@@ -2350,9 +2350,14 @@ let
 
   openjdkBootstrap = callPackage ../development/compilers/openjdk/bootstrap.nix {};
 
+  # this allows a user of packageOverrides to request OpenJDK 7 for darwin.
+  openjdk6_darwin = callPackage ../development/compilers/openjdk-darwin { };
+  openjdk7_darwin = callPackage ../development/compilers/openjdk-darwin/openjdk7u.nix { };
+  openjdk_darwin = openjdk6_darwin;
+
   openjdk =
     if stdenv.isDarwin then
-      callPackage ../development/compilers/openjdk-darwin { }
+      openjdk_darwin
     else
       callPackage ../development/compilers/openjdk {
         jdk = pkgs.openjdkBootstrap;
