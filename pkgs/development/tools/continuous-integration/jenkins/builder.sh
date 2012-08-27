@@ -1,6 +1,15 @@
 #!/bin/sh
 set -e
 source $stdenv/setup
-cd $src
-mkdir -p $out/m2_repository
-mvn -Pnix-build install --settings=${jenkins_m2_settings}
+
+mkdir -p $out
+
+cp -vr $m2_repo/m2_repository $out/m2_repository
+chmod -R ug+rw $out/m2_repository
+
+cp -vr $src/* $out/
+
+cd $out
+
+mvn install --settings=${jenkins_m2_settings}
+
