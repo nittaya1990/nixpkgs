@@ -3108,6 +3108,8 @@ let
 
   jam = callPackage ../development/tools/build-managers/jam { };
 
+  jenkins = callPackage ../development/tools/continuous-integration/jenkins { };
+
   jikespg = callPackage ../development/tools/parsing/jikespg { };
 
   lcov = callPackage ../development/tools/analysis/lcov { };
