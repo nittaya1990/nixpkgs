@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchgit, substituteAll, jdk, maven } :
+{ lib, stdenv, fetchgit, substituteAll, jdk, maven,
+unzip } :
 with lib;
 let
     # TODO(corey): Switch between URLs depending on mode.
@@ -27,6 +28,6 @@ in stdenv.mkDerivation {
 
   builder = ./builder.sh;
   jenkins_m2_settings = ./m2_settings.xml;
-  buildInputs = [maven];
+  buildInputs = [maven unzip];
   inherit jdk;
 }

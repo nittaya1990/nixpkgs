@@ -11,5 +11,5 @@ cp -vr $src/* $out/
 
 cd $out
 
-mvn install --settings=${jenkins_m2_settings}
+mvn install -Plight-test --settings=${jenkins_m2_settings}
 
