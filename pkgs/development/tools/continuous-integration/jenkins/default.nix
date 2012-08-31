@@ -1,5 +1,5 @@
 { lib, stdenv, fetchgit, substituteAll, getConfig,
-jdk, maven, unzip, fontconfig } :
+jdk, maven, unzip, fontconfig, fontsConf } :
 with lib;
 let
     mode = getConfig ["jenkins" "mode" ] "normal";
@@ -31,5 +31,5 @@ in stdenv.mkDerivation {
   builder = ./builder.sh;
   jenkins_m2_settings = ./m2_settings.xml;
   buildInputs = [maven unzip fontconfig];
-  inherit jdk;
+  inherit jdk fontsConf;
 }

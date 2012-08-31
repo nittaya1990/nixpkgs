@@ -3113,7 +3113,13 @@ let
 
   jam = callPackage ../development/tools/build-managers/jam { };
 
-  jenkins = callPackage ../development/tools/continuous-integration/jenkins { };
+  jenkins = callPackage ../development/tools/continuous-integration/jenkins {
+    fontsConf = makeFontsConf {
+      fontDirectories = [
+        freefont_ttf xorg.fontmiscmisc xorg.fontbhttf
+      ];
+    };
+  };
 
   jikespg = callPackage ../development/tools/parsing/jikespg { };
 

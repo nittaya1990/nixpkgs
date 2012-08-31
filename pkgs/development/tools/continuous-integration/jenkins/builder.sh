@@ -11,5 +11,7 @@ chmod -R u+rw $out/
 
 cd $out
 
+export FONTCONFIG_FILE=${fontsConf}
+
 mvn install -Plight-test --settings=${jenkins_m2_settings}
 
