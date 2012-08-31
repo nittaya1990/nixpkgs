@@ -3,11 +3,10 @@ jdk, maven, unzip } :
 with lib;
 let
     mode = getConfig ["jenkins" "mode" ] "normal";
-    src_for_mode = { 
-      "normal"    = fetchgit { url = "git://github.com/ooyala/jenkins-ci.git"; } ;
-      "local-dev" = ../../../../../../jenkins-ci;
-    };
-    src = builtins.getAttr mode src_for_mode;
+    src = if mode == "normal" then
+            fetchgit { url = "git://github.com/ooyala/jenkins-ci.git"; }
+          else
+            ../../../../../../jenkins-ci;
     base_src = builtins.filterSource
                 (path: type: type != "directory" || baseNameOf path != ".git")
                 src;
