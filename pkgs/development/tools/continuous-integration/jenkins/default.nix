@@ -4,7 +4,10 @@ with lib;
 let
     mode = getConfig ["jenkins" "mode" ] "normal";
     src = if mode == "normal" then
-            fetchgit { url = "git://github.com/ooyala/jenkins-ci.git"; }
+            fetchgit { 
+              url = "git://github.com/ooyala/jenkins-ci.git"; 
+              rev = "8a34f6bb2a22c6457b385f52fc658e7e4f5a4fa9";
+            }
           else
             ../../../../../../jenkins-ci;
     base_src = builtins.filterSource
