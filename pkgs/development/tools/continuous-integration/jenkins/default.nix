@@ -3,18 +3,18 @@ jdk, maven, unzip } :
 with lib;
 let
     mode = getConfig ["jenkins" "mode" ] "normal";
-    src = #if mode == "normal" then
-            fetchgit { url = "git://github.com/ooyala/jenkins-ci.git"; };
-          #else
-          #  ../../../../../../jenkins-ci;
+    src = if mode == "normal" then
+            fetchgit { url = "git://github.com/ooyala/jenkins-ci.git"; }
+          else
+            ../../../../../../jenkins-ci;
     base_src = builtins.filterSource
                 (path: type: type != "directory" || baseNameOf path != ".git")
-                src;
+                (builtins.toPath "${src}");
     # Relies on "mvn initialize" only caring about the poms.
     # Which seems to be true.
     only_poms = builtins.filterSource
                 (path: type: type != "file" || baseNameOf path != "pom.xml")
-                src;
+                (builtins.toPath "${src}");
 in stdenv.mkDerivation {
   name = "jenkins";
 
