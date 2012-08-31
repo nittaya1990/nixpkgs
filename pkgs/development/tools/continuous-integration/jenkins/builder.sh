@@ -4,9 +4,9 @@ source $stdenv/setup
 
 mkdir -p $out
 
-cp -vr $m2_repo/m2_repository $out/m2_repository
+cp -r $m2_repo/m2_repository $out/m2_repository
 
-cp -vr $src/* $out/
+cp -r $src/* $out/
 chmod -R u+rw $out/
 
 cd $out
