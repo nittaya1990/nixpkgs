@@ -18,11 +18,11 @@ let
 in stdenv.mkDerivation {
   name = "jenkins";
 
-  src = base_src;
+  src = src;
   m2_repo = stdenv.mkDerivation {
     name = "jenkins-m2-repo-initialized";
     builder = ./initialize_m2_repo.sh;
-    src = only_poms;
+    src = src;
     jenkins_m2_settings = ./m2_settings.xml;
     buildInputs = [maven];
     inherit jdk;
