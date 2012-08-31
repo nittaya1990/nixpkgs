@@ -3116,7 +3116,7 @@ let
   jenkins = callPackage ../development/tools/continuous-integration/jenkins {
     fontsConf = makeFontsConf {
       fontDirectories = [
-        freefont_ttf xorg.fontmiscmisc xorg.fontbhttf
+        dejavu_fonts freefont_ttf xorg.fontmiscmisc xorg.fontbhttf
       ];
     };
   };
