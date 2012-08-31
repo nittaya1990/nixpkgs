@@ -1,10 +1,13 @@
-{ lib, stdenv, fetchgit, substituteAll, jdk, maven,
-unzip } :
+{ lib, stdenv, fetchgit, substituteAll, getConfig,
+jdk, maven, unzip } :
 with lib;
 let
-    # TODO(corey): Switch between URLs depending on mode.
-    # src = fetchgit { url = "git://github.com/ooyala/jenkins-ci.git"; };
-    src = ../../../../../../jenkins-ci;
+    mode = getConfig ["jenkins" "mode" ] "normal";
+    src_for_mode = { 
+      "normal"    = fetchgit { url = "git://github.com/ooyala/jenkins-ci.git"; } ;
+      "local-dev" = ../../../../../../jenkins-ci;
+    };
+    src = builtins.getAttr mode src_for_mode;
     base_src = builtins.filterSource
                 (path: type: type != "directory" || baseNameOf path != ".git")
                 src;
