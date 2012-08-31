@@ -3114,6 +3114,7 @@ let
   jam = callPackage ../development/tools/build-managers/jam { };
 
   jenkins = callPackage ../development/tools/continuous-integration/jenkins {
+    jdk = openjdk;
     fontsConf = makeFontsConf {
       fontDirectories = [
         dejavu_fonts freefont_ttf xorg.fontmiscmisc xorg.fontbhttf
