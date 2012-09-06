@@ -6,7 +6,7 @@ let
     src = if mode == "normal" then
             fetchgit { 
               url = "git://github.com/ooyala/jenkins-ci.git"; 
-              rev = "8a34f6bb2a22c6457b385f52fc658e7e4f5a4fa9";
+              rev = "74921220008156b3bc8677f817683e9bba488fdc";
             }
           else
             ../../../../../../jenkins-ci;
