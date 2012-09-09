@@ -1,4 +1,4 @@
-#! /bin/sh -e
+#!/bin/sh -e
 
 url=
 rev=
@@ -164,23 +164,23 @@ clone(){
 
     # Download data from the repository.
     checkout_ref "$hash" "$ref" ||
-    checkout_hash "$hash" "$ref" || (
-        echo 1>&2 "Unable to checkout $hash$ref from $url.";
-        exit 1;
-    )
+    checkout_hash "$hash" "$ref" ||
+      { echo 1>&2 "Unable to checkout $hash$ref from $url." ;
+        return 1
+      }
 
     # Checkout linked sources.
-    init_submodules;
+    init_submodules || return 1
 
     if [ -z "$builder" -a -f .topdeps ]; then
-	if tg help 2>&1 > /dev/null
-	then
-	    echo "populating TopGit branches..."
-	    tg remote --populate origin
-	else
-	    echo "WARNING: would populate TopGit branches but TopGit is not available" >&2
-	    echo "WARNING: install TopGit to fix the problem" >&2
-	fi
+      if tg help 2>&1 > /dev/null
+      then
+          echo "populating TopGit branches..."
+          tg remote --populate origin
+      else
+          echo "WARNING: would populate TopGit branches but TopGit is not available" >&2
+          echo "WARNING: install TopGit to fix the problem" >&2
+      fi
     fi
 
     cd $top;
@@ -207,7 +207,7 @@ clone_user_rev() {
     # Allow doing additional processing before .git removal
     eval "$NIX_PREFETCH_GIT_CHECKOUT_HOOK"
     if test -z "$leaveDotGit"; then
-	echo "removing \`.git'..." >&2
+	      echo "removing \`.git'..." >&2
         find $dir -name .git\* | xargs rm -rf
     fi
 }
