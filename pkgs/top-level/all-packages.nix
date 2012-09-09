@@ -272,6 +272,7 @@ let
 
   fetchgit = import ../build-support/fetchgit {
     inherit stdenv git cacert;
+    ssh = openssh;
   };
 
   fetchgitrevision = import ../build-support/fetchgitrevision runCommand git;

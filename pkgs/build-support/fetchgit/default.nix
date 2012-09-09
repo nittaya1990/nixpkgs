@@ -1,4 +1,4 @@
-{stdenv, git, cacert}:
+{stdenv, git, cacert, ssh}:
 {url, rev ? "HEAD", md5 ? "", sha256 ? "", leaveDotGit ? false }:
 
 /* NOTE:
@@ -27,7 +27,7 @@ stdenv.mkDerivation {
   name = "git-export";
   builder = ./builder.sh;
   fetcher = ./nix-prefetch-git;
-  buildInputs = [git];
+  buildInputs = [git ssh];
 
   outputHashAlgo = if sha256 == "" then "md5" else "sha256";
   outputHashMode = "recursive";
