@@ -3114,14 +3114,15 @@ let
 
   jam = callPackage ../development/tools/build-managers/jam { };
 
-  jenkins = callPackage ../development/tools/continuous-integration/jenkins {
+  # low priority to prevent interference with maven's LICENSE.txt
+  jenkins = lowPrio (callPackage ../development/tools/continuous-integration/jenkins {
     jdk = openjdk;
     fontsConf = makeFontsConf {
       fontDirectories = [
         dejavu_fonts freefont_ttf xorg.fontmiscmisc xorg.fontbhttf
       ];
     };
-  };
+  });
 
   jikespg = callPackage ../development/tools/parsing/jikespg { };
 
