@@ -16,5 +16,5 @@ export FC_DEBUG=5
 
 export MAVEN_OPTS="-Xmx512M -XX:MaxPermSize=512M"
 
-mvn install -Plight-test --settings=${jenkins_m2_settings}
+mvn install -DskipTests --settings=${jenkins_m2_settings}
 
