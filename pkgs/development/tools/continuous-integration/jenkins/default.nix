@@ -3,13 +3,22 @@ jdk, maven3, unzip, fontconfig, fontsConf } :
 with lib;
 let
     mode = getConfig ["jenkins" "mode" ] "normal";
+    # TODO(corey): This is a bit ugly.
+    # Either we are doing dev on jenkins so we source the code directory.
+    # Or we are Ooyala internal and want the QA Tools approved code.
+    # Or we are none of those and we just want the standard jenkins distribution.
+    # The target rev is 1.484 since that has proven more stable than >= 1.485.
     src = if mode == "normal" then
             fetchgit { 
               url = "git://github.com/ooyala/jenkins-ci.git"; 
-              rev = "ccfcb7143b521070be049f94a4651871b91944d5";
+              rev = "jenkins-1.484";
             }
-          else
-            ../../../../../../jenkins-ci;
+          else if mode == "ooyala-internal" then
+            fetchgit {
+              url = "git://git@git.corp.ooyala.com/qa/tools/jenkins-ci.git";
+              rev = "0c5a9a472ea99cba003a015497d4461640144e31";
+            }
+          else ../../../../../../jenkins-ci;
     base_src = builtins.filterSource
                 (path: type: type != "directory" || baseNameOf path != ".git")
                 (builtins.toPath "${src}");
