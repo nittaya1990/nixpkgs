@@ -17,7 +17,7 @@ let
             fetchgit {
               url = "ssh://git@git.corp.ooyala.com/qa/tools/jenkins-ci.git";
               rev = "0c5a9a472ea99cba003a015497d4461640144e31";
-              sha256 = "0c5a9a472ea99cba003a015497d4461640144e31";
+              sha256 = "5bfcf7a623338b2ef81ac097e3e136eaf32856dd0730b7eeaff3161067b5d0be";
             }
           else builtins.filterSource
                 (path: type: type != "directory" || baseNameOf path != ".git")
