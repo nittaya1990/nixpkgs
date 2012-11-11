@@ -15,7 +15,7 @@ let
             }
           else if mode == "ooyala-internal" then
             fetchgit {
-              url = "git://git@git.corp.ooyala.com/qa/tools/jenkins-ci.git";
+              url = "ssh://git@git.corp.ooyala.com/qa/tools/jenkins-ci.git";
               rev = "0c5a9a472ea99cba003a015497d4461640144e31";
             }
           else builtins.filterSource
