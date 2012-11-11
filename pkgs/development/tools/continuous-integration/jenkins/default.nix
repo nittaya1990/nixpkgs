@@ -18,10 +18,9 @@ let
               url = "git://git@git.corp.ooyala.com/qa/tools/jenkins-ci.git";
               rev = "0c5a9a472ea99cba003a015497d4461640144e31";
             }
-          else ../../../../../../jenkins-ci;
-    base_src = builtins.filterSource
+          else builtins.filterSource
                 (path: type: type != "directory" || baseNameOf path != ".git")
-                (builtins.toPath "${src}");
+                ../../../../../../jenkins-ci;
     # Relies on "mvn initialize" only caring about the poms.
     # Which seems to be true.
     only_poms = builtins.filterSource
