@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "monad-logger";
-  version = "0.2.0";
-  sha256 = "0rsp24lx9gcvayj5d6afq26qrggm9qrjqjpdm7088xbl5k0c71fz";
+  version = "0.2.1";
+  sha256 = "00ssh60rxw7dg1dcfh8kr4mg9p7pvvvmjf9xd8kvxbrb9s3nkc4s";
   buildDepends = [ fastLogger resourcet text transformers ];
   meta = {
     homepage = "https://github.com/kazu-yamamoto/logger";

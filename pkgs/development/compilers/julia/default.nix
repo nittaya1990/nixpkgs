@@ -1,17 +1,18 @@
-{ stdenv, fetchgit, gfortran, perl, m4, llvm, gmp, pcre
+{ stdenv, fetchgit, gfortran, perl, m4, llvm, gmp, pcre, zlib
  , readline, fftwSinglePrec, fftw, libunwind, suitesparse, glpk, fetchurl
  , ncurses, libunistring, lighttpd, patchelf, openblas, liblapack
+ , tcl, tk
  } :
 let
   realGcc = stdenv.gcc.gcc;
 in
 stdenv.mkDerivation rec {
   pname = "julia";
-  date = "20120818";
+  date = "20121122";
   name = "${pname}-git-${date}";
 
   grisu_ver = "1.1.1";
-  dsfmt_ver = "2.1";
+  dsfmt_ver = "2.2";
   openblas_ver = "v0.2.2";
   lapack_ver = "3.4.1";
   arpack_ver = "3.1.2";
@@ -25,7 +26,7 @@ stdenv.mkDerivation rec {
   dsfmt_src = fetchurl {
     url = "http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/SFMT/dSFMT-src-${dsfmt_ver}.tar.gz";
     name = "dsfmt-${dsfmt_ver}.tar.gz";
-    sha256 = "e9d3e04bc984ec3b14033342f5ebdcd5202d8d8e40128dd737f566945612378f";
+    sha256 = "bc3947a9b2253a869fcbab8ff395416cb12958be9dba10793db2cd7e37b26899";
   };
   openblas_src = fetchurl {
     url = "https://github.com/xianyi/OpenBLAS/tarball/${openblas_ver}";
@@ -54,17 +55,17 @@ stdenv.mkDerivation rec {
 
   src = fetchgit {
     url = "git://github.com/JuliaLang/julia.git";
-    rev = "4f692899688f500c77d768f67748f4b7335c90eb";
-    sha256 = "a60e684a5283e80619f28ec8ff16fdc76c549e8463059507b0819db09dae6688";
+    rev = "51076ef4c1b269de738b6185865b389601627eb7";
+    sha256 = "1hbhxdiymkv0pd4dhr9wbvh1566ivfffhmafsjh8jcwh2f9fz90b";
   };
 
-  buildInputs = [ gfortran perl m4 gmp pcre llvm readline 
+  buildInputs = [ gfortran perl m4 gmp pcre llvm readline zlib
     fftw fftwSinglePrec libunwind suitesparse glpk ncurses libunistring patchelf
     openblas liblapack
     ];
 
   configurePhase = ''
-    for i in GMP LLVM PCRE LAPACK OPENBLAS BLAS READLINE FFTW LIBUNWIND SUITESPARSE GLPK LIGHTTPD; 
+    for i in GMP LLVM PCRE LAPACK OPENBLAS BLAS READLINE FFTW LIBUNWIND SUITESPARSE GLPK LIGHTTPD ZLIB; 
     do 
       sed -e "s@USE_SYSTEM_$i=0@USE_SYSTEM_$i=1@" -i Make.inc; 
     done
@@ -80,38 +81,37 @@ stdenv.mkDerivation rec {
     copy_kill_hash "${dsfmt_src}" deps/random
 
     ${if realGcc ==null then "" else 
-    ''export NIX_LDFLAGS="$NIX_LDFLAGS -L${realGcc}/lib -L${realGcc}/lib64 -lpcre -llapack -lm -lfftw3f -lfftw3 -lglpk -lunistring "''}
+    ''export NIX_LDFLAGS="$NIX_LDFLAGS -L${realGcc}/lib -L${realGcc}/lib64 -lpcre -llapack -lm -lfftw3f -lfftw3 -lglpk -lunistring -lz "''}
 
     sed -e 's@ cpp @ gcc -E @g' -i base/Makefile
 
-    export LDFLAGS="-L${suitesparse}/lib"
+    export LDFLAGS="-L${suitesparse}/lib -L$out/lib/julia -Wl,-rpath,$out/lib/julia"
 
     export GLPK_PREFIX="${glpk}/include"
 
     mkdir -p "$out/lib"
     sed -e "s@/usr/local/lib@$out/lib@g" -i deps/Makefile
     sed -e "s@/usr/lib@$out/lib@g" -i deps/Makefile
-    
-    export makeFlags="$makeFlags PREFIX=$out" 
+
+    export makeFlags="$makeFlags PREFIX=$out SHELL=${stdenv.shell}"
 
     export dontPatchELF=1
+
+    export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$PWD/usr/lib:$PWD/usr/lib/julia"
   '';
 
   preBuild = ''
-    make -C test/unicode all
-    make -C extras glpk_h.jl GLPK_PREFIX="$GLPK_PREFIX"
+    make -C test/unicode all SHELL="${stdenv.shell}"
+    make -C extras glpk_h.jl GLPK_PREFIX="$GLPK_PREFIX" SHELL="${stdenv.shell}"
   '';
 
   postInstall = ''
    ld -E --whole-archive --shared ${suitesparse}/lib/lib*[a-z].a -o "$out"/lib/libsuitesparse-shared.so
-   for i in umfpack cholmod amd camd colamd ; do
+   for i in umfpack cholmod amd camd colamd btf cxsparse ldl rbio spqr suitesparseconfig; do
      ln -s "libsuitesparse-shared.so" "$out/lib/lib$i.so"
    done
    ln -s "${lighttpd}/sbin/lighttpd" "$out/sbin/"
    ln -s "${lighttpd}/lib/"* "$out/lib/"
-
-   cp -r test examples "$out/lib/julia"
-   ls -R > "$out/ls-R"
   '';
 
   meta = {

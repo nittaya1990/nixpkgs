@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "skein";
-  version = "0.1.0.8";
-  sha256 = "0d0xrrcagf663rn37gpr13jyvfm7rnil18mz4miavb4hwzni46rm";
+  version = "0.1.0.10";
+  sha256 = "0qyiy2yx4qmazz744hyq51v2as51zd9r623bhhk21yzsgh7rl9kc";
   buildDepends = [ cereal cryptoApi tagged ];
   meta = {
     homepage = "https://github.com/meteficha/skein";

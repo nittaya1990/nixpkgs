@@ -17,9 +17,29 @@
 , libXrender
 , libXtst
 , libXi
+, libXinerama
+, libXcursor
+, fontconfig
 , cpio
+, cacert
 , jreOnly ? false
+, perl
 }:
+
+let
+
+  /**
+   * The JRE libraries are in directories that depend on the CPU.
+   */
+  architecture =
+    if stdenv.system == "i686-linux" then
+      "i386"
+    else if stdenv.system == "x86_64-linux" then
+      "amd64"
+    else
+      throw "openjdk requires i686-linux or x86_64 linux";
+
+in
 
 stdenv.mkDerivation rec {
   name = "openj${if jreOnly then "re" else "dk"}-7b127";
@@ -67,7 +87,13 @@ stdenv.mkDerivation rec {
     libXrender
     libXtst
     libXi
+    libXinerama
+    libXcursor
+    fontconfig
+    perl
   ];
+
+  NIX_LDFLAGS = "-lfontconfig -lXcursor -lXinerama";
 
   postUnpack = ''
     mkdir -p drops
@@ -91,6 +117,7 @@ stdenv.mkDerivation rec {
     ./cppflags-include-fix.patch
     ./printf-fix.patch
     ./linux-version-check-fix.patch
+    ./no-crypto-restrictions.patch
   ];
 
   makeFlags = [
@@ -107,7 +134,6 @@ stdenv.mkDerivation rec {
     "UNIXCOMMAND_PATH="
     "BOOTDIR=${jdk}"
     "DROPS_DIR=$(DROPS_PATH)"
-    "SKIP_BOOT_CYCLE=false"
   ];
 
   configurePhase = ''
@@ -117,6 +143,10 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out
     cp -av build/*/j2${if jreOnly then "re" else "sdk"}-image/* $out
+    pushd $out/${if ! jreOnly then "jre/" else ""}lib/security
+    rm cacerts
+    perl ${./generate-cacerts.pl} $out/bin/keytool ${cacert}/etc/ca-bundle.crt
+    popd
   '';
 #  '' + (if jreOnly then "" else ''
 #    if [ -z $jre ]; then
@@ -137,5 +167,7 @@ stdenv.mkDerivation rec {
 
     platforms = stdenv.lib.platforms.linux;
   };
+
+  passthru = { inherit architecture; };
 }
 

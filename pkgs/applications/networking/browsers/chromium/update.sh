@@ -1,6 +1,6 @@
 #!/bin/sh
 
-channels_url="http://omahaproxy.appspot.com/";
+channels_url="http://omahaproxy.appspot.com/all?csv=1";
 bucket_url="http://commondatastorage.googleapis.com/chromium-browser-official/";
 output_file="$(cd "$(dirname "$0")" && pwd)/sources.nix";
 
@@ -83,9 +83,9 @@ get_channel_exprs()
         echo -n "Checking if sha256 of version $version is cached..." >&2;
         if sha256="$(sha_lookup "$version")";
         then
-            echo "yes: $sha256" >&2;
+            echo " yes: $sha256" >&2;
         else
-            echo "no." >&2;
+            echo " no." >&2;
             sha256="$(get_sha256 "$channel" "$version" "$url")";
         fi;
 
