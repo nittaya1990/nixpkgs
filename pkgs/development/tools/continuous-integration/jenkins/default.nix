@@ -1,8 +1,9 @@
-{ lib, stdenv, fetchgit, substituteAll, getConfig,
+{ lib, stdenv, fetchgit, substituteAll, config,
 jdk, maven3, unzip, fontconfig, fontsConf } :
 with lib;
 let
-    mode = getConfig ["jenkins" "mode" ] "normal";
+    mode = config.jenkins.mode or "normal";
+
     # TODO(corey): This is a bit ugly.
     # Either we are doing dev on jenkins so we source the code directory.
     # Or we are Ooyala internal and want the QA Tools approved code.
