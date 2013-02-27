@@ -1,19 +1,22 @@
 { cabal, base64Bytestring, blazeHtml, extensibleExceptions
-, filepath, hslogger, html, monadControl, mtl, network, parsec
-, sendfile, syb, systemFilepath, text, threads, time, timeCompat
-, transformers, transformersBase, utf8String, xhtml, zlib
+, filepath, hslogger, html, HUnit, monadControl, mtl, network
+, parsec, sendfile, syb, systemFilepath, text, threads, time
+, timeCompat, transformers, transformersBase, utf8String, xhtml
+, zlib
 }:
 
 cabal.mkDerivation (self: {
   pname = "happstack-server";
-  version = "7.1.4";
-  sha256 = "0vnawm2m7lr7yvpd30divczxl90fayjvsysr7l1lq76qgxjsd576";
+  version = "7.1.6";
+  sha256 = "0gifq625kclam6sgblwa8a1vhxmx8saanzlrikch0l9q0l95nfwd";
   buildDepends = [
     base64Bytestring blazeHtml extensibleExceptions filepath hslogger
     html monadControl mtl network parsec sendfile syb systemFilepath
     text threads time timeCompat transformers transformersBase
     utf8String xhtml zlib
   ];
+  testDepends = [ HUnit parsec zlib ];
+  doCheck = false;
   meta = {
     homepage = "http://happstack.com";
     description = "Web related tools and services";

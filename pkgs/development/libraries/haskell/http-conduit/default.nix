@@ -1,16 +1,16 @@
 { cabal, asn1Data, attoparsec, attoparsecConduit, base64Bytestring
 , blazeBuilder, blazeBuilderConduit, caseInsensitive, certificate
 , conduit, cookie, cprngAes, dataDefault, deepseq, failure
-, filepath, httpTypes, liftedBase, mimeTypes, monadControl, mtl
-, network, random, regexCompat, resourcet, socks, text, time, tls
-, tlsExtra, transformers, transformersBase, utf8String, void
-, zlibConduit
+, filepath, hspec, httpTypes, HUnit, liftedBase, mimeTypes
+, monadControl, mtl, network, networkConduit, random, regexCompat
+, resourcet, socks, text, time, tls, tlsExtra, transformers
+, transformersBase, utf8String, void, wai, warp, zlibConduit
 }:
 
 cabal.mkDerivation (self: {
   pname = "http-conduit";
-  version = "1.8.7.1";
-  sha256 = "1m0f9snc2zxj8hvxw3ngw0h78ckvdlxxfjvrryk93blfwbamssi5";
+  version = "1.8.9";
+  sha256 = "0v99nc29h4qm1dbs7bwk4nwhxwk22vzl4ghrq9r3vishi6gwr7hb";
   buildDepends = [
     asn1Data attoparsec attoparsecConduit base64Bytestring blazeBuilder
     blazeBuilderConduit caseInsensitive certificate conduit cookie
@@ -18,6 +18,14 @@ cabal.mkDerivation (self: {
     mimeTypes monadControl mtl network random regexCompat resourcet
     socks text time tls tlsExtra transformers transformersBase
     utf8String void zlibConduit
+  ];
+  testDepends = [
+    asn1Data attoparsec attoparsecConduit base64Bytestring blazeBuilder
+    blazeBuilderConduit caseInsensitive certificate conduit cookie
+    cprngAes dataDefault deepseq failure filepath hspec httpTypes HUnit
+    liftedBase mimeTypes monadControl mtl network networkConduit random
+    regexCompat resourcet socks text time tls tlsExtra transformers
+    transformersBase utf8String void wai warp zlibConduit
   ];
   meta = {
     homepage = "http://www.yesodweb.com/book/http-conduit";
