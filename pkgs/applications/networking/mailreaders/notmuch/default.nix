@@ -3,11 +3,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "notmuch-0.14";
+  name = "notmuch-0.15.2";
 
   src = fetchurl {
     url = "http://notmuchmail.org/releases/${name}.tar.gz";
-    sha256 = "095e191dc0f3125c4fd98440fdf55050cba01b8e9f68245ffe0190a7f39ca753";
+    sha256 = "03cwylm0y9xld0hn753v0hn62f96nagdmzxv8jlz8vdbh9iszs56";
   };
 
   buildInputs = [ bash emacs gdb glib gmime gnupg1 pkgconfig talloc xapian ];
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
     description = "Notmuch -- The mail indexer";
     longDescription = "";
     license = stdenv.lib.licenses.gpl3;
-    maintainers = with stdenv.lib.maintainers; [ chaoflow ];
+    maintainers = with stdenv.lib.maintainers; [ chaoflow garbas ];
     platforms = stdenv.lib.platforms.gnu;
   };
 }

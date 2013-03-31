@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "SourceGraph";
-  version = "0.7.0.4";
-  sha256 = "1rxbanvw1dpdnpmrf5gpl12gn9796yq89dnmdxy56mb9qzsm7nm6";
+  version = "0.7.0.5";
+  sha256 = "0lbgs5a0ivn44bmc242hynsvczvxq2snz1fyjf13mrpfx8j5n8gk";
   isLibrary = false;
   isExecutable = true;
   buildDepends = [
@@ -16,6 +16,9 @@ cabal.mkDerivation (self: {
     description = "Static code analysis using graph-theoretic techniques";
     license = "GPL";
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })

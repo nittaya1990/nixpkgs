@@ -1,6 +1,6 @@
 { cabal, attoparsec, attoparsecEnumerator, binary, binaryShared
-, Cabal, deepseq, enumerator, filepath, haddock, hslogger, ltk
-, network, parsec, processLeksah, strict, time, transformers
+, Cabal, deepseq, enumerator, filepath, haddock, hslogger, HUnit
+, ltk, network, parsec, processLeksah, strict, time, transformers
 }:
 
 cabal.mkDerivation (self: {
@@ -14,11 +14,15 @@ cabal.mkDerivation (self: {
     enumerator filepath haddock hslogger ltk network parsec
     processLeksah strict time transformers
   ];
+  testDepends = [ enumerator hslogger HUnit transformers ];
   meta = {
     homepage = "http://leksah.org";
     description = "Metadata collection for leksah";
     license = "GPL";
     platforms = self.stdenv.lib.platforms.linux;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })

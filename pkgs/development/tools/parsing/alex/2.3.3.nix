@@ -7,11 +7,15 @@ cabal.mkDerivation (self: {
   isLibrary = false;
   isExecutable = true;
   buildTools = [ perl ];
+  doCheck = false;
   meta = {
     homepage = "http://www.haskell.org/alex/";
     description = "Alex is a tool for generating lexical analysers in Haskell";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })

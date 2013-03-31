@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "highlighting-kate";
-  version = "0.5.3.5";
-  sha256 = "0m76h33igw77ndllgzkqgmygi7krc5vfjvizidsgris0zd1g2yv3";
+  version = "0.5.3.8";
+  sha256 = "1fdgmwhiw05mgbgsrgyzvdqzklw9r10nswxfpnxkh5ivfxrhz82w";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ blazeHtml filepath mtl parsec regexPcre ];
@@ -13,6 +13,9 @@ cabal.mkDerivation (self: {
     description = "Syntax highlighting";
     license = "GPL";
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })

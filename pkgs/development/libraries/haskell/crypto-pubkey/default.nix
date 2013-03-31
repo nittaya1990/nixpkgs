@@ -1,5 +1,6 @@
 { cabal, cryptohash, cryptoNumbers, cryptoPubkeyTypes
-, cryptoRandomApi
+, cryptoRandomApi, HUnit, QuickCheck, testFramework
+, testFrameworkHunit, testFrameworkQuickcheck2
 }:
 
 cabal.mkDerivation (self: {
@@ -9,10 +10,15 @@ cabal.mkDerivation (self: {
   buildDepends = [
     cryptohash cryptoNumbers cryptoPubkeyTypes cryptoRandomApi
   ];
+  testDepends = [
+    cryptohash cryptoNumbers cryptoRandomApi HUnit QuickCheck
+    testFramework testFrameworkHunit testFrameworkQuickcheck2
+  ];
   meta = {
     homepage = "http://github.com/vincenthz/hs-crypto-pubkey";
     description = "Public Key cryptography";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })

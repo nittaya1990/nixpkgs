@@ -1,6 +1,7 @@
-{ cabal, binary, dataAccessor, distributedStatic, mtl
-, networkTransport, random, rank1dynamic, stm, syb, time
-, transformers
+{ cabal, ansiTerminal, binary, dataAccessor, distributedStatic
+, HUnit, mtl, network, networkTransport, networkTransportTcp
+, random, rank1dynamic, stm, syb, testFramework, testFrameworkHunit
+, time, transformers
 }:
 
 cabal.mkDerivation (self: {
@@ -13,12 +14,21 @@ cabal.mkDerivation (self: {
     binary dataAccessor distributedStatic mtl networkTransport random
     rank1dynamic stm syb time transformers
   ];
+  testDepends = [
+    ansiTerminal binary distributedStatic HUnit network
+    networkTransport networkTransportTcp random stm testFramework
+    testFrameworkHunit
+  ];
   noHaddock = true;
+  doCheck = false;
   meta = {
     homepage = "http://github.com/haskell-distributed/distributed-process";
     description = "Cloud Haskell: Erlang-style concurrency in Haskell";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })

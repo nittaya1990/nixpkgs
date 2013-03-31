@@ -12,8 +12,8 @@
 
 cabal.mkDerivation (self: {
   pname = "yesod";
-  version = "1.1.8";
-  sha256 = "0ygcsrq8nf1jvksig72r3i13qz1d3hgh5476fy6l4wl33idk6jb1";
+  version = "1.1.9.2";
+  sha256 = "1rv9mk842b9qwdzal9y5cn2z5z2rl6490600jg1xbsg0x0nl7hdj";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
@@ -32,6 +32,9 @@ cabal.mkDerivation (self: {
     description = "Creation of type-safe, RESTful web applications";
     license = self.stdenv.lib.licenses.mit;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })

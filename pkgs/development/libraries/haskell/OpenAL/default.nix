@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "OpenAL";
-  version = "1.4.0.1";
-  sha256 = "180f84sjakhd1b8h5n3l92by2wmic20n6ax0z5fi3fvk9w73khyv";
+  version = "1.4.0.2";
+  sha256 = "19q4pd5i2w330qh895z0cgim4m4f4gxqf4ya1192fchqmgcz1svz";
   buildDepends = [ ObjectName StateVar Tensor ];
   extraLibraries = [ openal ];
   meta = {
@@ -11,6 +11,9 @@ cabal.mkDerivation (self: {
     description = "A binding to the OpenAL cross-platform 3D audio API";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })

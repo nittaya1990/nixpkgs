@@ -20,12 +20,14 @@
   garbas = "Rok Garbas <rok@garbas.si>";
   goibhniu = "Cillian de Róiste <cillian.deroiste@gmail.com>";
   guibert = "David Guibert <david.guibert@gmail.com>";
+  iElectric = "Domen Kozar <domen@dev.si>";
   jcumming = "Jack Cummings <jack@mudshark.org>";
   kkallio = "Karn Kallio <tierpluspluslists@gmail.com>";
   ludo = "Ludovic Courtès <ludo@gnu.org>";
   marcweber = "Marc Weber <marco-oweber@gmx.de>";
   mornfall = "Petr Ročkai <me@mornfall.net>";
   neznalek = "Vladimír Čunát <vcunat@gmail.com>";
+  orbitz = "Malcolm Matalka <mmatalka@gmail.com>";
   page = "Carles Pagès <page@cubata.homelinux.net>";
   phreedom = "Evgeny Egorochkin <phreedom.stdin@gmail.com>";
   pierron = "Nicolas B. Pierron <nixos@nbp.name>";

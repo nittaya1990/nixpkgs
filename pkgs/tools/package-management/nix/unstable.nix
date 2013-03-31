@@ -5,14 +5,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "nix-1.4pre3056_79a3ba7";
+  name = "nix-1.5.2pre3082_2398417";
 
   src = fetchurl {
-    url = "http://hydra.nixos.org/build/4070551/download/5/${name}.tar.xz";
-    sha256 = "7478fd6fea91ec094645e8487b9ef001abd300703d79e04743f4d212469cf13d";
+    url = "http://hydra.nixos.org/build/4480483/download/5/${name}.tar.xz";
+    sha256 = "efea03fd9e15f52564ecfe6942bf9e8a757ef2e83b6ad9832f214342b2cbba83";
   };
 
-  buildNativeInputs = [ perl pkgconfig ];
+  nativeBuildInputs = [ perl pkgconfig ];
 
   buildInputs = [ curl openssl boehmgc sqlite ];
 
@@ -43,8 +43,8 @@ stdenv.mkDerivation rec {
 
   crossAttrs = {
     postUnpack =
-      '' export CPATH="${bzip2.hostDrv}/include"
-         export NIX_CROSS_LDFLAGS="-L${bzip2.hostDrv}/lib -rpath-link ${bzip2.hostDrv}/lib $NIX_CROSS_LDFLAGS"
+      '' export CPATH="${bzip2.crossDrv}/include"
+         export NIX_CROSS_LDFLAGS="-L${bzip2.crossDrv}/lib -rpath-link ${bzip2.crossDrv}/lib $NIX_CROSS_LDFLAGS"
       '';
 
     configureFlags =

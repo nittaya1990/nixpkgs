@@ -1,4 +1,4 @@
-{ cabal, blazeBuilder, filepath, ieee754, mtl, syb, text
+{ cabal, blazeBuilder, filepath, HUnit, ieee754, mtl, syb, text
 , transformers, utf8String
 }:
 
@@ -9,11 +9,15 @@ cabal.mkDerivation (self: {
   buildDepends = [
     blazeBuilder filepath ieee754 mtl syb text transformers utf8String
   ];
+  testDepends = [ HUnit mtl syb text ];
   meta = {
     homepage = "http://github.com/lymar/hastache";
     description = "Haskell implementation of Mustache templates";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })

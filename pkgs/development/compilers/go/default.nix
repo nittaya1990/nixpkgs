@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, bison, glibc, bash, coreutils, makeWrapper}:
+{ stdenv, fetchurl, bison, glibc, bash, coreutils, makeWrapper, tzdata}:
 
 let
   loader386 = "${glibc}/lib/ld-linux.so.2";
@@ -35,7 +35,7 @@ stdenv.mkDerivation {
     sed -i 's,/lib/ld-linux.so.2,${loader386},' src/cmd/8l/asm.c
     sed -i 's,/lib64/ld-linux-x86-64.so.2,${loaderAmd64},' src/cmd/6l/asm.c
     sed -i 's,/lib64/ld-linux-x86-64.so.3,${loaderArm},' src/cmd/5l/asm.c
-    sed -i 's,/usr/share/zoneinfo/,${glibc}/share/zoneinfo/,' src/pkg/time/zoneinfo_unix.go
+    sed -i 's,/usr/share/zoneinfo/,${tzdata}/share/zoneinfo/,' src/pkg/time/zoneinfo_unix.go
 
     #sed -i -e 's,/bin/cat,${coreutils}/bin/cat,' \
     #  -e 's,/bin/echo,${coreutils}/bin/echo,' \
@@ -54,9 +54,9 @@ stdenv.mkDerivation {
   patches = [ ./cacert.patch ];
 
   GOOS = "linux";
-  GOARCH = if (stdenv.system == "i686-linux") then "386"
-          else if (stdenv.system == "x86_64-linux") then "amd64"
-          else if (stdenv.system == "armv5tel-linux") then "arm"
+  GOARCH = if stdenv.system == "i686-linux" then "386"
+          else if stdenv.system == "x86_64-linux" then "amd64"
+          else if stdenv.system == "armv5tel-linux" then "arm"
           else throw "Unsupported system";
   GOARM = stdenv.lib.optionalString (stdenv.system == "armv5tel-linux") "5";
 
@@ -74,7 +74,7 @@ stdenv.mkDerivation {
     for a in go gofmt godoc; do
 	    wrapProgram "$out/bin/$a" \
 	      --set "GOROOT" $out/share/go \
-        ${if (stdenv.system == "armv5tel-linux") then "--set GOARM $GOARM" else ""}
+        ${if stdenv.system == "armv5tel-linux" then "--set GOARM $GOARM" else ""}
     done
 
     # Copy the emacs configuration for Go files.

@@ -8,7 +8,7 @@
         # environment overly, but also to keep hash-backwards-compatible with the old cabal.nix.
         internalAttrs = [
           "internalAttrs" "buildDepends" "buildTools" "extraLibraries" "pkgconfigDepends"
-          "isLibrary" "isExecutable"
+          "isLibrary" "isExecutable" "testDepends"
         ];
 
         # Stuff happening after the user preferences have been processed. We remove
@@ -55,6 +55,7 @@
             # but often propagatedBuildInputs is preferable anyway
             buildInputs = [ghc Cabal] ++ self.extraBuildInputs;
             extraBuildInputs = self.buildTools ++
+                               (stdenv.lib.optionals self.doCheck self.testDepends) ++
                                (if self.pkgconfigDepends == [] then [] else [pkgconfig]) ++
                                (if self.isLibrary then [] else self.buildDepends ++ self.extraLibraries ++ self.pkgconfigDepends);
 
@@ -68,6 +69,9 @@
             # build-depends Cabal field
             buildDepends = [];
 
+            # build-depends Cabal fields stated in test-suite stanzas
+            testDepends = [];
+
             # build-tools Cabal field
             buildTools = [];
 
@@ -80,31 +84,44 @@
             isLibrary = ! self.isExecutable;
             isExecutable = false;
 
-            libraryProfiling =
-              if enableLibraryProfiling then ["--enable-library-profiling"]
-                                        else ["--disable-library-profiling"];
+            # ignore version restrictions on the build inputs that the cabal file might specify
+            jailbreak = false;
+
+            # pass the '--enable-split-objs' flag to cabal in the configure stage
+            enableSplitObjs = !stdenv.isDarwin;         # http://hackage.haskell.org/trac/ghc/ticket/4013
+
+            # pass the '--enable-tests' flag to cabal in the configure stage
+            # and run any regression test suites the package might have
+            doCheck = stdenv.lib.versionOlder "7.4" ghc.ghcVersion;
+
+            extraConfigureFlags = [
+              (stdenv.lib.enableFeature enableLibraryProfiling "library-profiling")
+              (stdenv.lib.enableFeature self.enableSplitObjs "split-objs")
+            ] ++ stdenv.lib.optional (stdenv.lib.versionOlder "7" ghc.ghcVersion) (stdenv.lib.enableFeature self.doCheck "tests");
 
             # compiles Setup and configures
             configurePhase = ''
               eval "$preConfigure"
 
-              ${lib.optionalString (lib.attrByPath ["jailbreak"] false self) "${jailbreakCabal}/bin/jailbreak-cabal ${self.pname}.cabal && "
-              }for i in Setup.hs Setup.lhs; do
+              ${lib.optionalString self.jailbreak "${jailbreakCabal}/bin/jailbreak-cabal ${self.pname}.cabal"}
+
+              for i in Setup.hs Setup.lhs; do
                 test -f $i && ghc --make $i
               done
 
-              for p in $extraBuildInputs $propagatedBuildNativeInputs; do
+              for p in $extraBuildInputs $propagatedNativeBuildInputs; do
                 if [ -d "$p/include" ]; then
-                  extraLibDirs="$extraLibDirs --extra-include-dir=$p/include"
+                  extraConfigureFlags+=" --extra-include-dir=$p/include"
                 fi
                 for d in lib{,64}; do
                   if [ -d "$p/$d" ]; then
-                    extraLibDirs="$extraLibDirs --extra-lib-dir=$p/$d"
+                    extraConfigureFlags+=" --extra-lib-dir=$p/$d"
                   fi
                 done
               done
 
-              ./Setup configure --verbose --prefix="$out" $libraryProfiling $extraLibDirs $configureFlags
+              echo "configure flags: $extraConfigureFlags $configureFlags"
+              ./Setup configure --verbose --prefix="$out" $extraConfigureFlags $configureFlags
 
               eval "$postConfigure"
             '';
@@ -119,6 +136,14 @@
               [ -n "$noHaddock" ] || ./Setup haddock
 
               eval "$postBuild"
+            '';
+
+            checkPhase = stdenv.lib.optional self.doCheck ''
+              eval "$preCheck"
+
+              ./Setup test
+
+              eval "$postCheck"
             '';
 
             # installs via Cabal; creates a registration file for nix-support
@@ -145,8 +170,8 @@
             '';
 
             postFixup = ''
-              if test -f $out/nix-support/propagated-build-native-inputs; then
-                ln -s $out/nix-support/propagated-build-native-inputs $out/nix-support/propagated-user-env-packages
+              if test -f $out/nix-support/propagated-native-build-inputs; then
+                ln -s $out/nix-support/propagated-native-build-inputs $out/nix-support/propagated-user-env-packages
               fi
             '';
 

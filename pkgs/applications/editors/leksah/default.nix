@@ -16,12 +16,16 @@ cabal.mkDerivation (self: {
     QuickCheck regexBase regexTdfa strict text time transformers
     utf8String
   ];
+  testDepends = [ Cabal QuickCheck ];
   noHaddock = true;
   meta = {
     homepage = "http://www.leksah.org";
     description = "Haskell IDE written in Haskell";
     license = "GPL";
     platforms = self.stdenv.lib.platforms.linux;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })

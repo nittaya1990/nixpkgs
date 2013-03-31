@@ -7,12 +7,17 @@ cabal.mkDerivation (self: {
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ Cabal deepseq filepath ghcPaths xhtml ];
+  testDepends = [ Cabal filepath ];
   buildTools = [ alex happy ];
+  doCheck = false;
   meta = {
     homepage = "http://www.haskell.org/haddock/";
     description = "A documentation-generation tool for Haskell libraries";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })

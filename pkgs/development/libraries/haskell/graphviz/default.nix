@@ -1,5 +1,5 @@
-{ cabal, colour, dlist, fgl, filepath, polyparse, temporary, text
-, transformers, wlPprintText
+{ cabal, colour, dlist, fgl, filepath, polyparse, QuickCheck
+, temporary, text, transformers, wlPprintText
 }:
 
 cabal.mkDerivation (self: {
@@ -10,11 +10,19 @@ cabal.mkDerivation (self: {
     colour dlist fgl filepath polyparse temporary text transformers
     wlPprintText
   ];
+  testDepends = [
+    colour dlist fgl filepath polyparse QuickCheck temporary text
+    transformers wlPprintText
+  ];
+  doCheck = false;
   meta = {
     homepage = "http://projects.haskell.org/graphviz/";
     description = "Bindings to Graphviz for graph visualisation";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })

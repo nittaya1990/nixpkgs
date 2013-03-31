@@ -6,14 +6,15 @@
 assert release -> keyStore != null && keyAlias != null && keyStorePassword != null && keyAliasPassword != null;
 
 let
-  platformName = if (stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux") then "linux"
+  platformName = if stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux" then "linux"
     else if stdenv.system == "x86_64-darwin" then "macosx"
     else throw "Platform: ${stdenv.system} is not supported!";
 
   androidsdkComposition = androidsdk { inherit platformVersions useGoogleAPIs; };
 in
 stdenv.mkDerivation {
-  inherit name src;
+  name = stdenv.lib.replaceChars [" "] [""] name;
+  inherit src;
   
   ANDROID_HOME = "${androidsdkComposition}/libexec/android-sdk-${platformName}";
 
@@ -37,5 +38,8 @@ stdenv.mkDerivation {
   installPhase = ''
     mkdir -p $out
     mv bin/*-${if release then "release" else "debug"}.apk $out
+    
+    mkdir -p $out/nix-support
+    echo "file binary-dist \"$(echo $out/*.apk)\"" > $out/nix-support/hydra-build-products
   '';
 }

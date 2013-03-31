@@ -39,6 +39,8 @@
 , # After the builder did a 'make all' (kernel + modules)
   # we force building the target asked: bzImage/zImage/uImage/...
   postBuild ? "make $makeFlags $kernelTarget; make $makeFlags -C scripts unifdef"
+
+, extraNativeBuildInputs ? []
 , ...
 }:
 
@@ -83,7 +85,8 @@ stdenv.mkDerivation {
   # For UML and non-PC, just ignore all options that don't apply (We are lazy).
   ignoreConfigErrors = stdenv.platform.name != "pc";
 
-  buildNativeInputs = [ perl mktemp ];
+  nativeBuildInputs = [ perl mktemp ] ++ extraNativeBuildInputs;
+
   buildInputs = lib.optional (stdenv.platform.uboot != null)
     (ubootChooser stdenv.platform.uboot);
 
@@ -119,8 +122,8 @@ stdenv.mkDerivation {
 
       # The substitution of crossAttrs happens *after* the stdenv cross adapter sets
       # the parameters for the usual stdenv. Thus, we need to specify
-      # the ".hostDrv" in the buildInputs here.
-      buildInputs = lib.optional (cp.uboot != null) (ubootChooser cp.uboot).hostDrv;
+      # the ".crossDrv" in the buildInputs here.
+      buildInputs = lib.optional (cp.uboot != null) (ubootChooser cp.uboot).crossDrv;
     };
 
   meta = {
@@ -130,11 +133,11 @@ stdenv.mkDerivation {
         " (with patches: "
         + lib.concatStrings (lib.intersperse ", " (map (x: x.name) kernelPatches))
         + ")");
+    inherit version;
     license = "GPLv2";
     homepage = http://www.kernel.org/;
     maintainers = [
       lib.maintainers.eelco
-      lib.maintainers.shlevy
       lib.maintainers.chaoflow
     ];
     platforms = lib.platforms.linux;

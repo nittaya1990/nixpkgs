@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "yst";
-  version = "0.3.1";
-  sha256 = "1ax3j21b4ac9x4vvvfgnhz0sczd7l7ia6mcxnqhbc3166sn91vig";
+  version = "0.3.1.1";
+  sha256 = "1wc2s5aan4rqdrpqgqvka5pqm3d691si5hdf0m0wpi2hzkwl3qv3";
   isLibrary = false;
   isExecutable = true;
   buildDepends = [
@@ -17,6 +17,9 @@ cabal.mkDerivation (self: {
     description = "Builds a static website from templates and data in YAML or CSV files";
     license = "GPL";
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })

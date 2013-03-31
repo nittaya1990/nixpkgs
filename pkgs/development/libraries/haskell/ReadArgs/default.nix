@@ -1,4 +1,4 @@
-{ cabal, systemFilepath, text }:
+{ cabal, hspec, systemFilepath, text }:
 
 cabal.mkDerivation (self: {
   pname = "ReadArgs";
@@ -7,10 +7,12 @@ cabal.mkDerivation (self: {
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ systemFilepath text ];
+  testDepends = [ hspec systemFilepath text ];
   meta = {
     homepage = "http://github.com/rampion/ReadArgs";
     description = "Simple command line argument parsing";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })

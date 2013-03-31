@@ -1,5 +1,6 @@
 { cabal, base64Bytestring, base64Conduit, classyPrelude, conduit
-, mtl, resourcet, systemFileio, systemFilepath, text, transformers
+, hspec, mtl, QuickCheck, resourcet, systemFileio, systemFilepath
+, text, transformers
 }:
 
 cabal.mkDerivation (self: {
@@ -10,10 +11,15 @@ cabal.mkDerivation (self: {
     base64Bytestring base64Conduit classyPrelude conduit mtl resourcet
     systemFileio systemFilepath text transformers
   ];
+  testDepends = [
+    base64Bytestring classyPrelude conduit hspec QuickCheck
+    transformers
+  ];
   meta = {
     homepage = "https://github.com/fpco/haskell-ide";
     description = "Specify Haskell project templates and generate files";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })

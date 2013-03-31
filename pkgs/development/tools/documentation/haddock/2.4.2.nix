@@ -8,11 +8,15 @@ cabal.mkDerivation (self: {
   isExecutable = true;
   buildDepends = [ Cabal filepath ghcPaths ];
   buildTools = [ alex happy ];
+  doCheck = false;
   meta = {
     homepage = "http://www.haskell.org/haddock/";
     description = "A documentation-generation tool for Haskell libraries";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })

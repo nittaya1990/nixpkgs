@@ -1,5 +1,6 @@
 { cabal, attoparsec, blazeBuilder, deepseq, dlist, hashable, mtl
-, syb, text, time, unorderedContainers, vector
+, QuickCheck, syb, testFramework, testFrameworkQuickcheck2, text
+, time, unorderedContainers, vector
 }:
 
 cabal.mkDerivation (self: {
@@ -10,11 +11,18 @@ cabal.mkDerivation (self: {
     attoparsec blazeBuilder deepseq dlist hashable mtl syb text time
     unorderedContainers vector
   ];
+  testDepends = [
+    attoparsec QuickCheck testFramework testFrameworkQuickcheck2 text
+    time
+  ];
   meta = {
     homepage = "https://github.com/bos/aeson";
     description = "Fast JSON parsing and encoding";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })

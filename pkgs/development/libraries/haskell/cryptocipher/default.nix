@@ -1,5 +1,6 @@
-{ cabal, cereal, cipherAes, cipherRc4, cpu, cryptoApi
-, cryptoPubkeyTypes, primitive, tagged, vector
+{ cabal, cereal, cipherAes, cipherRc4, cpu, cryptoApi, cryptohash
+, cryptoPubkeyTypes, entropy, primitive, QuickCheck, tagged
+, testFramework, testFrameworkQuickcheck2, vector
 }:
 
 cabal.mkDerivation (self: {
@@ -12,11 +13,18 @@ cabal.mkDerivation (self: {
     cereal cipherAes cipherRc4 cpu cryptoApi cryptoPubkeyTypes
     primitive tagged vector
   ];
+  testDepends = [
+    cryptoApi cryptohash entropy QuickCheck testFramework
+    testFrameworkQuickcheck2 vector
+  ];
   meta = {
     homepage = "http://github.com/vincenthz/hs-cryptocipher";
     description = "Symmetrical block and stream ciphers";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })

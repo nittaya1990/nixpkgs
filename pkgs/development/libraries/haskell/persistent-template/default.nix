@@ -1,15 +1,21 @@
-{ cabal, aeson, monadControl, persistent, text, transformers }:
+{ cabal, aeson, hspec, monadControl, persistent, QuickCheck, text
+, transformers
+}:
 
 cabal.mkDerivation (self: {
   pname = "persistent-template";
-  version = "1.1.2.1";
-  sha256 = "02sqrq847cxywj9hwixvi0bqq09kxr9w6lhn6kqg4ww0mw2add6s";
+  version = "1.1.3.1";
+  sha256 = "0171x8mv3ff9ppllkp3mgpwa8p1zg3y6fykq70z9h0hx1ny0407p";
   buildDepends = [ aeson monadControl persistent text transformers ];
+  testDepends = [ aeson hspec persistent QuickCheck text ];
   meta = {
     homepage = "http://www.yesodweb.com/book/persistent";
     description = "Type-safe, non-relational, multi-backend persistence";
     license = self.stdenv.lib.licenses.mit;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })
