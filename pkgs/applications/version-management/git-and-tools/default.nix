@@ -10,7 +10,7 @@ rec {
   git = lib.makeOverridable (import ./git) {
     inherit fetchurl stdenv curl openssl zlib expat perl python gettext gnugrep
       asciidoc texinfo xmlto docbook2x docbook_xsl docbook_xml_dtd_45 libxslt
-      cpio tcl tk makeWrapper subversionClient hardlink;
+      cpio tcl tk makeWrapper subversionClient hardlink gzip;
     svnSupport = false;		# for git-svn support
     guiSupport = false;		# requires tcl/tk
     sendEmailSupport = false;	# requires plenty of perl libraries
@@ -51,7 +51,7 @@ rec {
       monadControl mtl network networkInfo networkMulticast networkProtocolXmpp
       QuickCheck random regexCompat SafeSemaphore SHA stm text time regexTdfa
       transformers transformersBase utf8String uuid wai waiLogger warp
-      xmlConduit xmlTypes yesod yesodDefault yesodForm yesodStatic testpack;
+      xmlConduit xmlTypes yesod yesodDefault yesodForm yesodStatic;
   };
 
   qgit = import ./qgit {

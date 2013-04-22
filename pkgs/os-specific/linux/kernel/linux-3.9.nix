@@ -252,8 +252,8 @@ in
 import ./generic.nix (
 
   rec {
-    version = "3.9-rc3";
-    modDirVersion = "3.9.0-rc3";
+    version = "3.9-rc7";
+    modDirVersion = "3.9.0-rc7";
     testing = true;
 
     preConfigure = ''
@@ -262,7 +262,7 @@ import ./generic.nix (
 
     src = fetchurl {
       url = "mirror://kernel/linux/kernel/v3.x/${if testing then "testing/" else ""}linux-${version}.tar.xz";
-      sha256 = "1fbg952zzn6nkch2fpd1fzkwc6xsf66fnmkxrmc77yz8d29qddi5";
+      sha256 = "0bl58byszb3pg5dplzc19kgx7gif5cnbfykqqp1jmskpxzf1splx";
     };
 
     config = configWithPlatform stdenv.platform;
