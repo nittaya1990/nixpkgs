@@ -173,6 +173,7 @@ let
       CRASH_DUMP n
       DMAR? n # experimental
       DVB_DYNAMIC_MINORS y # we use udev
+      FHANDLE y # used by systemd
       FUSION y # Fusion MPT device support
       IDE_GD_ATAPI y # ATAPI floppy support
       IRDA_ULTRA y # Ultra (connectionless) protocol
@@ -230,7 +231,7 @@ in
 import ./generic.nix (
 
   rec {
-    version = "3.0.65";
+    version = "3.0.70";
 
     preConfigure = ''
       substituteInPlace scripts/depmod.sh --replace '-b "$INSTALL_MOD_PATH"' ""
@@ -238,7 +239,7 @@ import ./generic.nix (
 
     src = fetchurl {
       url = "mirror://kernel/linux/kernel/v3.x/linux-${version}.tar.xz";
-      sha256 = "1vmk0bmg0djwbh9scrhpyljan01ygkwn4q0j1ydn8snag7sn4x8y";
+      sha256 = "0hxb457mixpcq43dg0lnbkfdjnzqw4ajfcfkyyfgdzn5496li6va";
     };
 
     config = configWithPlatform stdenv.platform;

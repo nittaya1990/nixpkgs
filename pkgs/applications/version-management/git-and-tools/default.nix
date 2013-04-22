@@ -10,7 +10,7 @@ rec {
   git = lib.makeOverridable (import ./git) {
     inherit fetchurl stdenv curl openssl zlib expat perl python gettext gnugrep
       asciidoc texinfo xmlto docbook2x docbook_xsl docbook_xml_dtd_45 libxslt
-      cpio tcl tk makeWrapper subversionClient;
+      cpio tcl tk makeWrapper subversionClient hardlink;
     svnSupport = false;		# for git-svn support
     guiSupport = false;		# requires tcl/tk
     sendEmailSupport = false;	# requires plenty of perl libraries
@@ -43,13 +43,15 @@ rec {
   });
 
   gitAnnex = lib.makeOverridable (import ./git-annex) {
-    inherit stdenv fetchurl perl coreutils git libuuid rsync findutils curl ikiwiki which openssh;
-    inherit (haskellPackages) ghc bloomfilter dataenc editDistance hinotify hS3 hslogger HTTP
-      blazeBuilder blazeHtml caseInsensitive IfElse json liftedBase MissingH monadControl mtl
-      network pcreLight SHA stm utf8String networkInfo dbus clientsession cryptoApi dataDefault
-      extensibleExceptions filepath hamlet httpTypes networkMulticast text time transformers
-      transformersBase wai waiLogger warp yesod yesodDefault yesodStatic testpack QuickCheck
-      SafeSemaphore networkProtocolXmpp async dns DAV uuid Glob;
+    inherit stdenv fetchurl perl which ikiwiki curl bup git gnupg1 lsof openssh rsync;
+    inherit (haskellPackages) ghc aeson async blazeBuilder bloomfilter
+      caseInsensitive clientsession cryptoApi dataDefault dataenc DAV dbus dns
+      editDistance extensibleExceptions filepath gnutls hamlet hinotify hS3
+      hslogger httpConduit httpTypes HUnit IfElse json liftedBase MissingH
+      monadControl mtl network networkInfo networkMulticast networkProtocolXmpp
+      QuickCheck random regexCompat SafeSemaphore SHA stm text time regexTdfa
+      transformers transformersBase utf8String uuid wai waiLogger warp
+      xmlConduit xmlTypes yesod yesodDefault yesodForm yesodStatic testpack;
   };
 
   qgit = import ./qgit {
@@ -69,7 +71,7 @@ rec {
   };
 
   topGit = lib.makeOverridable (import ./topgit) {
-    inherit stdenv fetchurl unzip;
+    inherit stdenv fetchurl;
   };
 
   tig = import ./tig {

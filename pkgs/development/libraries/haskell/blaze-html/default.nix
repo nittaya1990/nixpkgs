@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "blaze-html";
-  version = "0.6.0.0";
-  sha256 = "0n8jpmslcs29pfyb8jhp43dg4058ahd9y3kf2p2wr3r6b9yr5dll";
+  version = "0.6.1.1";
+  sha256 = "08zfmkvahmm613r0nrabwl5zv9ragcrhdqsa8jfdrfdkrf6ckbrc";
   buildDepends = [ blazeBuilder blazeMarkup text ];
   testDepends = [
     blazeBuilder blazeMarkup HUnit QuickCheck testFramework
@@ -16,6 +16,9 @@ cabal.mkDerivation (self: {
     description = "A blazingly fast HTML combinator library for Haskell";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })

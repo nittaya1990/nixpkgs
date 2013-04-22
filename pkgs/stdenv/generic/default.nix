@@ -6,6 +6,12 @@
   fetchurlBoot
 }:
 
+if ! builtins ? langVersion then
+
+  abort "This version of Nixpkgs requires Nix >= 1.2, please upgrade!"
+
+else
+
 let
 
   lib = import ../../lib;
@@ -30,6 +36,8 @@ let
 
         propagatedUserEnvPkgs = [gcc] ++
           lib.filter lib.isDerivation initialPath;
+
+        __ignoreNulls = true;
       }
 
       // rec {
@@ -44,42 +52,44 @@ let
           if !allowUnfree && (let l = attrs.meta.license or ""; in l == "unfree" || l == "unfree-redistributable" || l == lib.licenses.proprietary) then
             throw "package ‘${attrs.name}’ has an unfree license, refusing to evaluate"
           else
-          (derivation (
-            (removeAttrs attrs ["meta" "passthru" "crossAttrs"])
-            // (let
-              buildInputs = attrs.buildInputs or [];
-              buildNativeInputs = attrs.buildNativeInputs or [];
-              propagatedBuildInputs = attrs.propagatedBuildInputs or [];
-              propagatedBuildNativeInputs = attrs.propagatedBuildNativeInputs or [];
-              crossConfig = attrs.crossConfig or null;
-            in
-            {
-              builder = attrs.realBuilder or shell;
-              args = attrs.args or ["-e" (attrs.builder or ./default-builder.sh)];
-              stdenv = result;
-              system = result.system;
+            lib.addPassthru (derivation (
+              (removeAttrs attrs ["meta" "passthru" "crossAttrs"])
+              // (let
+                buildInputs = attrs.buildInputs or [];
+                nativeBuildInputs = attrs.nativeBuildInputs or [];
+                propagatedBuildInputs = attrs.propagatedBuildInputs or [];
+                propagatedNativeBuildInputs = attrs.propagatedNativeBuildInputs or [];
+                crossConfig = attrs.crossConfig or null;
+              in
+              {
+                builder = attrs.realBuilder or shell;
+                args = attrs.args or ["-e" (attrs.builder or ./default-builder.sh)];
+                stdenv = result;
+                system = result.system;
+                userHook = config.stdenv.userHook or null;
 
-              # Inputs built by the cross compiler.
-              buildInputs = lib.optionals (crossConfig != null) buildInputs;
-              propagatedBuildInputs = lib.optionals (crossConfig != null)
-                  propagatedBuildInputs;
-              # Inputs built by the usual native compiler.
-              buildNativeInputs = buildNativeInputs ++ lib.optionals
-                (crossConfig == null) buildInputs;
-              propagatedBuildNativeInputs = propagatedBuildNativeInputs ++
-                lib.optionals (crossConfig == null) propagatedBuildInputs;
-            }))
-          )
-          # The meta attribute is passed in the resulting attribute set,
-          # but it's not part of the actual derivation, i.e., it's not
-          # passed to the builder and is not a dependency.  But since we
-          # include it in the result, it *is* available to nix-env for
-          # queries.
-          // { meta = attrs.meta or {}; }
-          # Pass through extra attributes that are not inputs, but
-          # should be made available to Nix expressions using the
-          # derivation (e.g., in assertions).
-          // (attrs.passthru or {});
+                # Inputs built by the cross compiler.
+                buildInputs = lib.optionals (crossConfig != null) buildInputs;
+                propagatedBuildInputs = lib.optionals (crossConfig != null)
+                    propagatedBuildInputs;
+                # Inputs built by the usual native compiler.
+                nativeBuildInputs = nativeBuildInputs ++ lib.optionals
+                  (crossConfig == null) buildInputs;
+                propagatedNativeBuildInputs = propagatedNativeBuildInputs ++
+                  lib.optionals (crossConfig == null) propagatedBuildInputs;
+            }))) (
+            {
+              # The meta attribute is passed in the resulting attribute set,
+              # but it's not part of the actual derivation, i.e., it's not
+              # passed to the builder and is not a dependency.  But since we
+              # include it in the result, it *is* available to nix-env for
+              # queries.
+              meta = attrs.meta or {};
+            } //
+            # Pass through extra attributes that are not inputs, but
+            # should be made available to Nix expressions using the
+            # derivation (e.g., in assertions).
+            (attrs.passthru or {}));
 
         # Utility flags to test the type of platform.
         isDarwin = result.system == "x86_64-darwin";
@@ -87,6 +97,7 @@ let
                || result.system == "x86_64-linux"
                || result.system == "powerpc-linux"
                || result.system == "armv5tel-linux"
+               || result.system == "armv6l-linux"
                || result.system == "armv7l-linux"
                || result.system == "mips64el-linux";
         isGNU = result.system == "i686-gnu";      # GNU/Hurd
@@ -114,10 +125,13 @@ let
                || result.system == "x86_64-freebsd"
                || result.system == "x86_64-openbsd";
         is64bit = result.system == "x86_64-linux"
-                || result.system == "x86_64-darwin";
+                || result.system == "x86_64-darwin"
+                || result.system == "x86_64-freebsd"
+                || result.system == "x86_64-openbsd";
         isMips = result.system == "mips-linux"
                 || result.system == "mips64el-linux";
         isArm = result.system == "armv5tel-linux"
+             || result.system == "armv6l-linux"
              || result.system == "armv7l-linux";
 
         # Utility function: allow stdenv to be easily regenerated with

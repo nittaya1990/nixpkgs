@@ -5,14 +5,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "nix-1.4";
+  name = "nix-1.5.1";
 
   src = fetchurl {
     url = "http://nixos.org/releases/nix/${name}/${name}.tar.xz";
-    sha256 = "f400c7e9c935271b833055e4d6888ec15eb90ef92ee6521dc55f1501036dc9b2";
+    sha256 = "c53ec8a5518445bea658e1edb4e3be8c315b583aefc55d6969f2bf6f6c805239";
   };
 
-  buildNativeInputs = [ perl pkgconfig ];
+  nativeBuildInputs = [ perl pkgconfig ];
 
   buildInputs = [ curl openssl boehmgc sqlite ];
 
@@ -43,8 +43,8 @@ stdenv.mkDerivation rec {
 
   crossAttrs = {
     postUnpack =
-      '' export CPATH="${bzip2.hostDrv}/include"
-         export NIX_CROSS_LDFLAGS="-L${bzip2.hostDrv}/lib -rpath-link ${bzip2.hostDrv}/lib $NIX_CROSS_LDFLAGS"
+      '' export CPATH="${bzip2.crossDrv}/include"
+         export NIX_CROSS_LDFLAGS="-L${bzip2.crossDrv}/lib -rpath-link ${bzip2.crossDrv}/lib $NIX_CROSS_LDFLAGS"
       '';
 
     configureFlags =

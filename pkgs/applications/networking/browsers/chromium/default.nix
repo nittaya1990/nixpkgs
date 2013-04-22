@@ -13,15 +13,16 @@
 , gcc, bison, gperf
 , glib, gtk, dbus_glib
 , libXScrnSaver, libXcursor, mesa
-
-# dependencies for v25
-, libvpx
-
-# dependencies for >= v25
 , protobuf
+
+# dependencies for v25 only
+, libvpx
 
 # dependencies for >= v26
 , speechd, libXdamage
+
+# dependencies for >= v27
+, libXtst
 
 # optional dependencies
 , libgcrypt ? null # gnomeSupport || cupsSupport
@@ -59,7 +60,7 @@ let
     use_system_libexpat = true;
     use_system_libexif = true;
     use_system_libjpeg = true;
-    use_system_libpng = !post24;
+    use_system_libpng = false; # PNG dlopen() version conflict
     use_system_libusb = true;
     use_system_libxml = true;
     use_system_speex = true;
@@ -76,7 +77,7 @@ let
     use_system_skia = false;
     use_system_sqlite = false; # http://crbug.com/22208
     use_system_v8 = false;
-  } // optionalAttrs (post24 && !post25) {
+  } // optionalAttrs pre26 {
     use_system_libvpx = true;
     use_system_protobuf = true;
   };
@@ -89,14 +90,10 @@ let
     libusb1 libexif
   ];
 
-  post23 = !versionOlder sourceInfo.version "24.0.0.0";
-  post24 = !versionOlder sourceInfo.version "25.0.0.0";
-  post25 = !versionOlder sourceInfo.version "26.0.0.0";
-  only24 = post23 && !post24;
-  only25 = post24 && !post25;
-
-  maybeFixPulseAudioBuild = optional (only24 && pulseSupport)
-    ./pulse_audio_fix.patch;
+  pre26 = versionOlder sourceInfo.version "26.0.0.0";
+  pre27 = versionOlder sourceInfo.version "27.0.0.0";
+  post25 = !pre26;
+  post26 = !pre27;
 
 in stdenv.mkDerivation rec {
   name = "${packageName}-${version}";
@@ -119,28 +116,28 @@ in stdenv.mkDerivation rec {
     krb5
     glib gtk dbus_glib
     libXScrnSaver libXcursor mesa
+    pciutils protobuf
   ] ++ optional gnomeKeyringSupport libgnome_keyring
     ++ optionals gnomeSupport [ gconf libgcrypt ]
     ++ optional enableSELinux libselinux
     ++ optional cupsSupport libgcrypt
     ++ optional pulseSupport pulseaudio
-    ++ optionals post24 [ pciutils protobuf ]
-    ++ optional only25 libvpx
-    ++ optionals post25 [ speechd libXdamage ];
+    ++ optional pre26 libvpx
+    ++ optionals post25 [ speechd libXdamage ]
+    ++ optional post26 libXtst;
 
   opensslPatches = optional useOpenSSL openssl.patches;
 
   prePatch = "patchShebangs .";
 
   patches = optional cupsSupport ./cups_allow_deprecated.patch
-         ++ optional pulseSupport ./pulseaudio_array_bounds.patch
-         ++ maybeFixPulseAudioBuild
-         ++ optional post25 ./clone_detached.patch;
+         ++ optional (pulseSupport && pre27) ./pulseaudio_array_bounds.patch
+         ++ optional pre27 ./glibc-2.16-use-siginfo_t.patch;
 
-  postPatch = optionalString useOpenSSL ''
+  postPatch = ''
+    sed -i -r -e 's/-f(stack-protector)(-all)?/-fno-\1/' build/common.gypi
+  '' + optionalString useOpenSSL ''
     cat $opensslPatches | patch -p1 -d third_party/openssl/openssl
-  '' + optionalString post24 ''
-    sed -i -r -e "s/-f(stack-protector)(-all)?/-fno-\1/" build/common.gypi
   '' + optionalString post25 ''
     sed -i -e 's|/usr/bin/gcc|gcc|' \
       third_party/WebKit/Source/WebCore/WebCore.gyp/WebCore.gyp
@@ -223,6 +220,4 @@ in stdenv.mkDerivation rec {
     license = licenses.bsd3;
     platforms = platforms.linux;
   };
-} // optionalAttrs only25 {
-  NIX_CFLAGS_COMPILE = "-fno-stack-protector";
 }

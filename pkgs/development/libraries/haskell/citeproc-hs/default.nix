@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "citeproc-hs";
-  version = "0.3.7";
-  sha256 = "0ix9y7z8m8x4l10h96fgv820grywvwcp3019wxjja4y4w6irid3b";
+  version = "0.3.8";
+  sha256 = "0wlfwjxg852qcgx54m99xm7hxsmcw8c8r7fyrsxyxl3054xnfwz8";
   buildDepends = [
     filepath hexpat hsBibutils HTTP json mtl network pandocTypes parsec
     syb time utf8String
@@ -15,6 +15,9 @@ cabal.mkDerivation (self: {
     description = "A Citation Style Language implementation in Haskell";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })

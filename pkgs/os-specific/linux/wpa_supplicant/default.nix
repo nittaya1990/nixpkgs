@@ -36,15 +36,9 @@ stdenv.mkDerivation rec {
   buildInputs = [ openssl dbus_libs libnl ]
     ++ lib.optional readlineSupport readline;
 
-  buildNativeInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
 
-  patches =
-    [ (fetchurl {
-        url = "https://projects.archlinux.org/svntogit/packages.git/plain/trunk/hostap_allow-linking-with-libnl-3.2.patch?h=packages/wpa_supplicant";
-        name = "hostap_allow-linking-with-libnl-3.2.patch";
-        sha256 = "0iwvjq0apc6mv1r03k5pnyjgda3q47yx36c4lqvv8i8q1vn7kbf2";
-      })
-    ];
+  patches = [ ./libnl.patch ];
 
   postInstall = ''
     mkdir -p $out/share/man/man5 $out/share/man/man8
