@@ -7,10 +7,10 @@ cabal.mkDerivation (self: {
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ mtl QuickCheck random syb ];
+  jailbreak = true;
   meta = {
     description = "For testing partial and infinite values";
     license = "unknown";
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })

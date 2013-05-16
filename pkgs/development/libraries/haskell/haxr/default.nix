@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "haxr";
-  version = "3000.9.0.1";
-  sha256 = "106hw8ysjx12dvwij4ld6n54mxj2yl1p7iihp2fwz50v50mz6102";
+  version = "3000.9.1";
+  sha256 = "0m716ncb81y245vviz04089nlrvkca9cvjvj2qphkdhhmxsqw8fc";
   buildDepends = [
     base64Bytestring blazeBuilder HaXml HTTP mtl network time
     utf8String
@@ -15,9 +15,6 @@ cabal.mkDerivation (self: {
     description = "XML-RPC client and server library";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [
-      self.stdenv.lib.maintainers.andres
-      self.stdenv.lib.maintainers.simons
-    ];
+    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

@@ -8,11 +8,11 @@ cabal.mkDerivation (self: {
     diagramsContrib diagramsCore diagramsLib diagramsSvg
   ];
   noHaddock = true;
+  jailbreak = true;
   meta = {
     homepage = "http://projects.haskell.org/diagrams";
     description = "Embedded domain-specific language for declarative vector graphics";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })
