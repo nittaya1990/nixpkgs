@@ -11,8 +11,8 @@ let
   ghc704  = "ghc704";
   ghc742  = "ghc742";
   ghc763  = "ghc763";
-  default = [ ghc742 ];
-  latest  = [ ghc763 ];
+  default = [ ghc763 ];
+  latest  = [ ];
   all     = [ ghc6104 ghc6123 ghc704 ghc742 ghc763 ];
 
   allBut = platform: pkgs.lib.filter (x: platform != x) all;
@@ -50,6 +50,8 @@ mapHaskellTestOn {
   AgdaExecutable = default;
   alex = all;
   alexMeta = default;
+  alsaCore = default;
+  alsaPcm = default;
   alternativeIo = default;
   ansiTerminal = default;
   ansiWlPprint = default;
@@ -131,19 +133,16 @@ mapHaskellTestOn {
   dimensional = default ++ latest;
   dimensionalTf = default ++ latest;
   directoryTree = default;
-  distributedProcess = default;
   dlist = default;
   dns = default;
   doctest = default ++ latest;
   dotgen = default;
   doubleConversion = default;
-  Ebnf2ps = default;
   editDistance = default;
   editline = default;
   emailValidate = default;
   entropy = default;
   enumerator = default;
-  epic = default;
   erf = default;
   failure = default;
   fclabels = default;
@@ -181,7 +180,6 @@ mapHaskellTestOn {
   hamlet = default;
   happstackHamlet = default;
   happstackServer = default;
-  happstackUtil = default;
   happy = all;
   hashable = default;
   hashedStorage = default;
@@ -196,11 +194,9 @@ mapHaskellTestOn {
   HDBC = default;
   HDBCPostgresql = default;
   HDBCSqlite3 = default;
-  HFuse = default;
   highlightingKate = default;
   hinotify = default;
   hint = default;
-  Hipmunk = default;
   hledger = default ++ latest;
   hledgerInterest = default ++ latest;
   hledgerLib = default ++ latest;
@@ -220,7 +216,6 @@ mapHaskellTestOn {
   hslogger = default;
   hsloggerTemplate = default;
   hspec = default ++ latest;
-  hspread = default;
   HsSyck = default;
   HStringTemplate = default ++ latest;
   hsyslog = all;
@@ -248,7 +243,6 @@ mapHaskellTestOn {
   liftedBase = default;
   ListLike = default;
   logfloat = default;
-  ltk = default;
   mainlandPretty = default;
   maude = default;
   MaybeT = default;
@@ -270,7 +264,6 @@ mapHaskellTestOn {
   mtlparse = default;
   multiplate = default;
   multirec = default;
-  multiset = default;
   murmurHash = default;
   mwcRandom = default;
   nat = default;
@@ -360,7 +353,6 @@ mapHaskellTestOn {
   storableComplex = default;
   storableRecord = default;
   streamproc = all;
-  strictConcurrency = default;
   strict = default;
   strptime = default;
   svgcairo = default;
@@ -385,7 +377,7 @@ mapHaskellTestOn {
   transformersBase = default;
   transformersCompat = default;
   tuple = default;
-  typeLlevelNaturalNumber = default;
+  typeLevelNaturalNumber = default;
   uniplate = default;
   uniqueid = default;
   unixCompat = default;
@@ -397,8 +389,8 @@ mapHaskellTestOn {
   uuagc = default;
   uuid = default;
   uulib = default ++ latest;
+  uuOptions = default;
   uuParsinglib = default;
-  vacuumCairo = default;
   vacuum = default;
   vcsRevision = default;
   Vec = default;
@@ -414,9 +406,6 @@ mapHaskellTestOn {
   wlPprint = default ++ latest;
   wlPprintExtras = default;
   wlPprintTerminfo = default;
-  wxcore = default;
-  wx = default;
-  wxdirect = default;
   X11 = default;
   xhtml = all;
   xmlConduit = default;
