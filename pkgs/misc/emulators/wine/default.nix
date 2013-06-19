@@ -1,18 +1,18 @@
 { stdenv, fetchurl, xlibs, flex, bison, mesa, alsaLib
 , ncurses, libpng, libjpeg, lcms, freetype, fontconfig, fontforge
-, libxml2, libxslt, openssl, gnutls, cups
+, libxml2, libxslt, openssl, gnutls, cups, libdrm, makeWrapper
 }:
 
 assert stdenv.isLinux;
 assert stdenv.gcc.gcc != null;
 
 stdenv.mkDerivation rec {
-  version = "1.5.29";
+  version = "1.5.31";
   name = "wine-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/wine/${name}.tar.bz2";
-    sha256 = "1cc8g1mrs02nk16jz4a8brr82slp944k4c1nmaa2xpz183a0wz1q";
+    sha256 = "1hlj1r3xi1mbqblkiwrcphvvb8rd50qig25jhyid58qp3r2lf9a6";
   };
 
   gecko = fetchurl {
@@ -25,14 +25,14 @@ stdenv.mkDerivation rec {
     xlibs.libXcursor xlibs.libXinerama xlibs.libXrandr
     xlibs.libXrender xlibs.libXxf86vm xlibs.libXcomposite
     alsaLib ncurses libpng libjpeg lcms fontforge
-    libxml2 libxslt openssl gnutls cups
+    libxml2 libxslt openssl gnutls cups makeWrapper
   ];
 
   # Wine locates a lot of libraries dynamically through dlopen().  Add
   # them to the RPATH so that the user doesn't have to set them in
   # LD_LIBRARY_PATH.
   NIX_LDFLAGS = map (path: "-rpath ${path}/lib ") [
-    freetype fontconfig stdenv.gcc.gcc mesa mesa.libdrm
+    freetype fontconfig stdenv.gcc.gcc mesa libdrm
     xlibs.libXinerama xlibs.libXrender xlibs.libXrandr
     xlibs.libXcursor xlibs.libXcomposite libpng libjpeg
     openssl gnutls cups
@@ -42,7 +42,10 @@ stdenv.mkDerivation rec {
   # elements specified above.
   dontPatchELF = true;
 
-  postInstall = "install -D ${gecko} $out/share/wine/gecko/${gecko.name}";
+  postInstall = ''
+    install -D ${gecko} $out/share/wine/gecko/${gecko.name}
+    wrapProgram $out/bin/wine --prefix LD_LIBRARY_PATH : ${stdenv.gcc.gcc}/lib
+  '';
 
   enableParallelBuilding = true;
 

@@ -97,7 +97,7 @@ pythonPackages = python.modules // rec {
   };
 
   pygtk = import ../development/python-modules/pygtk {
-    inherit (pkgs) fetchurl stdenv pkgconfig glib gtk;
+    inherit (pkgs) fetchurl stdenv pkgconfig gtk;
     inherit python buildPythonPackage pygobject pycairo;
   };
 
@@ -106,7 +106,7 @@ pythonPackages = python.modules // rec {
   #  inherit (pkgs.gnome) libglade;
   #};
   pyGtkGlade = import ../development/python-modules/pygtk {
-    inherit (pkgs) fetchurl stdenv pkgconfig glib gtk;
+    inherit (pkgs) fetchurl stdenv pkgconfig gtk;
     inherit (pkgs.gnome) libglade;
     inherit python buildPythonPackage pygobject pycairo;
   };
@@ -975,6 +975,25 @@ pythonPackages = python.modules // rec {
     };
   };
 
+  fabric = buildPythonPackage rec {
+    name = "fabric-1.6.1";
+    src = fetchurl {
+      url = https://pypi.python.org/packages/source/F/Fabric/Fabric-1.6.1.tar.gz;
+      sha256 = "058psbhqbfm3n214wkyfpgm069yqmdqw1hql9bac1yv9pza3bzx1";
+    };
+    propagatedBuildInputs = [ paramiko pycrypto ];
+    buildInputs = [ fudge nose ];
+  }; 
+
+  fudge = buildPythonPackage rec {
+    name = "fudge-0.9.4";
+    src = fetchurl {
+      url = https://pypi.python.org/packages/source/f/fudge/fudge-0.9.4.tar.gz;
+      sha256 = "03sj2x6mpzm48swpa4hnn1gi6yilgniyjfg1ylz95wm1ijggi33w";
+    };
+    buildInputs = [ nose nosejs ];
+    propagatedBuildInputs = [ sphinx ];
+  };
 
   logilab_astng = buildPythonPackage rec {
     name = "logilab-astng-0.24.1";
@@ -2167,6 +2186,26 @@ pythonPackages = python.modules // rec {
     propagatedBuildInputs = [ unittest2 ];
   };
 
+  "lxml-2.3.6" = buildPythonPackage rec {
+    name = "lxml-2.3.6";
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/l/lxml/lxml-2.3.6.tar.gz";
+      md5 = "d5d886088e78b1bdbfd66d328fc2d0bc";
+    };
+    buildInputs = [ pkgs.libxml2 pkgs.libxslt ];
+    propagatedBuildInputs = [  ];
+    doCheck = false;
+    installCommand = ''
+      easy_install --always-unzip --no-deps --prefix="$out" .
+    '';
+
+    meta = {
+      description = "Pythonic binding for the libxml2 and libxslt libraries";
+      homepage = http://codespeak.net/lxml/index.html;
+      license = "BSD";
+    };
+  };
+
   lxml = buildPythonPackage ( rec {
     name = "lxml-3.0.2";
 
@@ -2718,6 +2757,15 @@ pythonPackages = python.modules // rec {
     propagatedBuildInputs = [ covCore nose2 ];
   });
 
+  nosejs = buildPythonPackage {
+    name = "nosejs-0.9.4";
+    src = fetchurl {
+      url = https://pypi.python.org/packages/source/N/NoseJS/NoseJS-0.9.4.tar.gz;
+      sha256 = "0qrhkd3sga56qf6k0sqyhwfcladwi05gl6aqmr0xriiq1sgva5dy";
+    };
+    buildInputs = [ nose ];
+  };
+
   notify = pkgs.stdenv.mkDerivation (rec {
     name = "python-notify-0.1.1";
 
@@ -2825,6 +2873,7 @@ pythonPackages = python.modules // rec {
     src = fetchgit {
       url = https://git.torproject.org/pluggable-transports/obfsproxy.git;
       rev = "3c4e843a30c430aec1de03e0e09ef654072efc03";
+      sha256 = "8fd1e63a37bc42add7609d97d50ecd81da81881bcf7015a9e2958531dbf39018";
     };
 
     propagatedBuildInputs = [ pyptlib argparse twisted pycrypto ];
@@ -2899,13 +2948,35 @@ pythonPackages = python.modules // rec {
     };
   });
 
-
-  paramiko = buildPythonPackage rec {
-    name = "paramiko-1.7.7.1";
+  pandas = buildPythonPackage rec {
+    name = "pandas-0.11.0";
 
     src = fetchurl {
-      url = "http://www.lag.net/paramiko/download/${name}.tar.gz";
-      sha256 = "1bjy4jn51c50mpq51jbwk0glzd8bxz83gxdfkr9p95dmrd17c7hh";
+      url = "https://pypi.python.org/packages/source/p/pandas/${name}.tar.gz";
+      sha256 = "1mwh783hcch6lywgjayj8aqmbfv6n8fd2qbf1xlwqk2913ad8x2d";
+    };
+
+    buildInputs = [ nose ];
+    propagatedBuildInputs = [ dateutil numpy pytz python.modules.sqlite3 ];
+
+    # Tests require networking to pass
+    doCheck = false;
+
+    meta = {
+      homepage = "http://pandas.pydata.org/";
+      description = "Python Data Analysis Library";
+      license = stdenv.lib.licenses.bsd3;
+      maintainers = [ stdenv.lib.maintainers.raskin ];
+      platforms = stdenv.lib.platforms.linux;
+    };
+  };
+
+  paramiko = buildPythonPackage rec {
+    name = "paramiko-1.10";
+
+    src = fetchurl {
+      url = https://pypi.python.org/packages/source/p/paramiko/paramiko-1.10.1.tar.gz;
+      sha256 = "1g5sbzfxdhps61z3vm30wa87m5xq1j9ar3qvgr5bz63l7nxhvb2z";
     };
 
     buildInputs = [ pycrypto ];
@@ -3320,6 +3391,10 @@ pythonPackages = python.modules // rec {
       url = "https://pypi.python.org/packages/source/p/pygit2/${name}.tar.gz";
       md5 = "8d27f84509a96d6791a6c393ae67d7c8";
     };
+
+    preConfigure = ( if stdenv.isDarwin then ''
+      export DYLD_LIBRARY_PATH="${pkgs.libgit2}/lib"
+    '' else "" );
 
     propagatedBuildInputs = [ pkgs.libgit2 ];
 
@@ -5588,6 +5663,36 @@ pythonPackages = python.modules // rec {
   };
 
 
+  tarman = buildPythonPackage rec {
+    version = "0.1";
+    name = "tarman-${version}";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/t/tarman/tarman-${version}.zip";
+      sha256 = "1g6p9v7z2qrg000150flwmpykkzc4y8l3lvkvpn0rb8czyw7l27f";
+    };
+
+    buildInputs = [ pkgs.unzip unittest2 nose mock ];
+    propagatedBuildInputs = [ python.modules.curses libarchive ];
+
+    # two tests fail
+    doCheck = false;
+  };
+
+
+  libarchive = buildPythonPackage rec {
+    version = "3.0.4-5";
+    name = "libarchive-${version}";
+
+    src = fetchurl {
+      url = "http://python-libarchive.googlecode.com/files/python-libarchive-${version}.tar.gz";
+      sha256 = "141yx9ym8gvybn67mw0lmgafzsd79rmd9l77lk0k6m2fzclqx1j5";
+    };
+
+    propagatedBuildInputs = [ pkgs.libarchive ];
+  };
+
+
   pyzmq = buildPythonPackage rec {
     name = "pyzmq-13.0.0";
     src = fetchurl {
@@ -5900,5 +6005,62 @@ pythonPackages = python.modules // rec {
       maintainers = [ stdenv.lib.maintainers.rickynils ];
     };
   };
+
+  gdata = buildPythonPackage rec {
+    name = "gdata-${version}";
+    version = "2.0.17";
+
+    src = fetchurl {
+      url = "https://gdata-python-client.googlecode.com/files/${name}.tar.gz";
+      # sha1 = "d2d9f60699611f95dd8c328691a2555e76191c0c";
+      sha256 = "0bdaqmicpbj9v3p0swvyrqs7m35bzwdw1gy56d3k09np692jfwmd";
+    };
+
+    # Fails with "error: invalid command 'test'"
+    doCheck = false;
+
+    meta = {
+      homepage = https://code.google.com/p/gdata-python-client/;
+      description = "Python client library for Google data APIs";
+      license = pkgs.lib.licenses.asl20;
+    };
+  };
+
+  IMAPClient = buildPythonPackage rec {
+    name = "IMAPClient-${version}";
+    version = "0.9.2";
+
+    src = fetchurl {
+      url = "http://freshfoo.com/projects/IMAPClient/${name}.tar.gz";
+      sha256 = "10alpj7074djs048xjc4j7ggd1nrqdqpy0fzl7fj9hddp0rbchs9";
+    };
+
+    preConfigure = ''
+      sed -i '/distribute_setup/d' setup.py
+    '';
+
+    meta = {
+      homepage = http://imapclient.freshfoo.com/;
+      description = "Easy-to-use, Pythonic and complete IMAP client library";
+      license = pkgs.lib.licenses.bsd3;
+    };
+  };
+
+  Logbook = buildPythonPackage rec {
+    name = "Logbook-${version}";
+    version = "0.4.1";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/L/Logbook/${name}.tar.gz";
+      # md5 = "143cb15af4c4a784ca785a1546ad1b93";
+      sha256 = "0iim9pcyl57c6z9i1kfw5nz92qrnpz2l0bz4lir2xrqi8m03q3d7";
+    };
+
+    meta = {
+      homepage = http://pythonhosted.org/Logbook/;
+      description = "A logging replacement for Python";
+      license = pkgs.lib.licenses.bsd3;
+    };
+ };
 
 }; in pythonPackages

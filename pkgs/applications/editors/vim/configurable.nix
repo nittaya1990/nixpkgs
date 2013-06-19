@@ -1,21 +1,51 @@
 # TODO tidy up eg The patchelf code is patching gvim even if you don't build it..
 # but I have gvim with python support now :) - Marc
-args: with args;
+args@{source ? "latest", ...}: with args;
+
+
 let inherit (args.composableDerivation) composableDerivation edf; in
-composableDerivation {} {
+composableDerivation {
+  # use gccApple to compile on darwin
+  mkDerivation = ( if stdenv.isDarwin
+                   then stdenvAdapters.overrideGCC stdenv gccApple
+                   else stdenv ).mkDerivation;
+} (fix: {
 
     name = "vim_configurable-7.3";
 
-    src = args.fetchurl {
-      url = ftp://ftp.vim.org/pub/vim/unix/vim-7.3.tar.bz2;
-      sha256 = "079201qk8g9yisrrb0dn52ch96z3lzw6z473dydw9fzi0xp5spaw";
+    enableParallelBuilding = true; # test this
+
+    src = 
+      builtins.getAttr source {
+      "default" =
+        # latest release
+        args.fetchurl {
+            url = ftp://ftp.vim.org/pub/vim/unix/vim-7.3.tar.bz2;
+            sha256 = "079201qk8g9yisrrb0dn52ch96z3lzw6z473dydw9fzi0xp5spaw";
+          };
+      "vim-nox" =
+          {
+            # vim nox branch: client-server without X by uing sockets
+            # REGION AUTO UPDATE: { name="vim-nox"; type="hg"; url="https://code.google.com/r/yukihironakadaira-vim-cmdsrv-nox/"; branch="cmdsrv-nox"; }
+            src = (fetchurl { url = "http://mawercer.de/~nix/repos/vim-nox-hg-2082fc3.tar.bz2"; sha256 = "293164ca1df752b7f975fd3b44766f5a1db752de6c7385753f083499651bd13a"; });
+            name = "vim-nox-hg-2082fc3";
+            # END
+          }.src;
+      "latest" = {
+        # vim latest usually is vim + bug fixes. So it should be very stable
+         # REGION AUTO UPDATE: { name="vim"; type="hg"; url="https://vim.googlecode.com/hg"; }
+         src = (fetchurl { url = "http://mawercer.de/~nix/repos/vim-hg-7f98896.tar.bz2"; sha256 = "efcb8cc5924b530631a8e5fc2a0622045c2892210d32d300add24aded51866f1"; });
+         name = "vim-hg-7f98896";
+         # END
+      }.src;
     };
 
-    configureFlags = ["--enable-gui=auto" "--with-features=${args.features}"];
+    configureFlags
+      = [ "--enable-gui=${args.gui}" "--with-features=${args.features}" ];
 
-    nativeBuildInputs = [ncurses pkgconfig]
-      ++ [ gtk libX11 libXext libSM libXpm libXt libXaw libXau libXmu glib 
-           libICE ];
+    nativeBuildInputs
+      = [ ncurses pkgconfig gtk libX11 libXext libSM libXpm libXt libXaw libXau
+          libXmu glib libICE ];
 
     # most interpreters aren't tested yet.. (see python for example how to do it)
     flags = {
@@ -47,11 +77,17 @@ composableDerivation {} {
 
   cfg = {
     pythonSupport    = config.vim.python or true;
-    darwinSupport    = config.vim.darwin or false;
+    rubySupport      = config.vim.ruby or true;
     nlsSupport       = config.vim.nls or false;
     tclSupport       = config.vim.tcl or false;
     multibyteSupport = config.vim.multibyte or false;
     cscopeSupport    = config.vim.cscope or false;
+    netbeansSupport  = config.netbeans or true; # eg envim is using it
+
+    # by default, compile with darwin support if we're compiling on darwin, but
+    # allow this to be disabled by setting config.vim.darwin to false
+    darwinSupport    = stdenv.isDarwin && (config.vim.darwin or true);
+
     # add .nix filetype detection and minimal syntax highlighting support
     ftNixSupport     = config.vim.ftNix or true;
   };
@@ -68,21 +104,23 @@ composableDerivation {} {
       // edf "gtktest" "gtktest" { } #Do not try to compile and run a test GTK program
     */
 
-  postInstall = "
-    rpath=`patchelf --print-rpath \$out/bin/vim`;
-    for i in \$nativeBuildInputs; do
-      echo adding \$i/lib
-      rpath=\$rpath:\$i/lib
+  postInstall = if stdenv.isLinux then ''
+    rpath=`patchelf --print-rpath $out/bin/vim`;
+    for i in $nativeBuildInputs; do
+      echo adding $i/lib
+      rpath=$rpath:$i/lib
     done
-    echo \$nativeBuildInputs
-    echo \$rpath
-    patchelf --set-rpath \$rpath \$out/bin/{vim,gvim}
-  ";
-  dontStrip =1;
+    echo $nativeBuildInputs
+    echo $rpath
+    patchelf --set-rpath $rpath $out/bin/{vim,gvim}
+  '' else "";
+
+  dontStrip = 1;
 
   meta = {
     description = "The most popular clone of the VI editor";
-    homepage = "www.vim.org";
+    homepage    = "www.vim.org";
+    platforms   = lib.platforms.unix;
   };
+})
 
-}
