@@ -591,6 +591,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   binaryShared = callPackage ../development/libraries/haskell/binary-shared {};
 
+  bindingsDSL = callPackage ../development/libraries/haskell/bindings-DSL {};
+
+  bindingsPosix = callPackage ../development/libraries/haskell/bindings-posix {};
+
   bitarray = callPackage ../development/libraries/haskell/bitarray {};
 
   bitmap = callPackage ../development/libraries/haskell/bitmap {};
@@ -626,6 +630,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   bson = callPackage ../development/libraries/haskell/bson {};
 
   boomerang = callPackage ../development/libraries/haskell/boomerang {};
+
+  byteable = callPackage ../development/libraries/haskell/byteable {};
 
   bytedump = callPackage ../development/libraries/haskell/bytedump {};
 
@@ -1121,6 +1127,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   HTTP_4000_2_8 = callPackage ../development/libraries/haskell/HTTP/4000.2.8.nix {};
   HTTP = self.HTTP_4000_2_8;
 
+  httpAttoparsec = callPackage ../development/libraries/haskell/http-attoparsec {};
+
   httpReverseProxy = callPackage ../development/libraries/haskell/http-reverse-proxy {};
 
   hackageDb = callPackage ../development/libraries/haskell/hackage-db {};
@@ -1164,6 +1172,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   hledger = callPackage ../development/libraries/haskell/hledger {};
   hledgerLib = callPackage ../development/libraries/haskell/hledger-lib {};
   hledgerInterest = callPackage ../applications/office/hledger-interest {};
+  hledgerIrr = callPackage ../applications/office/hledger-irr {};
   hledgerWeb = callPackage ../development/libraries/haskell/hledger-web {};
 
   HList = callPackage ../development/libraries/haskell/HList {};
@@ -1593,7 +1602,6 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   punycode = callPackage ../development/libraries/haskell/punycode {};
 
-  primitive_0_4_1 = callPackage ../development/libraries/haskell/primitive/0.4.1.nix   {};
   primitive_0_5_0_1 = callPackage ../development/libraries/haskell/primitive/0.5.0.1.nix   {};
   primitive = self.primitive_0_5_0_1;
 
@@ -1690,6 +1698,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   regexTDFA = callPackage ../development/libraries/haskell/regex-tdfa {};
   regexTdfa = self.regexTDFA;
+
+  regexTdfaText = callPackage ../development/libraries/haskell/regex-tdfa-text {};
 
   regexPCRE = callPackage ../development/libraries/haskell/regex-pcre {};
   regexPcre = self.regexPCRE;
@@ -1929,7 +1939,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   threads = callPackage ../development/libraries/haskell/threads {};
 
   time_1_1_2_4 = callPackage ../development/libraries/haskell/time/1.1.2.4.nix {};
-  time_1_4_0_2 = callPackage ../development/libraries/haskell/time/1.4.0.2.nix {};
+  time_1_4_1 = callPackage ../development/libraries/haskell/time/1.4.1.nix {};
   # time is in the core package set. It should only be necessary to
   # pass it explicitly in rare circumstances.
   time = null;
@@ -2006,10 +2016,6 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   vect = callPackage ../development/libraries/haskell/vect {};
 
-  vector_0_9_1 = callPackage ../development/libraries/haskell/vector/0.9.1.nix {
-    primitive = self.primitive_0_4_1;  
-  };
-  vector_0_10 = callPackage ../development/libraries/haskell/vector/0.10.nix  {};
   vector_0_10_0_1  = callPackage ../development/libraries/haskell/vector/0.10.0.1.nix  {};
   vector = self.vector_0_10_0_1;
 
@@ -2042,6 +2048,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   waiTest = callPackage ../development/libraries/haskell/wai-test {};
 
   warp = callPackage ../development/libraries/haskell/warp {};
+
+  warpTls = callPackage ../development/libraries/haskell/warp-tls {};
 
   WebBits_1_0 = callPackage ../development/libraries/haskell/WebBits/1.0.nix {
     parsec = self.parsec2;
@@ -2121,6 +2129,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   yesod = callPackage ../development/libraries/haskell/yesod {};
 
   yesodAuth = callPackage ../development/libraries/haskell/yesod-auth {};
+
+  yesodBin = callPackage ../development/libraries/haskell/yesod-bin {};
 
   yesodCore = callPackage ../development/libraries/haskell/yesod-core {};
 
