@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "yaml";
-  version = "0.8.3";
-  sha256 = "1lbf0dgc3qvcdiyzk8zkpkga7f7g4i2rxriwdvwbxx199xr4apx3";
+  version = "0.8.4.1";
+  sha256 = "0zbnyf5hp206ywqkdd7c1hsdbn4wxwk7p3rzn53m7rzxvfshlbbx";
   buildDepends = [
     aeson attoparsec conduit resourcet text transformers
     unorderedContainers vector

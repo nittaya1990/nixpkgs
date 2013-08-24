@@ -1,7 +1,7 @@
 { cabal, aeson, async, blazeBuilder, bloomfilter, bup
 , caseInsensitive, clientsession, cryptoApi, curl, dataDefault
 , dataenc, DAV, dbus, dlist, dns, editDistance
-, extensibleExceptions, filepath, git, gnupg1, gnutls, hamlet
+, extensibleExceptions, feed, filepath, git, gnupg1, gnutls, hamlet
 , hinotify, hS3, hslogger, HTTP, httpConduit, httpTypes, HUnit
 , IfElse, json, lsof, MissingH, MonadCatchIOTransformers
 , monadControl, mtl, network, networkInfo, networkMulticast
@@ -14,15 +14,15 @@
 
 cabal.mkDerivation (self: {
   pname = "git-annex";
-  version = "4.20130709";
-  sha256 = "1xsv5wi0sipp71p7yw90cwd4spm4sr0kcqj47zyd19mgdyd80p9i";
+  version = "4.20130815";
+  sha256 = "0c4fvqmnvyrncmiz0dxwax2rnb4yrqw1y54q2zkqiifzrihcyi71";
   isLibrary = false;
   isExecutable = true;
   buildDepends = [
     aeson async blazeBuilder bloomfilter caseInsensitive clientsession
     cryptoApi dataDefault dataenc DAV dbus dlist dns editDistance
-    extensibleExceptions filepath gnutls hamlet hinotify hS3 hslogger
-    HTTP httpConduit httpTypes HUnit IfElse json MissingH
+    extensibleExceptions feed filepath gnutls hamlet hinotify hS3
+    hslogger HTTP httpConduit httpTypes HUnit IfElse json MissingH
     MonadCatchIOTransformers monadControl mtl network networkInfo
     networkMulticast networkProtocolXmpp QuickCheck random regexTdfa
     SafeSemaphore SHA stm text time transformers unixCompat utf8String

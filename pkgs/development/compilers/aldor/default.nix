@@ -1,35 +1,36 @@
-{ fetchgit, stdenv, gmp, which, flex, bison, makeWrapper }:
+{ fetchgit, stdenv, gmp, which, flex, bison, makeWrapper
+, autoconf, automake, libtool, openjdk, perl }:
 
-stdenv.mkDerivation rec {
-  pname = "aldor";
-  version = "1.1.0";
-  name = "${pname}-${version}";
-  gitRev = "a02b088c8d5d06f16c50a83ddee4019e962d6673";
+stdenv.mkDerivation {
+  name = "aldor-1.1.0";
 
   src = fetchgit {
     url = "https://github.com/pippijn/aldor";
-    sha256 = "1zd343wq46f74yr30a5nrbv5n831z6wd24yqnrs7w17ccic69lny";
-    rev = gitRev;
+    sha256 = "14xv3jl15ib2knsdz0bd7jx64zg1qrr33q5zcr8gli860ps8gkg3";
+    rev = "f7b95835cf709654744441ddb1c515bfc2bec998";
   };
 
-  buildInputs = [ gmp which flex bison makeWrapper ];
+  buildInputs = [ gmp which flex bison makeWrapper autoconf automake libtool
+                  openjdk perl ];
 
-  installPhase = ''
-    for d in bin include lib ;
-    do
-      ensureDir $out/$d ;
-      cp -r build/$d $out/ ;
-    done
+  preConfigure = ''
+    cd aldor ;
+    ./autogen.sh ;
+  '';
 
-    for prog in aldor unicl zacc ;
+  postInstall = ''
+    for prog in aldor unicl javagen ;
     do
       wrapProgram $out/bin/$prog --set ALDORROOT $out \
+        --prefix PATH : ${openjdk}/bin \
         --prefix PATH : ${stdenv.gcc}/bin ;
     done
   '';
 
-  meta = with stdenv.lib ; {
+  meta = {
+    homepage = "http://www.aldor.org/";
     description = "Aldor is a programming language with an expressive type system";
+    license = stdenv.lib.licenses.asl20;
 
     longDescription = ''
       Aldor is a programming language with an expressive type system well-suited
@@ -44,9 +45,7 @@ stdenv.mkDerivation rec {
       and powerful properties of functional, object-oriented and aspect-oriented styles.
     '';
 
-    homepage = http://www.aldor.org/;
-    license = licenses.asl20;
-    maintainers = [ ];
-    platforms = platforms.linux;
+    maintainers = [ stdenv.lib.maintainers.simons ];
+    platforms = stdenv.lib.platforms.linux;
   };
 }

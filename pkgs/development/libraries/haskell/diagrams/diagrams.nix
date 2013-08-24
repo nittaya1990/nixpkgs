@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "diagrams";
-  version = "0.6";
-  sha256 = "1i62jbixjzw82y622ymp6lrp4kzgn7iv55arivvh0y46bbmybqvh";
+  version = "0.7.1";
+  sha256 = "0rdpp26zvimdhdw0jpw6w606jkzkqdx0pq4051fkyk2mldwk9ipj";
   buildDepends = [
     diagramsContrib diagramsCore diagramsLib diagramsSvg
   ];
