@@ -501,6 +501,8 @@ let
 
   azureus = callPackage ../tools/networking/p2p/azureus { };
 
+  basex = callPackage ../tools/text/xml/basex { };
+
   babeld = callPackage ../tools/networking/babeld { };
 
   banner = callPackage ../games/banner {};
@@ -515,7 +517,9 @@ let
 
   bmon = callPackage ../tools/misc/bmon { };
 
-  boomerang = callPackage ../development/tools/boomerang { };
+  boomerang = callPackage ../development/tools/boomerang {
+    stdenv = overrideGCC stdenv gcc47;
+  };
 
   bootchart = callPackage ../tools/system/bootchart { };
 
@@ -628,6 +632,8 @@ let
   connect = callPackage ../tools/networking/connect { };
 
   convertlit = callPackage ../tools/text/convertlit { };
+
+  collectd = callPackage ../tools/system/collectd { };
 
   colormake = callPackage ../development/tools/build-managers/colormake { };
 
@@ -1750,6 +1756,8 @@ let
   };
 
   ssss = callPackage ../tools/security/ssss { };
+
+  storeBackup = callPackage ../tools/backup/store-backup { };
 
   stun = callPackage ../tools/networking/stun { };
 
@@ -3683,6 +3691,8 @@ let
 
   uisp = callPackage ../development/tools/misc/uisp { };
 
+  uncrustify = callPackage ../development/tools/misc/uncrustify { };
+
   gdb = callPackage ../development/tools/misc/gdb {
     hurd = gnu.hurdCross;
     inherit (gnu) mig;
@@ -4484,7 +4494,9 @@ let
 
   libassuan2_1 = callPackage ../development/libraries/libassuan/git.nix { };
 
-  libav = callPackage ../development/libraries/libav { };
+  libav = libav_9;
+  libav_all = callPackage ../development/libraries/libav { };
+  inherit (libav_all) libav_9 libav_0_8;
 
   libavc1394 = callPackage ../development/libraries/libavc1394 { };
 
@@ -5960,7 +5972,8 @@ let
 
   fingerd_bsd = callPackage ../servers/fingerd/bsd-fingerd { };
 
-  firebird = callPackage ../servers/firebird { };
+  firebird = callPackage ../servers/firebird { icu = null; };
+  firebirdSuper = callPackage ../servers/firebird { superServer = true; };
 
   freepops = callPackage ../servers/mail/freepops { };
 
@@ -6279,7 +6292,11 @@ let
 
   drbd = callPackage ../os-specific/linux/drbd { };
 
-  dstat = callPackage ../os-specific/linux/dstat { };
+  dstat = callPackage ../os-specific/linux/dstat {
+    # pythonFull includes the "curses" standard library module, for pretty
+    # dstat color output
+    python = pythonFull;
+  };
 
   libuuid =
     if crossSystem != null && crossSystem.config == "i586-pc-gnu"
@@ -7925,6 +7942,8 @@ let
 
   lastwatch = callPackage ../applications/audio/lastwatch { };
 
+  lbdb = callPackage ../tools/misc/lbdb { };
+
   lci = callPackage ../applications/science/logic/lci {};
 
   ldcpp = callPackage ../applications/networking/p2p/ldcpp {
@@ -9325,7 +9344,13 @@ let
 
   gtk_engines = callPackage ../misc/themes/gtk2/gtk-engines { };
 
+  gtk-engine-murrine = callPackage ../misc/themes/gtk2/gtk-engine-murrine { };
+
   gnome_themes_standard = callPackage ../misc/themes/gnome-themes-standard { };
+
+  mate-icon-theme = callPackage ../misc/themes/mate-icon-theme { };
+
+  mate-themes = callPackage ../misc/themes/mate-themes { };
 
   xfce = xfce4_10;
   xfce4_10 = recurseIntoAttrs (import ../desktops/xfce { inherit pkgs newScope; });

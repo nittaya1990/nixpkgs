@@ -64,7 +64,7 @@
 # modifyPrio argument can be set to lowPrio to make all Haskell packages have
 # low priority.
 
-let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
+let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x y);
                  self = (prefFun result) result; in
 
 # Indentation deliberately broken at this point to keep the bulk
@@ -72,7 +72,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
 {
 
-  final = self;
+  finalReturn = self;
+
+  callPackage = callPackage;
 
   # GHC and its wrapper
   #
@@ -685,7 +687,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   cgi = self.cgi_3001_1_8_4;
 
   Chart = callPackage ../development/libraries/haskell/Chart {};
-
+  ChartCairo = callPackage ../development/libraries/haskell/Chart-cairo {};
   ChartGtk = callPackage ../development/libraries/haskell/Chart-gtk {};
 
   ChasingBottoms = callPackage ../development/libraries/haskell/ChasingBottoms {};
@@ -869,10 +871,6 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   directoryTree = callPackage ../development/libraries/haskell/directory-tree {};
 
-  distributedProcess = callPackage ../development/libraries/haskell/distributed-process {};
-
-  distributedProcessSimplelocalnet = callPackage ../development/libraries/haskell/distributed-process-simplelocalnet {};
-
   distributedStatic = callPackage ../development/libraries/haskell/distributed-static {};
 
   distributive = callPackage ../development/libraries/haskell/distributive {};
@@ -963,6 +961,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   filestore = callPackage ../development/libraries/haskell/filestore {};
 
   filesystemConduit = callPackage ../development/libraries/haskell/filesystem-conduit {};
+
+  final = callPackage ../development/libraries/haskell/final {};
 
   fgl_5_4_2_2 = callPackage ../development/libraries/haskell/fgl/5.4.2.2.nix {};
   fgl_5_4_2_3 = callPackage ../development/libraries/haskell/fgl/5.4.2.3.nix {};
@@ -1338,6 +1338,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   lens = callPackage ../development/libraries/haskell/lens {};
 
+  lensDatetime = callPackage ../development/libraries/haskell/lens-datetime {};
+
   lenses = callPackage ../development/libraries/haskell/lenses {};
 
   libffi = callPackage ../development/libraries/haskell/libffi {
@@ -1351,6 +1353,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   libxmlSax = callPackage ../development/libraries/haskell/libxml-sax {};
 
   liftedBase = callPackage ../development/libraries/haskell/lifted-base {};
+
+  linear = callPackage ../development/libraries/haskell/linear {};
 
   List = callPackage ../development/libraries/haskell/List {};
 
@@ -1543,6 +1547,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   OpenGLRaw_1_3_0_0 = callPackage ../development/libraries/haskell/OpenGLRaw/1.3.0.0.nix {};
   OpenGLRaw = self.OpenGLRaw_1_3_0_0;
+
+  operational = callPackage ../development/libraries/haskell/operational {};
 
   optparseApplicative = callPackage ../development/libraries/haskell/optparse-applicative {};
 
@@ -2379,4 +2385,4 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
 };
 
-in result.final
+in result.finalReturn
