@@ -1,6 +1,7 @@
-{ stdenv, fetchurl, libjpeg, libpng, libtiff, zlib, pkgconfig, fontconfig, openssl
-, lcms, freetype, libpaper, jbig2dec, expat, libiconvOrEmpty
-, x11Support, x11 ? null
+{ stdenv, fetchurl, pkgconfig, zlib, expat, openssl
+, libjpeg, libpng, libtiff, freetype, fontconfig, lcms2, libpaper, jbig2dec
+, libiconvOrEmpty
+, x11Support ? false, x11 ? null
 , cupsSupport ? false, cups ? null
 , gnuFork ? true
 }:
@@ -51,7 +52,7 @@ let
     };
 
     preConfigure = ''
-      rm -R libpng jpeg lcms{,2} tiff freetype jbig2dec expat jasper openjpeg
+      rm -R libpng jpeg lcms{,2} tiff freetype jbig2dec expat openjpeg
 
       substituteInPlace base/unix-aux.mak --replace "INCLUDE=/usr/include" "INCLUDE=/no-such-path"
       sed "s@if ( test -f \$(INCLUDE)[^ ]* )@if ( true )@" -i base/unix-aux.mak
@@ -78,10 +79,13 @@ stdenv.mkDerivation rec {
     # ... add other fonts here
   ];
 
-  buildInputs = [
-    libjpeg libpng libtiff zlib pkgconfig fontconfig openssl lcms
-    libpaper jbig2dec expat
-  ] ++ stdenv.lib.optionals x11Support [x11 freetype]
+  enableParallelBuilding = true;
+
+  buildInputs =
+    [ pkgconfig zlib expat openssl
+      libjpeg libpng libtiff freetype fontconfig lcms2 libpaper jbig2dec
+    ]
+    ++ stdenv.lib.optional x11Support x11
     ++ stdenv.lib.optional cupsSupport cups
     ++ libiconvOrEmpty
     # [] # maybe sometimes jpeg2000 support
@@ -101,9 +105,11 @@ stdenv.mkDerivation rec {
     makeFlagsArray=(CUPSSERVERBIN=$out/lib/cups CUPSSERVERROOT=$out/etc/cups CUPSDATA=$out/share/cups)
   '' + stdenv.lib.optionalString (variant ? preConfigure) variant.preConfigure;
 
-  configureFlags = [ "--with-system-libtiff" ] ++
-    (if x11Support then [ "--with-x" ] else [ "--without-x" ]) ++
-    (if cupsSupport then [ "--enable-cups" "--with-install-cups" ] else [ "--disable-cups" ]);
+  configureFlags =
+    [ "--with-system-libtiff"
+      (if x11Support then "--with-x" else "--without-x")
+      (if cupsSupport then "--enable-cups --with-install-cups" else "--disable-cups")
+    ];
 
   doCheck = true;
 

@@ -15,7 +15,7 @@
 , libwpg, dbus_glib, glibc, qt4, kde4, clucene_core, libcdr, lcms, vigra
 , unixODBC, mdds, saneBackends, mythes, libexttextcat, libvisio
 , fontsConf, pkgconfig, libzip, bluez5, libtool, maven
-, langs ? [ "ALL" ]
+, langs ? [ "en-US" "en-GB" "ca" "ru" "eo" "fr" "nl" "de" "sl" ]
 }:
 
 let
@@ -160,6 +160,7 @@ stdenv.mkDerivation rec {
 
     configureFlagsArray=(
       "--with-parallelism=$NIX_BUILD_CORES"
+      "--with-lang=${langsSpaces}"
     );
   '';
 
@@ -184,15 +185,20 @@ stdenv.mkDerivation rec {
 
   # It installs only things to $out/lib/libreoffice
   postInstall = ''
-    mkdir -p $out/bin
+    mkdir -p $out/bin $out/share
     for a in sbase scalc sdraw smath swriter spadmin simpress soffice; do
       ln -s $out/lib/libreoffice/program/$a $out/bin/$a
     done
     ln -s $out/bin/soffice $out/bin/libreoffice
+
+    ln -s $out/lib/libreoffice/share/xdg $out/share/applications
+    for f in $out/share/applications/*.desktop; do
+      substituteInPlace "$f" --replace "Exec=libreoffice4.0" "Exec=$out/bin/soffice"
+      substituteInPlace "$f" --replace "Exec=libreoffice" "Exec=$out/bin/soffice"
+    done
   '';
 
   configureFlags = [
-    "--with-lang=${langsSpaces}"
     "--with-vender=NixOS"
 
     # Without these, configure does not finish

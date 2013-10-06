@@ -1,11 +1,11 @@
-{ cabal, Cabal, convertible, emacs, filepath, ghcPaths, ghcSybUtils
-, hlint, hspec, ioChoice, syb, time, transformers
+{ cabal, Cabal, convertible, doctest, emacs, filepath, ghcPaths
+, ghcSybUtils, hlint, hspec, ioChoice, syb, time, transformers
 }:
 
 cabal.mkDerivation (self: {
   pname = "ghc-mod";
-  version = "2.0.3";
-  sha256 = "0f0n4cqpspad3ygw89rp8wj1gxb7mv5zrd8938zm1rn2mimihggr";
+  version = "3.1.2";
+  sha256 = "164ldbdvr2qrnb9sq0d9y35la4fzwn6x43xqdsi1s10dppckczlm";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
@@ -13,7 +13,7 @@ cabal.mkDerivation (self: {
     time transformers
   ];
   testDepends = [
-    Cabal convertible filepath ghcPaths ghcSybUtils hlint hspec
+    Cabal convertible doctest filepath ghcPaths ghcSybUtils hlint hspec
     ioChoice syb time transformers
   ];
   buildTools = [ emacs ];
@@ -25,6 +25,14 @@ cabal.mkDerivation (self: {
     cd ..
     ensureDir "$out/share/emacs"
     mv $pname-$version emacs/site-lisp
+    mv $out/bin/ghc-mod $out/ghc-mod
+    cat - > $out/bin/ghc-mod <<EOF
+    #!/bin/sh
+    COMMAND=\$1
+    shift
+    eval exec $out/ghc-mod \$COMMAND \$( ${self.ghc.GHCGetPackages} ${self.ghc.ghcVersion} | tr " " "\n" | tail -n +2 | paste -d " " - - | sed 's/.*/-g "&"/' | tr "\n" " ") "\$@"
+    EOF
+    chmod +x $out/bin/ghc-mod
   '';
   meta = {
     homepage = "http://www.mew.org/~kazu/proj/ghc-mod/";
@@ -34,6 +42,7 @@ cabal.mkDerivation (self: {
     maintainers = [
       self.stdenv.lib.maintainers.andres
       self.stdenv.lib.maintainers.bluescreen303
+      self.stdenv.lib.maintainers.ocharles
     ];
   };
 })

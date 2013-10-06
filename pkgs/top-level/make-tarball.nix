@@ -47,14 +47,14 @@ releaseTools.sourceTarball {
     nix-store --init
 
     # Run the regression tests in `lib'.
-    res="$(nix-instantiate --eval-only --strict pkgs/lib/tests.nix)"
+    res="$(nix-instantiate --eval-only --strict --show-trace pkgs/lib/tests.nix)"
     if test "$res" != "[ ]"; then
         echo "regression tests for lib failed, got: $res"
         exit 1
     fi
 
     # Check that all-packages.nix evaluates on a number of platforms.
-    for platform in i686-linux x86_64-linux powerpc-linux i686-freebsd; do
+    for platform in i686-linux x86_64-linux x86_64-darwin i686-freebsd x86_64-freebsd; do
         header "checking pkgs/top-level/all-packages.nix on $platform"
         nix-env --readonly-mode -f pkgs/top-level/all-packages.nix \
             --show-trace --argstr system "$platform" \
@@ -63,8 +63,7 @@ releaseTools.sourceTarball {
     done
 
     header "checking eval-release.nix"
-    nix-instantiate --eval-only --strict --xml ./maintainers/scripts/eval-release.nix > $TMPDIR/out.xml
-    xmllint --noout $TMPDIR/out.xml
+    nix-instantiate --eval-only --strict --show-trace ./maintainers/scripts/eval-release.nix > /dev/null
     stopNest
   '';
 

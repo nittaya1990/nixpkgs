@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, perl, glib, libintlOrEmpty }:
+{ stdenv, fetchurl, pkgconfig, perl, glib, libintlOrEmpty, gobjectIntrospection }:
 
 stdenv.mkDerivation rec {
   name = "atk-2.8.0";
@@ -12,12 +12,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig perl ];
 
-  propagatedBuildInputs = [ glib ];
+  propagatedBuildInputs = [ glib gobjectIntrospection /*ToDo: why propagate*/ ];
 
   postInstall = "rm -rf $out/share/gtk-doc";
 
   meta = {
-    description = "ATK, the accessibility toolkit";
+    description = "Accessibility toolkit";
 
     longDescription = ''
       ATK is the Accessibility Toolkit.  It provides a set of generic

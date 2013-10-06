@@ -10,8 +10,8 @@
 
 cabal.mkDerivation (self: {
   pname = "lens";
-  version = "3.9.0.2";
-  sha256 = "0ch38z33zgdyzjmc7jqwabwq68iidicpzhbwzpd4fvcqdp27apl2";
+  version = "3.9.2";
+  sha256 = "17pc0waf3g6dxvmvyxkgh8kz22iscd9z00s67rcn0p604swprj2k";
   buildDepends = [
     bifunctors comonad comonadsFd comonadTransformers contravariant
     distributive filepath genericDeriving hashable
@@ -26,9 +26,6 @@ cabal.mkDerivation (self: {
     transformers unorderedContainers vector
   ];
   doCheck = false;
-  patchPhase = ''
-    sed -i -e 's|generic-deriving.*,|generic-deriving,|' lens.cabal
-  '';
   meta = {
     homepage = "http://github.com/ekmett/lens/";
     description = "Lenses, Folds and Traversals";
