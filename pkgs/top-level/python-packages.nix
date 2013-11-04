@@ -5,7 +5,7 @@ isPy26 = python.majorVersion == "2.6";
 isPy27 = python.majorVersion == "2.7";
 optional = pkgs.lib.optional;
 optionals = pkgs.lib.optionals;
-modules = python.modules or { readline = null; sqlite3 = null; curses = null; ssl = null; crypt = null; };
+modules = python.modules or { readline = null; sqlite3 = null; curses = null; curses_panel = null; ssl = null; crypt = null; };
 
 pythonPackages = modules // import ./python-packages-generated.nix {
   inherit pkgs python;
@@ -187,19 +187,28 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
 
   afew = buildPythonPackage rec {
-    rev = "6bb3915636aaf86f046a017ffffd9a4ef395e199";
+    rev = "d5d0ddeae0c5758a3f6cf5de77913804d88e906a";
     name = "afew-1.0_${rev}";
 
     src = fetchurl {
       url = "https://github.com/teythoon/afew/tarball/${rev}";
       name = "${name}.tar.bz";
-      sha256 = "74926d9ddfa69534cfbd08a82f0acccab2c649558062654d5d2ff2999d201384";
+      sha256 = "0al7hz994sh0yrpixqafr25acglvniq4zsbs9aj89zr7yzq1g1j0";
     };
 
-    propagatedBuildInputs = [ pythonPackages.notmuch pkgs.dbacl ];
+    buildInputs = [ pkgs.dbacl ];
 
-    # error: invalid command 'test'
+    propagatedBuildInputs = [
+      pythonPackages.notmuch
+      pythonPackages.subprocess32
+      pythonPackages.chardet
+    ];
+
     doCheck = false;
+
+    preConfigure = ''
+      substituteInPlace afew/DBACL.py --replace "'dbacl'" "'${pkgs.dbacl}/bin/dbacl'"
+    '';
 
     postInstall = ''
       wrapProgram $out/bin/afew \
@@ -289,13 +298,13 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
 
   alot = buildPythonPackage rec {
-    rev = "0711cf8efaf1a4cca24617c3406210a415006457";
-    name = "alot-0.3.4_${rev}";
+    rev = "fa10bfc2de105da819c8e11e913a44c3c1ac60a4";
+    name = "alot-0.3.5_${rev}";
 
     src = fetchurl {
       url = "https://github.com/pazz/alot/tarball/${rev}";
       name = "${name}.tar.bz";
-      sha256 = "1rxkx9cjajsv9x1dl4xp1r3vr0kb66sglxaqzjiwaknqzahmmji5";
+      sha256 = "0zd4jiwxqb7m672xkr5jcqkfpk9jx1kmkllyvjjvswkgjjqdrhax";
     };
 
     # error: invalid command 'test'
@@ -1347,6 +1356,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       homepage = http://pythonhosted.org/evdev;
       license = licenses.bsd3;
       maintainers = [ maintainers.goibhniu ];
+      platforms = stdenv.lib.platforms.linux;
     };
   };
 
@@ -1401,6 +1411,36 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     };
   };
 
+  faker = buildPythonPackage rec {
+    name = "faker-0.0.4";
+    src = fetchurl {
+      url = https://pypi.python.org/packages/source/F/Faker/Faker-0.0.4.tar.gz;
+      sha256 = "09q5jna3j8di0gw5yjx0dvlndkrk2x9vvqzwyfsvg3nlp8h38js1";
+    };
+    buildInputs = [ nose ];
+    meta = with stdenv.lib; {
+      description = "A Python library for generating fake user data.";
+      homepage    = http://pypi.python.org/pypi/Faker;
+      license     = licenses.mit;
+      maintainers = with maintainers; [ lovek323 ];
+      platforms   = platforms.unix;
+    };
+  };
+
+  fake_factory = buildPythonPackage rec {
+    name = "fake-factory-0.2";
+    src = fetchurl {
+      url = https://pypi.python.org/packages/source/f/fake-factory/fake-factory-0.2.tar.gz;
+      sha256 = "0qdmk8p4anrj9mf95dh9v7bkhv1pz69hvhlw380kj4iz7b44b6zn";
+    };
+    meta = with stdenv.lib; {
+      description = "A Python package that generates fake data for you.";
+      homepage    = https://pypi.python.org/pypi/fake-factory;
+      license     = licenses.mit;
+      maintainers = with maintainers; [ lovek323 ];
+      platforms   = platforms.unix;
+    };
+  };
 
   fabric = buildPythonPackage rec {
     name = "fabric-1.6.1";
@@ -1820,6 +1860,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     src = fetchgit {
       inherit rev;
       url = "https://github.com/Pylons/substanced.git";
+      sha256 = "eded6468563328af37a07aeb88ef81ed78ccaff2ab687cac34ad2b36e19abcb4";
     };
 
     buildInputs = [ mock ];
@@ -2270,11 +2311,11 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
   ecdsa = buildPythonPackage rec {
     name = "ecdsa-${version}";
-    version = "0.9";
+    version = "0.10";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/e/ecdsa/${name}.tar.gz";
-      md5 = "2b9c35245ce391d6b7d8f991aad5c630";
+      md5 = "e95941b3bcbf1726472bb724d7478551";
     };
 
     # Only needed for tests
@@ -2664,6 +2705,31 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     meta = {
       homepage = https://launchpad.net/glance;
       description = "Services for discovering, registering, and retrieving virtual machine images";
+    };
+  };
+
+  glances = buildPythonPackage rec {
+    name = "glances-${meta.version}";
+
+    src = fetchurl {
+      url = "https://github.com/nicolargo/glances/archive/v${meta.version}.tar.gz";
+      sha256 = "0g2yg9qf7qgjwv13x0rx51rzhn99pcmjpb3vk0g3gmmdsqyqi0d6";
+    };
+
+    buildInputs = [ pkgs.hddtemp ];
+
+    propagatedBuildInputs = [ psutil jinja2 modules.curses modules.curses_panel];
+
+    doCheck = false;
+
+    preConfigure = ''
+      sed -i -r -e '/data_files.append[(][(](conf|etc)_path/ietc_path="etc/glances"; conf_path="etc/glances"' setup.py;
+    '';
+
+    meta = {
+      version = "1.7.1";
+      homepage = "http://nicolargo.github.io/glances/";
+      description = "Cross-platform curses-based monitoring tool";
     };
   };
 
@@ -3996,7 +4062,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       homepage = "https://github.com/paramiko/paramiko/";
       description = "Native Python SSHv2 protocol library";
       license = stdenv.lib.licenses.lgpl21Plus;
-      maintainer = [ stdenv.lib.maintainers.aszlig ];
+      maintainers = [ stdenv.lib.maintainers.aszlig ];
 
       longDescription = ''
         This is a library for making SSH2 connections (client or server).
@@ -4628,6 +4694,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       homepage = "http://www.pyglet.org/";
       description = "A cross-platform windowing and multimedia library";
       license = stdenv.lib.licenses.bsd3;
+      platforms = stdenv.lib.platforms.mesaPlatforms;
     };
   };
 
@@ -4795,7 +4862,8 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     meta = {
       homepage = "https://fedorahosted.org/pyparted/";
       description = "Python interface for libparted";
-      license = pkgs.lib.licenses.gpl2Plus;
+      license = stdenv.lib.licenses.gpl2Plus;
+      platforms = stdenv.lib.platforms.linux;
     };
   };
 
@@ -4851,6 +4919,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       homepage = "http://pyudev.readthedocs.org/";
       description = "Pure Python libudev binding";
       license = stdenv.lib.licenses.lgpl21Plus;
+      platforms = stdenv.lib.platforms.linux;
     };
   };
 
@@ -4974,6 +5043,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
           '';
 
           license = "BSD-style";
+          platforms = stdenv.lib.platforms.mesaPlatforms;
         };
       };
 
@@ -5173,6 +5243,27 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       license = "GPLv2+";
     };
   });
+
+
+  pywebkitgtk = stdenv.mkDerivation rec {
+    name = "pywebkitgtk-${version}";
+    version = "1.1.8";
+
+    src = fetchurl {
+      url = "http://pywebkitgtk.googlecode.com/files/${name}.tar.bz2";
+      sha256 = "1svlwyl61rvbqbcbalkg6pbf38yjyv7qkq9sx4x35yk69lscaac2";
+    };
+
+    buildInputs = with pkgs; [
+      pkgconfig python gtk2 pygtk libxml2 libxslt libsoup webkit_gtk2 icu
+    ];
+
+    meta = {
+      homepage = "https://code.google.com/p/pywebkitgtk/";
+      description = "Python bindings for the WebKit GTK+ port";
+      license = stdenv.lib.licenses.lgpl2Plus;
+    };
+  };
 
 
   pyxattr = buildPythonPackage (rec {
@@ -5627,6 +5718,23 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     };
   };
 
+  sympy = buildPythonPackage rec {
+    name = "sympy-0.7.3";
+
+    src = fetchurl {
+      url    = "https://github.com/sympy/sympy/releases/download/${name}/${name}.tar.gz";
+      sha256 = "081g9gs2d1d41ipn8zr034d98cnrxvc4zsmihqmfwzirwzpcii5x";
+    };
+
+    meta = with stdenv.lib; {
+      description = "A Python library for symbolic mathematics";
+      homepage    = http://www.sympy.org/;
+      license     = "free";
+      maintainers = with maintainers; [ lovek323 ];
+      platforms   = platforms.unix;
+    };
+  };
+
   pilkit = buildPythonPackage rec {
     name = "pilkit-1.1.4";
 
@@ -5836,6 +5944,23 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     meta = {
       description = "A system for controlling process state under UNIX";
       homepage = http://supervisord.org/;
+    };
+  };
+
+  subprocess32 = buildPythonPackage rec {
+    name = "subprocess32-3.2.5rc1";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/s/subprocess32/${name}.tar.gz";
+      md5 = "f5f46106368be6336b54af95d048fea9";
+    };
+
+    doCheck = false;
+
+    meta = {
+      homepage = "https://pypi.python.org/pypi/subprocess32";
+      description = "Backport of the subprocess module from Python 3.2.5 for use on 2.x.";
+      maintainers = [ stdenv.lib.maintainers.garbas ];
     };
   };
 
