@@ -1803,14 +1803,12 @@ let
 
   socat = callPackage ../tools/networking/socat { };
 
+  socat2pre = lowPrio (callPackage ../tools/networking/socat/2.x.nix { });
+
   sourceHighlight = callPackage ../tools/text/source-highlight {
     # Boost 1.54 causes the "test_regexranges" test to fail
     boost = boost153;
   };
-
-  socat2pre = lowPrio (builderDefsPackage ../tools/networking/socat/2.0.0-b3.nix {
-    inherit fetchurl stdenv openssl;
-  });
 
   squashfsTools = callPackage ../tools/filesystems/squashfs { };
 
@@ -1916,7 +1914,7 @@ let
   unoconv = callPackage ../tools/text/unoconv { };
 
   upx = callPackage ../tools/compression/upx { };
- 
+
   urlview = callPackage ../applications/misc/urlview {};
 
   usbmuxd = callPackage ../tools/misc/usbmuxd {};
@@ -2292,7 +2290,7 @@ let
     cross = assert crossSystem != null; crossSystem;
   };
 
-  gcc44_realCross = lib.addMetaAttrs { platforms = []; }
+  gcc44_realCross = lib.addMetaAttrs { hydraPlatforms = []; }
     (makeOverridable (import ../development/compilers/gcc/4.4) {
       inherit stdenv fetchurl texinfo gmp mpfr /* ppl cloogppl */ noSysDirs
           gettext which;
@@ -2341,7 +2339,7 @@ let
 
   gcc47 = gcc47_real;
 
-  gcc45_realCross = lib.addMetaAttrs { platforms = []; }
+  gcc45_realCross = lib.addMetaAttrs { hydraPlatforms = []; }
     (makeOverridable (import ../development/compilers/gcc/4.5) {
       inherit fetchurl stdenv texinfo gmp mpfr mpc libelf zlib
         ppl cloogppl gettext which noSysDirs;
@@ -2353,7 +2351,7 @@ let
       cross = assert crossSystem != null; crossSystem;
     });
 
-  gcc46_realCross = lib.addMetaAttrs { platforms = []; }
+  gcc46_realCross = lib.addMetaAttrs { hydraPlatforms = []; }
     (makeOverridable (import ../development/compilers/gcc/4.6) {
       inherit fetchurl stdenv texinfo gmp mpfr mpc libelf zlib
         cloog ppl gettext which noSysDirs;
@@ -2365,7 +2363,7 @@ let
       cross = assert crossSystem != null; crossSystem;
     });
 
-  gcc47_realCross = lib.addMetaAttrs { platforms = []; }
+  gcc47_realCross = lib.addMetaAttrs { hydraPlatforms = []; }
     (makeOverridable (import ../development/compilers/gcc/4.7) {
       inherit fetchurl stdenv texinfo gmp mpfr mpc libelf zlib
         cloog ppl gettext which noSysDirs;
@@ -2386,7 +2384,7 @@ let
                    if isMingw then windows.mingw_headers1 else null;
     in
       wrapGCCCross {
-      gcc = forceNativeDrv (lib.addMetaAttrs { platforms = []; } (
+      gcc = forceNativeDrv (lib.addMetaAttrs { hydraPlatforms = []; } (
         gcc_realCross.override {
           crossStageStatic = true;
           langCC = false;
@@ -2567,20 +2565,6 @@ let
 
   gcj = gcj45;
 
-  gcj44 = wrapGCC (gcc44.gcc.override {
-    name = "gcj";
-    langJava = true;
-    langFortran = false;
-    langCC = true;
-    langC = false;
-    profiledCompiler = false;
-    inherit zip unzip zlib boehmgc gettext pkgconfig;
-    inherit gtk;
-    inherit (gnome) libart_lgpl;
-    inherit (xlibs) libX11 libXt libSM libICE libXtst libXi libXrender
-      libXrandr xproto renderproto xextproto inputproto randrproto;
-  });
-
   gcj45 = wrapGCC (gcc45.gcc.override {
     name = "gcj";
     langJava = true;
@@ -2673,18 +2657,6 @@ let
     profiledCompiler = false;
     enableMultilib = false;
   });
-
-  # Not officially supported version for ghdl
-  ghdl_gcc44 = lowPrio (wrapGCC (import ../development/compilers/gcc/4.4 {
-    inherit stdenv fetchurl texinfo gmp mpfr noSysDirs gnat gettext which
-      ppl cloogppl;
-    name = "ghdl";
-    langVhdl = true;
-    langCC = false;
-    langC = false;
-    profiledCompiler = false;
-    enableMultilib = false;
-  }));
 
   gcl = builderDefsPackage ../development/compilers/gcl {
     inherit mpfr m4 binutils fetchcvs emacs zlib which
@@ -3264,12 +3236,14 @@ let
 
   pythonFull = python27Full;
   python26Full = callPackage ../development/interpreters/python/wrapper.nix {
-    extraLibs = lib.attrValues python26.modules;
+    extraLibs = [];
+    postBuild = "";
     python = python26;
     inherit (python26Packages) recursivePthLoader;
   };
   python27Full = callPackage ../development/interpreters/python/wrapper.nix {
-    extraLibs = lib.attrValues python27.modules;
+    extraLibs = [];
+    postBuild = "";
     python = python27;
     inherit (python27Packages) recursivePthLoader;
   };
@@ -4477,8 +4451,6 @@ let
   gtkspell = callPackage ../development/libraries/gtkspell { };
 
   gts = callPackage ../development/libraries/gts { };
-
-  gurobi = callPackage ../development/libraries/gurobi {};
 
   gvfs = callPackage ../development/libraries/gvfs { };
 
@@ -6815,7 +6787,7 @@ let
   linuxPackages_3_2_xen = linuxPackagesFor pkgs.linux_3_2_xen linuxPackages_3_2_xen;
   linuxPackages_3_4 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_4 linuxPackages_3_4);
   linuxPackages_3_4_apparmor = linuxPackagesFor pkgs.linux_3_4_apparmor linuxPackages_3_4_apparmor;
-  linuxPackages_3_6_rpi = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_6_rpi linuxPackages_3_6_rpi);
+  linuxPackages_3_6_rpi = linuxPackagesFor pkgs.linux_3_6_rpi linuxPackages_3_6_rpi;
   linuxPackages_3_10 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_10 linuxPackages_3_10);
   linuxPackages_3_11 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_11 linuxPackages_3_11);
   linuxPackages_3_12 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_12 linuxPackages_3_12);
@@ -7334,7 +7306,7 @@ let
 
   abook = callPackage ../applications/misc/abook { };
 
-  adobeReader = callPackage_i686 ../applications/misc/adobe-reader { };
+  adobe-reader = callPackage_i686 ../applications/misc/adobe-reader { };
 
   aewan = callPackage ../applications/editors/aewan { };
 
@@ -7360,6 +7332,8 @@ let
   audacious = callPackage ../applications/audio/audacious { };
 
   audacity = callPackage ../applications/audio/audacity { };
+
+  milkytracker = callPackage ../applications/audio/milkytracker { };
 
   aumix = callPackage ../applications/audio/aumix {
     gtkGUI = false;
@@ -8891,6 +8865,17 @@ let
 
   vimNox = lowPrio (vim_configurable.override { source = "vim-nox"; });
 
+  qvim = lowPrio (callPackage ../applications/editors/vim/qvim.nix {
+    inherit (pkgs) fetchgit stdenv ncurses pkgconfig gettext
+      composableDerivation lib config python perl tcl ruby qt4;
+    inherit (pkgs.xlibs) libX11 libXext libSM libXpm libXt libXaw libXau libXmu
+      libICE;
+
+    features = "huge"; # one of  tiny, small, normal, big or huge
+    lua = pkgs.lua5;
+    flags = [ "python" "X11" ]; # only flag "X11" by now
+  });
+
   virtviewer = callPackage ../applications/virtualization/virt-viewer {};
   virtmanager = callPackage ../applications/virtualization/virt-manager {
     inherit (gnome) gnome_python;
@@ -9299,8 +9284,8 @@ let
 
   racer = callPackage ../games/racer { };
 
-  residualvm = callPackage ../games/residualvm { 
-    openglSupport = mesaSupported; 
+  residualvm = callPackage ../games/residualvm {
+    openglSupport = mesaSupported;
   };
 
   rigsofrods = callPackage ../games/rigsofrods {
@@ -10242,9 +10227,9 @@ let
        LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:${gcc.gcc}/lib
        export LD_LIBRARY_PATH
     '';
-   };
+  };
 
-   patoline = PatolineEnv ocamlPackages_4_00_1;
+  patoline = PatolineEnv ocamlPackages_4_00_1;
 
   znc = callPackage ../applications/networking/znc { };
 
@@ -10265,5 +10250,10 @@ let
   httrack = callPackage ../tools/backup/httrack { };
 
   mg = callPackage ../applications/editors/mg { };
+
+
+  # Attributes for backward compatibility.
+  adobeReader = adobe-reader;
+
 
 }; in pkgs

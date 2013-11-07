@@ -1,4 +1,4 @@
-{ stdenv, ghc, packages, buildEnv, makeWrapper }:
+{ stdenv, ghc, packages, buildEnv, makeWrapper, ignoreCollisions ? false }:
 
 assert packages != [];
 
@@ -7,10 +7,12 @@ let
   packageDBFlag = if ghc761OrLater then "--package-db" else "--package-conf";
   libDir        = "$out/lib/ghc-${ghc.version}";
   packageCfgDir = "${libDir}/package.conf.d";
+  isHaskellPkg  = x: (x ? pname) && (x ? version);
 in
 buildEnv {
   name = "haskell-env-${ghc.name}";
-  paths = stdenv.lib.filter (x: x ? ghc) (stdenv.lib.closePropagation packages) ++ [ghc];
+  paths = stdenv.lib.filter isHaskellPkg (stdenv.lib.closePropagation packages) ++ [ghc];
+  inherit ignoreCollisions;
   postBuild = ''
     . ${makeWrapper}/nix-support/setup-hook
 
