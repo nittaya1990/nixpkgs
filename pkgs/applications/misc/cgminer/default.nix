@@ -1,5 +1,5 @@
 { fetchgit, stdenv, pkgconfig, libtool, autoconf, automake,
-  curl, ncurses, amdappsdk, amdadlsdk, xorg }:
+  curl, ncurses, amdappsdk, amdadlsdk, udev, xorg }:
 
 stdenv.mkDerivation rec {
   version = "2.11.4";
@@ -7,25 +7,21 @@ stdenv.mkDerivation rec {
 
   src = fetchgit {
     url = "https://github.com/ckolivas/cgminer.git";
-    rev = "96c8ff5f10f2d8f0cf4d1bd889e8eeac2e4aa715";
-    sha256  = "1vf9agy4vw50cap03qig2y65hdrsdy7cknkzyagv89w5xb230r9a";
+    rev = "0bfac827434a30f130423123e7c6fbedf8f2062c";
+    sha256  = "0nvcw363ycaa1mwgprrkxdygsq3d6q2j38lbrzpxqry4zgqvhwlf";
   };
 
-  buildInputs = [ autoconf automake pkgconfig libtool curl ncurses amdappsdk amdadlsdk xorg.libX11 xorg.libXext xorg.libXinerama ];
+  buildInputs = [ autoconf automake pkgconfig libtool curl ncurses amdappsdk amdadlsdk xorg.libX11
+                  xorg.libXext xorg.libXinerama udev ];
   configureScript = "./autogen.sh";
-  configureFlags = "--enable-scrypt";
+  configureFlags = "--enable-scrypt --enable-opencl --enable-bflsc";
   NIX_LDFLAGS = "-lgcc_s -lX11 -lXext -lXinerama";
 
   preConfigure = ''
     ln -s ${amdadlsdk}/include/* ADL_SDK/
   '';
 
-  postBuild = ''
-    gcc api-example.c -I compat/jansson -o cgminer-api
-  '';
-
   postInstall = ''
-    cp cgminer-api $out/bin/
     chmod 444 $out/bin/*.cl
   '';
 
