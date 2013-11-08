@@ -16,7 +16,7 @@ let
 
   cgminerConfig = pkgs.writeText "cgminer.conf" ''
   {
-  ${concatStringsSep ",\n" mergedHwConfig},
+  ${concatStringsSep ",\n" mergedHwConfig}
   ${concatStringsSep ",\n" mergedConfig},
   "pools": [
   ${concatStringsSep ",\n"
@@ -54,8 +54,8 @@ in
         description = "List of pools where to mine";
         example = [{
           url = "http://p2pool.org:9332";
-          username = "17EUZxTvs9uRmPsjPZSYUU3zCz9iwstudk";
-          password="X";
+          user = "17EUZxTvs9uRmPsjPZSYUU3zCz9iwstudk";
+          pass = "X";
         }];
       };
 
@@ -108,12 +108,18 @@ in
 
   config = mkIf config.services.cgminer.enable {
 
+    users.extraGroups = { plugdev = {}; };
     users.extraUsers = singleton
       { name = cfg.user;
         description = "Cgminer user";
+        extraGroups = ["plugdev"];
       };
 
     environment.systemPackages = [ cfg.package ];
+
+    services.udev.extraRules = ''
+    ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6014", SUBSYSTEMS=="usb", ACTION=="add", MODE="0666", GROUP="plugdev"
+    '';
 
     systemd.services.cgminer = {
       path = [ pkgs.cgminer ];
@@ -134,7 +140,5 @@ in
         RestartSec = 10;
       };
     };
-
   };
-
 }
