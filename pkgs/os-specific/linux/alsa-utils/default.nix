@@ -1,12 +1,12 @@
 {stdenv, fetchurl, alsaLib, gettext, ncurses, libsamplerate}:
 
 stdenv.mkDerivation rec {
-  name = "alsa-utils-1.0.26";
+  name = "alsa-utils-1.0.27";
 
   src = fetchurl {
     # url = "ftp://ftp.alsa-project.org/pub/utils/${name}.tar.bz2";
     url = "http://alsa.cybermirror.org/utils/${name}.tar.bz2";
-    sha256 = "1rw1n3w8syqky9i7kwy5xd2rzfdbihxas32vwfxpb177lqx2lpzq";
+    sha256 = "1vssljbdzf0psqhhd7w9m9mzb0sl2kgx9fagkja25sqw6ivwsxkg";
   };
 
   buildInputs = [ alsaLib ncurses libsamplerate ];
@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
     '';
 
   meta = {
+    homepage = http://www.alsa-project.org/;
     description = "ALSA, the Advanced Linux Sound Architecture utils";
 
     longDescription = ''
@@ -30,6 +31,6 @@ stdenv.mkDerivation rec {
       MIDI functionality to the Linux-based operating system.
     '';
 
-    homepage = http://www.alsa-project.org/;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

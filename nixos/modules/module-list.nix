@@ -91,6 +91,7 @@
   ./services/databases/virtuoso.nix
   ./services/games/ghost-one.nix
   ./services/hardware/acpid.nix
+  ./services/hardware/amd-hybrid-graphics.nix
   ./services/hardware/bluetooth.nix
   ./services/hardware/nvidia-optimus.nix
   ./services/hardware/pcscd.nix
@@ -146,6 +147,7 @@
   ./services/networking/avahi-daemon.nix
   ./services/networking/bind.nix
   ./services/networking/bitlbee.nix
+  ./services/networking/connman.nix
   ./services/networking/cntlm.nix
   ./services/networking/chrony.nix
   ./services/networking/ddclient.nix
@@ -166,9 +168,11 @@
   ./services/networking/ifplugd.nix
   ./services/networking/iodined.nix
   ./services/networking/ircd-hybrid/default.nix
+  ./services/networking/kippo.nix
   ./services/networking/minidlna.nix
   ./services/networking/nat.nix
   ./services/networking/networkmanager.nix
+  ./services/networking/ntopng.nix
   ./services/networking/ntpd.nix
   ./services/networking/oidentd.nix
   ./services/networking/openfire.nix
@@ -197,6 +201,7 @@
   ./services/scheduling/fcron.nix
   ./services/search/elasticsearch.nix
   ./services/security/clamav.nix
+  ./services/security/haveged.nix
   ./services/security/fprot.nix
   ./services/security/frandom.nix
   ./services/security/tor.nix
@@ -210,6 +215,7 @@
   ./services/torrent/transmission.nix
   ./services/ttys/gpm.nix
   ./services/ttys/agetty.nix
+  ./services/ttys/kmscon.nix
   ./services/web-servers/apache-httpd/default.nix
   ./services/web-servers/jboss/default.nix
   ./services/web-servers/lighttpd/default.nix
@@ -228,6 +234,7 @@
   ./services/x11/hardware/multitouch.nix
   ./services/x11/hardware/synaptics.nix
   ./services/x11/hardware/wacom.nix
+  ./services/x11/mesa.nix
   ./services/x11/window-managers/awesome.nix
   #./services/x11/window-managers/compiz.nix
   ./services/x11/window-managers/default.nix
@@ -246,11 +253,11 @@
   ./system/boot/kexec.nix
   ./system/boot/loader/efi.nix
   ./system/boot/loader/generations-dir/generations-dir.nix
-  ./system/boot/loader/gummiboot/gummiboot.nix
-  ./system/boot/loader/raspberrypi/raspberrypi.nix
   ./system/boot/loader/grub/grub.nix
   ./system/boot/loader/grub/memtest.nix
+  ./system/boot/loader/gummiboot/gummiboot.nix
   ./system/boot/loader/init-script/init-script.nix
+  ./system/boot/loader/raspberrypi/raspberrypi.nix
   ./system/boot/luksroot.nix
   ./system/boot/modprobe.nix
   ./system/boot/shutdown.nix
@@ -274,6 +281,8 @@
   ./tasks/network-interfaces.nix
   ./tasks/scsi-link-power-management.nix
   ./tasks/swraid.nix
+  ./testing/service-runner.nix
+  ./virtualisation/containers.nix
   ./virtualisation/libvirtd.nix
   #./virtualisation/nova.nix
   ./virtualisation/virtualbox-guest.nix

@@ -4,21 +4,22 @@
 , httpTypes, HUnit, liftedBase, monadControl, monadLogger, parsec
 , pathPieces, QuickCheck, random, resourcet, safe, shakespeare
 , shakespeareCss, shakespeareI18n, shakespeareJs, text, time
-, transformers, transformersBase, vector, wai, waiExtra, waiTest
-, warp, yesodRoutes
+, transformers, transformersBase, unixCompat, vector, wai, waiExtra
+, waiLogger, waiTest, warp, yesodRoutes
 }:
 
 cabal.mkDerivation (self: {
   pname = "yesod-core";
-  version = "1.2.4.5";
-  sha256 = "091f89bwjsf2qimivbz74rykjjgzghfvs66sv9cz305pgw6kpjc7";
+  version = "1.2.6.5";
+  sha256 = "1xry2jhm4rj3a7fg4xdx5q6fah8dixnrhzyk4176a60a3q8j3lal";
   buildDepends = [
     aeson attoparsecConduit blazeBuilder blazeHtml blazeMarkup
     caseInsensitive cereal clientsession conduit cookie dataDefault
     failure fastLogger hamlet httpTypes liftedBase monadControl
     monadLogger parsec pathPieces random resourcet safe shakespeare
     shakespeareCss shakespeareI18n shakespeareJs text time transformers
-    transformersBase vector wai waiExtra warp yesodRoutes
+    transformersBase unixCompat vector wai waiExtra waiLogger warp
+    yesodRoutes
   ];
   testDepends = [
     blazeBuilder conduit hamlet hspec httpTypes HUnit liftedBase

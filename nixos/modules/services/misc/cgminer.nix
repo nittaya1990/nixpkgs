@@ -109,11 +109,12 @@ in
   config = mkIf config.services.cgminer.enable {
 
     users.extraGroups = { plugdev = {}; };
-    users.extraUsers = singleton
-      { name = cfg.user;
+    users.extraUsers = optionalAttrs (cfg.user == "cgminer") (singleton
+      { name = "cgminer";
+        uid = config.ids.uids.cgminer;
         description = "Cgminer user";
         extraGroups = ["plugdev"];
-      };
+      });
 
     environment.systemPackages = [ cfg.package ];
 
@@ -124,10 +125,10 @@ in
     systemd.services.cgminer = {
       path = [ pkgs.cgminer ];
 
-      after = [ "display-manager.target" "network.target" ];
+      after = [ "network.target" "display-manager.service" ];
       wantedBy = [ "multi-user.target" ];
 
-      environment = { 
+      environment = {
         LD_LIBRARY_PATH = ''/run/opengl-driver/lib:/run/opengl-driver-32/lib'';
         DISPLAY = ":0";
         GPU_MAX_ALLOC_PERCENT = "100";
@@ -135,9 +136,11 @@ in
       };
 
       serviceConfig = {
-        ExecStart = "${pkgs.cgminer}/bin/cgminer -T -c ${cgminerConfig}";
+        ExecStart = "${pkgs.cgminer}/bin/cgminer --syslog --text-only --config ${cgminerConfig}";
         User = cfg.user;
-        RestartSec = 10;
+        RestartSec = "30s";
+        Restart = "always";
+        StartLimitInterval = "1m";
       };
     };
   };

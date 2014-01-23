@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "threads";
-  version = "0.5.0.2";
-  sha256 = "14ccmjg56429a3mzx11ccv18bvkqg56ph9kbpmhdx2ajar80g6jm";
+  version = "0.5.1.1";
+  sha256 = "196yjkq7wgjcck9wqj4f3x3k47ls9yiay3k6d8k7kzixc2xc621z";
   buildDepends = [ baseUnicodeSymbols stm ];
   testDepends = [
     baseUnicodeSymbols concurrentExtra HUnit stm testFramework

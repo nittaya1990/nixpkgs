@@ -84,6 +84,7 @@
 , "grunt-contrib-cssmin"
 , "grunt-contrib-uglify"
 , "grunt-karma"
+, "grunt-bower-task"
 , "grunt-sed"
 , "karma"
 , "karma-mocha"
@@ -107,4 +108,11 @@
 , "x509"
 , "owl-deepcopy"
 , "meat"
+, "hipache"
+, "posix"
+, "node-protobuf"
+, "rethinkdb"
+, "bower2nix"
+, "fetch-bower"
+, { "titanium": "3.2.0" }
 ]

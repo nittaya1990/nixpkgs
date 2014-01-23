@@ -11,13 +11,19 @@ let
   systemd = cfg.package;
 
   makeUnit = name: unit:
-    pkgs.runCommand "unit" { inherit (unit) text; preferLocalBuild = true; }
-      (if unit.enable then  ''
-        mkdir -p $out
-        echo -n "$text" > $out/${name}
-      '' else ''
+    pkgs.runCommand "unit" { preferLocalBuild = true; inherit (unit) text; }
+      ((if !unit.enable then  ''
         mkdir -p $out
         ln -s /dev/null $out/${name}
+      '' else if unit.linkTarget != null then ''
+        mkdir -p $out
+        ln -s ${unit.linkTarget} $out/${name}
+      '' else if unit.text != null then ''
+        mkdir -p $out
+        echo -n "$text" > $out/${name}
+      '' else "") + optionalString (unit.extraConfig != {}) ''
+        mkdir -p $out/${name}.d
+        ${concatStringsSep "\n" (mapAttrsToList (n: v: "echo -n \"${v}\" > $out/${name}.d/${n}") unit.extraConfig)}
       '');
 
   upstreamUnits =
@@ -160,16 +166,48 @@ let
   };
 
   serviceConfig = { name, config, ... }: {
-    config = {
-      # Default path for systemd services.  Should be quite minimal.
-      path =
-        [ pkgs.coreutils
-          pkgs.findutils
-          pkgs.gnugrep
-          pkgs.gnused
-          systemd
-        ];
-    };
+    config = mkMerge
+      [ { # Default path for systemd services.  Should be quite minimal.
+          path =
+            [ pkgs.coreutils
+              pkgs.findutils
+              pkgs.gnugrep
+              pkgs.gnused
+              systemd
+            ];
+          environment.PATH = config.path;
+        }
+        (mkIf (config.preStart != "")
+          { serviceConfig.ExecStartPre = makeJobScript "${name}-pre-start" ''
+              #! ${pkgs.stdenv.shell} -e
+              ${config.preStart}
+            '';
+          })
+        (mkIf (config.script != "")
+          { serviceConfig.ExecStart = makeJobScript "${name}-start" ''
+              #! ${pkgs.stdenv.shell} -e
+              ${config.script}
+            '' + " " + config.scriptArgs;
+          })
+        (mkIf (config.postStart != "")
+          { serviceConfig.ExecStartPost = makeJobScript "${name}-post-start" ''
+              #! ${pkgs.stdenv.shell} -e
+              ${config.postStart}
+            '';
+          })
+        (mkIf (config.preStop != "")
+          { serviceConfig.ExecStop = makeJobScript "${name}-pre-stop" ''
+              #! ${pkgs.stdenv.shell} -e
+              ${config.preStop}
+            '';
+          })
+        (mkIf (config.postStop != "")
+          { serviceConfig.ExecStopPost = makeJobScript "${name}-post-stop" ''
+              #! ${pkgs.stdenv.shell} -e
+              ${config.postStop}
+            '';
+          })
+      ];
   };
 
   mountConfig = { name, config, ... }: {
@@ -223,41 +261,10 @@ let
           ${attrsToSection def.unitConfig}
 
           [Service]
-          Environment=PATH=${def.path}
-          Environment=LD_LIBRARY_PATH=
           ${let env = cfg.globalEnvironment // def.environment;
             in concatMapStrings (n: "Environment=\"${n}=${getAttr n env}\"\n") (attrNames env)}
           ${optionalString (!def.restartIfChanged) "X-RestartIfChanged=false"}
           ${optionalString (!def.stopIfChanged) "X-StopIfChanged=false"}
-
-          ${optionalString (def.preStart != "") ''
-            ExecStartPre=${makeJobScript "${name}-pre-start" ''
-              #! ${pkgs.stdenv.shell} -e
-              ${def.preStart}
-            ''}
-          ''}
-
-          ${optionalString (def.script != "") ''
-            ExecStart=${makeJobScript "${name}-start" ''
-              #! ${pkgs.stdenv.shell} -e
-              ${def.script}
-            ''} ${def.scriptArgs}
-          ''}
-
-          ${optionalString (def.postStart != "") ''
-            ExecStartPost=${makeJobScript "${name}-post-start" ''
-              #! ${pkgs.stdenv.shell} -e
-              ${def.postStart}
-            ''}
-          ''}
-
-          ${optionalString (def.postStop != "") ''
-            ExecStopPost=${makeJobScript "${name}-post-stop" ''
-              #! ${pkgs.stdenv.shell} -e
-              ${def.postStop}
-            ''}
-          ''}
-
           ${attrsToSection def.serviceConfig}
         '';
     };
@@ -311,8 +318,6 @@ let
         '';
     };
 
-  nixosUnits = mapAttrsToList makeUnit cfg.units;
-
   units = pkgs.runCommand "units" { preferLocalBuild = true; }
     ''
       mkdir -p $out
@@ -338,8 +343,8 @@ let
         done
       done
 
-      for i in ${toString nixosUnits}; do
-        ln -s $i/* $out/
+      for i in ${toString (mapAttrsToList (n: v: v.unit) cfg.units)}; do
+        ln -fs $i/* $out/
       done
 
       for i in ${toString cfg.packages}; do
@@ -348,14 +353,14 @@ let
 
       ${concatStrings (mapAttrsToList (name: unit:
           concatMapStrings (name2: ''
-            mkdir -p $out/${name2}.wants
-            ln -sfn ../${name} $out/${name2}.wants/
+            mkdir -p $out/'${name2}.wants'
+            ln -sfn '../${name}' $out/'${name2}.wants'/
           '') unit.wantedBy) cfg.units)}
 
       ${concatStrings (mapAttrsToList (name: unit:
           concatMapStrings (name2: ''
-            mkdir -p $out/${name2}.requires
-            ln -sfn ../${name} $out/${name2}.requires/
+            mkdir -p $out/'${name2}.requires'
+            ln -sfn '../${name}' $out/'${name2}.requires'/
           '') unit.requiredBy) cfg.units)}
 
       ln -s ${cfg.defaultUnit} $out/default.target
@@ -363,7 +368,7 @@ let
       ln -s rescue.target $out/kbrequest.target
 
       mkdir -p $out/getty.target.wants/
-      ln -s ../getty@tty1.service $out/getty.target.wants/
+      ln -s ../autovt@tty1.service $out/getty.target.wants/
 
       ln -s ../local-fs.target ../remote-fs.target ../network.target ../nss-lookup.target \
             ../nss-user-lookup.target ../swap.target $out/multi-user.target.wants/
@@ -387,32 +392,58 @@ in
       description = "Definition of systemd units.";
       default = {};
       type = types.attrsOf types.optionSet;
-      options = {
-        text = mkOption {
-          type = types.str;
-          description = "Text of this systemd unit.";
+      options = { name, config, ... }:
+        { options = {
+            text = mkOption {
+              type = types.nullOr types.str;
+              default = null;
+              description = "Text of this systemd unit.";
+            };
+            enable = mkOption {
+              default = true;
+              type = types.bool;
+              description = ''
+                If set to false, this unit will be a symlink to
+                /dev/null. This is primarily useful to prevent specific
+                template instances (e.g. <literal>serial-getty@ttyS0</literal>)
+                from being started.
+              '';
+            };
+            requiredBy = mkOption {
+              default = [];
+              type = types.listOf types.string;
+              description = "Units that require (i.e. depend on and need to go down with) this unit.";
+            };
+            wantedBy = mkOption {
+              default = [];
+              type = types.listOf types.string;
+              description = "Units that want (i.e. depend on) this unit.";
+            };
+            unit = mkOption {
+              internal = true;
+              description = "The generated unit.";
+            };
+            linkTarget = mkOption {
+              default = null;
+              description = "The file to symlink this target to.";
+              type = types.nullOr types.path;
+            };
+            extraConfig = mkOption {
+              default = {};
+              example = { "foo@1.conf" = "X-RestartIfChanged=false"; };
+              type = types.attrsOf types.lines;
+              description = ''
+                Extra files to be appended to the configuration for the unit.
+                This can be used to override configuration for a unit provided
+                by systemd or another package, or to override only a single instance
+                of a template unit.
+              '';
+            };
+          };
+          config = {
+            unit = makeUnit name config;
+          };
         };
-        enable = mkOption {
-          default = true;
-          type = types.bool;
-          description = ''
-            If set to false, this unit will be a symlink to
-            /dev/null. This is primarily useful to prevent specific
-            template instances (e.g. <literal>serial-getty@ttyS0</literal>)
-            from being started.
-          '';
-        };
-        requiredBy = mkOption {
-          default = [];
-          type = types.listOf types.string;
-          description = "Units that require (i.e. depend on and need to go down with) this unit.";
-        };
-        wantedBy = mkOption {
-          default = [];
-          type = types.listOf types.string;
-          description = "Units that want (i.e. depend on) this unit.";
-        };
-      };
     };
 
     systemd.packages = mkOption {
@@ -486,6 +517,16 @@ in
       '';
     };
 
+    systemd.extraConfig = mkOption {
+      default = "";
+      type = types.lines;
+      example = "DefaultLimitCORE=infinity";
+      description = ''
+        Extra config options for systemd. See man systemd-system.conf for
+        available options.
+      '';
+    };
+
     services.journald.console = mkOption {
       default = "";
       type = types.str;
@@ -516,9 +557,19 @@ in
       '';
     };
 
+    services.journald.extraConfig = mkOption {
+      default = "";
+      type = types.lines;
+      example = "Storage=volatile";
+      description = ''
+        Extra config options for systemd-journald. See man journald.conf
+        for available options.
+      '';
+    };
+
     services.logind.extraConfig = mkOption {
       default = "";
-      type = types.str;
+      type = types.lines;
       example = "HandleLidSwitch=ignore";
       description = ''
         Extra config options for systemd-logind. See man logind.conf for
@@ -555,6 +606,7 @@ in
     environment.etc."systemd/system.conf".text =
       ''
         [Manager]
+        ${config.systemd.extraConfig}
       '';
 
     environment.etc."systemd/journald.conf".text =
@@ -566,6 +618,7 @@ in
           ForwardToConsole=yes
           TTYPath=${config.services.journald.console}
         ''}
+        ${config.services.journald.extraConfig}
       '';
 
     environment.etc."systemd/logind.conf".text =
@@ -584,13 +637,6 @@ in
         mkdir -m 0755 -p /var/lib/udev
         mkdir -p /var/log/journal
         chmod 0755 /var/log/journal
-
-        # Regenerate the hardware database /var/lib/udev/hwdb.bin
-        # whenever systemd changes.
-        if [ ! -e /var/lib/udev/prev-systemd -o "$(readlink /var/lib/udev/prev-systemd)" != ${systemd} ]; then
-          echo "regenerating udev hardware database..."
-          ${systemd}/bin/udevadm hwdb --update && ln -sfn ${systemd} /var/lib/udev/prev-systemd
-        fi
 
         # Make all journals readable to users in the wheel and adm
         # groups, in addition to those in the systemd-journal group.

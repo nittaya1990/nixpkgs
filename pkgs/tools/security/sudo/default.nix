@@ -1,14 +1,14 @@
 { stdenv, fetchurl, coreutils, pam, groff }:
 
 stdenv.mkDerivation rec {
-  name = "sudo-1.8.6p7";
+  name = "sudo-1.8.9p3";
 
   src = fetchurl {
     urls =
       [ "ftp://ftp.sudo.ws/pub/sudo/${name}.tar.gz"
         "ftp://ftp.sudo.ws/pub/sudo/OLD/${name}.tar.gz"
       ];
-    sha256 = "0djh2b14d1b1knah46v971x940rz63hvnskz16fzami3nbnqj41h";
+    sha256 = "1dy549nwplc3d1147fvcl8p8hbrc7sslqldi6229r4pbibng1cd2";
   };
 
   postConfigure = ''

@@ -6,14 +6,16 @@ rec {
   };
 
   texmfSrc = fetchurl {
-    url = mirror://debian/pool/main/t/texlive-base/texlive-base_2013.20130918.orig.tar.xz;
-    sha256 = "0h7x49zsd2gs8fr28f4h04dv5m8p2mpgqxk2vvl5xlf4wwxxbm2p";
+    url = mirror://debian/pool/main/t/texlive-base/texlive-base_2013.20131219.orig.tar.xz;
+    sha256 = "1kcfw6n9rv3wznyqkvkad60p1zljbn1cw2jhajzcrn8m39y0ad3x";
   };
 
   langTexmfSrc = fetchurl {
-    url = mirror://debian/pool/main/t/texlive-lang/texlive-lang_2013.20131010.orig.tar.xz;
-    sha256 = "17wfd2qmyafv74ac3ssy9aga12g09l2q0r1p19fb4vvs0wrkwzbz";
+    url = mirror://debian/pool/main/t/texlive-lang/texlive-lang_2013.20131219.orig.tar.xz;
+    sha256 = "139hb91ks62q56dnnrzhcxmm2wpz0b40ka7smaqgw86r002albb0";
   };
+
+  passthru = { inherit texmfSrc langTexmfSrc; };
 
   setupHook = ./setup-hook.sh;
 
@@ -100,8 +102,8 @@ rec {
   patchShebangsInterimShareTexmfDist = doPatchShebangs ''$out/share/texmf-dist/scripts/'';
   patchShebangsInterimTexmfDist = doPatchShebangs ''$out/texmf-dist/scripts/'';
 
-  patchShebangsInterim = fullDepEntry ("") ["patchShebangsInterimBin" 
-    "patchShebangsInterimLibexec" "patchShebangsInterimTexmfDist" 
+  patchShebangsInterim = fullDepEntry ("") ["patchShebangsInterimBin"
+    "patchShebangsInterimLibexec" "patchShebangsInterimTexmfDist"
     "patchShebangsInterimShareTexmfDist"];
 
   buildInputs = [ zlib bzip2 ncurses libpng flex bison libX11 libICE xproto
@@ -112,7 +114,7 @@ rec {
 
   configureFlags = [ "--with-x11" "--enable-ipc" "--with-mktexfmt"
     "--enable-shared" "--disable-native-texlive-build" "--with-system-zziplib"
-    "--with-system-libgs" "--with-system-t1lib" "--with-system-freetype2" 
+    "--with-system-libgs" "--with-system-t1lib" "--with-system-freetype2"
     "--with-system-freetype=no" "--disable-ttf2pk" "--enable-ttf2pk2"
     ]
     ++ ( if stdenv.isDarwin
@@ -133,4 +135,3 @@ rec {
     platforms   = platforms.unix;
   };
 }
-

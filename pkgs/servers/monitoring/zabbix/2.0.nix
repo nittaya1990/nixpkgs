@@ -5,11 +5,12 @@ assert enableJabber -> minmay != null;
 
 let
 
-  version = "2.0.9";
+  version = "2.0.10";
+  branch = "2.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/zabbix/zabbix-${version}.tar.gz";
-    sha256 = "057fjqww0qzs56nm8m3c36kbrhwriysvjvqzgwm9j2bg9ylixvym";
+    sha256 = "0p86m634j08w0gbr2rwqr3h5p6md7k0c688w5yxc1ii3l9fmnhbi";
   };
 
   preConfigure =
@@ -61,6 +62,7 @@ in
       '';
 
     meta = {
+      inherit branch;
       description = "An enterprise-class open source distributed monitoring solution";
       homepage = http://www.zabbix.com/;
       license = "GPL";
@@ -77,6 +79,7 @@ in
     configureFlags = "--enable-agent";
 
     meta = {
+      inherit branch;
       description = "An enterprise-class open source distributed monitoring solution (client-side agent)";
       homepage = http://www.zabbix.com/;
       license = "GPL";

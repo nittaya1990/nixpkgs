@@ -106,7 +106,6 @@ let
       file = all;
       findutils = all;
       flex = all;
-      flex2535 = all;
       fontforge = linux;
       fuse = linux;
       gajim = linux;
@@ -116,6 +115,7 @@ let
       gcc34 = linux;
       gcc42 = linux;
       gcc44 = linux;
+      gcj = linux;
       ghdl = linux;
       ghostscript = linux;
       ghostscriptX = linux;
@@ -126,7 +126,7 @@ let
       glibcLocales = linux;
       glxinfo = linux;
       gnash = linux;
-      gnat44 = linux;
+      gnat = linux;
       gnugrep = all;
       gnum4 = all;
       gnumake = all;
@@ -309,7 +309,6 @@ let
       vim = linux;
       vimHugeX = linux;
       VisualBoyAdvance = linux;
-      vlc = linux;
       vncrec = linux;
       vorbisTools = linux;
       vpnc = linux;
@@ -369,6 +368,10 @@ let
       };
 
       haskellPackages_ghc704 = {
+        ghc = ghcSupported;
+      };
+
+      haskellPackages_ghc722 = {
         ghc = ghcSupported;
       };
 

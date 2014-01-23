@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "JuicyPixels";
-  version = "3.1.1.1";
-  sha256 = "0lvhaa8pqknkcsfps5gcbwiqx0y1rhasiw9hwy7975vgpsh58dph";
+  version = "3.1.3";
+  sha256 = "1zyrdd8mhgj0lchsznyhqhxb48ql8fhfqi5qs54qaxan514w6x70";
   buildDepends = [
     binary deepseq mtl primitive transformers vector zlib
   ];

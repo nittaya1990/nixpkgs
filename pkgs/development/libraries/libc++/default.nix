@@ -1,21 +1,25 @@
-{ stdenv, fetchsvn, cmake }:
+{ stdenv, fetchurl, fetchsvn, cmake, libcxxabi, python }:
 
-let rev = "165151"; in
+let
+  version = "3.4";
 
-stdenv.mkDerivation {
-  name = "libc++-pre${rev}";
+in stdenv.mkDerivation rec {
+  name = "libc++-${version}";
 
-  src = fetchsvn {
-    url = "http://llvm.org/svn/llvm-project/libcxx/trunk";
-    inherit rev;
-    sha256 = "00l8xx5nc3cjlmln7c1sy1i4v844has9kbfxrsziwkalzbgwaslz";
+  src = fetchurl {
+    url = "http://llvm.org/releases/${version}/libcxx-${version}.src.tar.gz";
+    sha256 = "1sqd5qhqj7qnn9zjxx9bv7ky4f7xgmh9sbgd53y1kszhg41217xx";
   };
 
-  buildInputs = [ cmake ];
+  buildInputs = [ cmake libcxxabi python ];
 
-  cmakeFlags = [ "-DCMAKE_BUILD_TYPE=Release" ];
+  cmakeFlags = [ "-DCMAKE_BUILD_TYPE=Release"
+                 "-DLIBCXX_LIBCXXABI_INCLUDE_PATHS=${libcxxabi}/include"
+                 "-DLIBCXX_CXX_ABI=libcxxabi" ];
 
   enableParallelBuilding = true;
+
+  passthru.abi = libcxxabi;
 
   meta = {
     homepage = http://libcxx.llvm.org/;
@@ -25,4 +29,3 @@ stdenv.mkDerivation {
     platforms = stdenv.lib.platforms.all;
   };
 }
-
