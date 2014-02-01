@@ -3,13 +3,10 @@
 rec {
   inherit (pkgs) glib gtk2 gtk3 gnome2;
   gtk = gtk3; # just to be sure
+  libcanberra = pkgs.libcanberra_gtk3; # just to be sure
   inherit (pkgs.gnome2) gnome_common ORBit2;
   orbit = ORBit2;
-
-
-#### Overrides of libraries
-
-  libsoup = pkgs.libsoup_2_44;
+  inherit (pkgs) libsoup;
 
 #### Core (http://ftp.acc.umu.se/pub/GNOME/core/)
 
@@ -46,6 +43,8 @@ rec {
   gnome_online_accounts = callPackage ./core/gnome-online-accounts { };
 
   gnome_session = callPackage ./core/gnome-session { };
+
+  gnome_shell = callPackage ./core/gnome-shell { };
 
   gnome_settings_daemon = callPackage ./core/gnome-settings-daemon { };
 

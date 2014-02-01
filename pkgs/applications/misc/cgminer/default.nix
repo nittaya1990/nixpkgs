@@ -1,5 +1,6 @@
-{ fetchgit, stdenv, pkgconfig, libtool, autoconf, automake,
-  curl, ncurses, amdappsdk, amdadlsdk, udev, xorg, jansson }:
+{ fetchgit, stdenv, pkgconfig, libtool, autoconf, automake
+, curl, ncurses, amdappsdk, amdadlsdk, udev, xorg, jansson }:
+
 stdenv.mkDerivation rec {
   version = "3.7.2";
   name = "cgminer-${version}";
@@ -40,6 +41,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/ckolivas/cgminer";
     license = licenses.gpl3;
     maintainers = [ maintainers.offline ];
-    platforms = [ "i686-linux" "x86_64-linux" ];
+    platforms = stdenv.lib.platforms.linux;
+    hydraPlatforms = [];
   };
 }

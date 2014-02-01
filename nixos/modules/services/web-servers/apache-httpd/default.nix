@@ -260,7 +260,7 @@ let
 
     '' else ""}
 
-    ${if cfg.globalRedirect != null then ''
+    ${if cfg.globalRedirect != null && cfg.globalRedirect != "" then ''
       RedirectPermanent / ${cfg.globalRedirect}
     '' else ""}
 
@@ -582,6 +582,12 @@ in
   ###### implementation
 
   config = mkIf config.services.httpd.enable {
+  
+    assertions = [ { assertion = mainCfg.enableSSL == true
+                               -> mainCfg.sslServerCert != null
+                                    && mainCfg.sslServerKey != null;
+                     message = "SSL is enabled for HTTPD, but sslServerCert and/or sslServerKey haven't been specified."; }
+                 ];
 
     users.extraUsers = optionalAttrs (mainCfg.user == "wwwrun") singleton
       { name = "wwwrun";
@@ -622,8 +628,8 @@ in
           ++ concatMap (svc: svc.extraServerPath) allSubservices;
 
         environment =
-          { PHPRC = if enablePHP then phpIni else "";
-          } // (listToAttrs (concatMap (svc: svc.globalEnvVars) allSubservices));
+          optionalAttrs enablePHP { PHPRC = phpIni; }
+          // (listToAttrs (concatMap (svc: svc.globalEnvVars) allSubservices));
 
         preStart =
           ''

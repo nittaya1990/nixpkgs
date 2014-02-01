@@ -65,6 +65,9 @@ pythonPackages = modules // import ./python-packages-generated.nix {
   ipython = import ../shells/ipython {
     inherit (pkgs) stdenv fetchurl sip pyqt4;
     inherit buildPythonPackage pythonPackages;
+    qtconsoleSupport = !pkgs.stdenv.isDarwin; # qt is not supported on darwin
+    pylabQtSupport = !pkgs.stdenv.isDarwin;
+    pylabSupport = !pkgs.stdenv.isDarwin; # cups is not supported on darwin
   };
 
   ipythonLight = lowPrio (import ../shells/ipython {
@@ -1410,6 +1413,27 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       homepage = http://deron.meranda.us/python/demjson/;
       license = stdenv.lib.licenses.lgpl3Plus;
       maintainers = with stdenv.lib.maintainers; [ bjornfor ];
+      platforms = stdenv.lib.platforms.all;
+    };
+  };
+
+
+  dpkt = buildPythonPackage rec {
+    name = "dpkt-1.8";
+
+    src = fetchurl {
+      url = "https://dpkt.googlecode.com/files/${name}.tar.gz";
+      sha256 = "01q5prynymaqyfsfi2296xncicdpid2hs3yyasim8iigvkwy4vf5";
+    };
+
+    # error: invalid command 'test'
+    doCheck = false;
+
+    meta = with stdenv.lib; {
+      description = "Fast, simple packet creation / parsing, with definitions for the basic TCP/IP protocols";
+      homepage = https://code.google.com/p/dpkt/;
+      license = licenses.bsd3;
+      maintainers = [ maintainers.bjornfor ];
       platforms = stdenv.lib.platforms.all;
     };
   };
@@ -4293,11 +4317,11 @@ pythonPackages = modules // import ./python-packages-generated.nix {
   };
 
   paramiko = buildPythonPackage rec {
-    name = "paramiko-1.12.0";
+    name = "paramiko-1.12.1";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/p/paramiko/${name}.tar.gz";
-      md5 = "4187f77b1a5a313c899993930e30c321";
+      md5 = "ae4544dc0a1419b141342af89fcf0dd9";
     };
 
     propagatedBuildInputs = [ pycrypto ecdsa ];
