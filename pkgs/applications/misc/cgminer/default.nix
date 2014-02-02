@@ -23,9 +23,9 @@ stdenv.mkDerivation rec {
     ln -s ${amdadlsdk}/include/* ADL_SDK/
   '';
 
-  postBuild = ''
-    gcc api-example.c -o cgminer-api
-  '';
+#  postBuild = ''
+#    gcc api-example.c -o cgminer-api
+#  '';
 
   postInstall = ''
     chmod 444 $out/bin/*.cl
