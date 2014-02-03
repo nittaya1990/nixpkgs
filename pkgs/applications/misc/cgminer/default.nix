@@ -1,5 +1,5 @@
 { fetchgit, stdenv, pkgconfig, libtool, autoconf, automake
-, curl, ncurses, amdappsdk, amdadlsdk, udev, xorg, jansson }:
+, curl, ncurses, amdappsdk, amdadlsdk, udev, xorg, jansson, libusb1 }:
 
 stdenv.mkDerivation rec {
   version = "3.7.2";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     autoconf automake pkgconfig libtool curl ncurses amdappsdk amdadlsdk
-    xorg.libX11 xorg.libXext xorg.libXinerama udev jansson
+    xorg.libX11 xorg.libXext xorg.libXinerama udev jansson libusb1
   ];
   configureScript = "./autogen.sh";
   configureFlags = "--enable-scrypt --enable-opencl --enable-bflsc";
@@ -23,9 +23,9 @@ stdenv.mkDerivation rec {
     ln -s ${amdadlsdk}/include/* ADL_SDK/
   '';
 
-#  postBuild = ''
-#    gcc api-example.c -o cgminer-api
-#  '';
+  postBuild = ''
+    gcc -I ${libusb1}/include/libusb-1.0 api-example.c -o cgminer-api
+  '';
 
   postInstall = ''
     chmod 444 $out/bin/*.cl
