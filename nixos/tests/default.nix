@@ -13,6 +13,7 @@ with import ../lib/testing.nix { inherit system minimal; };
   installer = makeTests (import ./installer.nix);
   efi-installer = makeTests (import ./efi-installer.nix);
   ipv6 = makeTest (import ./ipv6.nix);
+  jenkins = makeTest (import ./jenkins.nix);
   kde4 = makeTest (import ./kde4.nix);
   #kexec = makeTest (import ./kexec.nix);
   login = makeTest (import ./login.nix {});

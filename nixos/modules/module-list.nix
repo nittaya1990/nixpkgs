@@ -78,6 +78,7 @@
   ./services/backup/postgresql-backup.nix
   ./services/backup/sitecopy-backup.nix
   ./services/backup/rsnapshot.nix
+  ./services/continuous-integration/jenkins/default.nix
   ./services/databases/4store-endpoint.nix
   ./services/databases/4store.nix
   ./services/databases/firebird.nix

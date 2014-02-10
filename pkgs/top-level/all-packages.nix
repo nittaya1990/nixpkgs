@@ -3630,6 +3630,8 @@ let
 
   jikespg = callPackage ../development/tools/parsing/jikespg { };
 
+  jenkins = callPackage ../development/tools/continuous-integration/jenkins { };
+
   lcov = callPackage ../development/tools/analysis/lcov { };
 
   leiningen = callPackage ../development/tools/build-managers/leiningen { };
