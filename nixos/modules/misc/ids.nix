@@ -114,6 +114,7 @@
       logcheck = 103;
       nix-ssh = 104;
       dictd = 105;
+      jenkins = 106;
 
       # When adding a uid, make sure it doesn't match an existing gid.
 
