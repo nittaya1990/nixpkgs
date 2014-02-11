@@ -33,6 +33,18 @@ in {
         default = "jenkins";
         description = "User account under which jenkins runs";
       };
+
+      packages = mkOption {
+        default = [ pkgs.git pkgs.jdk pkgs.openssh pkgs.nix ];
+        type = types.listOf types.package;
+        description = "The packages to exposed to the jenkins process";
+      };
+
+      nixRemote = mkOption {
+        default = "daemon";
+        type = types.string;
+        description = "The NIX_REMOTE variable to provide to the jenkins process";
+      };
     };
   };
 
@@ -55,7 +67,12 @@ in {
         JENKINS_HOME = cfg.home;
       };
 
-      path = [ pkgs.git pkgs.jdk pkgs.openssh ];
+      path = cfg.packages;
+
+      script = ''
+        export NIX_REMOTE=${cfg.nixRemote}
+        ${pkgs.jdk}/bin/java -jar ${pkgs.jenkins} --httpPort=${toString cfg.port}
+      '';
 
       postStart = ''
         until ${pkgs.curl}/bin/curl -L localhost:${toString cfg.port} ; do
@@ -73,8 +90,6 @@ in {
 
       serviceConfig = {
         User = cfg.user;
-        ExecStart = "${pkgs.jdk}/bin/java -jar ${pkgs.jenkins} --httpPort=${toString cfg.port}";
-        PermissionsStartOnly = true;
       };
     };
   };
