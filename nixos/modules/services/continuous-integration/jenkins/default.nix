@@ -39,6 +39,9 @@ in {
   config = mkIf cfg.enable {
     users.extraUsers = optionalAttrs (cfg.user == "jenkins") (singleton {
       name = "jenkins";
+      home = cfg.home;
+      createHome = true;
+      useDefaultShell = true;
       uid = config.ids.uids.jenkins;
       description = "jenkins user";
     });
@@ -52,11 +55,7 @@ in {
         JENKINS_HOME = cfg.home;
       };
 
-      preStart = ''
-        mkdir -p ${cfg.home}
-        chown -R ${cfg.user} ${cfg.home}
-        sync
-      '';
+      path = [ pkgs.git pkgs.jdk pkgs.openssh ];
 
       postStart = ''
         until ${pkgs.curl}/bin/curl -L localhost:${toString cfg.port} ; do
