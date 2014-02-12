@@ -17,7 +17,7 @@ in {
         default = "/var/lib/jenkins";
         type = types.string;
         description = ''
-          The path to use as JENKINS_HOME
+          The path to use as JENKINS_HOME and as the home of the "jenkins" user.
         '';
       };
 
@@ -31,7 +31,10 @@ in {
 
       user = mkOption {
         default = "jenkins";
-        description = "User account under which jenkins runs";
+        description = ''
+          User account under which jenkins runs. The default value of "jenkins" causes the user to
+          be managed automatically. Otherwise another module is expected to manage the user.
+        '';
       };
 
       packages = mkOption {
