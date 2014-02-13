@@ -37,6 +37,13 @@ in {
         '';
       };
 
+      group = mkOption {
+        default = "jenkins";
+        description = ''
+          Default group of "jenkins" user.
+        '';
+      };
+
       packages = mkOption {
         default = [ pkgs.stdenv pkgs.git pkgs.jdk pkgs.openssh pkgs.nix ];
         type = types.listOf types.package;
@@ -52,8 +59,11 @@ in {
   };
 
   config = mkIf cfg.enable {
+    users.extraGroups = optional (cfg.user == "jenkins") { name = "jenkins"; };
+
     users.extraUsers = optionalAttrs (cfg.user == "jenkins") (singleton {
-      name = "jenkins";
+      name = cfg.user;
+      group = cfg.group;
       home = cfg.home;
       createHome = true;
       useDefaultShell = true;
