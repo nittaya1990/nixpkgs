@@ -38,9 +38,9 @@ in {
       };
 
       packages = mkOption {
-        default = [ pkgs.git pkgs.jdk pkgs.openssh pkgs.nix ];
+        default = [ pkgs.stdenv pkgs.git pkgs.jdk pkgs.openssh pkgs.nix ];
         type = types.listOf types.package;
-        description = "The packages to exposed to the jenkins process";
+        description = "The packages to expose to the jenkins process";
       };
 
       nixRemote = mkOption {
