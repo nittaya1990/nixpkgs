@@ -130,6 +130,7 @@ rec {
       then t.testScript { inherit nodes; }
       else t.testScript;
 
+    taps = lib.optionalString (t ? taps) t.taps;
     vlans = map (m: m.config.virtualisation.vlans) (lib.attrValues nodes);
 
     vms = map (m: m.config.system.build.vm) (lib.attrValues nodes);
@@ -151,12 +152,14 @@ rec {
           --add-flags "$vms" \
           --run "testScript=\"\$(cat $out/test-script)\"" \
           --set testScript '"$testScript"' \
-          --set VLANS '"${toString vlans}"'
+          --set VLANS '"${toString vlans}"' \
+          --set TAPS  '"${toString taps}"'
         ln -s ${testDriver}/bin/nixos-test-driver $out/bin/nixos-run-vms
         wrapProgram $out/bin/nixos-run-vms \
           --add-flags "$vms" \
           --set tests '"startAll; joinAll;"' \
           --set VLANS '"${toString vlans}"' \
+          --set TAPS  '"${toString taps}"' \
           ${lib.optionalString (builtins.length vms == 1) "--set USE_SERIAL 1"}
       ''; # "
 

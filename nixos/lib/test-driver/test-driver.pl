@@ -15,6 +15,11 @@ STDERR->autoflush(1);
 
 my $log = new Logger;
 
+my %taps;
+foreach my $tap_spec (split / /, $ENV{TAPS} || "") {
+    $tap_spec =~ /(\d+)-(\w+)/;
+    $taps{$1} = $2;
+}
 
 # Start vde_switch for each network required by the test.
 my %vlans;
@@ -34,7 +39,12 @@ foreach my $vlan (split / /, $ENV{VLANS} || "") {
     if ($pid == 0) {
         dup2(fileno($pty->slave), 0);
         dup2(fileno($stdoutW), 1);
-        exec "vde_switch -s $socket" or _exit(1);
+        if (defined $taps{$vlan}) {
+            my $tap = $taps{"$vlan"};
+            exec "vde_switch -s $socket --tap $tap" or _exit(1);
+        } else {
+            exec "vde_switch -s $socket" or _exit(1);
+        }
     }
     close $stdoutW;
     print $pty "version\n";
