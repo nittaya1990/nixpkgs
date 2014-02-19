@@ -44,6 +44,14 @@ in {
         '';
       };
 
+      extraGroups = mkOption {
+        default = [];
+        type = with types; listOf string;
+        description = ''
+          Extra groups of the "jenkins" user.
+        '';
+      };
+
       packages = mkOption {
         default = [ pkgs.stdenv pkgs.git pkgs.jdk pkgs.openssh pkgs.nix ];
         type = types.listOf types.package;
@@ -66,12 +74,13 @@ in {
 
     users.extraUsers = optionalAttrs (cfg.user == "jenkins") (singleton {
       name = cfg.user;
-      group = cfg.group;
-      home = cfg.home;
+      description = "jenkins user";
       createHome = true;
+      home = cfg.home;
+      group = cfg.group;
+      extraGroups = cfg.extraGroups;
       useDefaultShell = true;
       uid = config.ids.uids.jenkins;
-      description = "jenkins user";
     });
 
     systemd.services.jenkins = {
