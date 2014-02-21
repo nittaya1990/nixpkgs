@@ -2,6 +2,7 @@
 with pkgs.lib;
 let
   cfg = config.services.jenkins;
+  userCfg = config.users.jenkins;
 in {
   options = {
     services.jenkins = {
@@ -14,10 +15,10 @@ in {
       };
       
       home = mkOption {
-        default = "/var/lib/jenkins";
+        default = userCfg.home;
         type = types.string;
         description = ''
-          The path to use as JENKINS_HOME and as the home of the "jenkins" user.
+          The path to use as JENKINS_HOME. Defaults to the home of the "jenkins" user.
         '';
       };
 
@@ -26,29 +27,6 @@ in {
         type = types.uniq types.int;
         description = ''
           Specifies port number on which the jenkins HTTP interface listens. The default is 8080
-        '';
-      };
-
-      user = mkOption {
-        default = "jenkins";
-        description = ''
-          User account under which jenkins runs. The default value of "jenkins" causes the user to
-          be managed automatically. Otherwise another module is expected to manage the user.
-        '';
-      };
-
-      group = mkOption {
-        default = "jenkins";
-        description = ''
-          Default group of "jenkins" user.
-        '';
-      };
-
-      extraGroups = mkOption {
-        default = [];
-        type = with types; listOf string;
-        description = ''
-          Extra groups of the "jenkins" user.
         '';
       };
 
@@ -70,18 +48,7 @@ in {
   };
 
   config = mkIf cfg.enable {
-    users.extraGroups = optional (cfg.user == "jenkins") { name = "jenkins"; };
-
-    users.extraUsers = optionalAttrs (cfg.user == "jenkins") (singleton {
-      name = cfg.user;
-      description = "jenkins user";
-      createHome = true;
-      home = cfg.home;
-      group = cfg.group;
-      extraGroups = cfg.extraGroups;
-      useDefaultShell = true;
-      uid = config.ids.uids.jenkins;
-    });
+    users.jenkins.enable = true;
 
     systemd.services.jenkins = {
       description = "jenkins continuous integration server";
@@ -113,7 +80,7 @@ in {
       '';
 
       serviceConfig = {
-        User = cfg.user;
+        User = userCfg.name;
       };
     };
   };
