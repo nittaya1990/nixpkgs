@@ -15,10 +15,10 @@ in {
       };
 
       user = mkOption {
-        default = userCfg.name;
+        default = "jenkins";
         type = with types; string;
         description = ''
-          User the jenkins server should execute under. Defaults to the ${userCfg.name} user.
+          User the jenkins server should execute under. Defaults to the "jenkins" user.
         '';
       };
 
