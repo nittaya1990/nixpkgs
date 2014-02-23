@@ -207,6 +207,7 @@
       munin = 95;
       keys = 96;
       dictd = 105;
+      jenkins = 106;
 
       # When adding a gid, make sure it doesn't match an existing uid.
 

@@ -43,15 +43,16 @@ in {
   config = mkIf cfg.enable {
     users.extraGroups = optional (cfg.group == "jenkins") { name = "jenkins"; };
 
-    users.extraUsers = singleton {
-      name = "jenkins";
-      description = "jenkins user";
-      createHome = true;
-      home = cfg.home;
-      group = cfg.group;
-      extraGroups = cfg.extraGroups;
-      useDefaultShell = true;
-      uid = config.ids.uids.jenkins;
+    users.extraUsers = {
+      jenkins = {
+        description = "jenkins user";
+        createHome = true;
+        home = cfg.home;
+        group = cfg.group;
+        extraGroups = cfg.extraGroups;
+        useDefaultShell = true;
+        uid = config.ids.uids.jenkins;
+      };
     };
   };
 }
