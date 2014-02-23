@@ -41,7 +41,10 @@ in {
   };
 
   config = mkIf cfg.enable {
-    users.extraGroups = optional (cfg.group == "jenkins") { name = "jenkins"; };
+    users.extraGroups = optional (cfg.group == "jenkins") {
+      name = "jenkins";
+      gid = config.ids.gids.jenkins;
+    };
 
     users.extraUsers = {
       jenkins = {
