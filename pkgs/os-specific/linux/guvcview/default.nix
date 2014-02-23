@@ -1,14 +1,31 @@
-{ stdenv, fetchgit, intltool, autoreconfHook, gettext, pkgconfig,
-  gtk3, portaudio, libpng, SDL, ffmpeg, udev, libusb1, libv4l, alsaLib }:
-stdenv.mkDerivation {
-  name = "guvcview";
+{ stdenv, fetchgit, intltool, autoreconfHook, gettext, pkgconfig
+, gtk3, portaudio, libpng, SDL, ffmpeg, udev, libusb1, libv4l, alsaLib }:
+
+stdenv.mkDerivation rec {
+  version = "1.7.2";
+  rev = "ab84b0b1ed358f0504e1218a0ef792a02b307af8";
+  name = "guvcview-${version}_${rev}";
+
   src = fetchgit {
+    inherit rev;
     url = "git://git.code.sf.net/p/guvcview/git-master";
-    rev = "ab84b0b1ed358f0504e1218a0ef792a02b307af8";
+    sha256 = "08cpbxq3dh2mlsgzk5dj3vfrgap4q281n9h6xzpbsvyifcj1a9n1";
   };
 
-  buildInputs = [ autoreconfHook gtk3 intltool pkgconfig 
-                  SDL portaudio ffmpeg ffmpeg udev libusb1 libv4l alsaLib ];
+  buildInputs =
+    [ SDL
+      alsaLib
+      autoreconfHook
+      ffmpeg
+      gtk3
+      intltool
+      libusb1
+      libv4l
+      pkgconfig
+      portaudio
+      udev
+    ];
+
   preConfigure = ''
     ./bootstrap.sh
   '';

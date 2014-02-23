@@ -110,7 +110,11 @@
       openldap = 99;
       memcached = 100;
       cgminer = 101;
-      jenkins = 102;
+      munin = 102;
+      logcheck = 103;
+      nix-ssh = 104;
+      dictd = 105;
+      jenkins = 106;
 
       # When adding a uid, make sure it doesn't match an existing gid.
 
@@ -200,6 +204,9 @@
       haproxy = 92;
       openldap = 93;
       connman = 94;
+      munin = 95;
+      keys = 96;
+      dictd = 105;
 
       # When adding a gid, make sure it doesn't match an existing uid.
 

@@ -13,12 +13,20 @@ in {
           Whether to enable the jenkins continuous integration server.
         '';
       };
-      
+
+      user = mkOption {
+        default = userCfg.name;
+        type = with types; string;
+        description = ''
+          User the jenkins server should execute under. Defaults to the ${userCfg.name} user.
+        '';
+      };
+
       home = mkOption {
         default = userCfg.home;
-        type = types.string;
+        type = with types; string;
         description = ''
-          The path to use as JENKINS_HOME. Defaults to the home of the "jenkins" user.
+          The path to use as JENKINS_HOME. Defaults to the home of the ${userCfg.name} user.
         '';
       };
 
@@ -33,7 +41,9 @@ in {
       packages = mkOption {
         default = [ pkgs.stdenv pkgs.git pkgs.jdk pkgs.openssh pkgs.nix ];
         type = types.listOf types.package;
-        description = "Packages to expose to the jenkins process";
+        description = ''
+          Packages to add to PATH for the jenkins process.
+        '';
       };
 
       environment = mkOption {
@@ -80,7 +90,7 @@ in {
       '';
 
       serviceConfig = {
-        User = userCfg.name;
+        User = cfg.user;
       };
     };
   };

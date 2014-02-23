@@ -9,7 +9,9 @@ in {
         type = types.bool;
         default = false;
         description = ''
-          Whether to enable the jenkins user.
+          Whether to enable the jenkins user. By default enabling a jenkins service enables the
+          jenkins user. The "user" config property can be used to select a different user for the
+          service.
         '';
       };
 
@@ -35,21 +37,13 @@ in {
           Home of the "jenkins" user and JENKINS_HOME.
         '';
       };
-
-      name = mkOption {
-        default = "jenkins";
-        description = ''
-          Name of account which jenkins runs. The default value of "jenkins" causes the user to be
-          managed automatically. Otherwise another module is expected to manage the user.
-        '';
-      };
     };
   };
 
   config = mkIf cfg.enable {
-    users.extraGroups = optional (cfg.name == "jenkins") { name = "jenkins"; };
+    users.extraGroups = optional (cfg.group == "jenkins") { name = "jenkins"; };
 
-    users.extraUsers = optionalAttrs (cfg.name == "jenkins") (singleton {
+    users.extraUsers = singleton {
       name = cfg.name;
       description = "jenkins user";
       createHome = true;
@@ -58,6 +52,6 @@ in {
       extraGroups = cfg.extraGroups;
       useDefaultShell = true;
       uid = config.ids.uids.jenkins;
-    });
+    };
   };
 }
