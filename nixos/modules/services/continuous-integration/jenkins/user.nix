@@ -10,8 +10,8 @@ in {
         default = false;
         description = ''
           Whether to enable the jenkins user. By default enabling a jenkins service enables the
-          jenkins user. The "user" config property can be used to select a different user for the
-          service.
+          jenkins user. The "user" config property of the service can be used to select a different
+          user.
         '';
       };
 
@@ -44,7 +44,7 @@ in {
     users.extraGroups = optional (cfg.group == "jenkins") { name = "jenkins"; };
 
     users.extraUsers = singleton {
-      name = cfg.name;
+      name = "jenkins";
       description = "jenkins user";
       createHome = true;
       home = cfg.home;
