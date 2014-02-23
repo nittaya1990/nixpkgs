@@ -1,7 +1,7 @@
 { stdenv, fetchurl, ... } @ args:
 
 import ./generic.nix (args // rec {
-  version = "3.14";
+  version = "3.14.0-rc3";
 
   src = fetchurl {
     url = "https://www.kernel.org/pub/linux/kernel/v3.x/testing/linux-3.14-rc3.tar.xz";
