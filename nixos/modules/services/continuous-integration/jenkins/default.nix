@@ -26,7 +26,7 @@ in {
         default = userCfg.home;
         type = with types; string;
         description = ''
-          The path to use as JENKINS_HOME. Defaults to the home of the ${userCfg.name} user.
+          The path to use as JENKINS_HOME. Defaults to the home of the "jenkins" user.
         '';
       };
 
