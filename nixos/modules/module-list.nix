@@ -81,7 +81,6 @@
   ./services/backup/sitecopy-backup.nix
   ./services/backup/rsnapshot.nix
   ./services/continuous-integration/jenkins/default.nix
-  ./services/continuous-integration/jenkins/user.nix
   ./services/databases/4store-endpoint.nix
   ./services/databases/4store.nix
   ./services/databases/firebird.nix
