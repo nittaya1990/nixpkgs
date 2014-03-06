@@ -67,21 +67,19 @@ in {
 
   config = mkIf cfg.enable {
     users.extraGroups = optional (cfg.group == "jenkins") {
-      jenkins = {
-        gid = config.ids.gids.jenkins;
-      };
+      name = "jenkins";
+      gid = config.ids.gids.jenkins;
     };
 
     users.extraUsers = optional (cfg.user == "jenkins") {
-      jenkins = {
-        description = "jenkins user";
-        createHome = true;
-        home = cfg.home;
-        group = cfg.group;
-        extraGroups = cfg.extraGroups;
-        useDefaultShell = true;
-        uid = config.ids.uids.jenkins;
-      };
+      name = "jenkins";
+      description = "jenkins user";
+      createHome = true;
+      home = cfg.home;
+      group = cfg.group;
+      extraGroups = cfg.extraGroups;
+      useDefaultShell = true;
+      uid = config.ids.uids.jenkins;
     };
 
     systemd.services.jenkins = {
