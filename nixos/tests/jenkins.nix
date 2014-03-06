@@ -9,12 +9,12 @@
         services.jenkins.enable = true;
 
         # should have no effect
-        services.jenkins-slave.enable = true;
+        services.jenkinsSlave.enable = true;
 
         users.extraUsers.jenkins.extraGroups = [ "users" ];
       };
     slave = { pkgs, config, ... }: {
-        services.jenkins-slave.enable = true;
+        services.jenkinsSlave.enable = true;
 
         users.extraUsers.jenkins.extraGroups = [ "users" ];
       };

@@ -1,11 +1,11 @@
 { config, pkgs, ... }:
 with pkgs.lib;
 let
-  cfg = config.services.jenkins-slave;
+  cfg = config.services.jenkinsSlave;
   masterCfg = config.services.jenkins;
 in {
   options = {
-    services.jenkins-slave = {
+    services.jenkinsSlave = {
       # todo:
       # * assure the profile of the jenkins user has a JRE and any specified packages. This would
       # enable ssh slaves.
