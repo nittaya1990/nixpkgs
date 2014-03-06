@@ -77,7 +77,6 @@ in {
       createHome = true;
       home = cfg.home;
       group = cfg.group;
-      extraGroups = cfg.extraGroups;
       useDefaultShell = true;
       uid = config.ids.uids.jenkins;
     };
