@@ -1,19 +1,19 @@
-{ cabal, comonad, hashable, hspec, QuickCheck, semigroupoids
+{ cabal, comonad, foldl, hashable, hspec, QuickCheck, semigroupoids
 , semigroups, text, transformers, unorderedContainers, vector
-, vectorInstances
+, vectorAlgorithms, vectorInstances
 }:
 
 cabal.mkDerivation (self: {
   pname = "mono-traversable";
-  version = "0.3.0.2";
-  sha256 = "1aa6dm75ff822fazdnjfgggy3y2zxa8vy4dn2vvx0y8i9pgh0m0l";
+  version = "0.4.0.1";
+  sha256 = "049skbjwz49c9qz2nys2hn6pc4gqn1a91b5kl9z6hjs9fnaic6ng";
   buildDepends = [
     comonad hashable semigroupoids semigroups text transformers
-    unorderedContainers vector vectorInstances
+    unorderedContainers vector vectorAlgorithms vectorInstances
   ];
   testDepends = [
-    hspec QuickCheck semigroups text transformers unorderedContainers
-    vector
+    foldl hspec QuickCheck semigroups text transformers
+    unorderedContainers vector
   ];
   meta = {
     homepage = "https://github.com/snoyberg/mono-traversable";

@@ -78,18 +78,19 @@
   ./services/backup/bacula.nix
   ./services/backup/mysql-backup.nix
   ./services/backup/postgresql-backup.nix
-  ./services/backup/sitecopy-backup.nix
   ./services/backup/rsnapshot.nix
+  ./services/backup/sitecopy-backup.nix
+  ./services/backup/tarsnap.nix
   ./services/continuous-integration/jenkins/default.nix
   ./services/continuous-integration/jenkins/slave.nix
   ./services/databases/4store-endpoint.nix
   ./services/databases/4store.nix
+  ./services/databases/couchdb.nix
   ./services/databases/firebird.nix
   ./services/databases/memcached.nix
   ./services/databases/mongodb.nix
   ./services/databases/redis.nix
   ./services/databases/mysql.nix
-  ./services/databases/mysql55.nix
   ./services/databases/openldap.nix
   ./services/databases/postgresql.nix
   ./services/databases/virtuoso.nix
@@ -190,6 +191,7 @@
   ./services/networking/rdnssd.nix
   ./services/networking/rpcbind.nix
   ./services/networking/sabnzbd.nix
+  ./services/networking/searx.nix
   ./services/networking/supybot.nix
   ./services/networking/ssh/lshd.nix
   ./services/networking/ssh/sshd.nix
@@ -206,6 +208,7 @@
   ./services/scheduling/cron.nix
   ./services/scheduling/fcron.nix
   ./services/search/elasticsearch.nix
+  ./services/search/solr.nix
   ./services/security/clamav.nix
   ./services/security/haveged.nix
   ./services/security/fprot.nix
@@ -228,8 +231,10 @@
   ./services/web-servers/lighttpd/cgit.nix
   ./services/web-servers/lighttpd/gitweb.nix
   ./services/web-servers/nginx/default.nix
+  ./services/web-servers/phpfpm.nix
   ./services/web-servers/tomcat.nix
   ./services/web-servers/varnish/default.nix
+  ./services/web-servers/winstone.nix
   ./services/web-servers/zope2.nix
   ./services/x11/desktop-managers/default.nix
   ./services/x11/display-managers/auto.nix

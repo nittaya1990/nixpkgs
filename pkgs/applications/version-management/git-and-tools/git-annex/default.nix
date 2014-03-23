@@ -2,34 +2,35 @@
 , caseInsensitive, clientsession, cryptoApi, cryptohash, curl
 , dataDefault, dataenc, DAV, dbus, dlist, dns, editDistance
 , extensibleExceptions, feed, filepath, git, gnupg1, gnutls, hamlet
-, hinotify, hS3, hslogger, HTTP, httpConduit, httpTypes, IfElse
-, json, lsof, MissingH, MonadCatchIOTransformers, monadControl, mtl
-, network, networkConduit, networkInfo, networkMulticast
+, hinotify, hS3, hslogger, HTTP, httpClient, httpConduit, httpTypes
+, IfElse, json, liftedBase, lsof, MissingH
+, MonadCatchIOTransformers, monadControl, mtl, network
+, networkConduit, networkInfo, networkMulticast
 , networkProtocolXmpp, openssh, optparseApplicative, perl
 , QuickCheck, random, regexTdfa, rsync, SafeSemaphore, SHA, stm
 , tasty, tastyHunit, tastyQuickcheck, tastyRerun, text, time
 , transformers, unixCompat, utf8String, uuid, wai, waiLogger, warp
-, which, xmlConduit, xmlTypes, yesod, yesodCore, yesodDefault
+, warpTls, which, xmlTypes, yesod, yesodCore, yesodDefault
 , yesodForm, yesodStatic
 }:
 
 cabal.mkDerivation (self: {
   pname = "git-annex";
-  version = "5.20140221";
-  sha256 = "0z6awqbk6kagssx26ddixbrl381c1kmsmlgaqmx087g4rwp43wqb";
+  version = "5.20140306";
+  sha256 = "1kjgqrz0wnccylrbdiwj1yndg7v2k09f5h2vkk06bnx02xmwvjl9";
   isLibrary = false;
   isExecutable = true;
   buildDepends = [
     aeson async blazeBuilder bloomfilter caseInsensitive clientsession
     cryptoApi cryptohash dataDefault dataenc DAV dbus dlist dns
     editDistance extensibleExceptions feed filepath gnutls hamlet
-    hinotify hS3 hslogger HTTP httpConduit httpTypes IfElse json
-    MissingH MonadCatchIOTransformers monadControl mtl network
-    networkConduit networkInfo networkMulticast networkProtocolXmpp
-    optparseApplicative QuickCheck random regexTdfa SafeSemaphore SHA
-    stm tasty tastyHunit tastyQuickcheck tastyRerun text time
-    transformers unixCompat utf8String uuid wai waiLogger warp
-    xmlConduit xmlTypes yesod yesodCore yesodDefault yesodForm
+    hinotify hS3 hslogger HTTP httpClient httpConduit httpTypes IfElse
+    json liftedBase MissingH MonadCatchIOTransformers monadControl mtl
+    network networkConduit networkInfo networkMulticast
+    networkProtocolXmpp optparseApplicative QuickCheck random regexTdfa
+    SafeSemaphore SHA stm tasty tastyHunit tastyQuickcheck tastyRerun
+    text time transformers unixCompat utf8String uuid wai waiLogger
+    warp warpTls xmlTypes yesod yesodCore yesodDefault yesodForm
     yesodStatic
   ];
   buildTools = [ bup curl git gnupg1 lsof openssh perl rsync which ];

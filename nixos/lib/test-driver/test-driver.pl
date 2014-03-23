@@ -154,6 +154,13 @@ sub runTests {
         }
     });
 
+    $log->nest("syncing", sub {
+        foreach my $vm (values %vms) {
+            next unless $vm->isUp();
+            $vm->execute("sync /tmp/xchg");
+        }
+    });
+
     if ($nrTests != 0) {
         $log->log("$nrSucceeded out of $nrTests tests succeeded",
             ($nrSucceeded < $nrTests ? { error => 1 } : { }));

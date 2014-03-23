@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "world" ];
 
-  patches = [ ./disable-resolve_symlinks.patch ];
+  patches = [ ./disable-resolve_symlinks.patch ./less-is-more.patch ];
 
   installTargets = [ "install-world" ];
 
@@ -31,5 +31,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.postgresql.org/;
     description = "A powerful, open source object-relational database system";
     license = "bsd";
+    maintainers = [ stdenv.lib.maintainers.ocharles ];
+    hydraPlatforms = stdenv.lib.platforms.linux;
   };
 }
