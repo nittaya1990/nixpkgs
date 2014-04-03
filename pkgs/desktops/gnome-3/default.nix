@@ -40,7 +40,11 @@ rec {
 
   gnome_control_center = callPackage ./core/gnome-control-center { };
 
+  gnome-calculator = callPackage ./core/gnome-calculator { };
+
   gnome_common = callPackage ./core/gnome-common { };
+
+  gnome-font-viewer = callPackage ./core/gnome-font-viewer { };
 
   gnome_icon_theme = callPackage ./core/gnome-icon-theme { };
 
@@ -60,7 +64,11 @@ rec {
 
   gnome_shell = callPackage ./core/gnome-shell { };
 
+  gnome-screenshot = callPackage ./core/gnome-screenshot { };
+
   gnome_settings_daemon = callPackage ./core/gnome-settings-daemon { };
+
+  gnome-system-log = callPackage ./core/gnome-system-log { };
 
   gnome_terminal = callPackage ./core/gnome-terminal { };
 
@@ -128,5 +136,6 @@ rec {
   gitg = callPackage ./misc/gitg { };
 
   libgit2-glib = callPackage ./misc/libgit2-glib { };
-
+  
+  gexiv2 = callPackage ./misc/gexiv2 { };
 }

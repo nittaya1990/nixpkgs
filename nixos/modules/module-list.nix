@@ -61,6 +61,7 @@
   ./security/apparmor.nix
   ./security/apparmor-suid.nix
   ./security/ca.nix
+  ./security/duosec.nix
   ./security/pam.nix
   ./security/pam_usb.nix
   ./security/polkit.nix
@@ -95,6 +96,7 @@
   ./services/databases/postgresql.nix
   ./services/databases/virtuoso.nix
   ./services/games/ghost-one.nix
+  ./services/games/minecraft-server.nix
   ./services/hardware/acpid.nix
   ./services/hardware/amd-hybrid-graphics.nix
   ./services/hardware/bluetooth.nix
@@ -154,6 +156,7 @@
   ./services/networking/avahi-daemon.nix
   ./services/networking/bind.nix
   ./services/networking/bitlbee.nix
+  ./services/networking/btsync.nix
   ./services/networking/connman.nix
   ./services/networking/cntlm.nix
   ./services/networking/chrony.nix
@@ -179,6 +182,8 @@
   ./services/networking/minidlna.nix
   ./services/networking/nat.nix
   ./services/networking/networkmanager.nix
+  ./services/networking/ngircd.nix
+  ./services/networking/notbit.nix
   ./services/networking/ntopng.nix
   ./services/networking/ntpd.nix
   ./services/networking/oidentd.nix

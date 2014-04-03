@@ -1,33 +1,30 @@
 { stdenv, fetchurl, pkgconfig, udev, dbus_libs, perl }:
 
 stdenv.mkDerivation rec {
-  version = "1.8.10";
+  version = "1.8.11";
   name = "pcsclite-${version}";
 
   src = fetchurl {
-    url = "http://ftp.de.debian.org/debian/pool/main/p/pcsc-lite/pcsc-lite_${version}.orig.tar.bz2";
-    sha256 = "04i63zi9ayg38z3cahp6gf3rgx23w17bmcpdccm2hvaj63blnz30";
+    url = "https://alioth.debian.org/frs/download.php/file/3991/pcsc-lite-${version}.tar.bz2";
+    sha256 = "945041c94c53959ae5a767616a4ec5099fe67f549bfd344e8bd0cfe7a3c71ac6";
   };
 
   # The OS should care on preparing the drivers into this location
   configureFlags = [
     "--enable-usbdropdir=/var/lib/pcsc/drivers"
-    "--with-systemdsystemunitdir=$out/lib/systemd/system" # probably
+    "--with-systemdsystemunitdir=$out/etc/systemd/system"
+    "--enable-confdir=$out/etc"
   ];
-
-  preConfigure = ''
-    configureFlags="$configureFlags --enable-confdir=$out/etc"
-  '';
 
   buildInputs = [ udev dbus_libs perl ];
 
   nativeBuildInputs = [ pkgconfig ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Middleware to access a smart card using SCard API (PC/SC)";
     homepage = http://pcsclite.alioth.debian.org/;
-    license = "BSD";
-    maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = with stdenv.lib.platforms; linux;
+    license = licenses.bsd3;
+    maintainers = with maintainers; [viric];
+    platforms = with platforms; linux;
   };
 }

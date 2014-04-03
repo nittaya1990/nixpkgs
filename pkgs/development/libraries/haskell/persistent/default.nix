@@ -1,17 +1,17 @@
 { cabal, aeson, attoparsec, base64Bytestring, blazeHtml
 , blazeMarkup, conduit, hspec, liftedBase, monadControl
-, monadLogger, pathPieces, poolConduit, resourcet, scientific
+, monadLogger, pathPieces, resourcePool, resourcet, scientific
 , silently, sqlite, text, time, transformers, transformersBase
 , unorderedContainers, vector
 }:
 
 cabal.mkDerivation (self: {
   pname = "persistent";
-  version = "1.3.0.3";
-  sha256 = "0p9h43wvm1l9va6s6p71y6r5ifgvbqz8ypc86pmzbphq6712jnsl";
+  version = "1.3.0.6";
+  sha256 = "0rj5yi8nziym9cb9c9vw6vdjflf2yfz02i39p6dsdy084f1ivpk8";
   buildDepends = [
     aeson attoparsec base64Bytestring blazeHtml blazeMarkup conduit
-    liftedBase monadControl monadLogger pathPieces poolConduit
+    liftedBase monadControl monadLogger pathPieces resourcePool
     resourcet scientific silently text time transformers
     transformersBase unorderedContainers vector
   ];

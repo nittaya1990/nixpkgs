@@ -8,7 +8,7 @@
 , libusb1, libexif, pciutils
 
 , python, pythonPackages, perl, pkgconfig
-, nspr, udev, krb5, file
+, nspr, udev, krb5
 , utillinux, alsaLib
 , gcc, bison, gperf
 , glib, gtk, dbus_glib
@@ -54,7 +54,8 @@ let
       sed -i -r \
         -e 's/-f(stack-protector)(-all)?/-fno-\1/' \
         -e 's|/bin/echo|echo|' \
-        build/common.gypi
+        -e "/python_arch/s/: *'[^']*'/: '""'/" \
+        build/common.gypi chrome/chrome_tests.gypi
       sed -i '/not RunGN/,+1d' build/gyp_chromium
       sed -i -e 's|/usr/bin/gcc|gcc|' \
         third_party/WebKit/Source/build/scripts/scripts.gypi \
@@ -165,8 +166,7 @@ in stdenv.mkDerivation rec {
     nspr udev
     (if useOpenSSL then openssl else nss)
     utillinux alsaLib
-    gcc bison gperf
-    krb5 file
+    gcc bison gperf krb5
     glib gtk dbus_glib
     libXScrnSaver libXcursor libXtst mesa
     pciutils protobuf speechd libXdamage
@@ -223,8 +223,10 @@ in stdenv.mkDerivation rec {
     ffmpeg_branding = "Chrome";
   } // optionalAttrs (stdenv.system == "x86_64-linux") {
     target_arch = "x64";
+    python_arch = "x86-64";
   } // optionalAttrs (stdenv.system == "i686-linux") {
     target_arch = "ia32";
+    python_arch = "ia32";
   });
 
   configurePhase = ''
@@ -246,6 +248,9 @@ in stdenv.mkDerivation rec {
   installPhase = ''
     ensureDir "${libExecPath}"
     cp -v "${buildPath}/"*.pak "${libExecPath}/"
+    ${optionalString (!versionOlder src.version "34.0.0.0") ''
+    cp -v "${buildPath}/icudtl.dat" "${libExecPath}/"
+    ''}
     cp -vR "${buildPath}/locales" "${buildPath}/resources" "${libExecPath}/"
     cp -v ${buildPath}/libffmpegsumo.so "${libExecPath}/"
 
@@ -275,7 +280,7 @@ in stdenv.mkDerivation rec {
   meta = {
     description = "An open source web browser from Google";
     homepage = http://www.chromium.org/;
-    maintainers = with maintainers; [ goibhniu chaoflow aszlig ];
+    maintainers = with maintainers; [ goibhniu chaoflow aszlig wizeman ];
     license = licenses.bsd3;
     platforms = platforms.linux;
   };

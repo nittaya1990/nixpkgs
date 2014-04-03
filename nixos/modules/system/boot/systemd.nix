@@ -130,6 +130,11 @@ let
     ++ optionals cfg.enableEmergencyMode [
       "emergency.target"
       "emergency.service"
+    ]
+
+    ++ optionals config.services.journald.enableHttpGateway [
+      "systemd-journal-gatewayd.socket"
+      "systemd-journal-gatewayd.service"
     ];
 
   upstreamWants =
@@ -299,6 +304,15 @@ let
         '';
     };
 
+  pathToUnit = name: def:
+    { inherit (def) wantedBy requiredBy enable;
+      text = commonUnitText def +
+        ''
+          [Path]
+          ${attrsToSection def.pathConfig}
+        '';
+    };
+
   mountToUnit = name: def:
     { inherit (def) wantedBy requiredBy enable;
       text = commonUnitText def +
@@ -371,6 +385,10 @@ let
 
       ln -s ../local-fs.target ../remote-fs.target ../network.target ../nss-lookup.target \
             ../nss-user-lookup.target ../swap.target $out/multi-user.target.wants/
+
+      ${ optionalString config.services.journald.enableHttpGateway ''
+      ln -s ../systemd-journal-gatewayd.service $out/multi-user-target.wants/
+      ''}
     ''; # */
 
 in
@@ -463,6 +481,13 @@ in
       description = "Definition of systemd timer units.";
     };
 
+    systemd.paths = mkOption {
+      default = {};
+      type = types.attrsOf types.optionSet;
+      options = [ pathOptions unitConfig ];
+      description = "Definition of systemd path units.";
+    };
+
     systemd.mounts = mkOption {
       default = [];
       type = types.listOf types.optionSet;
@@ -547,6 +572,14 @@ in
       description = ''
         Extra config options for systemd-journald. See man journald.conf
         for available options.
+      '';
+    };
+
+    services.journald.enableHttpGateway = mkOption {
+      default = false;
+      type = types.bool;
+      description = ''
+        Enable journal http gateway
       '';
     };
 
@@ -640,6 +673,7 @@ in
       // mapAttrs' (n: v: nameValuePair "${n}.service" (serviceToUnit n v)) cfg.services
       // mapAttrs' (n: v: nameValuePair "${n}.socket" (socketToUnit n v)) cfg.sockets
       // mapAttrs' (n: v: nameValuePair "${n}.timer" (timerToUnit n v)) cfg.timers
+      // mapAttrs' (n: v: nameValuePair "${n}.path" (pathToUnit n v)) cfg.paths
       // listToAttrs (map
                    (v: let n = escapeSystemdPath v.where;
                        in nameValuePair "${n}.mount" (mountToUnit n v)) cfg.mounts)
@@ -659,6 +693,8 @@ in
       };
 
     users.extraGroups.systemd-journal.gid = config.ids.gids.systemd-journal;
+    users.extraUsers.systemd-journal-gateway.uid = config.ids.uids.systemd-journal-gateway;
+    users.extraGroups.systemd-journal-gateway.gid = config.ids.gids.systemd-journal-gateway;
 
     # Generate timer units for all services that have a ‘startAt’ value.
     systemd.timers =

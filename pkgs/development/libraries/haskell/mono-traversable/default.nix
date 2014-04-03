@@ -1,15 +1,16 @@
-{ cabal, comonad, foldl, hashable, hspec, QuickCheck, semigroupoids
-, semigroups, text, transformers, unorderedContainers, vector
-, vectorAlgorithms, vectorInstances
+{ cabal, comonad, dlist, dlistInstances, foldl, hashable, hspec
+, QuickCheck, semigroupoids, semigroups, text, transformers
+, unorderedContainers, vector, vectorAlgorithms, vectorInstances
 }:
 
 cabal.mkDerivation (self: {
   pname = "mono-traversable";
-  version = "0.4.0.1";
-  sha256 = "049skbjwz49c9qz2nys2hn6pc4gqn1a91b5kl9z6hjs9fnaic6ng";
+  version = "0.4.0.4";
+  sha256 = "1ikrdhr4f3755xim6j9db60a9y0mpdnljmck84qh47yk2axfp0n9";
   buildDepends = [
-    comonad hashable semigroupoids semigroups text transformers
-    unorderedContainers vector vectorAlgorithms vectorInstances
+    comonad dlist dlistInstances hashable semigroupoids semigroups text
+    transformers unorderedContainers vector vectorAlgorithms
+    vectorInstances
   ];
   testDepends = [
     foldl hspec QuickCheck semigroups text transformers

@@ -1,10 +1,11 @@
-{ cabal, mtl, syb }:
+{ cabal, hspec, HUnit, mtl, syb }:
 
 cabal.mkDerivation (self: {
   pname = "th-desugar";
-  version = "1.2.1";
-  sha256 = "12a8m1vzfbn728psaiqxwngmksrbybci3g7a47z04rjbsjf3cy4v";
+  version = "1.3.1";
+  sha256 = "1wi0c5d1w6vjjk580zhypgqnnkndcsx4cmx5qy01w97h6kyj8913";
   buildDepends = [ mtl syb ];
+  testDepends = [ hspec HUnit mtl syb ];
   meta = {
     homepage = "http://www.cis.upenn.edu/~eir/packages/th-desugar";
     description = "Functions to desugar Template Haskell";

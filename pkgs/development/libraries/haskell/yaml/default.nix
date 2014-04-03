@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "yaml";
-  version = "0.8.7.2";
-  sha256 = "00dmmws0gmp9fb2ha6z055ix7jlsiry24bwhkl226b680gi9a84d";
+  version = "0.8.8.1";
+  sha256 = "1lkw05rx88jckzlkslb945zswn6g7i3vxsgxpj9pkcxvh3y9zagv";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
@@ -13,8 +13,8 @@ cabal.mkDerivation (self: {
     unorderedContainers vector
   ];
   testDepends = [
-    aeson conduit hspec HUnit text transformers unorderedContainers
-    vector
+    aeson conduit hspec HUnit resourcet text transformers
+    unorderedContainers vector
   ];
   meta = {
     homepage = "http://github.com/snoyberg/yaml/";

@@ -118,6 +118,11 @@
       searx = 107;
       kippo = 108;
       jenkins = 109;
+      systemd-journal-gateway = 110;
+      notbit = 111;
+      ngircd = 112;
+      btsync = 113;
+      minecraft = 114;
 
       # When adding a uid, make sure it doesn't match an existing gid.
 
@@ -214,6 +219,8 @@
       searx = 107;
       kippo = 108;
       jenkins = 109;
+      systemd-journal-gateway = 110;
+      notbit = 111;
 
       # When adding a gid, make sure it doesn't match an existing uid.
 

@@ -460,6 +460,20 @@ rec {
     };
   });
 
+  backports_ssl_match_hostname_3_4_0_2 = pythonPackages.buildPythonPackage rec {
+    name = "backports.ssl_match_hostname-3.4.0.2";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/b/backports.ssl_match_hostname/backports.ssl_match_hostname-3.4.0.2.tar.gz";
+      md5 = "788214f20214c64631f0859dc79f23c6";
+    };
+
+    meta = {
+      description = "The Secure Sockets layer is only actually *secure*";
+      homepage = http://bitbucket.org/brandon/backports.ssl_match_hostname;
+    };
+  };
+
   bcdoc = buildPythonPackage rec {
     name = "bcdoc-0.12.1";
 
@@ -1484,6 +1498,22 @@ rec {
     };
   };
 
+  derpconf = pythonPackages.buildPythonPackage rec {
+    name = "derpconf-0.4.9";
+
+    propagatedBuildInputs = [ six ];
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/d/derpconf/${name}.tar.gz";
+      md5 = "a164807d7bf0c4adf1de781305f29b82";
+    };
+
+    meta = {
+      description = "derpconf abstracts loading configuration files for your app";
+      homepage = https://github.com/globocom/derpconf;
+      license = licenses.mit;
+    };
+  };
 
   dpkt = buildPythonPackage rec {
     name = "dpkt-1.8";
@@ -2395,7 +2425,7 @@ rec {
     };
 
     propagatedBuildInputs = with pkgs; [
-      pyGtkGlade libtorrentRasterbar twisted Mako chardet pyxdg pyopenssl
+      pyGtkGlade libtorrentRasterbar twisted Mako chardet pyxdg pyopenssl modules.curses
     ];
 
     postInstall = ''
@@ -3192,6 +3222,22 @@ rec {
     };
   };
 
+  gunicorn = buildPythonPackage rec {
+    name = "gunicorn-18.0";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/g/gunicorn/${name}.tar.gz";
+      md5 = "c7138b9ac7515a42066922d2b6120fbe";
+    };
+    
+    buildInputs = [ pytest ];
+
+    meta = {
+      homepage = http://pypi.python.org/pypi/gunicorn;
+      description = "WSGI HTTP Server for UNIX";
+    };
+  };
+
   hcs_utils = buildPythonPackage rec {
     name = "hcs_utils-1.3";
 
@@ -3212,12 +3258,12 @@ rec {
 
   hetzner = buildPythonPackage rec {
     name = "hetzner-${version}";
-    version = "0.6.0";
+    version = "0.7.0";
 
     src = fetchurl {
       url = "https://github.com/RedMoonStudios/hetzner/archive/"
           + "v${version}.tar.gz";
-      sha256 = "1cgi77f453ahw3ad6hvqwbyp6fwnh90rlzfgl9cp79wg58wyar4w";
+      sha256 = "1ldbhwy6yk18frv6n9znvdsrqfnpch4mfvc70jrpq3f9fw236src";
     };
 
     # not there yet, but coming soon.
@@ -5591,17 +5637,24 @@ rec {
 
 
   pyopengl =
-    let version = "3.0.0b5";
+    let version = "3.0.2";
     in
       buildPythonPackage {
         name = "pyopengl-${version}";
 
         src = fetchurl {
-          url = "mirror://sourceforge/pyopengl/PyOpenGL-${version}.tar.gz";
-          sha256 = "1rjpl2qdcqn4wamkik840mywdycd39q8dn3wqfaiv35jdsbifxx3";
+          url = "http://pypi.python.org/packages/source/P/PyOpenGL/PyOpenGL-${version}.tar.gz";
+          sha256 = "9ef93bbea2c193898341f574e281c3ca0dfe87c53aa25fbec4b03581f6d1ba03";
         };
 
         propagatedBuildInputs = with pkgs; [ mesa freeglut pil ];
+
+        patchPhase = ''
+          sed -i "s|util.find_library( name )|name|" OpenGL/platform/ctypesloader.py
+          sed -i "s|'GL',|'libGL.so',|" OpenGL/platform/glx.py
+          sed -i "s|'GLU',|'${pkgs.mesa}/lib/libGLU.so',|" OpenGL/platform/glx.py
+          sed -i "s|'glut',|'${pkgs.freeglut}/lib/libglut.so',|" OpenGL/platform/glx.py
+        '';
 
         meta = {
           homepage = http://pyopengl.sourceforge.net/;
@@ -5652,11 +5705,11 @@ rec {
 
 
   pyserial = buildPythonPackage rec {
-    name = "pyserial-2.6";
+    name = "pyserial-2.7";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/p/pyserial/${name}.tar.gz";
-      md5 = "cde799970b7c1ce1f7d6e9ceebe64c98";
+      sha256 = "3542ec0838793e61d6224e27ff05e8ce4ba5a5c5cc4ec5c6a3e8d49247985477";
     };
 
     doCheck = false;
@@ -7610,6 +7663,12 @@ rec {
     wxGTK = pkgs.wxGTK28;
   };
 
+  wxPython30 = import ../development/python-modules/wxPython/3.0.nix {
+    inherit (pkgs) stdenv fetchurl pkgconfig;
+    inherit pythonPackages;
+    wxGTK = pkgs.wxGTK30;
+  };
+
   xe = buildPythonPackage rec {
     url = "http://www.blarg.net/%7Esteveha/xe-0.7.4.tar.gz";
     name = stdenv.lib.nameFromURL url ".tar";
@@ -8245,11 +8304,13 @@ rec {
 
 
   tornado = buildPythonPackage rec {
-    name = "tornado-3.1.1";
+    name = "tornado-3.2";
+
+    propagatedBuildInputs = [ backports_ssl_match_hostname_3_4_0_2 ];
 
     src = fetchurl {
-      url = "http://pypi.python.org/packages/source/t/tornado/${name}.tar.gz";
-      sha256 = "1ipx23ix8hyd88rywmwr7bfdgkvkdac87xq3f9l5vkm0wjzh8n9l";
+      url = "https://pypi.python.org/packages/source/t/tornado/${name}.tar.gz";
+      md5 = "bd83cee5f1a5c5e139e87996d00b251b";
     };
 
     doCheck = false;
@@ -8781,6 +8842,21 @@ rec {
     };
   };
 
+  power = buildPythonPackage rec {
+    name = "power-1.2";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/p/power/${name}.tar.gz";
+      sha256 = "09a00af8357f63dbb1a1eb13b82e39ccc0a14d6d2e44e5b235afe60ce8ee8195";
+    };
+
+    meta = {
+      description = "Cross-platform system power status information";
+      homepage = https://github.com/Kentzo/Power;
+      license = "mit";
+    };
+  };
+
 # python2.7 specific packages
 } // optionalAttrs isPy27 (
   with pythonPackages;
@@ -8803,6 +8879,53 @@ rec {
       homepage = https://github.com/garbas/pypi2nix;
       description = "";
       maintainers = [ pkgs.stdenv.lib.maintainers.garbas ];
+    };
+  };
+
+
+  thumbor = pythonPackages.buildPythonPackage rec {
+    name = "thumbor-4.0.4";
+
+    propagatedBuildInputs = [
+                    tornado
+                    pycrypto
+                    pycurl
+                    pillow
+                    derpconf
+                    python_magic
+                    thumborPexif
+                    (pkgs.opencv.override {
+                        gtk = null;
+                        glib = null;
+                        xineLib = null;
+                        gstreamer = null;
+                        ffmpeg = null;
+                    }) ];
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/t/thumbor/${name}.tar.gz";
+      md5 = "cf639a1cc57ee287b299ace450444408";
+    };
+
+    meta = {
+      description = "Thumbor is a smart imaging service. It enables on-demand crop, resizing and flipping of images.";
+      homepage = https://github.com/globocom/thumbor/wiki;
+      license = licenses.mit;
+    };
+  };
+
+  thumborPexif = pythonPackages.buildPythonPackage rec {
+    name = "thumbor-pexif-0.14";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/t/thumbor-pexif/${name}.tar.gz";
+      md5 = "fb4cdb60f4a0bead5193fb483ccd3430";
+    };
+
+    meta = {
+      description = "Module to parse and edit the EXIF data tags in a JPEG image";
+      homepage = http://www.benno.id.au/code/pexif/;
+      license = licenses.mit;
     };
   };
 

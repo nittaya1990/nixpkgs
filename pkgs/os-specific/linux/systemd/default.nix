@@ -1,10 +1,13 @@
 { stdenv, fetchurl, pkgconfig, intltool, gperf, libcap, dbus, kmod
 , xz, pam, acl, cryptsetup, libuuid, m4, utillinux
 , glib, kbd, libxslt, coreutils, libgcrypt, sysvtools, docbook_xsl
-, kexectools
+, kexectools, libmicrohttpd
+, python ? null, pythonSupport ? false
 }:
 
 assert stdenv.isLinux;
+
+assert pythonSupport -> python != null;
 
 stdenv.mkDerivation rec {
   version = "203";
@@ -19,13 +22,15 @@ stdenv.mkDerivation rec {
     [ # These are all changes between upstream and
       # https://github.com/edolstra/systemd/tree/nixos-v203.
       ./fixes.patch
+      ./fix_console_in_containers.patch
     ]
     ++ stdenv.lib.optional stdenv.isArm ./libc-bug-accept4-arm.patch;
 
   buildInputs =
     [ pkgconfig intltool gperf libcap dbus.libs kmod xz pam acl
       /* cryptsetup */ libuuid m4 glib libxslt libgcrypt docbook_xsl
-    ];
+      libmicrohttpd
+    ] ++ stdenv.lib.optional pythonSupport python;
 
   configureFlags =
     [ "--localstatedir=/var"
