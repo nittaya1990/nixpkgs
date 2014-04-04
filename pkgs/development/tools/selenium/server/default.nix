@@ -12,8 +12,8 @@ stdenv.mkDerivation rec {
   unpack = "";
 
   buildCommand = ''
-    mkdir -p $out/share/lib/${name}
-    cp $src $out/share/lib/${name}/${name}.jar
+    mkdir -p $out/share/java
+    cp $src $out/share/java/selenium-server-standalone.jar
   '';
 
   meta = with stdenv.lib; {
