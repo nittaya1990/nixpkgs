@@ -190,7 +190,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
     GLUT         = self.GLUT_2_4_0_0;
     GLURaw       = self.GLURaw_1_3_0_0;
     haskellSrc   = self.haskellSrc_1_0_1_5;
-    hashable     = self.hashable_1_1_2_5;
+    hashable     = self.hashable_1_2_1_0;       # not HP (1.1.2.5), but fixes many builds
     html         = self.html_1_0_1_2;
     HTTP         = self.HTTP_4000_2_8;
     HUnit        = self.HUnit_1_2_5_2;
@@ -532,8 +532,6 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
     blazeBuilder = if (pkgs.stdenv.lib.versionOlder ghc.version "7.6") then self.blazeBuilder else null;
   };
 
-  aesonLens = callPackage ../development/libraries/haskell/aeson-lens {};
-
   aesonPretty = callPackage ../development/libraries/haskell/aeson-pretty {};
 
   alternativeIo = callPackage ../development/libraries/haskell/alternative-io {};
@@ -757,6 +755,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   ChasingBottoms = callPackage ../development/libraries/haskell/ChasingBottoms {};
 
+  cheapskate = callPackage ../development/libraries/haskell/cheapskate {};
+
   checkers = callPackage ../development/libraries/haskell/checkers {};
 
   chell = callPackage ../development/libraries/haskell/chell {};
@@ -847,7 +847,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   cprngAes = callPackage ../development/libraries/haskell/cprng-aes {};
 
-  criterion = callPackage ../development/libraries/haskell/criterion {};
+  criterion = callPackage ../development/libraries/haskell/criterion {
+    hastache = self.hastache_0_5_1;
+  };
 
   Crypto = callPackage ../development/libraries/haskell/Crypto {};
 
@@ -910,6 +912,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   dataDefaultInstancesOldLocale = callPackage ../development/libraries/haskell/data-default-instances-old-locale {};
 
   dataenc = callPackage ../development/libraries/haskell/dataenc {};
+
+  dataHash = callPackage ../development/libraries/haskell/data-hash {};
 
   dataInttrie = callPackage ../development/libraries/haskell/data-inttrie {};
 
@@ -1029,7 +1033,13 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   elerea = callPackage ../development/libraries/haskell/elerea {};
 
-  Elm = callPackage ../development/compilers/elm/elm.nix {};
+  Elm = callPackage ../development/compilers/elm/elm.nix {
+    binary = self.binary_0_7_1_0;
+    pandoc = self.pandoc.override {
+      binary = self.binary_0_7_1_0;
+      zipArchive = self.zipArchive.override { binary = self.binary_0_7_1_0; };
+    };
+  };
 
   elmServer = callPackage ../development/compilers/elm/elm-server.nix {};
 
@@ -1076,12 +1086,17 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   executablePath = callPackage ../development/libraries/haskell/executable-path {};
 
   fay = callPackage ../development/libraries/haskell/fay {};
+
   fayBase = callPackage ../development/libraries/haskell/fay-base {};
+
+  fdoNotify = callPackage ../development/libraries/haskell/fdo-notify {};
 
   filepath_1_3_0_0 = callPackage ../development/libraries/haskell/filepath {};
   filepath = null; # a core package in recent GHCs
 
   fileLocation = callPackage ../development/libraries/haskell/file-location {};
+
+  ftphs = callPackage ../development/libraries/haskell/ftphs {};
 
   extensibleEffects = callPackage ../development/libraries/haskell/extensible-effects {};
 
@@ -1314,7 +1329,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   haskore = callPackage ../development/libraries/haskell/haskore {};
 
-  hastache = callPackage ../development/libraries/haskell/hastache {};
+  hastache_0_5_1 = callPackage ../development/libraries/haskell/hastache/0.5.1.nix {};
+  hastache_0_6_0 = callPackage ../development/libraries/haskell/hastache/0.6.0.nix {};
+  hastache = self.hastache_0_6_0;
 
   heredoc = callPackage ../development/libraries/haskell/heredoc {};
 
@@ -1587,7 +1604,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   languageJava = callPackage ../development/libraries/haskell/language-java {};
 
-  languageJavascript = callPackage ../development/libraries/haskell/language-javascript {};
+  languageJavascript = callPackage ../development/libraries/haskell/language-javascript {
+    alex = self.alex_3_1_3;
+  };
 
   languageHaskellExtract = callPackage ../development/libraries/haskell/language-haskell-extract {};
 
@@ -2168,6 +2187,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   resourcet = callPackage ../development/libraries/haskell/resourcet {};
 
+  retry = callPackage ../development/libraries/haskell/retry {};
+
   rethinkdb = callPackage ../development/libraries/haskell/rethinkdb {};
 
   rfc5051 = callPackage ../development/libraries/haskell/rfc5051 {};
@@ -2185,6 +2206,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   safecopy = callPackage ../development/libraries/haskell/safecopy {};
 
   SafeSemaphore = callPackage ../development/libraries/haskell/SafeSemaphore {};
+
+  sbv = callPackage ../development/libraries/haskell/sbv {};
 
   scientific = callPackage ../development/libraries/haskell/scientific {};
 
@@ -2297,6 +2320,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   sybWithClass = callPackage ../development/libraries/haskell/syb/syb-with-class.nix {};
 
   sybWithClassInstancesText = callPackage ../development/libraries/haskell/syb/syb-with-class-instances-text.nix {};
+
+  syntactic = callPackage ../development/libraries/haskell/syntactic {};
 
   syz = callPackage ../development/libraries/haskell/syz {};
 
@@ -2516,9 +2541,15 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   traverseWithClass = callPackage ../development/libraries/haskell/traverse-with-class {};
 
+  treeView = callPackage ../development/libraries/haskell/tree-view {};
+
   trifecta = callPackage ../development/libraries/haskell/trifecta {};
 
   tuple = callPackage ../development/libraries/haskell/tuple {};
+
+  twitterConduit = callPackage ../development/libraries/haskell/twitter-conduit {};
+
+  twitterTypes = callPackage ../development/libraries/haskell/twitter-types {};
 
   TypeCompose = callPackage ../development/libraries/haskell/TypeCompose {};
 
@@ -2577,6 +2608,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   vacuum = callPackage ../development/libraries/haskell/vacuum {};
 
   vacuumCairo = callPackage ../development/libraries/haskell/vacuum-cairo {};
+
+  vacuumGraphviz = callPackage ../development/libraries/haskell/vacuum-graphviz {};
 
   vado = callPackage ../development/libraries/haskell/vado {};
 

@@ -460,6 +460,29 @@ rec {
     };
   });
 
+  autopep8 = buildPythonPackage (rec {
+    name = "autopep8-1.0";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/a/autopep8/${name}.tar.gz";
+      md5 = "41782e66efcbaf9d761bb45a2d2929bb";
+    };
+
+    propagatedBuildInputs = [ pep8 ];
+
+    # One test fails:
+    # FAIL: test_recursive_should_not_crash_on_unicode_filename (test.test_autopep8.CommandLineTests)
+    doCheck = false;
+
+    meta = with stdenv.lib; {
+      description = "A tool that automatically formats Python code to conform to the PEP 8 style guide";
+      homepage = https://pypi.python.org/pypi/autopep8/;
+      license = licenses.mit;
+      platforms = platforms.all;
+      maintainers = [ maintainers.bjornfor ];
+    };
+  });
+
   backports_ssl_match_hostname_3_4_0_2 = pythonPackages.buildPythonPackage rec {
     name = "backports.ssl_match_hostname-3.4.0.2";
 
@@ -3416,7 +3439,7 @@ rec {
       url = "http://pypi.python.org/packages/source/i/ipdb/ipdb-0.7.tar.gz";
       md5 = "d879f9b2b0f26e0e999809585dcaec61";
     };
-    propagatedBuildInputs = [ pythonPackages.ipython ];
+    propagatedBuildInputs = [ pythonPackages.ipythonLight ];
   };
 
   ipdbplugin = buildPythonPackage {
@@ -3425,7 +3448,7 @@ rec {
       url = "https://pypi.python.org/packages/source/i/ipdbplugin/ipdbplugin-1.4.tar.gz";
       md5 = "f9a41512e5d901ea0fa199c3f648bba7";
     };
-    propagatedBuildInputs = [ pythonPackages.nose pythonPackages.ipython ];
+    propagatedBuildInputs = [ pythonPackages.nose pythonPackages.ipythonLight ];
   };
 
 
@@ -8772,19 +8795,21 @@ rec {
   };
 
   searx = buildPythonPackage rec {
-    name = "searx-${version}";
-    version = "0.2.0";
+    name = "searx-${rev}";
+    rev = "44d3af9fb2482cd0df1a8ababbe2fdf27ab33172";
 
-    src = fetchurl {
-      url = "https://pypi.python.org/packages/source/s/searx/${name}.tar.gz";
-      sha256 = "19hxjg3vhq7fygcvfhsr3i40c8kbi7i76ym9cv2s03b3zijd38w0";
+    src = fetchgit {
+      url = "git://github.com/asciimoo/searx";
+      inherit rev;
+      sha256 = "1w505pzdkkcglq782wg7f5fxrw9i5jzp7px20c2xz18pps2m3rsm";
     };
 
-    propagatedBuildInputs = [ pyyaml lxml grequests flaskbabel flask requests gevent speaklater Babel pytz ];
+    propagatedBuildInputs = [ pyyaml lxml grequests flaskbabel flask requests
+      gevent speaklater Babel pytz dateutil ];
 
     meta = {
       homepage = https://github.com/asciimoo/searx;
-      description = "A privacy-respecting, hackable metasearch engine.";
+      description = "A privacy-respecting, hackable metasearch engine";
       license = stdenv.lib.licenses.agpl3Plus;
       maintainers = [ stdenv.lib.maintainers.matejc ];
     };
