@@ -1122,7 +1122,7 @@ let
     buggyBiosCDSupport = config.grub.buggyBiosCDSupport or true;
   };
 
-  grub2 = callPackage ../tools/misc/grub/2.0x.nix { libusb = libusb1; };
+  grub2 = callPackage ../tools/misc/grub/2.0x.nix { libusb = libusb1; flex = flex_2_5_35; };
 
   grub2_efi = grub2.override { EFIsupport = true; };
 
@@ -3733,6 +3733,7 @@ let
   checkstyle = callPackage ../development/tools/analysis/checkstyle { };
 
   flex = callPackage ../development/tools/parsing/flex { };
+  flex_2_5_35 = callPackage ../development/tools/parsing/flex/2.5.35.nix { };
 
   m4 = gnum4;
 
@@ -4868,6 +4869,8 @@ let
   libgnome_keyring = callPackage ../development/libraries/libgnome-keyring { };
   libgnome_keyring3 = gnome3.libgnome_keyring;
 
+  libseccomp = callPackage ../development/libraries/libseccomp { };
+
   libsecret = callPackage ../development/libraries/libsecret { };
 
   libgtop = callPackage ../development/libraries/libgtop {};
@@ -5066,6 +5069,8 @@ let
   libmusicbrainz2 = callPackage ../development/libraries/libmusicbrainz/2.x.nix { };
 
   libmusicbrainz3 = callPackage ../development/libraries/libmusicbrainz { };
+
+  libmusicbrainz5 = callPackage ../development/libraries/libmusicbrainz/5.x.nix { };
 
   libmusicbrainz = libmusicbrainz3;
 
@@ -6908,7 +6913,7 @@ let
   linux_3_2_grsecurity = lowPrio (lib.addMetaAttrs {
     maintainers = with lib.maintainers; [ wizeman thoughtpolice ];
   } (lib.overrideDerivation (linux_3_2.override (args: {
-    kernelPatches = args.kernelPatches ++ [ kernelPatches.grsecurity_3_0_3_2_56 kernelPatches.grsec_path ];
+    kernelPatches = args.kernelPatches ++ [ kernelPatches.grsecurity_3_0_3_2_57 kernelPatches.grsec_path ];
     argsOverride = {
       modDirVersion = "${linux_3_2.modDirVersion}-grsec";
     };
@@ -7064,8 +7069,6 @@ let
 
     perf = callPackage ../os-specific/linux/kernel/perf.nix { };
 
-    lockdep = callPackage ../os-specific/linux/kernel/lockdep.nix { };
-
     psmouse_alps = callPackage ../os-specific/linux/psmouse-alps { };
 
     spl = callPackage ../os-specific/linux/spl/default.nix { };
@@ -7129,6 +7132,8 @@ let
   libsmbios = callPackage ../os-specific/linux/libsmbios { };
 
   lm_sensors = callPackage ../os-specific/linux/lm-sensors { };
+
+  lockdep = callPackage ../os-specific/linux/lockdep { };
 
   lsiutil = callPackage ../os-specific/linux/lsiutil { };
 
