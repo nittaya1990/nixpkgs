@@ -3667,11 +3667,11 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ TestScript ];
   };
 
-  FinanceQuote = buildPerlPackage {
-    name = "Finance-Quote-1.19";
+  FinanceQuote = buildPerlPackage rec {
+    name = "Finance-Quote-1.29";
     src = fetchurl {
-      url = mirror://sourceforge/finance-quote/1.19/Finance-Quote-1.19.tar.gz;
-      sha256 = "0z1dqxw4by7rkwm113qp2mlhl5r0znr22kzinvr1p82svn0zvm2d";
+      url = "mirror://cpan/authors/id/E/EC/ECOCODE/${name}.tar.gz";
+      sha256 = "0rx8whixbhwq2imd3ffx3vcqdgfbjj6y1s01m38b52x3bjn9hw0f";
     };
     propagatedBuildInputs = [ CryptSSLeay HTMLTableExtract HTMLTree HTTPMessage LWP DateCalc JSON ];
     meta = {
@@ -6488,10 +6488,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   PackageStash = buildPerlPackage {
-    name = "Package-Stash-0.36";
+    name = "Package-Stash-0.34";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DO/DOY/Package-Stash-0.36.tar.gz;
-      sha256 = "1wbkdkm5gp5cpp84kr9cbbsrg0v908kxrcg4k86mx8ypgj6g8750";
+      url = mirror://cpan/authors/id/D/DO/DOY/Package-Stash-0.34.tar.gz;
+      sha256 = "1674zs96ndq3czs6v8xkdqqz4fnka0i2835nnns9zbw2q01yirj6";
     };
     buildInputs = [ DistCheckConflicts TestFatal TestRequires ];
     propagatedBuildInputs = [ DistCheckConflicts ModuleImplementation PackageDeprecationManager ];
