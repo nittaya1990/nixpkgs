@@ -30,8 +30,6 @@
       cabalInstall_1_18_0_3 = self.cabalInstall_1_18_0_3.override { Cabal = null; };
       cabalInstall = self.cabalInstall_1_18_0_3.override { Cabal = null; };
       binary_0_7_1_0 = null;
-      terminfo_0_4_0_0 = null;
-      xhtml_3000_2_1 = null;
     };
 
   ghc763Prefs =
