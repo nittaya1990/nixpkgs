@@ -581,6 +581,34 @@ rec {
   };
 
 
+  bedup = buildPythonPackage rec {
+    name = "bedup-20140206";
+
+    src = fetchgit {
+      url = "https://github.com/g2p/bedup.git";
+      rev = "80cb217d4819a03e159e42850a9a3f14e2b278a3";
+      sha256 = "1rik7a62v708ivfcy0pawhfnrb84b7gm3qr54x6jsxl0iqz078h6";
+    };
+
+    buildInputs = [ pkgs.btrfsProgs ];
+    propagatedBuildInputs = with pkgs; [ contextlib2 sqlalchemy pyxdg pycparser cffi alembic ];
+
+    meta = {
+      description = "Deduplication for Btrfs";
+      longDescription = ''
+        Deduplication for Btrfs. bedup looks for new and changed files, making sure that multiple
+        copies of identical files share space on disk. It integrates deeply with btrfs so that scans
+        are incremental and low-impact.
+      '';
+      homepage = https://github.com/g2p/bedup;
+      license = stdenv.lib.licenses.gpl2;
+
+      platforms = stdenv.lib.platforms.linux;
+
+      maintainers = [ stdenv.lib.maintainers.bluescreen303 ];
+    };
+  };
+
   beets = buildPythonPackage rec {
     name = "beets-1.0.0";
 
@@ -1142,6 +1170,15 @@ rec {
   };
 
 
+  contextlib2 = buildPythonPackage rec {
+    name = "contextlib2-0.4.0";
+
+    src = fetchurl rec {
+      url = "https://pypi.python.org/packages/source/c/contextlib2/${name}.tar.gz";
+      md5 = "ea687207db25f65552061db4a2c6727d";
+    };
+  };
+
   coverage = buildPythonPackage rec {
     name = "coverage-3.6";
 
@@ -1312,6 +1349,7 @@ rec {
     '';
 
     propagatedBuildInputs = [ py ]
+      ++ (optional isPy26 argparse)
       ++ stdenv.lib.optional
         pkgs.config.pythonPackages.pytest.selenium or false
         pythonPackages.selenium;
@@ -1952,11 +1990,11 @@ rec {
 
 
   pyramid = buildPythonPackage rec {
-    name = "pyramid-1.4.5";
+    name = "pyramid-1.5";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/p/pyramid/${name}.tar.gz";
-      md5 = "321731aad69e9788b7819e257a50be1a";
+      md5 = "8747658dcbab709a9c491e43d3b0d58b";
     };
 
     buildInputs = [
@@ -1968,8 +2006,6 @@ rec {
     ] ++ optional isPy26 unittest2;
 
     propagatedBuildInputs = [
-      chameleon
-      Mako
       paste_deploy
       repoze_lru
       repoze_sphinx_autointerface
@@ -2404,11 +2440,11 @@ rec {
 
 
   chameleon = buildPythonPackage rec {
-    name = "Chameleon-2.11";
+    name = "Chameleon-2.15";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/C/Chameleon/${name}.tar.gz";
-      md5 = "df72458bf3dd26a744dcff5ad555c34b";
+      md5 = "0214647152fcfcb9ce357624f8f9f203";
     };
 
     buildInputs = [] ++ optionals isPy26 [ ordereddict unittest2 ];
@@ -2505,11 +2541,11 @@ rec {
 
   django_1_6 = buildPythonPackage rec {
     name = "Django-${version}";
-    version = "1.6";
+    version = "1.6.3";
 
     src = fetchurl {
       url = "http://www.djangoproject.com/m/releases/1.6/${name}.tar.gz";
-      sha256 = "165bd5wmv2an9h365d12k0112z0l375dxsy7dlxa7r8kyg4gvnfk";
+      sha256 = "1wdqb2x0w0c10annbyz7rrrgrv9mpa9f8pz8006lf2csix33r7bd";
     };
 
     # error: invalid command 'test'
@@ -2523,11 +2559,11 @@ rec {
 
   django_1_5 = buildPythonPackage rec {
     name = "Django-${version}";
-    version = "1.5.5";
+    version = "1.5.6";
 
     src = fetchurl {
       url = "http://www.djangoproject.com/m/releases/1.5/${name}.tar.gz";
-      sha256 = "07fp8ycx76q2nz96mxld1svvpfsrivjgpql0mr20r7gwzcfrrrka";
+      sha256 = "1bxzz71sfvh0zgdzv4x3wdr4ffzd5cfnvq7iq2g1i282sacwnzwv";
     };
 
     # error: invalid command 'test'
@@ -2541,11 +2577,11 @@ rec {
 
   django_1_4 = buildPythonPackage rec {
     name = "Django-${version}";
-    version = "1.4.10";
+    version = "1.4.11";
 
     src = fetchurl {
       url = "http://www.djangoproject.com/m/releases/1.4/${name}.tar.gz";
-      sha256 = "1pi9mi14f19xlp29j2c8dz8rs749c1m41d9j1i0b3nlz0cy0h7rx";
+      sha256 = "00f2jlls3fhddrg7q4sjkwj6dmclh28n0vqm1m7kzcq5fjrxh6a8";
     };
 
     # error: invalid command 'test'
@@ -4486,6 +4522,30 @@ rec {
     };
   };
 
+  livestreamer = if isPy34 then null else (buildPythonPackage {
+    #version = "1.8.0";
+    name = "livestreamer-1.8.0";
+
+    src = fetchurl {
+      url = "https://github.com/chrippa/livestreamer/archive/v1.8.0.tar.gz";
+      sha256 = "0fzpznbnhzrqawxdljvyml5251wbr3nifdrvnmh2b8vz356js4l8";
+    };
+
+    buildInputs = [ pkgs.makeWrapper ];
+    propagatedBuildInputs = [ requests ];
+    postInstall = ''
+      wrapProgram $out/bin/livestreamer --prefix PATH : ${pkgs.rtmpdump}/bin
+    '';
+
+    meta = {
+      homepage = http://livestreamer.tanuki.se;
+      description = ''
+        Livestreamer is CLI program that extracts streams from various
+        services and pipes them into a video player of choice.
+      '';
+      license = "bsd";
+    };
+  });
 
   oauth2 = buildPythonPackage (rec {
     name = "oauth2-1.5.211";
@@ -5174,6 +5234,29 @@ rec {
     meta = {
       description = "Interface for working with block devices";
       license = stdenv.lib.licenses.gpl2Plus;
+    };
+  };
+
+  pycapnp = buildPythonPackage rec {
+    name = "pycapnp-0.4.4";
+    homepage = "http://jparyani.github.io/pycapnp/index.html";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pycapnp/${name}.tar.gz";
+      sha256 = "33b2b79438bb9bf37097966e1c90403c34ab49be1eb647ee251b62f362ee3537";
+    };
+
+    buildInputs = with pkgs; [ capnproto cython ];
+
+    # import setuptools as soon as possible, to minimize monkeypatching mayhem.
+    postConfigure = ''
+      sed -i '2iimport setuptools' setup.py
+    '';
+
+    meta = with stdenv.lib; {
+      maintainers = with maintainers; [ cstrahan ];
+      license = stdenv.lib.licenses.bsd2;
+      platforms = stdenv.lib.platforms.all;
     };
   };
 
@@ -5935,7 +6018,7 @@ rec {
     };
 
     buildInputs = with pkgs; [
-      pkgconfig python gtk2 pygtk libxml2 libxslt libsoup webkit_gtk2 icu
+      pkgconfig python gtk2 pygtk libxml2 libxslt libsoup webkitgtk2 icu
     ];
 
     meta = {
@@ -6976,7 +7059,7 @@ rec {
 
     checkPhase = ''
       cd tests
-      export LD_LIBRARY_PATH=${pkgs.imagemagick}/lib
+      export MAGICK_HOME="${pkgs.imagemagick}"
       export PYTHONPATH=$PYTHONPATH:../
       py.test
       cd ..

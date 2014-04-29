@@ -5,13 +5,13 @@
 , projectTemplate, resourcet, shakespeare, shakespeareCss
 , shakespeareJs, shakespeareText, split, streamingCommons
 , systemFileio, systemFilepath, tar, text, time, transformers
-, unixCompat, unorderedContainers, wai, warp, yaml, zlib
+, unixCompat, unorderedContainers, wai, waiExtra, warp, yaml, zlib
 }:
 
 cabal.mkDerivation (self: {
   pname = "yesod-bin";
-  version = "1.2.8";
-  sha256 = "0hic32k1ii1j2hrwxj7pc7vv26dmq8rv7h7as1fw0bwlysrnw8nm";
+  version = "1.2.9.1";
+  sha256 = "0x7r960sq6r3lds0sgjvrp8z6b275iggr0isny0b6rz5ynwd6bcz";
   isLibrary = false;
   isExecutable = true;
   buildDepends = [
@@ -21,7 +21,7 @@ cabal.mkDerivation (self: {
     optparseApplicative parsec projectTemplate resourcet shakespeare
     shakespeareCss shakespeareJs shakespeareText split streamingCommons
     systemFileio systemFilepath tar text time transformers unixCompat
-    unorderedContainers wai warp yaml zlib
+    unorderedContainers wai waiExtra warp yaml zlib
   ];
   meta = {
     homepage = "http://www.yesodweb.com/";

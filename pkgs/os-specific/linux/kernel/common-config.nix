@@ -114,6 +114,7 @@ with stdenv.lib;
   VGA_SWITCHEROO y
 
   # Sound.
+  SND_DYNAMIC_MINORS y
   SND_AC97_POWER_SAVE y # AC97 Power-Saving Mode
   SND_HDA_INPUT_BEEP y # Support digital beep via input layer
   SND_USB_CAIAQ_INPUT y
@@ -310,6 +311,11 @@ with stdenv.lib;
   # Enable the 9P cache to speed up NixOS VM tests.
   9P_FSCACHE y
   9P_FS_POSIX_ACL y
+
+  # Enable transparent support for huge pages.
+  TRANSPARENT_HUGEPAGE? y
+  TRANSPARENT_HUGEPAGE_ALWAYS? n
+  TRANSPARENT_HUGEPAGE_MADVISE? y
 
   ${kernelPlatform.kernelExtraConfig or ""}
   ${extraConfig}

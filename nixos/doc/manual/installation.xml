@@ -1,13 +1,13 @@
 <chapter xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
-         xml:id="installing-nixos">
+         xml:id="ch-installation">
 
 <title>Installing NixOS</title>
 
 
 <!--===============================================================-->
 
-<section>
+<section xml:id="sec-obtaining">
 
 <title>Obtaining NixOS</title>
 
@@ -51,7 +51,7 @@ running NixOS system through several other means:
 
 <!--===============================================================-->
 
-<section>
+<section xml:id="sec-installation">
 
 <title>Installation</title>
 
@@ -339,7 +339,7 @@ changes:
 
 <section>
 
-<title>Booting from a USB stick</title>
+<title xml:id="sec-booting-from-usb">Booting from a USB stick</title>
 
 <para>For systems withoua CD drive, the NixOS livecd can be booted from
 a usb stick. For non-UEFI installations,
@@ -473,7 +473,7 @@ been built.  These channels are:
 <itemizedlist>
   <listitem>
     <para>Stable channels, such as <literal
-    xlink:href="http://nixos.org/channels/nixos-13.10">nixos-13.10</literal>.
+    xlink:href="http://nixos.org/channels/nixos-14.04">nixos-14.04</literal>.
     These only get conservative bug fixes and package upgrades.  For
     instance, a channel update may cause the Linux kernel on your
     system to be upgraded from 3.4.66 to 3.4.67 (a minor bug fix), but
@@ -499,8 +499,8 @@ appliances.)</para>
 
 <para>When you first install NixOS, you’re automatically subscribed to
 the NixOS channel that corresponds to your installation source.   For
-instance, if you installed from a 13.10 ISO, you will be subscribed to
-the <literal>nixos-13.10</literal> channel.  To see which NixOS
+instance, if you installed from a 14.04 ISO, you will be subscribed to
+the <literal>nixos-14.04</literal> channel.  To see which NixOS
 channel you’re subscribed to, run the following as root:
 
 <screen>
@@ -515,10 +515,10 @@ $ nix-channel --add http://nixos.org/channels/<replaceable>channel-name</replace
 </screen>
 
 (Be sure to include the <literal>nixos</literal> parameter at the
-end.)  For instance, to use the NixOS 13.10 stable channel:
+end.)  For instance, to use the NixOS 14.04 stable channel:
 
 <screen>
-$ nix-channel --add http://nixos.org/channels/nixos-13.10 nixos
+$ nix-channel --add http://nixos.org/channels/nixos-14.04 nixos
 </screen>
 
 But it you want to live on the bleeding edge:

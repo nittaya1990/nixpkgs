@@ -1,10 +1,10 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
 
-  dhcpcd =  if !config.boot.isContainer then pkgs.dhcpcd else pkgs.dhcpcd_without_udev;
+  dhcpcd = if !config.boot.isContainer then pkgs.dhcpcd else pkgs.dhcpcd.override { udev = null; };
 
   # Don't start dhcpcd on explicitly configured interfaces or on
   # interfaces that are part of a bridge.
@@ -36,7 +36,7 @@ let
       # Ethernet cards used for bridging.  Likewise for vif* and tap*
       # (Xen) and virbr* and vnet* (libvirt) and c-* and ctmp-* (NixOS
       # containers).
-      denyinterfaces ${toString ignoredInterfaces} peth* vif* tap* tun* virbr* vnet* vboxnet* c-* ctmp-*
+      denyinterfaces ${toString ignoredInterfaces} lo peth* vif* tap* tun* virbr* vnet* vboxnet* c-* ctmp-*
 
       ${config.networking.dhcpcd.extraConfig}
     '';
@@ -44,17 +44,6 @@ let
   # Hook for emitting ip-up/ip-down events.
   exitHook = pkgs.writeText "dhcpcd.exit-hook"
     ''
-      #exec >> /var/log/dhcpcd 2>&1
-      #set -x
-
-      params="IFACE=$interface REASON=$reason"
-
-      # only works when interface is wireless and wpa_supplicant has a control socket
-      # but we allow it to fail silently
-      ${optionalString config.networking.wireless.enable ''
-        params+=" $(${pkgs.wpa_supplicant}/sbin/wpa_cli -i$interface status 2>/dev/null | grep ssid | sed 's|^b|B|;s|ssid|SSID|' | xargs)"
-      ''}
-
       if [ "$reason" = BOUND -o "$reason" = REBOOT ]; then
           # Restart ntpd.  We need to restart it to make sure that it
           # will actually do something: if ntpd cannot resolve the
@@ -80,6 +69,7 @@ in
   options = {
 
     networking.dhcpcd.denyInterfaces = mkOption {
+      type = types.listOf types.str;
       default = [];
       description = ''
          Disable the DHCP client for any interface whose name matches
@@ -90,6 +80,7 @@ in
     };
 
     networking.dhcpcd.extraConfig = mkOption {
+      type = types.lines;
       default = "";
       description = ''
          Literal string to append to the config file generated for dhcpcd.
@@ -120,9 +111,8 @@ in
         serviceConfig =
           { Type = "forking";
             PIDFile = "/run/dhcpcd.pid";
-            ExecStart = "@${dhcpcd}/sbin/dhcpcd dhcpcd --config ${dhcpcdConf}";
+            ExecStart = "@${dhcpcd}/sbin/dhcpcd dhcpcd --quiet --config ${dhcpcdConf}";
             ExecReload = "${dhcpcd}/sbin/dhcpcd --rebind";
-            StandardError = "null";
             Restart = "always";
           };
       };

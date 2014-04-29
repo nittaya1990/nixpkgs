@@ -10,8 +10,12 @@ let
 
   # !!! Should we also do shared libuv?
   deps = {
-    inherit v8 openssl zlib http-parser;
+    inherit openssl zlib http-parser;
     cares = c-ares;
+
+    # disabled system v8 because v8 3.14 no longer receives security fixes
+    # we fall back to nodejs' internal v8 copy which receives backports for now
+    # inherit v8
   };
 
   sharedConfigureFlags = name: [

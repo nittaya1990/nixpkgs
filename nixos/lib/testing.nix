@@ -67,61 +67,59 @@ rec {
     };
 
 
-  makeTest = testFun: complete (call testFun);
-  makeTests = testsFun: lib.mapAttrs (name: complete) (call testsFun);
+  makeTest =
+    { testScript, makeCoverageReport ? false, ... } @ t:
 
-  apply = makeTest; # compatibility
-  call = f: f { inherit pkgs system; };
+    let
 
-  complete = { testScript, ... } @ t: t // rec {
+      nodes = buildVirtualNetwork (
+        t.nodes or (if t ? machine then { machine = t.machine; } else { }));
 
-    nodes = buildVirtualNetwork (
-      t.nodes or (if t ? machine then { machine = t.machine; } else { }));
+      testScript' =
+        # Call the test script with the computed nodes.
+        if builtins.isFunction testScript
+        then testScript { inherit nodes; }
+        else testScript;
 
-    testScript =
-      # Call the test script with the computed nodes.
-      if builtins.isFunction t.testScript
-      then t.testScript { inherit nodes; }
-      else t.testScript;
+      taps = lib.optionalString (t ? taps) t.taps;
 
-    taps = lib.optionalString (t ? taps) t.taps;
-    vlans = map (m: m.config.virtualisation.vlans) (lib.attrValues nodes);
+      vlans = map (m: m.config.virtualisation.vlans) (lib.attrValues nodes);
 
-    vms = map (m: m.config.system.build.vm) (lib.attrValues nodes);
+      vms = map (m: m.config.system.build.vm) (lib.attrValues nodes);
 
-    # Generate onvenience wrappers for running the test driver
-    # interactively with the specified network, and for starting the
-    # VMs from the command line.
-    driver = runCommand "nixos-test-driver"
-      { buildInputs = [ makeWrapper];
-        inherit testScript;
-        preferLocalBuild = true;
-      }
-      ''
-        mkdir -p $out/bin
-        echo "$testScript" > $out/test-script
-        ln -s ${testDriver}/bin/nixos-test-driver $out/bin/
-        vms="$(for i in ${toString vms}; do echo $i/bin/run-*-vm; done)"
-        wrapProgram $out/bin/nixos-test-driver \
-          --add-flags "$vms" \
-          --run "testScript=\"\$(cat $out/test-script)\"" \
-          --set testScript '"$testScript"' \
-          --set VLANS '"${toString vlans}"' \
-          --set TAPS  '"${toString taps}"'
-        ln -s ${testDriver}/bin/nixos-test-driver $out/bin/nixos-run-vms
-        wrapProgram $out/bin/nixos-run-vms \
-          --add-flags "$vms" \
-          --set tests '"startAll; joinAll;"' \
-          --set VLANS '"${toString vlans}"' \
-          --set TAPS  '"${toString taps}"' \
-          ${lib.optionalString (builtins.length vms == 1) "--set USE_SERIAL 1"}
-      ''; # "
+      # Generate onvenience wrappers for running the test driver
+      # interactively with the specified network, and for starting the
+      # VMs from the command line.
+      driver = runCommand "nixos-test-driver"
+        { buildInputs = [ makeWrapper];
+          testScript = testScript';
+          preferLocalBuild = true;
+        }
+        ''
+          mkdir -p $out/bin
+          echo "$testScript" > $out/test-script
+          ln -s ${testDriver}/bin/nixos-test-driver $out/bin/
+          vms="$(for i in ${toString vms}; do echo $i/bin/run-*-vm; done)"
+          wrapProgram $out/bin/nixos-test-driver \
+            --add-flags "$vms" \
+            --run "testScript=\"\$(cat $out/test-script)\"" \
+            --set testScript '"$testScript"' \
+            --set VLANS '"${toString vlans}"' \
+            --set TAPS  '"${toString taps}"'
+          ln -s ${testDriver}/bin/nixos-test-driver $out/bin/nixos-run-vms
+          wrapProgram $out/bin/nixos-run-vms \
+            --add-flags "$vms" \
+            --set tests '"startAll; joinAll;"' \
+            --set VLANS '"${toString vlans}"' \
+            --set TAPS  '"${toString taps}"' \
+            ${lib.optionalString (builtins.length vms == 1) "--set USE_SERIAL 1"}
+        ''; # "
 
-    test = runTests driver;
+      test = runTests driver;
 
-    report = releaseTools.gcovReport { coverageRuns = [ test ]; };
-  };
+      report = releaseTools.gcovReport { coverageRuns = [ test ]; };
 
+    in (if makeCoverageReport then report else test) // { inherit driver test; };
 
   runInMachine =
     { drv
@@ -150,7 +148,7 @@ rec {
         exit $?
       '';
 
-      testscript = ''
+      testScript = ''
         startAll;
         $client->waitForUnit("multi-user.target");
         ${preBuild}
@@ -163,7 +161,7 @@ rec {
         ${coreutils}/bin/mkdir $out
         ${coreutils}/bin/mkdir -p vm-state-client/xchg
         export > vm-state-client/xchg/saved-env
-        export tests='${testscript}'
+        export tests='${testScript}'
         ${testDriver}/bin/nixos-test-driver ${vm.config.system.build.vm}/bin/run-*-vm
       ''; # */
 
@@ -201,6 +199,6 @@ rec {
       } // args);
 
 
-  simpleTest = as: (makeTest ({ ... }: as)).test;
+  simpleTest = as: (makeTest as).test;
 
 }

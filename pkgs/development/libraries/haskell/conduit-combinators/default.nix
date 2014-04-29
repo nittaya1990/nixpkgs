@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "conduit-combinators";
-  version = "0.2.4";
-  sha256 = "0pxzvxd1j48l7j2anv61bxv1accl0jc6vdf9vv0l3s2358smzwwv";
+  version = "0.2.5";
+  sha256 = "1by9jjflascchs7gf53fk5srv3ihrir8jqac6zyq74fjclx3b6z0";
   buildDepends = [
     base16Bytestring base64Bytestring chunkedData conduit conduitExtra
     monadControl monoTraversable mwcRandom primitive resourcet

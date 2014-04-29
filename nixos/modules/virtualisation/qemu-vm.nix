@@ -7,9 +7,9 @@
 # the VM in the host.  On the other hand, the root filesystem is a
 # read/writable disk image persistent across VM reboots.
 
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
 
@@ -398,6 +398,11 @@ in
 
     # Wireless won't work in the VM.
     networking.wireless.enable = mkVMOverride false;
+
+    # Speed up booting by not waiting for ARP.
+    networking.dhcpcd.extraConfig = "noarp";
+
+    networking.usePredictableInterfaceNames = false;
 
     system.requiredKernelConfig = with config.lib.kernelConfig;
       [ (isEnabled "VIRTIO_BLK")

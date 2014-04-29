@@ -206,6 +206,10 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/P/PI/PIXEL/Archive-Cpio-0.09.tar.gz;
       sha256 = "1cf8k5zjykdbc1mn8lixlkij6jklwn6divzyq2grycj3rpd36g5c";
     };
+    meta = {
+      description = "Module for manipulations of cpio archives";
+      platforms = stdenv.lib.platforms.linux;
+    };
   };
 
   ArchiveZip = buildPerlPackage {
@@ -2305,6 +2309,7 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/R/RI/RIBASUSHI/DBIx-Class-0.08250.tar.gz;
       sha256 = "0nsqvj34klc9pf4l5kj3nqkq7agbsn11ys4115100awf7gxjbad6";
     };
+    patches = [ ../development/perl-modules/dbix-class-fix-tests.patch ];
     buildInputs = [ DBDSQLite PackageStash TestException TestWarn TestDeep ];
     propagatedBuildInputs = [ ClassAccessorGrouped ClassC3Componentised ClassInspector ClassMethodModifiers ConfigAny ContextPreserve DataCompare DataDumperConcise DataPage DBI DevelGlobalDestruction HashMerge ModuleFind Moo MROCompat namespaceclean PathClass ScopeGuard SQLAbstract strictures SubName TryTiny ];
     meta = {
@@ -4390,17 +4395,19 @@ let self = _self // overrides; _self = with self; {
     doCheck = false;
   };
 
-  IOSocketSSL = buildPerlPackage rec {
-    name = "IO-Socket-SSL-1.81";
+  IOSocketSSL = buildPerlPackage {
+    name = "IO-Socket-SSL-1.981";
     src = fetchurl {
-      url = "mirror://cpan/modules/by-module/IO/${name}.tar.gz";
-      sha256 = "1vg7jpn7vz3a2j3fxjjkaxiiqg7azqmy7afrpghiqkjcr8b6zs9y";
+      url = mirror://cpan/authors/id/S/SU/SULLR/IO-Socket-SSL-1.981.tar.gz;
+      sha256 = "d78f3aac72888a350962c2da87b2b459513a175d7ac641cb1482bacbb81e76eb";
     };
     propagatedBuildInputs = [ URI NetSSLeay ];
     meta = {
+      homepage = https://github.com/noxxi/p5-io-socket-ssl;
       description = "Nearly transparent SSL encapsulation for IO::Socket::INET";
       license = "perl";
     };
+    doCheck = false; # tries to connect to facebook.com etc.
   };
 
   IOString = buildPerlPackage rec {

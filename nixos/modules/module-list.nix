@@ -100,7 +100,14 @@
   ./services/desktops/accountservice.nix
   ./services/desktops/gnome3/at-spi2-core.nix
   ./services/desktops/gnome3/evolution-data-server.nix
+  ./services/desktops/gnome3/gnome-documents.nix
+  ./services/desktops/gnome3/gnome-keyring.nix
+  ./services/desktops/gnome3/gnome-online-accounts.nix
+  ./services/desktops/gnome3/gnome-online-miners.nix
+  ./services/desktops/gnome3/gnome-user-share.nix
+  ./services/desktops/gnome3/seahorse.nix
   ./services/desktops/gnome3/sushi.nix
+  ./services/desktops/gnome3/tracker.nix
   ./services/desktops/telepathy.nix
   ./services/games/ghost-one.nix
   ./services/games/minecraft-server.nix
@@ -159,6 +166,7 @@
   ./services/network-filesystems/drbd.nix
   ./services/network-filesystems/nfsd.nix
   ./services/network-filesystems/openafs-client/default.nix
+  ./services/network-filesystems/rsyncd.nix
   ./services/network-filesystems/samba.nix
   ./services/networking/amuled.nix
   ./services/networking/avahi-daemon.nix
@@ -207,6 +215,7 @@
   ./services/networking/rpcbind.nix
   ./services/networking/sabnzbd.nix
   ./services/networking/searx.nix
+  ./services/networking/spiped.nix
   ./services/networking/supybot.nix
   ./services/networking/syncthing.nix
   ./services/networking/ssh/lshd.nix

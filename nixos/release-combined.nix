@@ -45,8 +45,10 @@ in rec {
         (all nixos.ova)
 
         # (all nixos.tests.efi-installer.simple)
+        (all nixos.tests.containers)
         (all nixos.tests.firefox)
         (all nixos.tests.firewall)
+        (all nixos.tests.gnome3)
         (all nixos.tests.installer.grub1)
         (all nixos.tests.installer.lvm)
         (all nixos.tests.installer.separateBoot)
@@ -60,7 +62,9 @@ in rec {
         (all nixos.tests.openssh)
         (all nixos.tests.printing)
         (all nixos.tests.proxy)
+        (all nixos.tests.simple)
         (all nixos.tests.udisks)
+        (all nixos.tests.udisks2)
         (all nixos.tests.xfce)
 
         nixpkgs.tarball
