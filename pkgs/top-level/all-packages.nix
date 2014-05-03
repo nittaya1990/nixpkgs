@@ -9326,6 +9326,9 @@ let
 
   virtualgl = callPackage ../tools/X11/virtualgl { };
 
+  primus = callPackage ../tools/X11/primus {
+  };
+
   bumblebee = callPackage ../tools/X11/bumblebee {
     nvidia_x11_x64 = linuxPackages.nvidia_x11;
     nvidia_x11_i686 = callPackage_i686 ../os-specific/linux/nvidia-x11 { libsOnly = true; };
