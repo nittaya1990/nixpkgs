@@ -18,7 +18,9 @@
 { stdenv, fetchurl, pkgconfig, help2man
 , libX11, glibc, glib, libbsd
 , makeWrapper, buildEnv, module_init_tools
-, linuxPackages, virtualgl, xorg, xkeyboard_config
+, xorg, xkeyboard_config
+, nvidia_x11_x64, nvidia_x11_i686
+, virtualgl_x64, virtualgl_i686
 }:
 
 let
@@ -28,25 +30,34 @@ let
   # isolated X11 environment with the nvidia module
   # it should include all components needed for bumblebeed and
   # optirun to spawn the second X server and to connect to it.
-  commonEnv = buildEnv {
+  x11Env = buildEnv {
     name = "bumblebee-env";
     paths = [
       module_init_tools
-
-      linuxPackages.nvidia_x11
       xorg.xorgserver
       xorg.xrandr
       xorg.xrdb
       xorg.setxkbmap
       xorg.libX11
       xorg.libXext
-
-      virtualgl
+      xorg.xf86inputevdev
     ];
+  };
 
-    # the nvidia GLX module overwrites the one of xorgserver,
-    # thus nvidia_x11 must be before xorgserver in the paths.
-    ignoreCollisions = true;
+  x64Env = buildEnv {
+    name = "bumblebee-x64-env";
+    paths = [
+      nvidia_x11_x64
+      virtualgl_x64
+    ];
+  };
+
+  i686Env = buildEnv {
+    name = "bumblebee-i686-env";
+    paths = [
+      nvidia_x11_i686
+      virtualgl_i686
+    ];
   };
 
 in stdenv.mkDerivation {
@@ -63,6 +74,7 @@ in stdenv.mkDerivation {
     # Substitute the path to the actual modinfo program in module.c.
     # Note: module.c also calls rmmod and modprobe, but those just have to
     # be in PATH, and thus no action for them is required.
+
     substituteInPlace src/module.c \
       --replace "/sbin/modinfo" "${module_init_tools}/sbin/modinfo"
 
@@ -79,22 +91,24 @@ in stdenv.mkDerivation {
     "--with-udev-rules=$out/lib/udev/rules.d"
     "CONF_DRIVER=nvidia"
     "CONF_DRIVER_MODULE_NVIDIA=nvidia"
-    "CONF_LDPATH_NVIDIA=${commonEnv}/lib"
-    "CONF_MODPATH_NVIDIA=${commonEnv}/lib/xorg/modules"
+    "CONF_LDPATH_NVIDIA=${x11Env}/lib:${x64Env}/lib:${i686Env}/lib"
+    "CONF_MODPATH_NVIDIA=${x64Env}/lib/xorg/modules,${x11Env}/lib/xorg/modules"
   ];
 
   # create a wrapper environment for bumblebeed and optirun
   postInstall = ''
     wrapProgram "$out/sbin/bumblebeed" \
-      --prefix PATH : "${commonEnv}/sbin:${commonEnv}/bin:\$PATH" \
-      --prefix LD_LIBRARY_PATH : "${commonEnv}/lib:\$LD_LIBRARY_PATH" \
+      --prefix PATH : "${x11Env}/sbin:${x11Env}/bin:${x64Env}/bin" \
+      --prefix LD_LIBRARY_PATH : "${x11Env}/lib:${x64Env}/lib" \
       --set FONTCONFIG_FILE "/etc/fonts/fonts.conf" \
       --set XKB_BINDIR "${xorg.xkbcomp}/bin" \
       --set XKB_DIR "${xkeyboard_config}/etc/X11/xkb"
 
     wrapProgram "$out/bin/optirun" \
-      --prefix PATH : "${commonEnv}/sbin:${commonEnv}/bin" \
-      --prefix LD_LIBRARY_PATH : "${commonEnv}/lib" \
+      --prefix PATH : "${x64Env}/bin"
+
+    makeWrapper "$out/bin/.optirun-wrapped" "$out/bin/optirun32" \
+      --prefix PATH : "${i686Env}/bin"
   '';
 
   meta = {
