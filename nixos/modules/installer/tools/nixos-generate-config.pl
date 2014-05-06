@@ -165,7 +165,7 @@ foreach my $path (glob "/sys/bus/pci/devices/*") {
     pciCheck $path;
 }
 
-push @attrs, "hardware.opengl.videoDrivers = [ \"$videoDriver\" ];" if $videoDriver;
+push @attrs, "services.xserver.videoDrivers = [ \"$videoDriver\" ];" if $videoDriver;
 
 
 # Idem for USB devices.
@@ -218,18 +218,19 @@ foreach my $path (glob "/sys/class/block/*") {
 }
 
 
-my $dmi = `@dmidecode@/sbin/dmidecode`;
+my $virt = `systemd-detect-virt`;
+chomp $virt;
 
 
 # Check if we're a VirtualBox guest.  If so, enable the guest
 # additions.
-if ($dmi =~ /Manufacturer: innotek/) {
+if ($virt eq "oracle") {
     push @attrs, "services.virtualbox.enable = true;"
 }
 
 
 # Likewise for QEMU.
-if ($dmi =~ /Manufacturer: Bochs/) {
+if ($virt eq "qemu" || $virt eq "kvm" || $virt eq "bochs") {
     push @imports, "<nixpkgs/nixos/modules/profiles/qemu-guest.nix>";
 }
 
@@ -401,7 +402,6 @@ if ($showHardwareConfig) {
         if (-e "/sys/firmware/efi/efivars") {
             $bootLoaderConfig = <<EOF;
   # Use the gummiboot efi boot loader.
-  boot.loader.grub.enable = false;
   boot.loader.gummiboot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 EOF
@@ -439,6 +439,12 @@ $bootLoaderConfig
   #   defaultLocale = "en_US.UTF-8";
   # };
 
+  # List packages installed in system profile. To search by name, run:
+  # $ nix-env -qaP | grep wget
+  # environment.systemPackages = with pkgs; [
+  #   wget
+  # ];
+
   # List services that you want to enable:
 
   # Enable the OpenSSH daemon.
@@ -455,6 +461,17 @@ $bootLoaderConfig
   # Enable the KDE Desktop Environment.
   # services.xserver.displayManager.kdm.enable = true;
   # services.xserver.desktopManager.kde4.enable = true;
+
+  # Define a user account. Don't forget to set a password with ‘passwd’.
+  # users.extraUsers.guest = {
+  #   name = "guest";
+  #   group = "users";
+  #   uid = 1000;
+  #   createHome = true;
+  #   home = "/home/guest";
+  #   shell = "/run/current-system/sw/bin/bash";
+  # };
+
 }
 EOF
     } else {

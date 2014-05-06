@@ -1117,6 +1117,18 @@ rec {
       packages = commonCentOSPackages;
     };
 
+    rhel7x86_64 = {
+      name = "rhel-7rc-x86_64";
+      fullName = "RHEL 7 rc (x86_64)";
+      packagesList = fetchurl {
+        url = http://ftp.redhat.com/redhat/rhel/rc/7/Server/x86_64/os/repodata/81f41fc6206a8477235dc7b5099ffe0867f71802415d66d6c0a213a41cae27c3-primary.xml.gz;
+        sha256 = "1hr7mqfa84x2q3b6cpa108cgfrq8zsghkdf7blipg13a4331zx41";
+      };
+      urlPrefix = http://ftp.redhat.com/redhat/rhel/rc/7/Server/x86_64/os ;
+      archs = ["noarch" "x86_64"];
+      packages = commonRHELPackages;
+    };
+
   };
 
 
@@ -1465,6 +1477,40 @@ rec {
       packages = commonDebPackages ++ [ "diffutils" "libc-bin" ];
     };
 
+    ubuntu1404i386 = {
+      name = "ubuntu-14.04-trusty-i386";
+      fullName = "Ubuntu 14.04 Trusty (i386)";
+      packagesLists =
+        [ (fetchurl {
+            url = mirror://ubuntu/dists/trusty/main/binary-i386/Packages.bz2;
+            sha256 = "1bld2z47cc8adlqgfib1hypj5zwdqalhizzgpmkr3rmmb095lbma";
+          })
+          (fetchurl {
+            url = mirror://ubuntu/dists/trusty/universe/binary-i386/Packages.bz2;
+            sha256 = "03xqi9vd653hdf31a2l6p3zqfmywwvwlsc54dymxji8ppj7mcgkz";
+          })
+        ];
+      urlPrefix = mirror://ubuntu;
+      packages = commonDebPackages ++ [ "diffutils" "libc-bin" ];
+    };
+
+    ubuntu1404x86_64 = {
+      name = "ubuntu-14.04-trusty-amd64";
+      fullName = "Ubuntu 14.04 Trusty (amd64)";
+      packagesList =
+        [ (fetchurl {
+            url = mirror://ubuntu/dists/trusty/main/binary-amd64/Packages.bz2;
+            sha256 = "11cw9flmnq3wappmwk87h19jzyrsan15h6p0mmb30ypnrqaz7g9j";
+          })
+          (fetchurl {
+            url = mirror://ubuntu/dists/trusty/universe/binary-amd64/Packages.bz2;
+            sha256 = "06nn3ci8s7zgwharxm76bcbqmnqknpds67zffylyii5hgmbjcnxm";
+          })
+        ];
+      urlPrefix = mirror://ubuntu;
+      packages = commonDebPackages ++ [ "diffutils" "libc-bin" ];
+    };
+
     debian40i386 = {
       name = "debian-4.0r9-etch-i386";
       fullName = "Debian 4.0r9 Etch (i386)";
@@ -1536,22 +1582,22 @@ rec {
     debian70x86_64 = debian7x86_64;
 
     debian7i386 = {
-      name = "debian-7.4-wheezy-i386";
-      fullName = "Debian 7.4 Wheezy (i386)";
+      name = "debian-7.5-wheezy-i386";
+      fullName = "Debian 7.5 Wheezy (i386)";
       packagesList = fetchurl {
         url = mirror://debian/dists/wheezy/main/binary-i386/Packages.bz2;
-        sha256 = "9f19822c82e25cd149f82b0d16fdbc00d1080db7f34e41de456498dc7c54f2b4";
+        sha256 = "c4896c30c9a483354714d50f19d0779b72a218ce4f817f9ec8554f9664137993";
       };
       urlPrefix = mirror://debian;
       packages = commonDebianPackages;
     };
 
     debian7x86_64 = {
-      name = "debian-7.4-wheezy-amd64";
-      fullName = "Debian 7.4 Wheezy (amd64)";
+      name = "debian-7.5-wheezy-amd64";
+      fullName = "Debian 7.5 Wheezy (amd64)";
       packagesList = fetchurl {
         url = mirror://debian/dists/wheezy/main/binary-amd64/Packages.bz2;
-        sha256 = "160ee0917693bc2e8f69b233c220857f35a70d906540d99d2779def576daf5f7";
+        sha256 = "f3b78aac7d2bdfc3896fdd2087affd0e16bafbf35945106b196483f5fb303d52";
       };
       urlPrefix = mirror://debian;
       packages = commonDebianPackages;
@@ -1600,6 +1646,28 @@ rec {
     "perl"
     "pkgconfig"
     "procps"
+    "rpm"
+    "rpm-build"
+    "tar"
+    "unzip"
+  ];
+
+  commonRHELPackages = [
+    "autoconf"
+    "automake"
+    "basesystem"
+    "bzip2"
+    "curl"
+    "diffutils"
+    "findutils"
+    "gawk"
+    "gcc-c++"
+    "gzip"
+    "make"
+    "patch"
+    "perl"
+    "pkgconfig"
+    "procps-ng"
     "rpm"
     "rpm-build"
     "tar"

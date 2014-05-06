@@ -1,6 +1,6 @@
-{ nixpkgs ? { outPath = ./..; revCount = 5678; shortRev = "gfedcba"; }
-, officialRelease ? false
+{ nixpkgs ? { outPath = ./..; revCount = 56789; shortRev = "gfedcba"; }
 , stableBranch ? false
+, supportedSystems ? [ "x86_64-linux" "i686-linux" ]
 }:
 
 let
@@ -18,15 +18,13 @@ let
 in rec {
 
   nixos = removeMaintainers (import ./release.nix {
-    inherit officialRelease stableBranch;
+    inherit stableBranch;
     nixpkgs = nixpkgsSrc;
   });
 
   nixpkgs = builtins.removeAttrs (removeMaintainers (import ../pkgs/top-level/release.nix {
-    inherit officialRelease;
+    inherit supportedSystems;
     nixpkgs = nixpkgsSrc;
-    # Only do Linux builds.
-    supportedSystems = [ "x86_64-linux" "i686-linux" ];
   })) [ "unstable" ];
 
   tested = pkgs.releaseTools.aggregate {
@@ -49,6 +47,7 @@ in rec {
         (all nixos.tests.firefox)
         (all nixos.tests.firewall)
         (all nixos.tests.gnome3)
+        #(all nixos.tests.installer.efi)
         (all nixos.tests.installer.grub1)
         (all nixos.tests.installer.lvm)
         (all nixos.tests.installer.separateBoot)

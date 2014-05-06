@@ -2,6 +2,7 @@
 , libjpeg, libpng, libtiff, ncurses, pango, pcre, perl, readline, tcl
 , texLive, tk, xz, zlib, less, texinfo, graphviz, icu, pkgconfig, bison
 , imake, which, jdk, atlas
+, withRecommendedPackages ? true
 }:
 
 stdenv.mkDerivation rec {
@@ -23,6 +24,7 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     configureFlagsArray=(
       --disable-lto
+      --with${stdenv.lib.optionalString (!withRecommendedPackages) "out"}-recommended-packages
       --with-blas="-L${atlas}/lib -lf77blas -latlas"
       --with-lapack="-L${liblapack}/lib -llapack"
       --with-readline
@@ -81,7 +83,7 @@ stdenv.mkDerivation rec {
       user-defined recursive functions and input and output facilities.
     '';
 
-    platforms = stdenv.lib.platforms.linux;
+    hydraPlatforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.simons ];
   };
 }

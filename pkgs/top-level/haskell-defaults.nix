@@ -416,7 +416,7 @@
   packages_ghc782 =
     packages { ghcPath = ../development/compilers/ghc/7.8.2.nix;
                ghcBinary = ghc742Binary;
-               prefFun = ghc782Prefs;
+               prefFun = ghcHEADPrefs;
              };
 
   packages_ghc783 =
@@ -428,7 +428,7 @@
   # Reasonably current HEAD snapshot. Should *always* be lowPrio.
   packages_ghcHEAD =
     packages { ghcPath = ../development/compilers/ghc/head.nix;
-               ghcBinary = ghc742Binary;
+               ghcBinary = pkgs.haskellPackages.ghcPlain;
                prefFun = ghcHEADPrefs;
                extraArgs = {
                  happy = pkgs.haskellPackages.happy_1_19_2;

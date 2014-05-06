@@ -32,6 +32,7 @@
   ./hardware/opengl.nix
   ./hardware/pcmcia.nix
   ./hardware/video/bumblebee.nix
+  ./hardware/video/nvidia.nix
   ./installer/tools/nixos-checkout.nix
   ./installer/tools/tools.nix
   ./misc/assertions.nix
@@ -135,7 +136,7 @@
   ./services/mail/opensmtpd.nix
   ./services/mail/postfix.nix
   ./services/mail/spamassassin.nix
-  ./services/misc/autofs.nix
+  #./services/misc/autofs.nix
   ./services/misc/cgminer.nix
   ./services/misc/dictd.nix
   ./services/misc/disnix.nix

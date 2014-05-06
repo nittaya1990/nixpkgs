@@ -1,18 +1,15 @@
-{ nixpkgs ? { outPath = ./..; revCount = 5678; shortRev = "gfedcba"; }
-, officialRelease ? false
+{ nixpkgs ? { outPath = ./..; revCount = 56789; shortRev = "gfedcba"; }
 , stableBranch ? false
+, supportedSystems ? [ "x86_64-linux" "i686-linux" ]
 }:
 
 let
 
   version = builtins.readFile ../.version;
   versionSuffix =
-    if officialRelease then ""
-    else (if stableBranch then "." else "pre") + "${toString nixpkgs.revCount}.${nixpkgs.shortRev}";
+    (if stableBranch then "." else "pre") + "${toString nixpkgs.revCount}.${nixpkgs.shortRev}";
 
-  systems = [ "x86_64-linux" "i686-linux" ];
-
-  forAllSystems = pkgs.lib.genAttrs systems;
+  forAllSystems = pkgs.lib.genAttrs supportedSystems;
 
   callTest = fn: args: forAllSystems (system: import fn ({ inherit system; } // args));
 
@@ -218,6 +215,7 @@ in rec {
   tests.firefox = callTest tests/firefox.nix {};
   tests.firewall = callTest tests/firewall.nix {};
   tests.gnome3 = callTest tests/gnome3.nix {};
+  tests.installer.efi = forAllSystems (system: (import tests/installer.nix { inherit system; }).efi.test);
   tests.installer.grub1 = forAllSystems (system: (import tests/installer.nix { inherit system; }).grub1.test);
   tests.installer.lvm = forAllSystems (system: (import tests/installer.nix { inherit system; }).lvm.test);
   tests.installer.rebuildCD = forAllSystems (system: (import tests/installer.nix { inherit system; }).rebuildCD.test);
@@ -240,7 +238,6 @@ in rec {
   tests.printing = callTest tests/printing.nix {};
   tests.proxy = callTest tests/proxy.nix {};
   tests.quake3 = callTest tests/quake3.nix {};
-  tests.rabbitmq = callTest tests/rabbitmq.nix {};
   tests.runInMachine = callTest tests/run-in-machine.nix {};
   tests.simple = callTest tests/simple.nix {};
   tests.tomcat = callTest tests/tomcat.nix {};
