@@ -1,4 +1,4 @@
-{ stdenv, git, openssh, fetchgit, ghc, perl, gmp, ncurses, autoconf, automake, libtool }:
+{ stdenv, git, openssh, fetchgit, ghc, perl, gmp, ncurses, autoconf, automake, libtool, happy, alex }:
 
 stdenv.mkDerivation rec {
   version = "7.8.3";
@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = "/home/coconnor/Development/ghc-7.8.3";
 
-  buildInputs = [ ghc perl gmp ncurses git openssh autoconf automake libtool ];
+  buildInputs = [ ghc perl gmp ncurses git openssh autoconf automake libtool happy alex ];
 
   enableParallelBuilding = true;
 
