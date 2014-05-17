@@ -99,6 +99,7 @@
   ./services/databases/virtuoso.nix
   ./services/databases/monetdb.nix
   ./services/desktops/accountservice.nix
+  ./services/desktops/geoclue2.nix
   ./services/desktops/gnome3/at-spi2-core.nix
   ./services/desktops/gnome3/evolution-data-server.nix
   ./services/desktops/gnome3/gnome-documents.nix
@@ -306,6 +307,7 @@
   ./tasks/filesystems.nix
   ./tasks/filesystems/btrfs.nix
   ./tasks/filesystems/ext.nix
+  ./tasks/filesystems/f2fs.nix
   ./tasks/filesystems/nfs.nix
   ./tasks/filesystems/reiserfs.nix
   ./tasks/filesystems/unionfs-fuse.nix

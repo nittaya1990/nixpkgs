@@ -3319,10 +3319,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   ExtUtilsMakeMaker = buildPerlPackage rec{
-    name = "ExtUtils-MakeMaker-6.84";
+    name = "ExtUtils-MakeMaker-6.98";
     src = fetchurl {
       url = "mirror://cpan/modules/by-module/ExtUtils/${name}.tar.gz";
-      sha256 = "1s3fn1fkm9l6pjhz7dbzsc6nhw1jm2hpf08fqhsqh1h50nj5pv5b";
+      sha256 = "1vv3v9rc2dnx8amwa7lpdywg3lakx7yv2n38qvfbk9jzkqc27c1f";
     };
     propagatedBuildInputs =
       [ ParseCPANMeta version JSONPP CPANMetaYAML CPANMeta
@@ -5139,6 +5139,23 @@ let self = _self // overrides; _self = with self; {
       license = "perl";
       maintainers = with maintainers; [ ocharles ];
       platforms   = stdenv.lib.platforms.unix;
+    };
+  };
+
+  MHonArc = buildPerlPackage rec {
+    name = "MHonArc-2.6.18";
+
+    src = fetchurl {
+      url    = "http://dcssrv1.oit.uci.edu/indiv/ehood/release/MHonArc/tar/${name}.tar.gz";
+      sha256 = "1xmf26dfwr8achprc3n1pxgl0mkiyr6pf25wq3dqgzqkghrrsxa2";
+    };
+    propagatedBuildInputs = [ ];
+    meta = with stdenv.lib; {
+      homepage    = http://dcssrv1.oit.uci.edu/indiv/ehood/mhonarch.html;
+      description = "A mail-to-HTML converter";
+      maintainers = with maintainers; [ lovek323 ];
+      license     = licenses.gpl2;
+      platforms   = platforms.unix;
     };
   };
 

@@ -70,6 +70,7 @@ with lib;
 
   boot.initrd.kernelModules = [ "xen-blkfront" ];
   boot.kernelModules = [ "xen-netfront" ];
+  boot.kernelParams = [ "console=ttyS0" ];
 
   # Generate a GRUB menu.  Amazon's pv-grub uses this to boot our kernel/initrd.
   boot.loader.grub.version = 1;
@@ -160,9 +161,4 @@ with lib;
   environment.systemPackages = [ pkgs.cryptsetup ];
 
   boot.initrd.supportedFilesystems = [ "unionfs-fuse" ];
-
-  # Prevent logging in as root without a password.  This doesn't really matter,
-  # since the only PAM services that allow logging in with a null
-  # password are local ones that are inaccessible on EC2 machines.
-  security.initialRootPassword = mkDefault "!";
 }

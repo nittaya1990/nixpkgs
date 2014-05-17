@@ -34,9 +34,8 @@ let
 
       # Ignore peth* devices; on Xen, they're renamed physical
       # Ethernet cards used for bridging.  Likewise for vif* and tap*
-      # (Xen) and virbr* and vnet* (libvirt) and c-* and ctmp-* (NixOS
-      # containers).
-      denyinterfaces ${toString ignoredInterfaces} lo peth* vif* tap* tun* virbr* vnet* vboxnet* c-* ctmp-*
+      # (Xen) and virbr* and vnet* (libvirt).
+      denyinterfaces ${toString ignoredInterfaces} lo peth* vif* tap* tun* virbr* vnet* vboxnet*
 
       ${config.networking.dhcpcd.extraConfig}
     '';
@@ -58,6 +57,8 @@ let
       #if [ "$reason" = EXPIRE -o "$reason" = RELEASE -o "$reason" = NOCARRIER ] ; then
       #    ${config.systemd.package}/bin/systemctl start ip-down.target
       #fi
+
+      ${config.networking.dhcpcd.runHook}
     '';
 
 in
@@ -84,6 +85,16 @@ in
       default = "";
       description = ''
          Literal string to append to the config file generated for dhcpcd.
+      '';
+    };
+
+    networking.dhcpcd.runHook = mkOption {
+      type = types.lines;
+      default = "";
+      example = "if [[ $reason =~ BOUND ]]; then echo $interface: Routers are $new_routers - were $old_routers; fi";
+      description = ''
+         Shell code that will be run after all other hooks. See
+         `man dhcpcd-run-hooks` for details on what is possible.
       '';
     };
 

@@ -9,6 +9,9 @@ use Getopt::Long qw(:config gnu_getopt);
 
 my $socat = '@socat@/bin/socat';
 
+# Ensure a consistent umask.
+umask 0022;
+
 # Parse the command line.
 
 sub showHelp {
@@ -64,7 +67,6 @@ sub writeNixOSConfig {
 with lib;
 
 { boot.isContainer = true;
-  security.initialRootPassword = mkDefault "!";
   networking.hostName = mkDefault "$containerName";
   networking.useDHCP = false;
   $extraConfig
