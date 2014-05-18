@@ -22,9 +22,20 @@ in
 
 
   config = mkIf (xcfg.enable && cfg.enable) {
+    services.xserver.desktopManager.session = singleton {
+      name = "e17";
+      bgSupport = true;
+      start =
+        ''
+          ${pkgs.e17.enlightenment}/bin/enlightenment_start
+        '';
+    };
+
+    environment.systemPackages =
+      [ pkgs.e17.enlightenment
+      ];
 
     services.dbus.packages = [ pkgs.e17.ethumb ];
-
   };
 
 }
