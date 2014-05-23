@@ -23,6 +23,9 @@ stdenv.mkDerivation rec {
     [ # These are all changes between upstream and
       # https://github.com/edolstra/systemd/tree/nixos-v212.
       ./fixes.patch
+      # removes the system sleep directory from install directories. NixOS handles creating the
+      # directory.
+      ./no-install-system-sleep-dir.patch
     ];
 
   buildInputs =
@@ -95,13 +98,17 @@ stdenv.mkDerivation rec {
   # 1e1954f53386cb773e2a152748dd31c4d36aa2d8) because using /var is
   # forbidden in early boot, but in NixOS the initrd guarantees that
   # /var is mounted.
-  makeFlags = "hwdb_bin=/var/lib/udev/hwdb.bin";
+  makeFlags =
+    [ "hwdb_bin=/var/lib/udev/hwdb.bin"
+      "systemsleepdir=/etc/systemd/system-sleep"
+    ];
 
   installFlags =
     [ "localstatedir=$(TMPDIR)/var"
       "sysconfdir=$(out)/etc"
       "sysvinitdir=$(TMPDIR)/etc/init.d"
       "pamconfdir=$(out)/etc/pam.d"
+      "systemsleepdir=/etc/systemd/system-sleep"
     ];
 
   # Get rid of configuration-specific data.
