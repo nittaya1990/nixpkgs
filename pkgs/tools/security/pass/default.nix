@@ -1,15 +1,21 @@
 { stdenv, fetchurl
 , coreutils, gnused, getopt, pwgen, git, tree, gnupg
-, makeWrapper }:
+, makeWrapper
+, withX ? false, xclip ? null
+}:
+
+assert withX -> xclip != null;
 
 stdenv.mkDerivation rec {
-  version = "1.6.1";
+  version = "1.6.2";
   name    = "password-store-${version}";
 
   src = fetchurl {
     url    = "http://git.zx2c4.com/password-store/snapshot/${name}.tar.xz";
-    sha256 = "108856223w225xnqmcps6r5dn7sgqc4c3kfa1hd6piskdials59w";
+    sha256 = "1d32y6k625pv704icmhg46zg02kw5zcyxscgljxgy8bb5wv4lv2j";
   };
+
+  patches = [ ./darwin-getopt.patch ];
 
   buildInputs = [ makeWrapper ];
 
@@ -30,6 +36,7 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    mkdir -p "$out/share/bash-completion/completions"
     mkdir -p "$out/share/zsh/site-functions"
     mkdir -p "$out/share/fish/completions"
 
@@ -49,6 +56,6 @@ stdenv.mkDerivation rec {
 
     # Ensure all dependencies are in PATH
     wrapProgram $out/bin/pass \
-      --prefix PATH : "${coreutils}/bin:${gnused}/bin:${getopt}/bin:${gnupg}/bin:${git}/bin:${tree}/bin:${pwgen}/bin"
+      --prefix PATH : "${coreutils}/bin:${gnused}/bin:${getopt}/bin:${gnupg}/bin:${git}/bin:${tree}/bin:${pwgen}/bin${if withX then ":${xclip}/bin" else ""}"
   '';
 }

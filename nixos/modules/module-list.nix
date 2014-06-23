@@ -14,12 +14,14 @@
   ./config/power-management.nix
   ./config/pulseaudio.nix
   ./config/shells-environment.nix
+  ./config/system-environment.nix
   ./config/swap.nix
   ./config/sysctl.nix
   ./config/system-path.nix
   ./config/timezone.nix
   ./config/unix-odbc-drivers.nix
   ./config/users-groups.nix
+  ./config/zram.nix
   ./hardware/all-firmware.nix
   ./hardware/cpu/intel-microcode.nix
   ./hardware/cpu/amd-microcode.nix
@@ -98,7 +100,8 @@
   ./services/databases/postgresql.nix
   ./services/databases/virtuoso.nix
   ./services/databases/monetdb.nix
-  ./services/desktops/accountservice.nix
+  ./services/databases/influxdb.nix
+  ./services/desktops/accountsservice.nix
   ./services/desktops/geoclue2.nix
   ./services/desktops/gnome3/at-spi2-core.nix
   ./services/desktops/gnome3/evolution-data-server.nix
@@ -107,6 +110,7 @@
   ./services/desktops/gnome3/gnome-online-accounts.nix
   ./services/desktops/gnome3/gnome-online-miners.nix
   ./services/desktops/gnome3/gnome-user-share.nix
+  ./services/desktops/gnome3/gvfs.nix
   ./services/desktops/gnome3/seahorse.nix
   ./services/desktops/gnome3/sushi.nix
   ./services/desktops/gnome3/tracker.nix
@@ -121,7 +125,6 @@
   ./services/hardware/pommed.nix
   ./services/hardware/sane.nix
   ./services/hardware/udev.nix
-  ./services/hardware/udisks.nix
   ./services/hardware/udisks2.nix
   ./services/hardware/upower.nix
   ./services/hardware/thinkfan.nix
@@ -157,7 +160,7 @@
   ./services/monitoring/graphite.nix
   ./services/monitoring/monit.nix
   ./services/monitoring/munin.nix
-  ./services/monitoring/nagios/default.nix
+  ./services/monitoring/nagios.nix
   ./services/monitoring/smartd.nix
   ./services/monitoring/statsd.nix
   ./services/monitoring/systemhealth.nix
@@ -204,6 +207,7 @@
   ./services/networking/networkmanager.nix
   ./services/networking/ngircd.nix
   ./services/networking/notbit.nix
+  ./services/networking/nsd.nix
   ./services/networking/ntopng.nix
   ./services/networking/ntpd.nix
   ./services/networking/oidentd.nix
@@ -222,6 +226,7 @@
   ./services/networking/syncthing.nix
   ./services/networking/ssh/lshd.nix
   ./services/networking/ssh/sshd.nix
+  ./services/networking/teamspeak3.nix
   ./services/networking/tftpd.nix
   ./services/networking/unbound.nix
   ./services/networking/vsftpd.nix
@@ -253,6 +258,7 @@
   ./services/ttys/agetty.nix
   ./services/ttys/kmscon.nix
   ./services/web-servers/apache-httpd/default.nix
+  ./services/web-servers/fcgiwrap.nix
   ./services/web-servers/jboss/default.nix
   ./services/web-servers/lighttpd/default.nix
   ./services/web-servers/lighttpd/cgit.nix
@@ -314,11 +320,13 @@
   ./tasks/filesystems/vfat.nix
   ./tasks/filesystems/xfs.nix
   ./tasks/filesystems/zfs.nix
+  ./tasks/encrypted-devices.nix
   ./tasks/kbd.nix
   ./tasks/lvm.nix
   ./tasks/network-interfaces.nix
   ./tasks/scsi-link-power-management.nix
   ./tasks/swraid.nix
+  ./tasks/trackpoint.nix
   ./testing/service-runner.nix
   ./virtualisation/container-config.nix
   ./virtualisation/containers.nix

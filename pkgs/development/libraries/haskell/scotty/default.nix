@@ -1,16 +1,18 @@
-{ cabal, aeson, blazeBuilder, caseInsensitive, conduit
-, conduitExtra, dataDefault, httpTypes, mtl, regexCompat, text
-, transformers, wai, waiExtra, warp
+{ cabal, aeson, blazeBuilder, caseInsensitive, conduit, dataDefault
+, hspec, httpTypes, liftedBase, monadControl, mtl, regexCompat
+, text, transformers, transformersBase, wai, waiExtra, warp
 }:
 
 cabal.mkDerivation (self: {
   pname = "scotty";
-  version = "0.7.2";
-  sha256 = "1y14af3qciwycgaxzx6rjan2jgfchjzs4zbxzh8p8s1d0l4gsqlb";
+  version = "0.8.1";
+  sha256 = "182iwsz5h7p08sqwfzb332gwj1wjx7fhhazm6gfdc0incab769m0";
   buildDepends = [
-    aeson blazeBuilder caseInsensitive conduit conduitExtra dataDefault
-    httpTypes mtl regexCompat text transformers wai waiExtra warp
+    aeson blazeBuilder caseInsensitive conduit dataDefault httpTypes
+    monadControl mtl regexCompat text transformers transformersBase wai
+    waiExtra warp
   ];
+  testDepends = [ hspec httpTypes liftedBase wai waiExtra ];
   jailbreak = true;
   meta = {
     homepage = "https://github.com/scotty-web/scotty";

@@ -49,6 +49,7 @@ let
     };
     propagatedBuildInputs = depends;
     meta.homepage = "http://cran.r-project.org/web/packages/${name}/";
+    meta.hydraPlatforms = R.meta.hydraPlatforms;
   };
 
 in
@@ -63,6 +64,7 @@ let self = _self // overrides; _self = with self; {
     };
     propagatedBuildInputs = [Rcpp];
     patchPhase = "patchShebangs configure";
+    meta.hydraPlatforms = R.meta.hydraPlatforms;
   };
 
   A3 = derive { name="A3"; version="0.9.2"; sha256="01s7znhph2mr3snpscci3y7nbcisa6kg6hy7im3742r6ah0z3jv7"; depends=[xtable pbapply]; };
@@ -333,16 +335,16 @@ let self = _self // overrides; _self = with self; {
   bayesQR = derive { name="bayesQR"; version="2.2"; sha256="0w5fg7hdwpgs2dg4vzcdsm60wkxgjxhcssw9jzig5qgdjdkm07nm"; depends=[]; };
   BayesQTLBIC = derive { name="BayesQTLBIC"; version="1.0-2"; sha256="1pgd3h45v3l44pfkin2883lk1davp0y4fq80lp6nqrsbx9cpsy2z"; depends=[leaps]; };
   bayess = derive { name="bayess"; version="1.4"; sha256="0axipk5hn2hw3g4dfh7y3xa0dxqmi8kqpbr77nl14y7ydpija6xm"; depends=[MASS mnormt gplots combinat]; };
-  BayesSAE = derive { name="BayesSAE"; version="1.0-1"; sha256="09s7f472by689b2b0gahnkhyjriizpsx6r5qa95nf3f4bfqi2cpf"; depends=[Formula coda lattice]; };
+  BayesSAE = derive { name="BayesSAE"; version="1.0-1"; sha256="09s7f472by689b2b0gahnkhyjriizpsx6r5qa95nf3f4bfqi2cpf"; depends=[Formula coda lattice pkgs.gsl]; };
   BayesSingleSub = derive { name="BayesSingleSub"; version="0.6.2"; sha256="0hgmyhg4mpxx7k91hbfa9h3533mqyn9rz4kl9kb30cc9g7g0m045"; depends=[coda mvtnorm MCMCpack]; };
   bayesSurv = derive { name="bayesSurv"; version="2.1-1"; sha256="076lzaiwjp4ahw36wvx9sb1g86b9cidvjv91sc1r509s8khph91w"; depends=[survival coda smoothSurv]; };
   bayesTFR = derive { name="bayesTFR"; version="4.0-5"; sha256="1cyzkgx0f275ng0ds0lvm3rwryd2ai20shhilp7ajvsria4h4dcw"; depends=[mvtnorm MASS coda wpp2012]; };
   Bayesthresh = derive { name="Bayesthresh"; version="2.0.1"; sha256="0w26h1ragqcg1i4h7c2y6vd8fig2jb2zrnvvchgg5z2hg9qdplsf"; depends=[lme4 MASS VGAM mvtnorm matrixcalc coda]; };
   BayesTree = derive { name="BayesTree"; version="0.3-1.1"; sha256="1sdxya2nli590m837zmqn4y3h62ph1hx8qszp6ayb19liff2bnmd"; depends=[nnet]; };
   BayesValidate = derive { name="BayesValidate"; version="0.0"; sha256="1gli65avpkb90asx92l1yjbwaxcsyb920idyjwgd2sl2b3l657ly"; depends=[]; };
-  BayesVarSel = derive { name="BayesVarSel"; version="1.5.1"; sha256="0r2al4d74dbra7va88fcazq5h19f0i4wymd39apsz3a3hsb8vdvv"; depends=[MASS]; };
+  BayesVarSel = derive { name="BayesVarSel"; version="1.5.1"; sha256="0r2al4d74dbra7va88fcazq5h19f0i4wymd39apsz3a3hsb8vdvv"; depends=[MASS pkgs.gsl]; };
   BayesX = derive { name="BayesX"; version="0.2-8"; sha256="1kj0xwy972383vx52i8dn7vp0x8r5cbbii0s7nwfz0bn2iaks0c0"; depends=[shapefiles sp maptools colorspace coda]; };
-  BayesXsrc = derive { name="BayesXsrc"; version="2.1-2"; sha256="114804f6maak5dmwzw4cbigjcdw7c6sgx48af35yrvkspi1gsz3b"; depends=[]; };
+  BayesXsrc = derive { name="BayesXsrc"; version="2.1-2"; sha256="114804f6maak5dmwzw4cbigjcdw7c6sgx48af35yrvkspi1gsz3b"; depends=[pkgs.readline]; };
   BayHap = derive { name="BayHap"; version="1.0.1"; sha256="0xqnl2cbf0pyjlpywyy0j4mwknfn8msz4s719dsri3r7hvn9m6kd"; depends=[boa]; };
   BayHaz = derive { name="BayHaz"; version="0.1-3"; sha256="08ilghlkgyma5758yw7mdgqycqcillqmx73knzzdlg2kzc77dvg6"; depends=[]; };
   BaylorEdPsych = derive { name="BaylorEdPsych"; version="0.5"; sha256="1kq6nvzdqwawygp7k62lw5hyccsj81jg82hq60yidgxnmmnnf7y2"; depends=[]; };
@@ -645,7 +647,7 @@ let self = _self // overrides; _self = with self; {
   cdb = derive { name="cdb"; version="0.0.1"; sha256="1rdb4lacjcw67apdyiv7cl1xvv9d1mrzck1qk605n6794k7wf2ys"; depends=[bitops]; };
   CDFt = derive { name="CDFt"; version="1.0.1"; sha256="0sc8ga48l3vvqfjq3ak5j1y27hgr5dw61wp0w5jpwzjz22jzqbap"; depends=[]; };
   CDLasso = derive { name="CDLasso"; version="1.1"; sha256="0n699y18ia2yqpk78mszgggy7jz5dybwsi2y56kdyblddcmz1yv7"; depends=[]; };
-  CDM = derive { name="CDM"; version="3.2-6"; sha256="07vnvqzrs3zny0p2sq0df37jgiwhzrnlgw9p6dd9x9qn5m9asfm6"; depends=[mvtnorm MASS psych polycor sfsmisc Rcpp]; };
+  CDM = derive { name="CDM"; version="3.2-6"; sha256="07vnvqzrs3zny0p2sq0df37jgiwhzrnlgw9p6dd9x9qn5m9asfm6"; depends=[mvtnorm MASS psych polycor sfsmisc Rcpp RcppArmadillo]; };
   CDNmoney = derive { name="CDNmoney"; version="2012.4-1"; sha256="1bnfsygbzdd70m5s9qq7524b1fybdws46axxjbw9dhwqpr8w85id"; depends=[]; };
   CDVine = derive { name="CDVine"; version="1.2"; sha256="1qfjbzdfz2dydkfw3b0jjma4csn62177j5sgzh6rszf0nifsi97g"; depends=[MASS mvtnorm igraph]; };
   cec2005benchmark = derive { name="cec2005benchmark"; version="1.0.3"; sha256="1fc833ji557y2vb6snlxh90gz1n7fxjfkwjmdcmasj1sfzaalsjy"; depends=[]; };
@@ -2660,7 +2662,7 @@ let self = _self // overrides; _self = with self; {
   marg = derive { name="marg"; version="1.2-2"; sha256="0j08zzcrj8nqsargi6xi50gy9pl4smmsp4b7ywlga7r1ga38g82r"; depends=[statmod survival]; };
   margie = derive { name="margie"; version="1.0"; sha256="1jkhg15xdiqjvpzbbc39l8jlfw0yrbarnd3zbgb3p0rh733x5g4j"; depends=[]; };
   marginalmodelplots = derive { name="marginalmodelplots"; version="0.4.2"; sha256="0d7m7sddz9rp1mkvirhcmk7hlbxsag3nm3vqfampnr7l2h158baa"; depends=[locfit]; };
-  markdown = derive { name="markdown"; version="0.6.5"; sha256="0gixql675hyl38cha2xxklx8x2jin88iqs7mndfqmq7mfms62i31"; depends=[]; };
+  markdown = derive { name="markdown"; version="0.7"; sha256="18q1yvzv9fk5j09ngrldm32cnswxhrmqx6g8d17srriis6ng6i5v"; depends=[ mime ]; };
   marked = derive { name="marked"; version="1.1.3"; sha256="0nvk7fq2q7yqxmw507bsbss04wggy13kgvcv5v01g8a0wb3ig9ym"; depends=[R2admb truncnorm coda optimx ggplot2 Matrix numDeriv Rcpp plyr]; };
   MarkedPointProcess = derive { name="MarkedPointProcess"; version="0.2.21"; sha256="06bypa124raa4vbcvi082vpd8bndnar4p1v18dq261z6j3ixk44k"; depends=[RandomFields R2Cuba]; };
   maRketSim = derive { name="maRketSim"; version="0.9.2"; sha256="1cq17zjwyf4i5lcqgxqkw805s4mr6qp89blgpmpxy8gdrbfj93m4"; depends=[]; };
@@ -2670,7 +2672,7 @@ let self = _self // overrides; _self = with self; {
   marqLevAlg = derive { name="marqLevAlg"; version="1.1"; sha256="1wmqi68g0flrlmj87vwgvyxap0miss0n42qiiw7ypyj4jw9kwm8j"; depends=[]; };
   MARSS = derive { name="MARSS"; version="3.9"; sha256="0vn8axzz0nqdcl3w00waghz68z8pvfm764w11kxxigvjpw2plj31"; depends=[nlme mvtnorm KFAS]; };
   maSAE = derive { name="maSAE"; version="0.1-2"; sha256="18a1zbfmjhrmi3fgqd7vaicpsca59kp8r1003pwl7l4032p32fxk"; depends=[]; };
-  MASS = derive { name="MASS"; version="7.3-32"; sha256="1nmd5b9yillca3gczq82n5kpxslkvdhq0nl3cw2wp9s9vax29ymh"; depends=[]; };
+  MASS = derive { name="MASS"; version="7.3-33"; sha256="1bq005zxyc7842z4cz5ilhh917clfdmhg5czfq6plkdgwq8nfhlk"; depends=[]; };
   MASSI = derive { name="MASSI"; version="1.1"; sha256="13kavfsm48qq9zyp10scfjcgrk0x2n4my7cz2xy78s14knlrks5y"; depends=[fpc gplots]; };
   MASSTIMATE = derive { name="MASSTIMATE"; version="1.1"; sha256="10hs2mprdfa747sz2bjy29jixblbnyb744wxf8gh4jq3d5f5xpiq"; depends=[epicalc]; };
   MasterBayes = derive { name="MasterBayes"; version="2.51"; sha256="0mbvhn6yspralmlajimdin14hszh78m0bxb3zdxd73xhjqxl4ixk"; depends=[coda genetics gtools kinship2]; };
@@ -2826,7 +2828,7 @@ let self = _self // overrides; _self = with self; {
   migui = derive { name="migui"; version="0.00-09"; sha256="0mrvsls9q039pay0vf59xwg6bbr7ahwl4x3iwvar6sbfg8606as8"; depends=[tkrplot mi foreign]; };
   MIICD = derive { name="MIICD"; version="1.1"; sha256="0d697mggax1yp7b4dfxdi25rqmwrq25gmmjqsag6sa5raqr96gc9"; depends=[mstate prodlim cmprsk riskRegression MASS survival]; };
   MILC = derive { name="MILC"; version="1.0"; sha256="14xsiw5al6kixwvf3ph0dlm8s13gsbqvzb92da6ng3x4iiyb1g0w"; depends=[]; };
-  mime = derive { name="mime"; version="0.1"; sha256="1qmflb4339mx666ak7h47k5jgvp7prisvpay00b639sg7pwp2hbx"; depends=[]; };
+  mime = derive { name="mime"; version="0.1.1"; sha256="1kgm06n9flw2kh9f63h3i20wg663qscfdvs7dpyb68ic3c7aimci"; depends=[]; };
   MImix = derive { name="MImix"; version="1.0"; sha256="033gxr0z2xba0pgckiigblb1xa94wrfmpgv3j122cdynjch44j4r"; depends=[]; };
   MindOnStats = derive { name="MindOnStats"; version="0.8"; sha256="1fsswkbrxd3f0hz3nd25xvp36si292s4q2r52hw6rsps2mx6bgqi"; depends=[]; };
   minerva = derive { name="minerva"; version="1.3"; sha256="0ph65jfm05wck3zz0lh3bmaj0p4c9309nzkrjpjxqkcnrfdbw6wf"; depends=[]; };
@@ -4005,7 +4007,7 @@ let self = _self // overrides; _self = with self; {
   RcppClassicExamples = derive { name="RcppClassicExamples"; version="0.1.1"; sha256="0shs12y3gj5p7gharjik48dqk0fy4k2jx7h22ppvgbs8z85qjrb8"; depends=[Rcpp RcppClassic]; };
   RcppCNPy = derive { name="RcppCNPy"; version="0.2.3"; sha256="1baz9272vwc44yab7xb6ig0gd2gj8idrhywir2zq77q8bfhqc9gh"; depends=[Rcpp]; };
   RcppDE = derive { name="RcppDE"; version="0.1.2"; sha256="0ji5csfygqvrcahgx5gxy7dddpykckzw8hmqslsdl7l68wj60qkc"; depends=[Rcpp RcppArmadillo]; };
-  RcppEigen = derive { name="RcppEigen"; version="0.3.2.1.1"; sha256="099hrj4r2dh0yfn63lazmqcja1gwxqzy1zlsfia31kkaw6i82g5l"; depends=[Matrix Rcpp]; };
+  RcppEigen = derive { name="RcppEigen"; version="0.3.2.1.2"; sha256="010a27jby8c61mgw2qb47zkln1v33gj0xcn8lf7sw0kb2mdh58yl"; depends=[Matrix Rcpp]; };
   RcppExamples = derive { name="RcppExamples"; version="0.1.6"; sha256="1jnqh9nii5nncsah0lrkls8dqqcka9fnbvfg8ikl4cqjri17rpbv"; depends=[Rcpp]; };
   RcppGSL = derive { name="RcppGSL"; version="0.2.0"; sha256="0qdm5igjrifw8a0m36k9xrbnaj11j18236a1gvdz689vy6a4hfqz"; depends=[Rcpp]; };
   RcppOctave = derive { name="RcppOctave"; version="0.14.1"; sha256="0fdljr0jdnardcm2qm29ibz16xymal8xac3p4grscipa44vm1w0b"; depends=[Rcpp pkgmaker digest stringr]; };

@@ -1,15 +1,14 @@
-{ cabal, byteable, HUnit, QuickCheck, testFramework
-, testFrameworkHunit, testFrameworkQuickcheck2
+{ cabal, byteable, HUnit, QuickCheck, tasty, tastyHunit
+, tastyQuickcheck
 }:
 
 cabal.mkDerivation (self: {
   pname = "cryptohash";
-  version = "0.11.4";
-  sha256 = "1laakkc1xzp2bmai0sfi86784wharqbyanlp1d1f1q6nj318by3y";
+  version = "0.11.6";
+  sha256 = "0dyzcaxr8vhzqq9hj4240rxpi87h4ps87yz09klz723shls26f6s";
   buildDepends = [ byteable ];
   testDepends = [
-    byteable HUnit QuickCheck testFramework testFrameworkHunit
-    testFrameworkQuickcheck2
+    byteable HUnit QuickCheck tasty tastyHunit tastyQuickcheck
   ];
   meta = {
     homepage = "http://github.com/vincenthz/hs-cryptohash";

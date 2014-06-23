@@ -1,25 +1,22 @@
-{ cabal, async, blazeBuilder, blazeBuilderConduit, caseInsensitive
-, conduit, conduitExtra, doctest, hashable, hspec, HTTP, httpDate
-, httpTypes, HUnit, liftedBase, network, networkConduit, QuickCheck
-, simpleSendfile, streamingCommons, text, time, transformers
-, unixCompat, void, wai
+{ cabal, async, blazeBuilder, caseInsensitive, doctest, hashable
+, hspec, HTTP, httpDate, httpTypes, HUnit, liftedBase, network
+, QuickCheck, simpleSendfile, streamingCommons, text, time
+, transformers, unixCompat, void, wai
 }:
 
 cabal.mkDerivation (self: {
   pname = "warp";
-  version = "2.1.5.1";
-  sha256 = "1dx911y3nr2ixsn3zdp1rd97rydnvixr9chs3nmmkswzdg3qihvl";
+  version = "3.0.0.3";
+  sha256 = "0lhmhgbza49lkbay6ydj5h1g04qzs4jx2wyq4bhddjrpmxsdsy2y";
   buildDepends = [
-    blazeBuilder blazeBuilderConduit caseInsensitive conduit
-    conduitExtra hashable httpDate httpTypes liftedBase network
-    networkConduit simpleSendfile streamingCommons text transformers
-    unixCompat void wai
+    blazeBuilder caseInsensitive hashable httpDate httpTypes network
+    simpleSendfile streamingCommons text unixCompat void wai
   ];
   testDepends = [
-    async blazeBuilder blazeBuilderConduit caseInsensitive conduit
-    conduitExtra doctest hashable hspec HTTP httpDate httpTypes HUnit
-    liftedBase network networkConduit QuickCheck simpleSendfile
-    streamingCommons text time transformers unixCompat void wai
+    async blazeBuilder caseInsensitive doctest hashable hspec HTTP
+    httpDate httpTypes HUnit liftedBase network QuickCheck
+    simpleSendfile streamingCommons text time transformers unixCompat
+    void wai
   ];
   doCheck = false;
   meta = {

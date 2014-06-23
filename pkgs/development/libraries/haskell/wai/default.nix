@@ -1,15 +1,11 @@
-{ cabal, blazeBuilder, conduit, conduitExtra, httpTypes, network
-, text, transformers, vault
-}:
+{ cabal, blazeBuilder, hspec, httpTypes, network, text, vault }:
 
 cabal.mkDerivation (self: {
   pname = "wai";
-  version = "2.1.0.2";
-  sha256 = "02hj07s3vlhbd2hds5pyksghildadjqhr8mmiyabwb7ap8iybidg";
-  buildDepends = [
-    blazeBuilder conduit conduitExtra httpTypes network text
-    transformers vault
-  ];
+  version = "3.0.0.2";
+  sha256 = "1zmpalgck8jns45wnlarw26kfw45ml0cp82kdqqpbckscxnr04r1";
+  buildDepends = [ blazeBuilder httpTypes network text vault ];
+  testDepends = [ blazeBuilder hspec ];
   meta = {
     homepage = "https://github.com/yesodweb/wai";
     description = "Web Application Interface";

@@ -480,7 +480,7 @@ in {
           if ! id "${u.name}" &>/dev/null; then
             ${pkgs.shadow}/sbin/useradd \
               -g "${u.group}" \
-              -G "${toString u.extraGroups}" \
+              -G "${concatStringsSep "," u.extraGroups}" \
               -s "${u.shell}" \
               -d "${u.home}" \
               ${optionalString u.isSystemUser "--system"} \
@@ -509,7 +509,7 @@ in {
         message = "uids and gids must be unique!";
       }
       { assertion = cfg.mutableUsers || (nonUidUsers == {});
-        message = "When mutableUsers is false, no uid can be null";
+        message = "When mutableUsers is false, no uid can be null: ${toString (attrNames nonUidUsers)}";
       }
       { assertion = cfg.mutableUsers || (nonGidGroups == {});
         message = "When mutableUsers is false, no gid can be null";

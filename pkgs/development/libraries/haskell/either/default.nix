@@ -1,14 +1,14 @@
-{ cabal, monadControl, MonadRandom, mtl, semigroupoids, semigroups
-, transformers, transformersBase
+{ cabal, exceptions, free, monadControl, MonadRandom, mtl
+, semigroupoids, semigroups, transformers, transformersBase
 }:
 
 cabal.mkDerivation (self: {
   pname = "either";
-  version = "4.1.1";
-  sha256 = "0wipgwrca7bm4rm843gc0p69f2hvm2z067mjrv8qvnivyxhy8i6k";
+  version = "4.3.0.1";
+  sha256 = "1ib6288gxzqfm2y198dzhhq588mlwqxm07pcrj4h66g1mcy54q1f";
   buildDepends = [
-    monadControl MonadRandom mtl semigroupoids semigroups transformers
-    transformersBase
+    exceptions free monadControl MonadRandom mtl semigroupoids
+    semigroups transformers transformersBase
   ];
   noHaddock = self.stdenv.lib.versionOlder self.ghc.version "7.6";
   meta = {

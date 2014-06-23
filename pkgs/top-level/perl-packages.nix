@@ -1631,15 +1631,17 @@ let self = _self // overrides; _self = with self; {
   };
 
   CPANMetaYAML = buildPerlPackage {
-    name = "CPAN-Meta-YAML-0.008";
+    name = "CPAN-Meta-YAML-0.012";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DA/DAGOLDEN/CPAN-Meta-YAML-0.008.tar.gz;
-      sha256 = "1fxc8ybn6mdgzxyq1n69rgihmpfaarfclmbdw2rznya5zg2b0nz0";
+      url = mirror://cpan/authors/id/D/DA/DAGOLDEN/CPAN-Meta-YAML-0.012.tar.gz;
+      sha256 = "7c728c573ba74294d3df2f0cbae2cd1b3830ed47040649b49a33a086b8300d28";
     };
+    buildInputs = [ JSONPP ];
+    doCheck = false; # Test::More too old
     meta = {
-      homepage = https://github.com/dagolden/cpan-meta-yaml;
+      homepage = https://github.com/dagolden/CPAN-Meta-YAML;
       description = "Read and write a subset of YAML for CPAN Meta files";
-      license = "perl5";
+      license = "perl";
     };
   };
 
@@ -1654,6 +1656,14 @@ let self = _self // overrides; _self = with self; {
       homepage = https://github.com/rjbs/cpan-uploader;
       description = "Upload things to the CPAN";
       license = "perl";
+    };
+  };
+
+  CryptBlowfish = buildPerlPackage rec {
+    name = "Crypt-Blowfish-2.14";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DP/DPARIS/${name}.tar.gz";
+      sha256 = "1cb7g8cyfs9alrfdykxhs8m6azj091fmcycz6p5vkxbbzcgl7cs6";
     };
   };
 
@@ -1672,6 +1682,15 @@ let self = _self // overrides; _self = with self; {
       sha256 = "1rypxlhpd1jc0c327aghgl9y6ls47drmpvn0a40b4k3vhfsypc9d";
     };
     buildInputs = [CryptCBC];
+  };
+
+  CryptDH = buildPerlPackage rec {
+    name = "Crypt-DH-0.07";
+    src = fetchurl {
+      url    = "mirror://cpan/authors/id/M/MI/MITHALDU/${name}.tar.gz";
+      sha256 = "0pvzlgwpx8fzdy64ki15155vhsj30i9zxmw6i4p7irh17d1g7368";
+    };
+    buildInputs = [ MathBigInt MathBigIntGMP ];
   };
 
   CryptDHGMP = buildPerlPackage rec {
@@ -1766,6 +1785,16 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/B/BJ/BJKUIT/Crypt-SmbHash-0.12.tar.gz";
       sha256 = "0dxivcqmabkhpz5xzph6rzl8fvq9xjy26b2ci77pv5gsmdzari38";
     };
+  };
+
+  CryptOpenSSLBignum = buildPerlPackage rec {
+    name = "Crypt-OpenSSL-Bignum-0.04";
+    src = fetchurl {
+      url    = "mirror://cpan/authors/id/I/IR/IROBERTS/${name}.tar.gz";
+      sha256 = "18vg2bqyhc0ahfdh5dkbgph5nh92qcz5vi99jq8aam4h86if78bk";
+    };
+    NIX_CFLAGS_COMPILE = "-I${pkgs.openssl}/include";
+    NIX_CFLAGS_LINK = "-L${pkgs.openssl}/lib -lcrypto";
   };
 
   CryptOpenSSLRandom = buildPerlPackage rec {
@@ -2267,6 +2296,18 @@ let self = _self // overrides; _self = with self; {
       homepage = https://github.com/timbunce/devel-sizeme;
       description = "Unknown";
       license = "perl";
+    };
+  };
+
+  DevelTrace = buildPerlPackage {
+    name = "Devel-Trace-0.12";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/M/MJ/MJD/Devel-Trace-0.12.tar.gz;
+      sha256 = "0s1q1a05gk3xvwqkya3k05vqjk13rvb489g0frprhzpzfvvwl0gm";
+    };
+    meta = {
+      description = "Print out each line before it is executed (like sh -x)";
+      license = "Public Domain";
     };
   };
 
@@ -3318,16 +3359,19 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  ExtUtilsMakeMaker = buildPerlPackage rec{
+  ExtUtilsMakeMaker = buildPerlPackage {
     name = "ExtUtils-MakeMaker-6.98";
     src = fetchurl {
-      url = "mirror://cpan/modules/by-module/ExtUtils/${name}.tar.gz";
-      sha256 = "1vv3v9rc2dnx8amwa7lpdywg3lakx7yv2n38qvfbk9jzkqc27c1f";
+      url = mirror://cpan/authors/id/B/BI/BINGOS/ExtUtils-MakeMaker-6.98.tar.gz;
+      sha256 = "2eb023189e5fa6b9dcc66858b1fde953d1f1b86f971ec5ab42dd36c172da63ef";
     };
     propagatedBuildInputs =
-      [ ParseCPANMeta version JSONPP CPANMetaYAML CPANMeta
-        FileCopyRecursive VersionRequirements ExtUtilsManifest
-      ];
+      [ ParseCPANMeta JSONPP JSONPPCompat5006 CPANMetaYAML FileCopyRecursive ];
+    meta = {
+      homepage = https://metacpan.org/release/ExtUtils-MakeMaker;
+      description = "Create a module Makefile";
+      license = "perl";
+    };
   };
 
   ExtUtilsManifest = buildPerlPackage rec {
@@ -3534,12 +3578,13 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ HTTPDate ];
   };
 
-  FileMimeInfo = buildPerlPackage {
-    name = "File-MimeInfo-0.20";
+  FileMimeInfo = buildPerlPackage rec {
+    name = "File-MimeInfo-0.23";
     src = fetchurl {
-      url = "http://search.cpan.org/CPAN/authors/id/M/MI/MICHIELB/File-MimeInfo-0.20.tar.gz";
-      sha256 = "1738yi3a0xcbvffqymjb6cyh999q4pryalfwbkmdbjdks2y0bxz0";
+      url = "mirror://cpan/modules/by-module/File/${name}.tar.gz";
+      sha256 = "006i9idnxv9hsz1gykc5bqs05ma5wz9dsjrpmah9293bgdy1ccxj";
     };
+    doCheck = false; # Failed test 'desktop file is the right one'
     propagatedBuildInputs = [ FileBaseDir FileDesktopEntry ];
   };
 
@@ -4616,6 +4661,18 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  JSONPPCompat5006 = buildPerlPackage {
+    name = "JSON-PP-Compat5006-1.09";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/M/MA/MAKAMAKA/JSON-PP-Compat5006-1.09.tar.gz;
+      sha256 = "197030df52635f9bbe25af10742eea5bd74971473118c11311fcabcb62e3716a";
+    };
+    meta = {
+      description = "Helper module in using JSON::PP in Perl 5.6";
+      license = "perl";
+    };
+  };
+
   JSONXS = buildPerlPackage {
     name = "JSON-XS-2.34";
     src = fetchurl {
@@ -5022,6 +5079,27 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  MathBigInt = buildPerlPackage rec {
+    name ="Math-BigInt-1.9993";
+    src = fetchurl {
+      url    = "mirror://cpan/authors/id/P/PJ/PJACKLAM/${name}.tar.gz";
+      sha256 = "0zmzd4d2sjnhg5cdnqvqj78w5dkickszlxv1csdxsgdvmz8w0dyr";
+    };
+  };
+
+  MathBigIntGMP = buildPerlPackage rec {
+    name = "Math-BigInt-GMP-1.38";
+    src = fetchurl {
+      url    = "mirror://cpan/authors/id/P/PJ/PJACKLAM/${name}.tar.gz";
+      sha256 = "05bg10gg3ksn4h08yyyj7f31rqhdqap8d0jsbq61b3x0274wml0s";
+    };
+    buildInputs = [ pkgs.gmp ];
+    doCheck = false;
+    NIX_CFLAGS_COMPILE = "-I${pkgs.gmp}/include";
+    NIX_CFLAGS_LINK = "-L${pkgs.gmp}/lib -lgmp";
+  };
+
+
   MathClipper = buildPerlModule rec {
     name = "Math-Clipper-1.22";
     src = fetchurl {
@@ -5210,6 +5288,20 @@ let self = _self // overrides; _self = with self; {
     meta = {
       homepage = https://github.com/rjbs/mixin-linewise;
       description = "Write your linewise code for handles; this does the rest";
+      license = "perl";
+    };
+  };
+
+  ModernPerl = buildPerlPackage {
+    name = "Modern-Perl-1.20140107";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/C/CH/CHROMATIC/Modern-Perl-1.20140107.tar.gz;
+      sha256 = "9cf66b2f93340dfe1cd7162262a47e7c4ba82475a52dc2a036c2fdc8a65298b8";
+    };
+    propagatedBuildInputs = [ perl ];
+    meta = {
+      homepage = https://github.com/chromatic/Modern-Perl;
+      description = "Enable all of the features of Modern Perl with one import";
       license = "perl";
     };
   };
@@ -6596,13 +6688,18 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  ParseCPANMeta = buildPerlPackage rec {
-    name = "Parse-CPAN-Meta-1.4409";
+  ParseCPANMeta = buildPerlPackage {
+    name = "Parse-CPAN-Meta-1.4414";
     src = fetchurl {
-      url = "mirror://cpan/modules/by-module/Parse/${name}.tar.gz";
-      sha256 = "0b7cp78zajmwf4a0968p3b2bb00axkxj3a9nq1rx8cb17hhva819";
+      url = mirror://cpan/authors/id/D/DA/DAGOLDEN/Parse-CPAN-Meta-1.4414.tar.gz;
+      sha256 = "cd7608154dfb72c9e110f012befe6b75d78448cb3e761716b60aa7545e16ca1b";
     };
     propagatedBuildInputs = [ CPANMetaYAML JSONPP ];
+    meta = {
+      homepage = https://github.com/Perl-Toolchain-Gang/Parse-CPAN-Meta;
+      description = "Parse META.yml and META.json CPAN metadata files";
+      license = "perl";
+    };
   };
 
   ParseRecDescent = buildPerlPackage rec {
@@ -7460,7 +7557,7 @@ let self = _self // overrides; _self = with self; {
       sha256 = "8e7dae184444e27ee959e33b3ae161cc83115d11da189ed5003b004450e04b48";
     };
     meta = {
-      homepage = http://web-cpan.berlios.de/modules/Statistics-Descriptive/;
+      #homepage = http://web-cpan.berlios.de/modules/Statistics-Descriptive/; # berlios shut down; I found no replacement
       description = "Module of basic descriptive statistical functions";
       license = "perl";
     };
@@ -9086,6 +9183,18 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  TieHashIndexed = buildPerlPackage {
+    name = "Tie-Hash-Indexed-0.05";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/M/MH/MHX/Tie-Hash-Indexed-0.05.tar.gz;
+      sha256 = "a8862a4763d58a8c785e34b8b18e5db4ce5c3e36b9b5cf565a3088584eab361e";
+    };
+    meta = {
+      description = "Ordered hashes for Perl";
+      license = "perl";
+    };
+  };
+
   TieToObject = buildPerlPackage {
     name = "Tie-ToObject-0.03";
     src = fetchurl {
@@ -9208,10 +9317,14 @@ let self = _self // overrides; _self = with self; {
   };
 
   UNIVERSALrequire = buildPerlPackage {
-    name = "UNIVERSAL-require-0.16";
+    name = "UNIVERSAL-require-0.17";
     src = fetchurl {
-      url = mirror://cpan/authors/id/N/NE/NEILB/UNIVERSAL-require-0.16.tar.gz;
-      sha256 = "0fbx3f39lvck3n4ksqwji5m1hfdagx25jk5kg2h0gkb01jwz3za2";
+      url = mirror://cpan/authors/id/N/NE/NEILB/UNIVERSAL-require-0.17.tar.gz;
+      sha256 = "5dc9f13f2d2bbdf852387e2a63c0753728c2bea9125dd628c313db3ef66ec4c3";
+    };
+    meta = {
+      description = "Require() modules from a variable";
+      license = "perl";
     };
   };
 

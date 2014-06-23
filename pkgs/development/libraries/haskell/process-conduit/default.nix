@@ -11,6 +11,7 @@ cabal.mkDerivation (self: {
     text
   ];
   testDepends = [ conduit hspec ];
+  doCheck = false;
   meta = {
     homepage = "http://github.com/tanakh/process-conduit";
     description = "Conduits for processes";

@@ -1,22 +1,22 @@
 { cabal, aeson, attoparsec, dataDefault, filepath, ghcPaths, groom
 , haskellNames, haskellPackages, haskellSrcExts, languageEcmascript
 , mtl, optparseApplicative, safe, sourcemap, split, spoon, syb
-, tasty, tastyHunit, tastyTh, text, transformers, uniplate
+, tasty, tastyHunit, tastyTh, text, time, transformers, uniplate
 , unorderedContainers, utf8String, vector
 }:
 
 cabal.mkDerivation (self: {
   pname = "fay";
-  version = "0.20.0.0";
-  sha256 = "04rjmn280f87xlzv4h9as3cxnwaapfvpvq7zaig2rrw0l342pxy0";
+  version = "0.20.1.1";
+  sha256 = "0jcvq880xnkm8aqr69ihwf7by55fc1bbd8wk8152zqgkih74qzc4";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
     aeson attoparsec dataDefault filepath ghcPaths groom haskellNames
     haskellPackages haskellSrcExts languageEcmascript mtl
     optparseApplicative safe sourcemap split spoon syb tasty tastyHunit
-    tastyTh text transformers uniplate unorderedContainers utf8String
-    vector
+    tastyTh text time transformers uniplate unorderedContainers
+    utf8String vector
   ];
   meta = {
     homepage = "http://fay-lang.org/";

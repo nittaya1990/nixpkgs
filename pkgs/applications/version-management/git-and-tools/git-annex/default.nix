@@ -1,50 +1,44 @@
 { cabal, aeson, async, blazeBuilder, bloomfilter, bup, byteable
 , caseInsensitive, clientsession, cryptoApi, cryptohash, curl
 , dataDefault, dataenc, DAV, dbus, dlist, dns, editDistance
-, extensibleExceptions, fdoNotify, feed, filepath, git, gnupg1
-, gnutls, hamlet, hinotify, hS3, hslogger, HTTP, httpClient
+, exceptions, extensibleExceptions, fdoNotify, feed, filepath, git
+, gnupg1, gnutls, hamlet, hinotify, hS3, hslogger, HTTP, httpClient
 , httpConduit, httpTypes, IfElse, json, liftedBase, lsof, MissingH
-, MonadCatchIOTransformers, monadControl, mtl, network
-, networkConduit, networkInfo, networkMulticast
-, networkProtocolXmpp, openssh, optparseApplicative, perl
-, QuickCheck, random, regexTdfa, rsync, SafeSemaphore, securemem
-, SHA, shakespeare, stm, tasty, tastyHunit, tastyQuickcheck
-, tastyRerun, text, time, transformers, unixCompat, utf8String
-, uuid, wai, waiLogger, warp, warpTls, which, xmlTypes, yesod
-, yesodCore, yesodDefault, yesodForm, yesodStatic
+, monadControl, mtl, network, networkConduit, networkInfo
+, networkMulticast, networkProtocolXmpp, openssh
+, optparseApplicative, perl, QuickCheck, random, regexTdfa, rsync
+, SafeSemaphore, securemem, SHA, shakespeare, stm, tasty
+, tastyHunit, tastyQuickcheck, tastyRerun, text, time, transformers
+, unixCompat, utf8String, uuid, wai, waiExtra, warp, warpTls, which
+, xmlTypes, yesod, yesodCore, yesodDefault, yesodForm, yesodStatic
+, fsnotify
 }:
 
 cabal.mkDerivation (self: {
   pname = "git-annex";
-  version = "5.20140421";
-  sha256 = "1ahn62gmgszssl2ni7b6rran548wjkb10035hrgvag6dwiiyik9g";
+  version = "5.20140613";
+  sha256 = "01khqy68w1rqxic9lqal7902cv89d10xvbzmvlsx99g70ljqfafi";
   isLibrary = false;
   isExecutable = true;
   buildDepends = [
     aeson async blazeBuilder bloomfilter byteable caseInsensitive
-    clientsession cryptoApi cryptohash dataDefault dataenc DAV dbus
-    dlist dns editDistance extensibleExceptions fdoNotify feed filepath
-    gnutls hamlet hinotify hS3 hslogger HTTP httpClient httpConduit
-    httpTypes IfElse json liftedBase MissingH MonadCatchIOTransformers
-    monadControl mtl network networkConduit networkInfo
-    networkMulticast networkProtocolXmpp optparseApplicative QuickCheck
-    random regexTdfa SafeSemaphore securemem SHA shakespeare stm tasty
-    tastyHunit tastyQuickcheck tastyRerun text time transformers
-    unixCompat utf8String uuid wai waiLogger warp warpTls xmlTypes
-    yesod yesodCore yesodDefault yesodForm yesodStatic
-  ];
+    clientsession cryptoApi cryptohash dataDefault dataenc DAV
+    dlist dns editDistance exceptions extensibleExceptions
+    feed filepath gnutls hamlet hS3 hslogger HTTP httpClient
+    httpConduit httpTypes IfElse json liftedBase MissingH monadControl
+    mtl network networkConduit networkInfo networkMulticast
+    networkProtocolXmpp optparseApplicative QuickCheck random regexTdfa
+    SafeSemaphore securemem SHA shakespeare stm tasty tastyHunit
+    tastyQuickcheck tastyRerun text time transformers unixCompat
+    utf8String uuid wai waiExtra warp warpTls xmlTypes yesod yesodCore
+    yesodDefault yesodForm yesodStatic
+  ] ++ (if (!self.stdenv.isDarwin) then [
+    dbus fdoNotify hinotify
+  ] else [
+    fsnotify
+  ]);
   buildTools = [ bup curl git gnupg1 lsof openssh perl rsync which ];
-  configureFlags = "-fS3
-                    -fWebDAV
-                    -fInotify
-                    -fDbus
-                    -fAssistant
-                    -fWebapp
-                    -fPairing
-                    -fXMPP
-                    -fDNS
-                    -fProduction
-                    -fTDFA";
+  configureFlags = "-fAssistant -fProduction";
   preConfigure = ''
     export HOME="$NIX_BUILD_TOP/tmp"
     mkdir "$HOME"

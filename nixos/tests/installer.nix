@@ -129,9 +129,10 @@ let
       #$machine->waitForUnit('getty@tty2');
       $machine->waitForUnit("rogue");
       $machine->waitForUnit("nixos-manual");
-      $machine->waitForUnit("dhcpcd");
 
       ${optionalString testChannel ''
+        $machine->waitForUnit("dhcpcd");
+
         # Allow the machine to talk to the fake nixos.org.
         $machine->succeed(
             "rm /etc/hosts",
@@ -145,6 +146,9 @@ let
         $machine->succeed("hello") =~ /Hello, world/
             or die "bad `hello' output";
       ''}
+
+      # Wait for hard disks to appear in /dev
+      $machine->succeed("udevadm settle");
 
       # Partition the disk.
       ${createPartitions}
@@ -161,10 +165,10 @@ let
           "/mnt/etc/nixos/configuration.nix");
 
       # Perform the installation.
-      $machine->succeed("nixos-install >&2");
+      $machine->succeed("nixos-install < /dev/null >&2");
 
       # Do it again to make sure it's idempotent.
-      $machine->succeed("nixos-install >&2");
+      $machine->succeed("nixos-install < /dev/null >&2");
 
       $machine->succeed("umount /mnt/boot || true");
       $machine->succeed("umount /mnt");
@@ -173,7 +177,7 @@ let
       $machine->shutdown;
 
       # Now see if we can boot the installation.
-      my $machine = createMachine({ ${hdFlags} qemuFlags => "${qemuFlags}" });
+      $machine = createMachine({ ${hdFlags} qemuFlags => "${qemuFlags}" });
 
       # Did /boot get mounted?
       $machine->waitForUnit("local-fs.target");
@@ -205,7 +209,7 @@ let
 
       # And just to be sure, check that the machine still boots after
       # "nixos-rebuild switch".
-      my $machine = createMachine({ ${hdFlags} qemuFlags => "${qemuFlags}" });
+      $machine = createMachine({ ${hdFlags} qemuFlags => "${qemuFlags}" });
       $machine->waitForUnit("network.target");
       $machine->shutdown;
     '';

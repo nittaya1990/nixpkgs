@@ -1,5 +1,7 @@
 { stdenv, fetchurl, noSysDirs
 , langC ? true, langCC ? true, langFortran ? false
+, langObjC ? stdenv.isDarwin
+, langObjCpp ? stdenv.isDarwin
 , langJava ? false
 , langAda ? false
 , langVhdl ? false
@@ -52,7 +54,7 @@ assert langGo -> langCC;
 with stdenv.lib;
 with builtins;
 
-let version = "4.8.2";
+let version = "4.8.3";
 
     # Whether building a cross-compiler for GNU/Hurd.
     crossGNU = cross != null && cross.config == "i586-pc-gnu";
@@ -62,7 +64,7 @@ let version = "4.8.2";
   */
     enableParallelBuilding = !profiledCompiler;
 
-    patches = [ ./bug-58800.patch ] # http://gcc.gnu.org/bugzilla/show_bug.cgi?id=58800
+    patches = []
       ++ optional enableParallelBuilding ./parallel-bconfig.patch
       ++ optional (cross != null) ./libstdc++-target.patch
       # ++ optional noSysDirs ./no-sys-dirs.patch
@@ -160,6 +162,7 @@ let version = "4.8.2";
           " --disable-libgomp " +
           " --disable-libquadmath" +
           " --disable-shared" +
+          " --disable-libatomic " +  # libatomic requires libc
           " --disable-decimal-float" # libdecnumber requires libc
           else
           (if crossDarwin then " --with-sysroot=${libcCross}/share/sysroot"
@@ -209,7 +212,7 @@ stdenv.mkDerivation ({
 
   src = fetchurl {
     url = "mirror://gnu/gcc/gcc-${version}/gcc-${version}.tar.bz2";
-    sha256 = "1j6dwgby4g3p3lz7zkss32ghr45zpdidrg8xvazvn91lqxv25p09";
+    sha256 = "07hg10zs7gnqz58my10ch0zygizqh0z0bz6pv4pgxx45n48lz3ka";
   };
 
   inherit patches;
@@ -351,6 +354,8 @@ stdenv.mkDerivation ({
         ++ optional langAda      "ada"
         ++ optional langVhdl     "vhdl"
         ++ optional langGo       "go"
+        ++ optional langObjC     "objc"
+        ++ optional langObjCpp   "obj-c++"
         ++ optionals crossDarwin [ "objc" "obj-c++" ]
         )
       )
@@ -489,7 +494,7 @@ stdenv.mkDerivation ({
     else null;
 
   passthru =
-    { inherit langC langCC langAda langFortran langVhdl langGo enableMultilib version; };
+    { inherit langC langCC langObjC langObjCpp langAda langFortran langVhdl langGo enableMultilib version; };
 
   inherit enableParallelBuilding;
 

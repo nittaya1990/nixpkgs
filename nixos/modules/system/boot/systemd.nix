@@ -15,13 +15,13 @@ let
       pkgs.runCommand "unit" { preferLocalBuild = true; inherit (unit) text; }
         ''
           mkdir -p $out
-          echo -n "$text" > $out/${name}
+          echo -n "$text" > $out/${shellEscape name}
         ''
     else
       pkgs.runCommand "unit" { preferLocalBuild = true; }
         ''
           mkdir -p $out
-          ln -s /dev/null $out/${name}
+          ln -s /dev/null $out/${shellEscape name}
         '';
 
   upstreamSystemUnits =
@@ -187,9 +187,11 @@ let
       "timers.target"
     ];
 
+  shellEscape = s: (replaceChars [ "\\" ] [ "\\\\" ] s);
+
   makeJobScript = name: text:
-    let x = pkgs.writeTextFile { name = "unit-script"; executable = true; destination = "/bin/${name}"; inherit text; };
-    in "${x}/bin/${name}";
+    let x = pkgs.writeTextFile { name = "unit-script"; executable = true; destination = "/bin/${shellEscape name}"; inherit text; };
+    in "${x}/bin/${shellEscape name}";
 
   unitConfig = { name, config, ... }: {
     config = {
@@ -704,6 +706,13 @@ in
       description = "Definition of systemd per-user service units.";
     };
 
+    systemd.user.sockets = mkOption {
+      default = {};
+      type = types.attrsOf types.optionSet;
+      options = [ socketOptions unitConfig ];
+      description = "Definition of systemd per-user socket units.";
+    };
+
   };
 
 
@@ -790,7 +799,8 @@ in
                        in nameValuePair "${n}.automount" (automountToUnit n v)) cfg.automounts);
 
     systemd.user.units =
-      mapAttrs' (n: v: nameValuePair "${n}.service" (serviceToUnit n v)) cfg.user.services;
+      mapAttrs' (n: v: nameValuePair "${n}.service" (serviceToUnit n v)) cfg.user.services
+      // mapAttrs' (n: v: nameValuePair "${n}.socket" (socketToUnit n v)) cfg.user.sockets;
 
     system.requiredKernelConfig = map config.lib.kernelConfig.isEnabled
       [ "DEVTMPFS" "CGROUPS" "INOTIFY_USER" "SIGNALFD" "TIMERFD" "EPOLL" "NET"
@@ -836,6 +846,8 @@ in
         # Please change the option ‘systemd.tmpfiles.rules’ instead.
         ${concatStringsSep "\n" cfg.tmpfiles.rules}
       '';
+
+    systemd.services."user@".restartIfChanged = false;
 
   };
 }
