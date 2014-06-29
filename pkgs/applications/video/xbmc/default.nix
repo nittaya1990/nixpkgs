@@ -90,7 +90,8 @@ stdenv.mkDerivation rec {
           --prefix PATH ":" "${xdpyinfo}/bin" \
           --prefix LD_LIBRARY_PATH ":" "${curl}/lib" \
           --prefix LD_LIBRARY_PATH ":" "${systemd}/lib" \
-          --prefix LD_LIBRARY_PATH ":" "${libvdpau}/lib"
+          --prefix LD_LIBRARY_PATH ":" "${libvdpau}/lib" \
+          --prefix LD_LIBRARY_PATH ":" "${libmad}/lib"
       done
     '';
 
