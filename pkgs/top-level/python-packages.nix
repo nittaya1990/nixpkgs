@@ -67,6 +67,28 @@ rec {
     inherit python;
   };
 
+  discid = buildPythonPackage rec {
+    name = "discid-1.1.0";
+
+    meta = with stdenv.lib; {
+      description = "Python binding of libdiscid";
+      homepage    = "https://python-discid.readthedocs.org/";
+      license     = licenses.lgpl3Plus;
+      platforms   = platforms.linux;
+      maintainer  = with maintainers; [ iyzsong ];
+    };
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/d/discid/${name}.tar.gz";
+      md5 = "2ad2141452dd10b03ad96ccdad075235";
+    };
+
+    patchPhase = ''
+      substituteInPlace discid/libdiscid.py \
+        --replace '_open_library(_LIB_NAME)' "_open_library('${pkgs.libdiscid}/lib/libdiscid.so.0')"
+    '';
+  };
+
   ipython = import ../shells/ipython {
     inherit (pkgs) stdenv fetchurl sip pyqt4;
     inherit buildPythonPackage pythonPackages;
@@ -144,6 +166,12 @@ rec {
   sip = import ../development/python-modules/sip {
     inherit (pkgs) stdenv fetchurl;
     inherit python;
+  };
+
+  tables = import ../development/python-modules/tables {
+    inherit (pkgs) stdenv fetchurl bzip2 lzo;
+    inherit python buildPythonPackage cython numpy numexpr;
+    hdf5 = pkgs.hdf5.override { zlib = pkgs.zlib; };
   };
 
   # packages defined here
@@ -873,6 +901,7 @@ rec {
   # A patched version of buildout, useful for buildout based development on Nix
   zc_buildout_nix = callPackage ../development/python-modules/buildout-nix { };
 
+  zc_recipe_egg = zc_recipe_egg_buildout171;
   zc_buildout = zc_buildout171;
   zc_buildout2 = zc_buildout221;
   zc_buildout221 = buildPythonPackage rec {
@@ -925,6 +954,29 @@ rec {
       license = licenses.zpt21;
       maintainers = [ stdenv.lib.maintainers.garbas ];
     };
+  };
+
+  zc_recipe_egg_fun = { buildout, version, md5 }: buildPythonPackage rec {
+    inherit version;
+    name = "zc.recipe.egg-${version}";
+
+    buildInputs = [ buildout ];
+    doCheck = false;
+
+    src = fetchurl {
+      inherit md5;
+      url = "https://pypi.python.org/packages/source/z/zc.recipe.egg/zc.recipe.egg-${version}.tar.gz";
+    };
+  };
+  zc_recipe_egg_buildout171 = zc_recipe_egg_fun {
+    buildout = zc_buildout171;
+    version = "1.3.2";
+    md5 = "1cb6af73f527490dde461d3614a36475";
+  };
+  zc_recipe_egg_buildout2 = zc_recipe_egg_fun {
+    buildout = zc_buildout2;
+    version = "2.0.1";
+    md5 = "5e81e9d4cc6200f5b1abcf7c653dd9e3";
   };
 
   bunch = buildPythonPackage (rec {
@@ -998,6 +1050,20 @@ rec {
       description = "A pythonic, object-oriented HTTP framework";
     };
   });
+
+
+  click = buildPythonPackage {
+    name = "click-2.1";
+    src = fetchurl {
+      url = https://pypi.python.org/packages/source/c/click/click-2.1.tar.gz;
+      md5 = "0ba97ba09af82c56e2d35f3412d0aa6e";
+    };
+    meta = {
+      homepage = "http://click.pocoo.org/";
+      description = "Click is a Python package for creating beautiful command line interfaces in a composable way with as little code as necessary.";
+      license = "bsd, 3-clause";
+    };
+  };
 
 
   clepy = buildPythonPackage rec {
@@ -2234,6 +2300,37 @@ rec {
     };
   };
 
+  radicale = buildPythonPackage rec {
+    name = "radicale-${version}";
+    namePrefix = "";
+    version = "0.9b1";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/R/Radicale/Radicale-${version}.tar.gz";
+      sha256 = "3a8451909de849f173f577ddec0a085f19040dbb6aa13d5256208a0f8e11d88d";
+    };
+
+    propagatedBuildInputs = with pythonPackages; [
+      flup
+      ldap
+      sqlalchemy
+    ];
+
+    doCheck = false;
+
+    meta = {
+      homepage = "http://www.radicale.org/";
+      longDescription = ''
+        The Radicale Project is a complete CalDAV (calendar) and CardDAV
+        (contact) server solution. Calendars and address books are available for
+        both local and remote access, possibly limited through authentication
+        policies. They can be viewed and edited by calendar and contact clients
+        on mobile phones or computers.
+      '';
+      license = stdenv.lib.licenses.gpl3Plus;
+      maintainers = [ stdenv.lib.maintainers.edwtjo ];
+    };
+  };
 
   raven = buildPythonPackage rec {
     name = "raven-3.4.1";
@@ -4601,6 +4698,43 @@ rec {
     };
   };
 
+  numexpr = buildPythonPackage rec {
+    version = "2.4";
+    name = "numexpr-${version}";
+
+    src = fetchgit {
+      url = https://github.com/pydata/numexpr.git;
+      rev = "606cc9a110711e947d35ac2770749c00dab184c8";
+      sha256 = "1gxgkg7ncgjhnifn444iha5nrjhyr8sr6w5yp204186a1ysz858g";
+    };
+
+    propagatedBuildInputs = with pkgs; [ numpy ];
+
+    # Run the test suite.
+    # It requires the build path to be in the python search path.
+    checkPhase = ''
+      ${python}/bin/${python.executable} <<EOF
+      import sysconfig
+      import sys
+      import os
+      f = "lib.{platform}-{version[0]}.{version[1]}"
+      lib = f.format(platform=sysconfig.get_platform(),
+                     version=sys.version_info)
+      build = os.path.join(os.getcwd(), 'build', lib)
+      sys.path.insert(0, build)
+      import numexpr
+      r = numexpr.test()
+      if not r.wasSuccessful():
+          sys.exit(1)
+      EOF
+    '';
+
+    meta = {
+      description = "Fast numerical array expression evaluator for NumPy";
+      homepage = "https://github.com/pydata/numexpr";
+    };
+  };
+
   numpy = buildPythonPackage ( rec {
     name = "numpy-1.7.1";
 
@@ -4835,11 +4969,11 @@ rec {
   });
 
   pandas = buildPythonPackage rec {
-    name = "pandas-0.12.0";
+    name = "pandas-0.14.0";
 
     src = fetchurl {
       url = "https://pypi.python.org/packages/source/p/pandas/${name}.tar.gz";
-      sha256 = "0vf865wh1kcq33189ykqgngb25nxhxxch6skfdl3c6w024v4r6xy";
+      sha256 = "f7997debca756c4dd5ccdf5a010dfe3d1c7dac98ee706b715d994cf7c9d35528";
     };
 
     buildInputs = [ nose ];
@@ -5012,11 +5146,11 @@ rec {
   };
 
   pip = buildPythonPackage rec {
-    version = "1.5";
+    version = "1.5.6";
     name = "pip-${version}";
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/p/pip/pip-${version}.tar.gz";
-      sha256 = "0j700f70mj0brdlvs2cz4a7h4jwmzgymgp8qk1qb3lsm1qd1vy15";
+      md5 = "01026f87978932060cc86c1dc527903e";
     };
     buildInputs = [ mock scripttest virtualenv pytest ];
   };
@@ -5075,13 +5209,13 @@ rec {
   };
 
   plumbum = buildPythonPackage rec {
-    name = "plumbum-1.2.0";
+    name = "plumbum-1.4.2";
 
     buildInputs = [ pythonPackages.six ];
 
     src = fetchurl {
-      url = "https://pypi.python.org/packages/source/p/plumbum/plumbum-1.2.0.tar.gz";
-      md5 = "18b7f888dfaf62a48df937abffe07897";
+      url = "https://pypi.python.org/packages/source/p/plumbum/${name}.tar.gz";
+      md5 = "38b526af9012a5282ae91dfe372cefd3";
     };
   };
 
