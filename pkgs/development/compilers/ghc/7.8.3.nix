@@ -1,11 +1,11 @@
 { stdenv, fetchurl, ghc, perl, gmp, ncurses }:
 
 stdenv.mkDerivation rec {
-  version = "7.8.2";
+  version = "7.8.3";
   name = "ghc-${version}";
 
   src = fetchurl {
-    url = "http://www.haskell.org/ghc/dist/7.8.2/${name}-src.tar.xz";
+    url = "http://www.haskell.org/ghc/dist/7.8.3/${name}-src.tar.xz";
     sha256 = "15kyz98zq22sgwkzy2bkx0yz98qkrzgdigz919vafd7fxnkf3la5";
   };
 
