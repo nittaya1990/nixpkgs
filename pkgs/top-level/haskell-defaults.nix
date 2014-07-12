@@ -20,16 +20,13 @@
     transformersCompat = super.transformersCompat_0_3_3;
   };
 
-  ghc783Prefs = self : super : super // {
-  };
-
-  ghc782Prefs = self : super : ghcHEADPrefs self super // {
+  ghc783Prefs = self : super : ghcHEADPrefs self super // {
     cabalInstall_1_20_0_3 = super.cabalInstall_1_20_0_3.override { Cabal = self.Cabal_1_20_0_1; };
     codex = super.codex.override { hackageDb = super.hackageDb.override { Cabal = self.Cabal_1_20_0_1; }; };
     mtl = self.mtl_2_1_2;
   };
 
-  ghc763Prefs = self : super : ghc782Prefs self super // {
+  ghc763Prefs = self : super : ghc783Prefs self super // {
     ariadne = super.ariadne.override {
       haskellNames = self.haskellNames.override {
         haskellPackages = self.haskellPackages.override { Cabal = self.Cabal_1_18_1_3; };
@@ -221,16 +218,6 @@
     packages { ghcPath = ../development/compilers/ghc/7.8.3.nix;
                ghcBinary = ghc742Binary;
                prefFun = ghc783Prefs;
-               extraArgs = {
-                 happy = pkgs.haskellPackages_ghc742.happy_1_19_3;
-                 alex = pkgs.haskellPackages_ghc742.alex_3_1_3;
-               };
-             };
-
-  packages_ghc782 =
-    packages { ghcPath = ../development/compilers/ghc/7.8.2.nix;
-               ghcBinary = ghc742Binary;
-               prefFun = ghc782Prefs;
              };
 
   packages_ghc763 =
