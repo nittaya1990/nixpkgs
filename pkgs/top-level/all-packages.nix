@@ -593,6 +593,8 @@ let
 
   bfr = callPackage ../tools/misc/bfr { };
 
+  bitbucket-cli = pythonPackages.bitbucket-cli;
+
   blockdiag = pythonPackages.blockdiag;
 
   bmon = callPackage ../tools/misc/bmon { };
@@ -646,6 +648,8 @@ let
   mpdcron = callPackage ../tools/audio/mpdcron { };
 
   syslogng = callPackage ../tools/system/syslog-ng { };
+
+  syslogng_incubator = callPackage ../tools/system/syslog-ng-incubator { };
 
   rsyslog = callPackage ../tools/system/rsyslog { };
 
@@ -982,6 +986,8 @@ let
   evtest = callPackage ../applications/misc/evtest { };
 
   exempi = callPackage ../development/libraries/exempi { };
+
+  exercism = callPackage ../development/tools/exercism { };
 
   exif = callPackage ../tools/graphics/exif { };
 
@@ -1941,6 +1947,8 @@ let
 
   rdmd = callPackage ../development/compilers/rdmd { };
 
+  riemann_c_client = callPackage ../tools/misc/riemann-c-client { };
+
   ripmime = callPackage ../tools/networking/ripmime {};
 
   rkflashtool = callPackage ../tools/misc/rkflashtool { };
@@ -2209,6 +2217,8 @@ let
   usbmuxd = callPackage ../tools/misc/usbmuxd {};
 
   vacuum = callPackage ../applications/networking/instant-messengers/vacuum {};
+
+  volatility = callPackage ../tools/security/volatility { };
 
   vidalia = callPackage ../tools/security/vidalia { };
 
@@ -3475,6 +3485,7 @@ let
   lua5_sockets = callPackage ../development/interpreters/lua-5/sockets.nix {};
   lua5_expat = callPackage ../development/interpreters/lua-5/expat.nix {};
   lua5_filesystem = callPackage ../development/interpreters/lua-5/filesystem.nix {};
+  lua5_sec = callPackage ../development/interpreters/lua-5/sec.nix {};
 
   luarocks = callPackage ../development/tools/misc/luarocks {
      lua = lua5;
@@ -3556,17 +3567,26 @@ let
     llvm = llvm_33 ;
   };
 
+  python = python2;
+  python2 = python27;
+  python3 = python34;
+
+  # pythonPackages further below, but assigned here because they need to be in sync
+  pythonPackages = python2Packages;
+  python2Packages = python27Packages;
+  python3Packages = python34Packages;
+
+  pythonFull = python2Full;
+  python2Full = python27Full;
+
   python26 = callPackage ../development/interpreters/python/2.6 { db = db47; };
-  python27 = callPackage ../development/interpreters/python/2.7 { libX11 = xlibs.libX11; };
+  python27 = callPackage ../development/interpreters/python/2.7 { };
   python32 = callPackage ../development/interpreters/python/3.2 { };
   python33 = callPackage ../development/interpreters/python/3.3 { };
   python34 = hiPrio (callPackage ../development/interpreters/python/3.4 { });
-  python = python27;
-  python3 = python3Packages.python;
 
   pypy = callPackage ../development/interpreters/pypy/2.3 { };
 
-  pythonFull = python27Full;
   python26Full = callPackage ../development/interpreters/python/wrapper.nix {
     extraLibs = [];
     postBuild = "";
@@ -5200,6 +5220,8 @@ let
     useGTK = config.libiodbc.gtk or false;
   };
 
+  libivykis = callPackage ../development/libraries/libivykis { };
+
   liblastfmSF = callPackage ../development/libraries/liblastfmSF { };
 
   liblastfm = callPackage ../development/libraries/liblastfm { };
@@ -5207,6 +5229,8 @@ let
   liblqr1 = callPackage ../development/libraries/liblqr-1 { };
 
   liblockfile = callPackage ../development/libraries/liblockfile { };
+
+  liblogging = callPackage ../development/libraries/liblogging { };
 
   libmcrypt = callPackage ../development/libraries/libmcrypt {};
 
@@ -5328,6 +5352,8 @@ let
   libmodplug = callPackage ../development/libraries/libmodplug {};
 
   libmpcdec = callPackage ../development/libraries/libmpcdec { };
+
+  libmp3splt = callPackage ../development/libraries/libmp3splt { };
 
   libmrss = callPackage ../development/libraries/libmrss { };
 
@@ -6515,8 +6541,6 @@ let
   # python function with default python interpreter
   buildPythonPackage = pythonPackages.buildPythonPackage;
 
-  pythonPackages = python27Packages;
-
   # `nix-env -i python-nose` installs for 2.7, the default python.
   # Therefore we do not recurse into attributes here, in contrast to
   # python27Packages. `nix-env -iA python26Packages.nose` works
@@ -6526,7 +6550,15 @@ let
     python = python26;
   };
 
-  python3Packages = python34Packages;
+  python27Packages = lib.hiPrioSet (recurseIntoAttrs (import ./python-packages.nix {
+    inherit pkgs;
+    python = python27;
+  }));
+
+  python32Packages = import ./python-packages.nix {
+    inherit pkgs;
+    python = python32;
+  };
 
   python33Packages = recurseIntoAttrs (import ./python-packages.nix {
     inherit pkgs;
@@ -6537,16 +6569,6 @@ let
     inherit pkgs;
     python = python34;
   });
-
-  python32Packages = import ./python-packages.nix {
-    inherit pkgs;
-    python = python32;
-  };
-
-  python27Packages = lib.hiPrioSet (recurseIntoAttrs (import ./python-packages.nix {
-    inherit pkgs;
-    python = python27;
-  }));
 
   pypyPackages = recurseIntoAttrs (import ./python-packages.nix {
     inherit pkgs;
@@ -8305,6 +8327,10 @@ let
 
   dwb = callPackage ../applications/networking/browsers/dwb { dconf = gnome3.dconf; };
 
+  dwbWrapper = wrapFirefox
+    { browser = dwb; browserName = "dwb"; desktopName = "dwb";
+    };
+
   dwm = callPackage ../applications/window-managers/dwm {
     patches = config.dwm.patches or [];
   };
@@ -9170,6 +9196,8 @@ let
 
   mp3info = callPackage ../applications/audio/mp3info { };
 
+  mp3splt = callPackage ../applications/audio/mp3splt { };
+
   mpc123 = callPackage ../applications/audio/mpc123 { };
 
   mpg123 = callPackage ../applications/audio/mpg123 { };
@@ -9473,6 +9501,10 @@ let
     qt = qt4;
   };
 
+  retroshare06 = callPackage ../applications/networking/p2p/retroshare/0.6.nix {
+    qt = qt4;
+  };
+
   rsync = callPackage ../applications/networking/sync/rsync {
     enableACLs = !(stdenv.isDarwin || stdenv.isSunOS || stdenv.isFreeBSD);
     enableCopyDevicesPatch = (config.rsync.enableCopyDevicesPatch or false);
@@ -9638,6 +9670,8 @@ let
     sslSupport = true;
     gpgSupport = true;
   };
+
+  symlinks = callPackage ../tools/system/symlinks { };
 
   syncthing = callPackage ../applications/networking/syncthing { };
 
@@ -10605,7 +10639,7 @@ let
 
       qtcurve = callPackage ../misc/themes/qtcurve { };
 
-      quassel = callPackage ../applications/networking/irc/quassel { };
+      quassel = callPackage ../applications/networking/irc/quassel { dconf = gnome3.dconf; };
 
       quasselDaemon = (self.quassel.override {
         monolithic = false;

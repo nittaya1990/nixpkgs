@@ -849,5 +849,7 @@ in
 
     systemd.services."user@".restartIfChanged = false;
 
+    systemd.services.systemd-remount-fs.restartIfChanged = false;
+
   };
 }

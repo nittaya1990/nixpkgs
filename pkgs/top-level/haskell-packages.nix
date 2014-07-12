@@ -411,6 +411,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   classyPreludeConduit = callPackage ../development/libraries/haskell/classy-prelude-conduit {};
 
+  clay = callPackage ../development/libraries/haskell/clay {};
+
   clientsession = callPackage ../development/libraries/haskell/clientsession {};
 
   clock = callPackage ../development/libraries/haskell/clock {};
@@ -946,10 +948,9 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
     libc = pkgs.stdenv.gcc.libc;
   };
 
-  gtkglext = callPackage ../development/libraries/haskell/gtkglext {};
+  gtkglext = callPackage ../development/libraries/haskell/gtkglext { gtkglext = pkgs.gnome2.gtkglext; };
 
   gtk2hsBuildtools = callPackage ../development/libraries/haskell/gtk2hs-buildtools {};
-  gtk2hsC2hs = self.gtk2hsBuildtools;
 
   gtksourceview2 = callPackage ../development/libraries/haskell/gtksourceview2 {
     inherit (pkgs.gnome) gtksourceview;
@@ -1018,6 +1019,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   haskellSrcMeta = callPackage ../development/libraries/haskell/haskell-src-meta {};
 
+  haskellTokenUtils = callPackage ../development/libraries/haskell/haskell-token-utils {};
+
   haskore = callPackage ../development/libraries/haskell/haskore {};
 
   hastache = callPackage ../development/libraries/haskell/hastache {};
@@ -1076,6 +1079,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   haskellForMaths = callPackage ../development/libraries/haskell/HaskellForMaths {};
 
+  haxl = callPackage ../development/libraries/haskell/haxl {};
+
   haxr = callPackage ../development/libraries/haskell/haxr {};
 
   haxr_th = callPackage ../development/libraries/haskell/haxr-th {};
@@ -1093,6 +1098,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   HDBCPostgresql = callPackage ../development/libraries/haskell/HDBC/HDBC-postgresql.nix {};
 
   HDBCSqlite3 = callPackage ../development/libraries/haskell/HDBC/HDBC-sqlite3.nix {};
+
+  HPDF = callPackage ../development/libraries/haskell/HPDF {};
 
   heist = callPackage ../development/libraries/haskell/heist {};
 
@@ -1187,6 +1194,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   hsloggerTemplate = callPackage ../development/libraries/haskell/hslogger-template {};
 
   hspec = callPackage ../development/libraries/haskell/hspec {};
+
+  hspecAttoparsec = callPackage ../development/libraries/haskell/hspec-attoparsec {};
 
   hspecWai = callPackage ../development/libraries/haskell/hspec-wai {};
 
@@ -1344,6 +1353,12 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   lambdabot = callPackage ../development/libraries/haskell/lambdabot {};
 
+  lambdabotWrapper = callPackage ../development/libraries/haskell/lambdabot/wrapper.nix {
+    mueval = self.muevalWrapper.override {
+      additionalPackages = [ self.lambdabot ];
+    };
+  };
+  
   lambdabotUtils = callPackage ../development/libraries/haskell/lambdabot-utils {};
 
   lambdacubeEngine = callPackage ../development/libraries/haskell/lambdacube-engine {};
@@ -1539,6 +1554,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   mueval = callPackage ../development/libraries/haskell/mueval {};
 
+  muevalWrapper = callPackage ../development/libraries/haskell/mueval/wrapper.nix {};
+
   multiarg = callPackage ../development/libraries/haskell/multiarg {};
 
   multimap = callPackage ../development/libraries/haskell/multimap {};
@@ -1690,8 +1707,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   parsec = self.parsec_3_1_5;
 
   parsers_0_10_3 = callPackage ../development/libraries/haskell/parsers/0.10.3.nix {};
-  parsers_0_11_0_2 = callPackage ../development/libraries/haskell/parsers/0.11.0.2.nix {};
-  parsers = self.parsers_0_11_0_2;
+  parsers_0_11_0_3 = callPackage ../development/libraries/haskell/parsers/0.11.0.3.nix {};
+  parsers = self.parsers_0_11_0_3;
 
   parsimony = callPackage ../development/libraries/haskell/parsimony {};
 
@@ -1916,6 +1933,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   regexPosix = self.regexPosix_0_95_2;
 
   regexTdfa = callPackage ../development/libraries/haskell/regex-tdfa {};
+
+  regexTdfaRc = callPackage ../development/libraries/haskell/regex-tdfa-rc {};
 
   regexTdfaText = callPackage ../development/libraries/haskell/regex-tdfa-text {};
 
@@ -2204,6 +2223,10 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   tagged = callPackage ../development/libraries/haskell/tagged {};
 
+  taggy = callPackage ../development/libraries/haskell/taggy {};
+
+  taggyLens = callPackage ../development/libraries/haskell/taggy-lens {};
+
   tagshare = callPackage ../development/libraries/haskell/tagshare {};
 
   tagsoup = callPackage ../development/libraries/haskell/tagsoup {};
@@ -2473,7 +2496,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   void = callPackage ../development/libraries/haskell/void {};
 
   vty_4_7_5 = callPackage ../development/libraries/haskell/vty/4.7.5.nix {};
-  vty_5_1_0 = callPackage ../development/libraries/haskell/vty/5.1.0.nix {};
+  vty_5_1_1 = callPackage ../development/libraries/haskell/vty/5.1.1.nix {};
   vty = self.vty_4_7_5;
 
   vtyUi = callPackage ../development/libraries/haskell/vty-ui {};
