@@ -1,12 +1,15 @@
-{ stdenv, git, openssh, fetchgit, ghc, perl, gmp, ncurses, autoconf, automake, libtool, happy, alex }:
+{ stdenv, fetchurl, ghc, perl, gmp, ncurses }:
 
 stdenv.mkDerivation rec {
   version = "7.8.3";
   name = "ghc-${version}";
 
-  src = "/home/coconnor/Development/ghc-7.8.3";
+  src = fetchurl {
+    url = "http://www.haskell.org/ghc/dist/7.8.3/${name}-src.tar.xz";
+    sha256 = "0n5rhwl83yv8qm0zrbaxnyrf8x1i3b6si927518mwfxs96jrdkdh";
+  };
 
-  buildInputs = [ ghc perl gmp ncurses git openssh autoconf automake libtool happy alex ];
+  buildInputs = [ ghc perl gmp ncurses ];
 
   enableParallelBuilding = true;
 
@@ -18,8 +21,6 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     echo "${buildMK}" > mk/build.mk
-    perl ./boot
-
     sed -i -e 's|-isysroot /Developer/SDKs/MacOSX10.5.sdk||' configure
   '' + stdenv.lib.optionalString (!stdenv.isDarwin) ''
     export NIX_LDFLAGS="$NIX_LDFLAGS -rpath $out/lib/ghc-${version}"

@@ -7652,6 +7652,7 @@ rec {
     src = fetchgit {
       url = https://github.com/miracle2k/tarsnapper.git;
       rev = "620439bca68892f2ffaba1079a34b18496cc6596";
+      sha256 = "06pp499qm2dxpja2jgmmq2jrcx3m4nq52x5hhil9r1jxvyiq962p";
     };
 
     propagatedBuildInputs = [ argparse pyyaml ];
@@ -9269,26 +9270,21 @@ rec {
   pykka = buildPythonPackage rec {
     name = "pykka-${version}";
 
-    version = "1.1.0";
+    version = "1.2.0";
 
     src = fetchgit {
       url = "https://github.com/jodal/pykka.git";
       rev = "refs/tags/v${version}";
-      sha256 = "0w6bcaqkzwmd9habszlgjkp3kkhkna08s9aivnmna5hddsghfqmz";
+      sha256 = "17vv2q636zp2fvxrp7ckgnz1ifaffcj5vdxvfb4isd1d32c49amb";
     };
-
-    # python zip complains about old timestamps
-    preConfigure = ''
-      find -print0 | xargs -0 touch
-    '';
 
     # There are no tests
     doCheck = false;
 
-    meta = {
+    meta = with stdenv.lib; {
       homepage = http://www.pykka.org;
       description = "A Python implementation of the actor model";
-      maintainers = [ stdenv.lib.maintainers.rickynils ];
+      maintainers = [ maintainers.rickynils ];
     };
   };
 

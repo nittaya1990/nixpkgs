@@ -5403,6 +5403,8 @@ let
 
   libopus = callPackage ../development/libraries/libopus { };
 
+  libosinfo = callPackage ../development/libraries/libosinfo {};
+
   libosip = callPackage ../development/libraries/osip {};
 
   libosip_3 = callPackage ../development/libraries/osip/3.nix {};
@@ -9180,6 +9182,8 @@ let
   };
 
   mopidy = callPackage ../applications/audio/mopidy { };
+
+  mopidy-spotify = callPackage ../applications/audio/mopidy-spotify { };
 
   mozilla = callPackage ../applications/networking/browsers/mozilla {
     inherit (gnome) libIDL;
