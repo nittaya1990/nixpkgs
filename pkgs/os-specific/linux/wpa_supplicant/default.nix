@@ -40,10 +40,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./libnl.patch
     # remove this patch after wpa_supplicant 2.1
-    (fetchurl {
-      url ="http://projects.archlinux.org/svntogit/packages.git/plain/trunk/0001-Revert-OpenSSL-Do-not-accept-SSL-Client-certificate-.patch?h=packages/wpa_supplicant";
-      sha256 = "0x1wl2nbl7v9kv80qvysfjhhg5a7lmgygv1y723flps6y8ngm19w";
-    })
+    ./0001-Revert-OpenSSL-Do-not-accept-SSL-Client-certificate-.patch
   ];
 
   postInstall = ''
