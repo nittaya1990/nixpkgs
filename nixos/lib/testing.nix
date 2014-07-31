@@ -121,7 +121,7 @@ rec {
 
       report = releaseTools.gcovReport { coverageRuns = [ test ]; };
 
-    in (if makeCoverageReport then report else test) // { inherit driver test; };
+    in (if makeCoverageReport then report else test) // { inherit nodes driver test; };
 
   runInMachine =
     { drv

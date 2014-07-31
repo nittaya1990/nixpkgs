@@ -153,15 +153,16 @@ let
 
 
   # Override system. This is useful to build i686 packages on x86_64-linux.
-  forceSystem = system: (import ./all-packages.nix) {
+  forceSystem = system: kernel: (import ./all-packages.nix) {
     inherit system;
+    platform = platform // { kernelArch = kernel; };
     inherit bootStdenv noSysDirs gccWithCC gccWithProfiling config
-      crossSystem platform;
+      crossSystem;
   };
 
 
   # Used by wine, firefox with debugging version of Flash, ...
-  pkgsi686Linux = forceSystem "i686-linux";
+  pkgsi686Linux = forceSystem "i686-linux" "i386";
 
   callPackage_i686 = lib.callPackageWith (pkgsi686Linux // pkgsi686Linux.xorg);
 
@@ -610,6 +611,8 @@ let
   };
 
   cv = callPackage ../tools/misc/cv { };
+
+  crawl = callPackage ../games/crawl { lua = lua5; };
 
   ditaa = callPackage ../tools/graphics/ditaa { };
 
@@ -7059,7 +7062,7 @@ let
   alsaLib = callPackage ../os-specific/linux/alsa-lib { };
 
   alsaPlugins = callPackage ../os-specific/linux/alsa-plugins {
-    jack2 = null;
+    jackaudio = null;
   };
 
   alsaPluginWrapper = callPackage ../os-specific/linux/alsa-plugins/wrapper.nix { };
@@ -8022,6 +8025,11 @@ let
   r5rs = callPackage ../data/documentation/rnrs/r5rs.nix { };
 
   sourceCodePro = callPackage ../data/fonts/source-code-pro {};
+
+  source-han-sans-japanese = callPackage ../data/fonts/source-han-sans/japanese.nix {};
+  source-han-sans-korean = callPackage ../data/fonts/source-han-sans/korean.nix {};
+  source-han-sans-simplified-chinese = callPackage ../data/fonts/source-han-sans/simplified-chinese.nix {};
+  source-han-sans-traditional-chinese = callPackage ../data/fonts/source-han-sans/traditional-chinese.nix {};
 
   tango-icon-theme = callPackage ../data/icons/tango-icon-theme { };
 
@@ -9181,6 +9189,8 @@ let
 
   mopidy-spotify = callPackage ../applications/audio/mopidy-spotify { };
 
+  mopidy-moped = callPackage ../applications/audio/mopidy-moped { };
+
   mozilla = callPackage ../applications/networking/browsers/mozilla {
     inherit (gnome) libIDL;
   };
@@ -10198,7 +10208,17 @@ let
     };
   };
 
+  dwarf_fortress_2014 = callPackage_i686 ../games/dwarf-fortress/df2014.nix {
+    SDL_image = pkgsi686Linux.SDL_image.override {
+      libpng = pkgsi686Linux.libpng12;
+    };
+  };
+
   dwarf_fortress_modable = appendToName "moddable" (dwarf_fortress.override {
+    copyDataDirectory = true;
+  });
+
+  dwarf_fortress_2014_modable = appendToName "moddable" (dwarf_fortress_2014.override {
     copyDataDirectory = true;
   });
 
@@ -11076,10 +11096,7 @@ let
 
   hplipWithPlugin = hplip.override { withPlugin = true; };
 
-  # using the new configuration style proposal which is unstable
-  jack1 = callPackage ../misc/jackaudio/jack1.nix { };
-
-  jack2 = callPackage ../misc/jackaudio { };
+  jackaudio = callPackage ../misc/jackaudio { };
 
   keynav = callPackage ../tools/X11/keynav { };
 
