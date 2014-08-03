@@ -1,8 +1,8 @@
-{ stdenv, lib, fetchurl, SDL, boost, cmake, ffmpeg, gettext, glew
+{ stdenv, lib, fetchurl, fetchpatch, SDL, boost, cmake, ffmpeg, gettext, glew
 , ilmbase, libXi, libjpeg, libpng, libsamplerate, libsndfile
 , libtiff, mesa, openal, opencolorio, openexr, openimageio, openjpeg, python
 , zlib, fftw
-, jackaudioSupport ? false, jackaudio
+, jackaudioSupport ? false, jack2
 }:
 
 with lib;
@@ -19,12 +19,19 @@ stdenv.mkDerivation rec {
     [ SDL boost cmake ffmpeg gettext glew ilmbase libXi
       libjpeg libpng libsamplerate libsndfile libtiff mesa openal
       opencolorio openexr openimageio /* openjpeg */ python zlib fftw
-    ] ++ optional jackaudioSupport jackaudio;
+    ] ++ optional jackaudioSupport jack2;
 
   postUnpack =
     ''
       substituteInPlace */doc/manpage/blender.1.py --replace /usr/bin/python ${python}/bin/python3
     '';
+
+  patches = [(fetchpatch { # fix parallel builds
+    url = "https://developer.blender.org/D619?download=true";
+    sha256 = "18h4fqsbpwxzqz7qby18lrrbzqnyd5xnann3xcac5wddwv5wjb0f";
+    name = "D619.diff";
+  })];
+  patchFlags = "-p0";
 
   cmakeFlags =
     [ "-DOPENEXR_INC=${openexr}/include/OpenEXR"

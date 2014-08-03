@@ -2654,7 +2654,7 @@ rec {
       sed -i "/use_setuptools/d" setup.py
     '';
 
-    buildInputs = [ pkgs.alsaLib pkgs.jackaudio ];
+    buildInputs = [ pkgs.alsaLib pkgs.jack2 ];
 
     meta = with stdenv.lib; {
       description = "A Python wrapper for the RtMidi C++ library written with Cython";
@@ -9023,6 +9023,24 @@ rec {
     };
 
     doCheck = false;
+  };
+
+
+  tornadokick = buildPythonPackage rec {
+    name = "tornadokick-2014.07.23";
+
+    propagatedBuildInputs = [ tornado ];
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/t/tornadokick/${name}.tar.gz";
+      md5 = "201d26de2993a554b16140af3b4ee1b6";
+    };
+
+    meta = {
+      description = "The TornadoKick Web Toolkit for Tornado Web Framework.";
+      homepage = http://github.com/multoncore/tornadokick;
+      license = stdenv.lib.licenses.asl20;
+    };
   };
 
 
