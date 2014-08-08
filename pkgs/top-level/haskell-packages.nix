@@ -1056,11 +1056,15 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   haskellTokenUtils = callPackage ../development/libraries/haskell/haskell-token-utils {};
 
+  haskintex = callPackage ../development/libraries/haskell/haskintex {};
+
   haskore = callPackage ../development/libraries/haskell/haskore {};
 
   hastache = callPackage ../development/libraries/haskell/hastache {};
 
   hasteCompiler = callPackage ../development/libraries/haskell/haste-compiler {};
+
+  HaTeX = callPackage ../development/libraries/haskell/HaTeX {};
 
   hcltest = callPackage ../development/libraries/haskell/hcltest {};
 
@@ -1498,6 +1502,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   mainlandPretty = callPackage ../development/libraries/haskell/mainland-pretty {};
 
   markovChain = callPackage ../development/libraries/haskell/markov-chain {};
+
+  matrix = callPackage ../development/libraries/haskell/matrix {};
 
   maude = callPackage ../development/libraries/haskell/maude {};
 
