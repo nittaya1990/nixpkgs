@@ -9,12 +9,6 @@ stdenv.mkDerivation rec {
     sha256 = "0n5rhwl83yv8qm0zrbaxnyrf8x1i3b6si927518mwfxs96jrdkdh";
   };
 
-  # Ship 'xhtml', 'terminfo', and 'haskeline' to fix <https://ghc.haskell.org/trac/ghc/ticket/8919>.
-  # Newer versions of GHC will contain this patch already, so this stanza can be removed when updating.
-  patches = [ (fetchurl { url = "https://git.haskell.org/ghc.git/patch/4caadb7cbee5c176abb99df25c4cc1657ae57f40";
-                          sha256 = "17zcpx3zvfyfdbbh661id0c7hrr3vmmz11qbn8zwn688ixzaagz9"; })
-            ];
-
   buildInputs = [ ghc perl gmp ncurses ];
 
   enableParallelBuilding = true;
