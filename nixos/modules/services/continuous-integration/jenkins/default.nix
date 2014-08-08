@@ -94,7 +94,7 @@ in {
       path = cfg.packages;
 
       script = ''
-        ${pkgs.jdk}/bin/java -jar ${pkgs.jenkins} --httpPort=${toString cfg.port}
+        ${pkgs.jdk}/bin/java -jar ${pkgs.jenkins}/jenkins.war --httpPort=${toString cfg.port}
       '';
 
       postStart = ''
