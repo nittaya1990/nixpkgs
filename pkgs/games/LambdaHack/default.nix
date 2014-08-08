@@ -26,6 +26,7 @@ cabal.mkDerivation (self: {
   patchPhase = ''
     sed -i -e 's|gtk >=.*|gtk|' LambdaHack.cabal
   '';
+  jailbreak = true;
   meta = {
     homepage = "http://github.com/LambdaHack/LambdaHack";
     description = "A roguelike game engine in early development";
