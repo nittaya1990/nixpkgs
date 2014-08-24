@@ -11,7 +11,6 @@
 let
 
   version = "1.8.5.4";
-
   svn = subversionClient.override { perlBindings = true; };
 
 in
@@ -66,6 +65,7 @@ stdenv.mkDerivation {
       ln -s "$out/share/git/contrib/emacs/"*.el $out/share/emacs/site-lisp/
       mkdir -p $out/etc/bash_completion.d
       ln -s $out/share/git/contrib/completion/git-completion.bash $out/etc/bash_completion.d/
+      ln -s $out/share/git/contrib/completion/git-prompt.sh $out/etc/bash_completion.d/
 
       # grep is a runtime dependence, need to patch so that it's found
       substituteInPlace $out/libexec/git-core/git-sh-setup \

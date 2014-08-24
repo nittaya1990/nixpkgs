@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "wai-logger";
-  version = "2.2.1";
-  sha256 = "0210phkadr5ndpx6ppmygir0mxnpjffvccjb4lnpjnwy2ydf0lzy";
+  version = "2.2.3";
+  sha256 = "0ljpzq3yfiz3xfglvj69jdk46lmgsg6nqncv9mhij4ih6qq0cx0w";
   buildDepends = [
     autoUpdate blazeBuilder byteorder caseInsensitive easyFile
     fastLogger httpTypes network unixTime wai
@@ -18,6 +18,5 @@ cabal.mkDerivation (self: {
     description = "A logging system for WAI";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })
