@@ -1510,6 +1510,8 @@ let
 
   megatools = callPackage ../tools/networking/megatools { };
 
+  mfcuk = callPackage ../tools/security/mfcuk { };
+
   minecraft = callPackage ../games/minecraft { };
 
   minecraft-server = callPackage ../games/minecraft-server { };
@@ -1642,6 +1644,8 @@ let
   mpack = callPackage ../tools/networking/mpack { };
 
   pa_applet = callPackage ../tools/audio/pa-applet { };
+
+  pnmixer = callPackage ../tools/audio/pnmixer { };
 
   nifskope = callPackage ../tools/graphics/nifskope { };
 
@@ -5310,6 +5314,8 @@ let
 
   libnatspec = callPackage ../development/libraries/libnatspec { };
 
+  libnfc = callPackage ../development/libraries/libnfc { };
+
   libnfsidmap = callPackage ../development/libraries/libnfsidmap { };
 
   libnice = callPackage ../development/libraries/libnice { };
@@ -5445,6 +5451,8 @@ let
   libnetfilter_queue = callPackage ../development/libraries/libnetfilter_queue { };
 
   libnfnetlink = callPackage ../development/libraries/libnfnetlink { };
+
+  libnftnl = callPackage ../development/libraries/libnftnl { };
 
   libnih = callPackage ../development/libraries/libnih { };
 
@@ -7680,6 +7688,8 @@ let
     libpng = libpng15;
   };
 
+  nftables = callPackage ../os-specific/linux/nftables { };
+
   numactl = callPackage ../os-specific/linux/numactl { };
 
   gocode = callPackage ../development/tools/gocode { };
@@ -8393,7 +8403,7 @@ let
 
   d4x = callPackage ../applications/misc/d4x { };
 
-  darcs = with haskellPackages_ghc763; callPackage ../applications/version-management/darcs {
+  darcs = with haskellPackages_ghc783; callPackage ../applications/version-management/darcs {
     cabal = cabal.override {
       extension = self : super : {
         isLibrary = false;
@@ -8506,6 +8516,8 @@ let
     coffee = callPackage ../applications/editors/emacs-modes/coffee { };
 
     colorTheme = callPackage ../applications/editors/emacs-modes/color-theme { };
+
+    colorThemeSolarized = callPackage ../applications/editors/emacs-modes/color-theme-solarized { };
 
     cryptol = callPackage ../applications/editors/emacs-modes/cryptol { };
 
@@ -8996,26 +9008,6 @@ let
 
   i810switch = callPackage ../os-specific/linux/i810switch { };
 
-  icecat3 = lowPrio (callPackage ../applications/networking/browsers/icecat-3 {
-    inherit (gnome) libIDL libgnomeui gnome_vfs;
-    inherit (xlibs) pixman;
-    inherit (pythonPackages) ply;
-  });
-
-  icecatXulrunner3 = lowPrio (callPackage ../applications/networking/browsers/icecat-3 {
-    application = "xulrunner";
-    inherit (gnome) libIDL libgnomeui gnome_vfs;
-    inherit (xlibs) pixman;
-    inherit (pythonPackages) ply;
-  });
-
-  icecat3Xul =
-    (symlinkJoin "icecat-with-xulrunner-${icecat3.version}"
-       [ icecat3 icecatXulrunner3 ])
-    // { inherit (icecat3) gtk isFirefox3Like meta; };
-
-  icecat3Wrapper = wrapFirefox { browser = icecat3Xul; browserName = "icecat"; desktopName = "IceCat"; };
-
   icewm = callPackage ../applications/window-managers/icewm { };
 
   id3v2 = callPackage ../applications/audio/id3v2 { };
@@ -9403,7 +9395,9 @@ let
     rake         = rake;
   };
 
-  synfigstudio = callPackage ../applications/graphics/synfigstudio { };
+  synfigstudio = callPackage ../applications/graphics/synfigstudio {
+    fontsConf = makeFontsConf { fontDirectories = [ freefont_ttf ]; };
+  };
 
   sxhkd = callPackage ../applications/window-managers/sxhkd { };
 
@@ -10596,6 +10590,8 @@ let
 
   xonotic = callPackage ../games/xonotic { };
 
+  xskat = callPackage ../games/xskat { };
+
   xsokoban = builderDefsPackage (import ../games/xsokoban) {
     inherit (xlibs) libX11 xproto libXpm libXt;
   };
@@ -11513,6 +11509,10 @@ let
   x2x = callPackage ../tools/X11/x2x { };
 
   xboxdrv = callPackage ../misc/drivers/xboxdrv { };
+
+  xinput_calibrator = callPackage ../tools/X11/xinput_calibrator {
+    inherit (xlibs) libXi inputproto;
+  };
 
   xosd = callPackage ../misc/xosd { };
 

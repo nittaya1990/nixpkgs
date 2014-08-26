@@ -132,7 +132,7 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = http://git-scm.com/;
-    description = "Git, a popular distributed version control system";
+    description = "Distributed version control system";
     license = stdenv.lib.licenses.gpl2Plus;
 
     longDescription = ''
