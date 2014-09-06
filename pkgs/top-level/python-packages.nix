@@ -38,7 +38,7 @@ rec {
   # global distutils config used by buildPythonPackage
   distutils-cfg = callPackage ../development/python-modules/distutils-cfg { };
 
-  buildPythonPackage = callPackage ../development/python-modules/generic { };
+  buildPythonPackage = makeOverridable (callPackage ../development/python-modules/generic { });
 
   wrapPython = pkgs.makeSetupHook
     { deps = pkgs.makeWrapper;
@@ -188,12 +188,12 @@ rec {
 
   sip = import ../development/python-modules/sip {
     inherit (pkgs) stdenv fetchurl;
-    inherit python;
+    inherit python isPyPy;
   };
 
   sip_4_16 = import ../development/python-modules/sip/4.16.nix {
     inherit (pkgs) stdenv fetchurl;
-    inherit python;
+    inherit python isPyPy;
   };
 
   tables = import ../development/python-modules/tables {
@@ -440,6 +440,7 @@ rec {
 
   apsw = buildPythonPackage rec {
     name = "apsw-3.7.6.2-r1";
+    disabled = isPyPy;
 
     src = fetchurl {
       url = "http://apsw.googlecode.com/files/${name}.zip";
@@ -2005,6 +2006,7 @@ rec {
   eyeD3 = buildPythonPackage rec {
     version = "0.7.4";
     name    = "eyeD3-${version}";
+    disabled = isPyPy;
 
     src = fetchurl {
       url = "http://eyed3.nicfit.net/releases/${name}.tgz";
@@ -2109,6 +2111,7 @@ rec {
       sha256 = "103mzf0l15kyvw5nmf7bsdrqg6y3wpyxmkyl2h9lk7jxb5gdc9s1";
     };
     disabled = isPy3k;
+    doCheck = (!isPyPy);  # https://github.com/fabric/fabric/issues/11891
     propagatedBuildInputs = [ paramiko pycrypto ];
     buildInputs = [ fudge nose ];
   };
@@ -3852,6 +3855,7 @@ rec {
 
   greenlet = buildPythonPackage rec {
     name = "greenlet-0.4.3";
+    disabled = isPyPy;  # builtin for pypy
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/g/greenlet/${name}.zip";
@@ -4024,11 +4028,11 @@ rec {
   };
 
   httplib2 = buildPythonPackage rec {
-    name = "httplib2-0.8";
+    name = "httplib2-0.9";
 
     src = fetchurl {
       url = "https://pypi.python.org/packages/source/h/httplib2/${name}.tar.gz";
-      sha256 = "174w6rz4na1sdlfz37h95l0pkfm9igf9nqmhbd8aqh3sm7d9zrff";
+      sha256 = "1asi5wpncnc6ki3bz33mhb9xh2lrkb24y4qng8bmqnczdmm8rsir";
     };
 
     meta = {
@@ -4366,11 +4370,11 @@ rec {
   };
 
   lxml = buildPythonPackage ( rec {
-    name = "lxml-3.0.2";
+    name = "lxml-3.3.6";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/l/lxml/${name}.tar.gz";
-      md5 = "38b15b0dd5e9292cf98be800e84a3ce4";
+      md5 = "a804b36864c483fe7abdd7f493a0c379";
     };
 
     buildInputs = [ pkgs.libxml2 pkgs.libxslt ];
@@ -5295,12 +5299,14 @@ rec {
   };
 
   numpy = buildPythonPackage ( rec {
-    name = "numpy-1.7.1";
+    name = "numpy-1.8.2";
 
     src = fetchurl {
       url = "mirror://sourceforge/numpy/${name}.tar.gz";
-      sha256 = "0jh832j439jj2b7m1z5a4rv5cpdn1yiw1r6gwrhdihw562d029am";
+      sha256 = "1gcxlk3mf43pzpxvbw8kcfg173g4105j9szsfc1kxwablail6myf";
     };
+    
+    disabled = isPyPy;  # WIP
 
     preConfigure = ''
       sed -i 's/-faltivec//' numpy/distutils/system_info.py
@@ -5783,8 +5789,9 @@ rec {
     buildInputs = [ python pkgs.libjpeg pkgs.zlib pkgs.freetype ];
 
     disabled = isPy3k;
-
     doCheck = true;
+    
+    postInstall = "ln -s $out/lib/${python.libPrefix}/site-packages $out/lib/${python.libPrefix}/site-packages/PIL";
 
     preConfigure = ''
       sed -i "setup.py" \
@@ -5793,13 +5800,8 @@ rec {
               s|^ZLIB_ROOT =.*$|ZLIB_ROOT = libinclude("${pkgs.zlib}")|g ;'
     '';
 
-    checkPhase   = "${python}/bin/${python.executable} selftest.py";
-    buildPhase   = "${python}/bin/${python.executable} setup.py build_ext -i";
-
-    postInstall = ''
-      cd "$out"/lib/python*/site-packages
-      ln -s $PWD PIL
-    '';
+    checkPhase = "${python}/bin/${python.executable} selftest.py";
+    buildPhase = "${python}/bin/${python.executable} setup.py build_ext -i";
 
     meta = {
       homepage = http://www.pythonware.com/products/pil/;
@@ -5982,6 +5984,7 @@ rec {
 
   psycopg2 = buildPythonPackage rec {
     name = "psycopg2-2.5.3";
+    disabled = isPyPy;
 
     # error: invalid command 'test'
     doCheck = false;
@@ -6202,6 +6205,7 @@ rec {
 
   pycurl = buildPythonPackage (rec {
     name = "pycurl-7.19.5";
+    disabled = isPyPy; # https://github.com/pycurl/pycurl/issues/208
 
     src = fetchurl {
       url = "http://pycurl.sourceforge.net/download/${name}.tar.gz";
@@ -6476,6 +6480,7 @@ rec {
   pyparted = buildPythonPackage rec {
     name = "pyparted-${version}";
     version = "3.10";
+    disabled = isPyPy;
 
     src = fetchurl {
       url = "https://fedorahosted.org/releases/p/y/pyparted/${name}.tar.gz";
@@ -8138,9 +8143,10 @@ rec {
     };
   });
 
-  sqlalchemy = pkgs.lib.overrideDerivation sqlalchemy9 (args: rec {
+  sqlalchemy = sqlalchemy9.override rec {
     name = "SQLAlchemy-0.7.10";
-    disabled = isPy3k;
+    disabled = isPy34;
+
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/S/SQLAlchemy/${name}.tar.gz";
       sha256 = "0rhxgr85xdhjn467qfs0dkyj8x46zxcv6ad3dfx3w14xbkb3kakp";
@@ -8153,10 +8159,12 @@ rec {
     preConfigure = optionalString isPy3k ''
       python3 sa2to3.py --no-diffs -w lib test examples
     '';
-  });
+  };
 
-  sqlalchemy8 = pkgs.lib.overrideDerivation sqlalchemy9 (args: rec {
+  sqlalchemy8 = sqlalchemy9.override rec {
     name = "SQLAlchemy-0.8.7";
+    disabled = isPy34;
+
     src = fetchurl {
       url = "https://pypi.python.org/packages/source/S/SQLAlchemy/${name}.tar.gz";
       md5 = "4f3377306309e46739696721b1785335";
@@ -8164,7 +8172,7 @@ rec {
     preConfigure = optionalString isPy3k ''
       python3 sa2to3.py --no-diffs -w lib test examples
     '';
-  });
+  };
 
   sqlalchemy9 = buildPythonPackage rec {
     name = "SQLAlchemy-0.9.4";
@@ -8314,14 +8322,10 @@ rec {
       export LC_ALL="en_US.UTF-8"
     '';
 
-    # Not picking up from PyPI because it doesn't contain tests.
-    src = fetchgit {
-      url = "git://github.com/gabrielfalcao/sure.git";
-      rev = "86ab9faa97aa9c1720c7d090deac2be385ed3d7a";
-      sha256 = "02vffcdgr6vbj80lhl925w7zqy6cqnfvs088i0rbkjs5lxc511b3";
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/s/sure/${name}.tar.gz";
+      md5 = "6dbecef27dffc41c8cd8aab8a8b3fdfb";
     };
-
-
 
     buildInputs = [ nose ];
 
@@ -8535,7 +8539,7 @@ rec {
 
   smmap = buildPythonPackage rec {
     name = "smmap-0.8.2";
-    disabled = isPy3k;  # next release will have py3k support
+    disabled = isPy3k || isPyPy;  # next release will have py3k/pypy support
     meta.maintainers = [ stdenv.lib.maintainers.mornfall ];
 
     src = fetchurl {
@@ -9778,8 +9782,7 @@ rec {
 
     propagatedBuildInputs = [ zope_interface zope_exceptions zope_testing six ] ++ optional (!python.is_py3k or false) subunit;
 
-    # a test is failing
-    doCheck = false;
+    doCheck = true;
 
     meta = {
       description = "A flexible test runner with layer support";
