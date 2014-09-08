@@ -19,13 +19,12 @@ rec {
 
 
   buildVM =
-    nodes: configuration:
+    nodes: configurations:
 
     import ./eval-config.nix {
       inherit system;
-      modules =
-        [ configuration
-          ../modules/virtualisation/qemu-vm.nix
+      modules = configurations ++
+        [ ../modules/virtualisation/qemu-vm.nix
           ../modules/testing/test-instrumentation.nix # !!! should only get added for automated test runs
           { key = "no-manual"; services.nixosManual.enable = false; }
         ] ++ optional minimal ../modules/testing/minimal-kernel.nix;
@@ -36,11 +35,11 @@ rec {
   # Given an attribute set { machine1 = config1; ... machineN =
   # configN; }, sequentially assign IP addresses in the 192.168.1.0/24
   # range to each machine, and set the hostname to the attribute name.
-  assignIPAddresses = nodes_def:
+  assignIPAddresses = nodes:
 
     let
 
-      machines = attrNames nodes_def;
+      machines = attrNames nodes;
 
       machinesNumbered = zipTwoLists machines (range 1 254);
 
@@ -85,4 +84,5 @@ rec {
         ] );
 
     in listToAttrs nodes_;
+
 }
