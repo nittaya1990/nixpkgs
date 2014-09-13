@@ -1,10 +1,10 @@
 { fetchurl, stdenv, ncurses }:
 
-stdenv.mkDerivation (rec {
-  name = "readline-6.3";
+stdenv.mkDerivation rec {
+  name = "readline-6.3p08";
 
   src = fetchurl {
-    url = "mirror://gnu/readline/${name}.tar.gz";
+    url = "mirror://gnu/readline/readline-6.3.tar.gz";
     sha256 = "0hzxr9jxqqx5sxsv9vmlxdnvlr9vi4ih1avjb869hbs6p5qn1fjn";
   };
 
@@ -15,9 +15,21 @@ stdenv.mkDerivation (rec {
   patches =
     [ ./link-against-ncurses.patch
       ./no-arch_only-6.3.patch
-    ];
+    ]
+    ++
+    (let
+       patch = nr: sha256:
+         fetchurl {
+           url = "mirror://gnu/readline/readline-6.3-patches/readline63-${nr}";
+           inherit sha256;
+         };
+     in
+       import ./readline-6.3-patches.nix patch);
 
-  meta = {
+  # Don't run the native `strip' when cross-compiling.
+  dontStrip = stdenv ? cross;
+
+  meta = with stdenv.lib; {
     description = "Library for interactive line editing";
 
     longDescription = ''
@@ -37,15 +49,10 @@ stdenv.mkDerivation (rec {
 
     homepage = http://savannah.gnu.org/projects/readline/;
 
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
 
-    maintainers = [ stdenv.lib.maintainers.ludo ];
+    maintainers = [ maintainers.ludo ];
+
+    platforms = platforms.unix;
   };
 }
-
-//
-
-# Don't run the native `strip' when cross-compiling.
-(if (stdenv ? cross)
- then { dontStrip = true; }
- else { }))

@@ -1,5 +1,6 @@
 { pkgs, python }:
-  with pkgs.lib;
+
+with pkgs.lib;
 
 let
   isPy26 = python.majorVersion == "2.6";
@@ -17,23 +18,29 @@ let
     if isPy34 then "python34" else
     if isPyPy then "pypy" else "";
 
-  modules = python.modules or { readline = null; sqlite3 = null; curses = null; curses_panel = null; ssl = null; crypt = null; };
+  modules = python.modules or {
+    readline = null;
+    sqlite3 = null;
+    curses = null;
+    curses_panel = null;
+    ssl = null;
+    crypt = null;
+  };
 
-pythonPackages = modules // import ./python-packages-generated.nix {
-  inherit pkgs python;
-  inherit (pkgs) stdenv fetchurl;
-  self = pythonPackages;
-} //
-
+  pythonPackages = modules // import ./python-packages-generated.nix {
+    inherit pkgs python;
+    inherit (pkgs) stdenv fetchurl;
+    self = pythonPackages;
+  }
 # Python packages for all python versions
-rec {
+// rec {
 
   inherit python isPy26 isPy27 isPy33 isPy34 isPyPy isPy3k pythonName;
   inherit (pkgs) fetchurl fetchsvn fetchgit stdenv unzip;
 
   # helpers
 
-  callPackage = callPackageWith (pkgs // pythonPackages);
+  callPackage = pkgs.newScope pythonPackages;
 
   # global distutils config used by buildPythonPackage
   distutils-cfg = callPackage ../development/python-modules/distutils-cfg { };
@@ -49,23 +56,16 @@ rec {
 
   # specials
 
-  recursivePthLoader = import ../development/python-modules/recursive-pth-loader {
-    inherit (pkgs) stdenv;
-    inherit python;
-  };
+  recursivePthLoader = callPackage ../development/python-modules/recursive-pth-loader { };
 
-  setuptools = import ../development/python-modules/setuptools {
-    inherit (pkgs) stdenv fetchurl;
-    inherit python wrapPython distutils-cfg;
-  };
+  setuptools = callPackage ../development/python-modules/setuptools { };
 
   # packages defined elsewhere
 
   blivet = callPackage ../development/python-modules/blivet { };
 
-  dbus = import ../development/python-modules/dbus {
-    inherit (pkgs) stdenv fetchurl pkgconfig dbus dbus_glib dbus_tools;
-    inherit python;
+  dbus = callPackage ../development/python-modules/dbus {
+    dbus = pkgs.dbus;
   };
 
   discid = buildPythonPackage rec {
@@ -91,8 +91,6 @@ rec {
   };
 
   h5py = callPackage ../development/python-modules/h5py {
-    inherit (pkgs) stdenv fetchurl;
-    inherit python buildPythonPackage cython numpy;
     hdf5 = pkgs.hdf5.override { mpi = null; };
   };
 
@@ -103,25 +101,19 @@ rec {
     inherit mpi4py;
   };
 
-  ipython = import ../shells/ipython {
-    inherit (pkgs) stdenv fetchurl sip pyqt4;
-    inherit buildPythonPackage pythonPackages;
+  ipython = callPackage ../shells/ipython {
     qtconsoleSupport = !pkgs.stdenv.isDarwin; # qt is not supported on darwin
     pylabQtSupport = !pkgs.stdenv.isDarwin;
     pylabSupport = !pkgs.stdenv.isDarwin; # cups is not supported on darwin
   };
 
-  ipythonLight = lowPrio (import ../shells/ipython {
-    inherit (pkgs) stdenv fetchurl;
-    inherit buildPythonPackage pythonPackages;
+  ipythonLight = lowPrio (ipython.override {
     qtconsoleSupport = false;
     pylabSupport = false;
     pylabQtSupport = false;
   });
 
   mpi4py = callPackage ../development/python-modules/mpi4py {
-    inherit (pkgs) stdenv fetchurl openssh;
-    inherit python buildPythonPackage;
     mpi = pkgs.openmpi;
   };
 
@@ -131,74 +123,37 @@ rec {
   # version of nixpart.
   nixpart0 = nixpart;
 
-  pitz = import ../applications/misc/pitz {
-    inherit (pkgs) stdenv fetchurl;
-    inherit buildPythonPackage tempita jinja2 pyyaml clepy mock nose decorator docutils;
+  pitz = callPackage ../applications/misc/pitz { };
+
+  pycairo = callPackage ../development/python-modules/pycairo {
   };
 
-  pycairo = import ../development/python-modules/pycairo {
-    inherit (pkgs) stdenv fetchurl fetchpatch pkgconfig cairo x11;
-    inherit python;
+  pycrypto = callPackage ../development/python-modules/pycrypto { };
+
+  pygobject = callPackage ../development/python-modules/pygobject { };
+
+  pygobject3 = callPackage ../development/python-modules/pygobject/3.nix { };
+
+  pygtk = callPackage ../development/python-modules/pygtk { libglade = null; };
+
+  pyGtkGlade = pygtk.override {
+    libglade = pkgs.gnome.libglade;
   };
 
-  pycrypto = import ../development/python-modules/pycrypto {
-    inherit (pkgs) fetchurl stdenv gmp;
-    inherit python buildPythonPackage;
-  };
-
-  pygobject = import ../development/python-modules/pygobject {
-    inherit (pkgs) stdenv fetchurl pkgconfig glib;
-    inherit python;
-  };
-
-  pygobject3 = import ../development/python-modules/pygobject/3.nix {
-    inherit (pkgs) stdenv fetchurl pkgconfig glib gobjectIntrospection cairo;
-    inherit python pycairo;
-  };
-
-  pygtk = import ../development/python-modules/pygtk {
-    inherit (pkgs) fetchurl stdenv pkgconfig gtk;
-    inherit python buildPythonPackage pygobject pycairo isPy3k;
-  };
-
-  # XXX: how can we get an override here?
-  #pyGtkGlade = pygtk.override {
-  #  inherit (pkgs.gnome) libglade;
-  #};
-  pyGtkGlade = import ../development/python-modules/pygtk {
-    inherit (pkgs) fetchurl stdenv pkgconfig gtk;
-    inherit (pkgs.gnome) libglade;
-    inherit python buildPythonPackage pygobject pycairo isPy3k;
-  };
-
-  pyqt4 = import ../development/python-modules/pyqt/4.x.nix {
-    inherit (pkgs) stdenv fetchurl pkgconfig qt4 makeWrapper;
-    inherit (pkgs.xorg) lndir;
-    inherit python sip;
+  pyqt4 = callPackage ../development/python-modules/pyqt/4.x.nix {
     pythonDBus = dbus;
   };
 
-  pyqt5 = import ../development/python-modules/pyqt/5.x.nix {
-    inherit (pkgs) stdenv fetchurl pkgconfig qt5 makeWrapper;
-    inherit (pkgs.xorg) lndir;
-    inherit python;
+  pyqt5 = callPackage ../development/python-modules/pyqt/5.x.nix {
     sip = sip_4_16;
     pythonDBus = dbus;
   };
 
-  sip = import ../development/python-modules/sip {
-    inherit (pkgs) stdenv fetchurl;
-    inherit python isPyPy;
-  };
+  sip = callPackage ../development/python-modules/sip { };
 
-  sip_4_16 = import ../development/python-modules/sip/4.16.nix {
-    inherit (pkgs) stdenv fetchurl;
-    inherit python isPyPy;
-  };
+  sip_4_16 = callPackage ../development/python-modules/sip/4.16.nix { };
 
-  tables = import ../development/python-modules/tables {
-    inherit (pkgs) stdenv fetchurl bzip2 lzo;
-    inherit python buildPythonPackage cython numpy numexpr;
+  tables = callPackage ../development/python-modules/tables {
     hdf5 = pkgs.hdf5.override { zlib = pkgs.zlib; };
   };
 
@@ -675,7 +630,7 @@ rec {
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/b/beautifulsoup4/${name}.tar.gz";
-      md5 = "c012adc06217b8532c446d181cc56586";
+      md5 = "f1481ed77336de77a2d8e5b061b6ad62";
     };
 
     # invalid command 'test'
@@ -1112,6 +1067,24 @@ rec {
     };
     doCheck = false;
   });
+
+
+  cairocffi = buildPythonPackage rec {
+    name = "cairocffi-0.5.4";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/c/cairocffi/${name}.tar.gz";
+      md5 = "e3fa4002583bfaa88b156e1af9c75bde";
+    };
+
+    propagatedBuildInputs = [ cffi ];
+
+    meta = {
+      homepage = https://github.com/SimonSapin/cairocffi;
+      license = "bsd";
+      description = "cffi-based cairo bindings for Python";
+    };
+  };
 
 
   carrot = buildPythonPackage rec {
@@ -1912,6 +1885,23 @@ rec {
     };
   };
 
+  dotfiles = buildPythonPackage rec {
+    name = "dotfiles-0.6.3";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/d/dotfiles/${name}.tar.gz";
+      md5 = "95a0792eb92a8fc0db8a7e59389470fe";
+    };
+
+    doCheck = true;
+
+    meta = {
+      description = "Easily manage your dotfiles";
+      homepage = https://github.com/jbernard/dotfiles;
+      license = licenses.isc;
+    };
+  };
+
   dpkt = buildPythonPackage rec {
     name = "dpkt-1.8";
     disabled = isPy3k;
@@ -2172,6 +2162,21 @@ rec {
     };
   };
 
+  singledispatch = buildPythonPackage rec {
+    name = "singledispatch-3.4.0.3";
+
+    propagatedBuildInputs = [ six ];
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/s/singledispatch/${name}.tar.gz";
+      md5 = "af2fc6a3d6cc5a02d0bf54d909785fcb";
+    };
+
+    meta = with stdenv.lib; {
+      homepage = http://docs.python.org/3/library/functools.html;
+    };
+  };
+
   gcutil = buildPythonPackage rec {
     name = "gcutil-1.15.0";
     meta.maintainers = [ stdenv.lib.maintainers.phreedom ];
@@ -2180,6 +2185,10 @@ rec {
       url = https://dl.google.com/dl/cloudsdk/release/artifacts/gcutil-1.15.0.tar.gz;
       sha256 = "12c98ivhjr01iz6lkga574xm8p0bsil6arydvpblyw8sjkgim5sq";
     };
+
+    patchPhase = ''
+      substituteInPlace setup.py --replace "httplib2==0.8" "httplib2"
+    '';
 
     propagatedBuildInputs = [ gflags iso8601_0_1_4 ipaddr httplib2 google_apputils google_api_python_client ];
   };
@@ -3446,6 +3455,23 @@ rec {
     };
   };
 
+  flask_cache = buildPythonPackage rec {
+    name = "Flask-Cache-0.13.1";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/F/Flask-Cache/${name}.tar.gz";
+      md5 = "ab82a9cd0844891ccdb54fbb93fd6c59";
+    };
+
+    propagatedBuildInputs = [ werkzeug flask ];
+
+    meta = {
+      homepage = https://github.com/thadeusb/flask-cache;
+      description = "Adds cache support to your Flask application";
+      license = "BSD";
+    };
+  };
+
   flexget = buildPythonPackage rec {
     name = "FlexGet-1.2.161";
     disabled = isPy3k;
@@ -3456,7 +3482,7 @@ rec {
     };
 
     buildInputs = [ nose ];
-    # dateutil dependancy: requirement is dateutil !=2.0 and != 2.2,
+    # dateutil dependency: requirement is dateutil !=2.0 and != 2.2,
     # dateutil_1_5 is used as it's supported, but a newer version could be used
     propagatedBuildInputs = [ paver feedparser sqlalchemy pyyaml rpyc
 	    beautifulsoup4 html5lib pyrss2gen pynzb progressbar jinja2 flask
@@ -3933,12 +3959,12 @@ rec {
 
   hetzner = buildPythonPackage rec {
     name = "hetzner-${version}";
-    version = "0.7.0";
+    version = "0.7.2";
 
     src = fetchurl {
       url = "https://github.com/RedMoonStudios/hetzner/archive/"
           + "v${version}.tar.gz";
-      sha256 = "1ldbhwy6yk18frv6n9znvdsrqfnpch4mfvc70jrpq3f9fw236src";
+      sha256 = "07jnrgy9fkh1hwgsa8491ljz9spazmifqsg92m3xnamja1536qfl";
     };
 
     # not there yet, but coming soon.
@@ -4047,6 +4073,7 @@ rec {
     name = "httpretty-${version}";
     version = "0.8.3";
     disabled = isPy3k;
+    doCheck = !isPyPy;
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/h/httpretty/${name}.tar.gz";
@@ -4084,6 +4111,25 @@ rec {
     };
     doCheck = false;
   }) else null;
+
+  influxdb = buildPythonPackage rec {
+    name = "influxdb-0.1.12";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/i/influxdb/${name}.tar.gz";
+      md5 = "6c975058ccc4df41dad8d8234c52d754";
+    };
+
+    # ImportError: No module named tests
+    doCheck = false;
+    propagatedBuildInputs = [ requests ];
+
+    meta = {
+      description = "Python client for InfluxDB";
+      homepage = https://github.com/influxdb/influxdb-python;
+      license = licenses.mit;
+    };
+  };
 
   iptools = buildPythonPackage rec {
     version = "0.6.1";
@@ -4140,6 +4186,7 @@ rec {
 
   ipdb = buildPythonPackage rec {
     name = "ipdb-0.8";
+    disabled = isPyPy;  # setupterm: could not find terminfo database
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/i/ipdb/${name}.zip";
       md5 = "96dca0712efa01aa5eaf6b22071dd3ed";
@@ -4350,23 +4397,6 @@ rec {
     };
 
     propagatedBuildInputs = [ unittest2 ];
-  };
-
-  "lxml-2.3.6" = buildPythonPackage rec {
-    name = "lxml-2.3.6";
-    src = fetchurl {
-      url = "http://pypi.python.org/packages/source/l/lxml/lxml-2.3.6.tar.gz";
-      md5 = "d5d886088e78b1bdbfd66d328fc2d0bc";
-    };
-    buildInputs = [ pkgs.libxml2 pkgs.libxslt ];
-    propagatedBuildInputs = [  ];
-    doCheck = false;
-
-    meta = {
-      description = "Pythonic binding for the libxml2 and libxslt libraries";
-      homepage = http://codespeak.net/lxml/index.html;
-      license = "BSD";
-    };
   };
 
   lxml = buildPythonPackage ( rec {
@@ -5359,6 +5389,7 @@ rec {
   livestreamer = buildPythonPackage rec {
     version = "1.10.2";
     name = "livestreamer-${version}";
+    disabled = isPyPy;
 
     src = fetchurl {
       url = "https://github.com/chrippa/livestreamer/archive/v${version}.tar.gz";
@@ -5366,7 +5397,7 @@ rec {
     };
 
     buildInputs = [ pkgs.makeWrapper ];
-    propagatedBuildInputs = [ requests pkgs.rtmpdump pycrypto ];
+    propagatedBuildInputs = [ requests2 pkgs.rtmpdump pycrypto singledispatch futures ];
     postInstall = ''
       wrapProgram $out/bin/livestreamer --prefix PATH : ${pkgs.rtmpdump}/bin
     '';
@@ -7085,11 +7116,11 @@ rec {
 
 
   requests = buildPythonPackage rec {
-    name = "requests-1.2.0";
+    name = "requests-1.2.3";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/r/requests/${name}.tar.gz";
-      md5 = "22af2682233770e5468a986f451c51c0";
+      md5 = "adbd3f18445f7fe5e77f65c502e264fb";
     };
 
     meta = {
@@ -8148,6 +8179,7 @@ rec {
   sqlalchemy = sqlalchemy9.override rec {
     name = "SQLAlchemy-0.7.10";
     disabled = isPy34;
+    doCheck = !isPyPy;
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/S/SQLAlchemy/${name}.tar.gz";
@@ -8166,6 +8198,7 @@ rec {
   sqlalchemy8 = sqlalchemy9.override rec {
     name = "SQLAlchemy-0.8.7";
     disabled = isPy34;
+    doCheck = !isPyPy;
 
     src = fetchurl {
       url = "https://pypi.python.org/packages/source/S/SQLAlchemy/${name}.tar.gz";
@@ -8337,6 +8370,22 @@ rec {
       description = "Utility belt for automated testing";
       homepage = "http://falcao.it/sure/";
       license = licenses.gpl3Plus;
+    };
+  };
+
+
+  structlog = buildPythonPackage rec {
+    name = "structlog-0.4.2";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/s/structlog/${name}.tar.gz";
+      md5 = "062cda36069e8573e00c265f451f899e";
+    };
+
+    meta = {
+      description = "Painless structural logging";
+      homepage = http://www.structlog.org/;
+      license = licenses.asl20;
     };
   };
 
@@ -9123,15 +9172,11 @@ rec {
   wxPython = wxPython28;
 
 
-  wxPython28 = import ../development/python-modules/wxPython/2.8.nix {
-    inherit (pkgs) stdenv fetchurl pkgconfig;
-    inherit pythonPackages;
+  wxPython28 = callPackage ../development/python-modules/wxPython/2.8.nix {
     wxGTK = pkgs.wxGTK28;
   };
 
-  wxPython30 = import ../development/python-modules/wxPython/3.0.nix {
-    inherit (pkgs) stdenv fetchurl pkgconfig;
-    inherit pythonPackages;
+  wxPython30 = callPackage ../development/python-modules/wxPython/3.0.nix {
     wxGTK = pkgs.wxGTK30;
   };
 
@@ -9291,6 +9336,7 @@ rec {
   zodb3 = buildPythonPackage rec {
     name = "zodb3-${version}";
     version = "3.11.0";
+    disabled = isPyPy;
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/Z/ZODB3/ZODB3-${version}.tar.gz";
@@ -9309,6 +9355,8 @@ rec {
 
   zodb = buildPythonPackage rec {
     name = "zodb-${version}";
+    disabled = isPyPy;
+
     version = "4.0.1";
 
     src = fetchurl {
@@ -9682,11 +9730,11 @@ rec {
 
 
   zope_schema = buildPythonPackage rec {
-    name = "zope.schema-4.4.1";
+    name = "zope.schema-4.4.2";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/z/zope.schema/${name}.tar.gz";
-      sha256 = "0wpwfggd736ai8bbrwbsnqf522sh5j57d1zxq8m8p6i5nwml0q02";
+      sha256 = "1p943jdxb587dh7php4vx04qvn7b2877hr4qs5zyckvp5afhhank";
     };
 
     propagatedBuildInputs = [ zope_location zope_event zope_interface zope_testing ] ++ optional isPy26 ordereddict;
@@ -10262,6 +10310,58 @@ rec {
       maintainers = with maintainers; [ rickynils offline ];
     };
   };
+
+  graphite_api = buildPythonPackage rec {
+    name = "graphite-api-1.0.1";
+
+    src = fetchgit {
+      url = "https://github.com/brutasse/graphite-api.git";
+      rev = "b6f75e8a08fae695c094fece6de611b893fc65fb";
+      sha256 = "41b90d5f35e99a020a6b1b77938690652521d1841b3165574fcfcee807ce4e6a";
+    };
+
+    # ImportError: No module named tests
+    doCheck = false;
+
+    propagatedBuildInputs = [
+      flask
+      flask_cache
+      cairocffi
+      pyparsing
+      pytz
+      pyyaml
+      raven
+      six
+      structlog
+      tzlocal
+    ];
+
+    meta = {
+      description = "Graphite-web,  without the interface. Just the rendering HTTP API.";
+      homepage = https://github.com/brutasse/graphite-api;
+      license = licenses.asl20;
+    };
+  };
+
+  graphite_influxdb = buildPythonPackage rec {
+    name = "graphite-influxdb-0.3";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/g/graphite-influxdb/${name}.tar.gz";
+      md5 = "5ce64ff6bb0b41c99e57486d6ec86eb7";
+    };
+
+    propagatedBuildInputs = [ influxdb graphite_api ];
+
+    passthru.moduleName = "graphite_influxdb.InfluxdbFinder";
+
+    meta = {
+      description = "An influxdb backend for Graphite-web and graphite-api";
+      homepage = https://github.com/vimeo/graphite-influxdb;
+      license = licenses.asl20;
+    };
+  };
+
 
   pyspotify = buildPythonPackage rec {
     name = "pyspotify-${version}";

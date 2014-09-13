@@ -41,6 +41,7 @@
   cstrahan = "Charles Strahan <charles.c.strahan@gmail.com>";
   DamienCassou = "Damien Cassou <damien.cassou@gmail.com>";
   DerGuteMoritz = "Moritz Heidkamp <moritz@twoticketsplease.de>";
+  dbohdan = "Danyil Bohdan <danyil.bohdan@gmail.com>";
   doublec = "Chris Double <chris.double@double.co.nz>";
   ederoyd46 = "Matthew Brown <matt@ederoyd.co.uk>";
   edwtjo = "Edward Tjörnhammar <ed@cflags.cc>";
@@ -104,6 +105,7 @@
   roelof = "Roelof Wobben <rwobben@hotmail.com>";
   romildo = "José Romildo Malaquias <malaquias@gmail.com>";
   rszibele = "Richard Szibele <richard_szibele@hotmail.com>";
+  rycee = "Robert Helgesson <robert@rycee.net>";
   sander = "Sander van der Burg <s.vanderburg@tudelft.nl>";
   shlevy = "Shea Levy <shea@shealevy.com>";
   simons = "Peter Simons <simons@cryp.to>";
@@ -118,6 +120,7 @@
   ttuegel = "Thomas Tuegel <ttuegel@gmail.com>";
   tv = "Tomislav Viljetić <tv@shackspace.de>";
   urkud = "Yury G. Kudryashov <urkud+nix@ya.ru>";
+  vandenoever = "Jos van den Oever <jos@vandenoever.info>";
   vbmithr = "Vincent Bernardoff <vb@luminar.eu.org>";
   vcunat = "Vladimír Čunát <vcunat@gmail.com>";
   viric = "Lluís Batlle i Rossell <viric@viric.name>";
