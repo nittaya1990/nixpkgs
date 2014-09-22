@@ -85,6 +85,11 @@ in {
   };
 
   config = mkIf cfg.enable {
+    # server references the dejavu fonts
+    environment.systemPackages = [
+      pkgs.dejavu_fonts
+    ];
+
     users.extraGroups = optional (cfg.group == "jenkins") {
       name = "jenkins";
       gid = config.ids.gids.jenkins;
@@ -114,6 +119,7 @@ in {
 
       script = ''
         ${pkgs.jdk}/bin/java -jar ${pkgs.jenkins}/jenkins.war \
+                             -Djava.awt.headless=true \
                              --httpPort=${toString cfg.port} \
                              ${concatStringsSep " " cfg.extraOptions}
       '';
