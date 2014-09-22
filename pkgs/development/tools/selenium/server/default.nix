@@ -1,12 +1,15 @@
 { stdenv, fetchurl }:
-
-stdenv.mkDerivation rec {
+let
+  majorVersion = "2.43";
+  release = "1";
+  baseURL = "http://selenium-release.storage.googleapis.com";
+in stdenv.mkDerivation rec {
   name = "selenium-server-standalone-${version}";
-  version = "2.39.0";
+  version = "${majorVersion}.${release}";
 
   src = fetchurl {
-    url = "https://selenium.googlecode.com/files/${name}.jar";
-    sha256 = "11ixh5x5f9kia2va8wssd3n7y57dkv3snw6xvk85y4qhzg64b65f";
+    url = "${baseURL}/${majorVersion}/selenium-server-standalone-${version}.jar";
+    sha256 = "1qn70jcpnf2fzazkc5h6w4n77fja7w3a3gngm14f9yg1gy7z19fk";
   };
 
   unpack = "";
