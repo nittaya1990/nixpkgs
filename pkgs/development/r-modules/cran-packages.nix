@@ -38,7 +38,7 @@
 
 let
 
-  inherit (pkgs) R fetchurl stdenv curl;
+  inherit (pkgs) R fetchurl stdenv;
 
   buildRPackage = import ./generic-builder.nix R;
 
@@ -2479,7 +2479,7 @@ let self = _self // overrides; _self = with self; {
   jpeg = derive { name="jpeg"; version="0.1-8"; sha256="05hawv5qcb82ljc1l2nchx1wah8mq2k2kfkhpzyww554ngzbwcnh"; depends=[]; };
   JPSurv = derive { name="JPSurv"; version="1.0.1"; sha256="11hfji0nyfmw1d7y2cijpp7ivlv5s9k8g771kmgwy14wflkyf7g2"; depends=[]; };
   jSonarR = derive { name="jSonarR"; version="1.0"; sha256="1369v79y2679p1c1s6pfi0zdj21zbbln3a4gqsxivx82m0lwqprp"; depends=[RCurl]; };
-  jsonlite = derive { name="jsonlite"; version="0.9.10"; sha256="0w49mv4fabzgc86gv2jn9apwf9k6bk1s1p3mjmaxpmw95wgjpc9r"; depends=[]; };
+  jsonlite = derive { name="jsonlite"; version="0.9.11"; sha256="4e6d86dfd1584ed2b96b1eb6c067b07847df5fff673d07ffacca6399c330552e"; depends=[]; };
   jtrans = derive { name="jtrans"; version="0.1"; sha256="1wcrjyifsnpk9jfmwc1cx30qp5vavwl87i0avbbls8cmji7z0nay"; depends=[]; };
   JudgeIt = derive { name="JudgeIt"; version="1.5.1"; sha256="1jssz1x9gw9hjpqlqbvlxa99icl8gffzl6qya0cnaxr50p82hdag"; depends=[]; };
   Julia = derive { name="Julia"; version="1.0"; sha256="0df72mjkfsaz7wbrg3l6fcypwm59hdxxndjv1b833xa4qpq5301g"; depends=[]; };
@@ -4252,7 +4252,7 @@ let self = _self // overrides; _self = with self; {
   rcqp = derive { name="rcqp"; version="0.3"; sha256="0vxcgchnxdsdamclcshjbkn00ysmfmqp586a36wsyv3zqrd6rg7p"; depends=[plyr]; };
   Rcsdp = derive { name="Rcsdp"; version="0.1.53"; sha256="0x91hyx6z9f4zd7djxlq7dnznmr9skyzwbbcbjyid9hxbcfyvhcp"; depends=[]; };
   rCUR = derive { name="rCUR"; version="1.3"; sha256="1f38xbc5n91k2y88cg0sv1z2p4g5vl7v2k1024f42f7526g2p2lx"; depends=[MASS Matrix lattice]; };
-  RCurl = derive { name="RCurl"; version="1.95-4.3"; sha256="1gyjarnxwz3ldpm1vwq9ls6al66rvs7yshzhrl1fv9lbm1qi8yfg"; depends=[bitops curl]; };
+  RCurl = derive { name="RCurl"; version="1.95-4.3"; sha256="1gyjarnxwz3ldpm1vwq9ls6al66rvs7yshzhrl1fv9lbm1qi8yfg"; depends=[bitops pkgs.curl]; };
   Rd2roxygen = derive { name="Rd2roxygen"; version="1.4"; sha256="09dxgp65zac5b9mxbjrvy3ihdwski98xva5afq659b8yfvkviq4g"; depends=[roxygen2 formatR]; };
   rda = derive { name="rda"; version="1.0.2-2"; sha256="1g2q7c0y138i9r7jgjrlpqznvwpqsj6f7vljqqfzh2l6kcj43vjj"; depends=[]; };
   rdatamarket = derive { name="rdatamarket"; version="0.6.4"; sha256="16a1yxvf841505a8gh7jf09fx6ipysymrpvsd4b07xdg5hvbzx25"; depends=[zoo RCurl RJSONIO]; };
@@ -4387,11 +4387,11 @@ let self = _self // overrides; _self = with self; {
   Rgbp = derive { name="Rgbp"; version="1.0.6"; sha256="1j4j7g9z7p592f82k0yvibrydynkd9v1ldil2vf3ikc650bn2l02"; depends=[sn]; };
   RGCCA = derive { name="RGCCA"; version="2.0"; sha256="0mcp51z5jkn7yxmspp5cvmmvq0cwh7hj66g7wjmxsi74dwxcinvg"; depends=[MASS]; };
   rgcvpack = derive { name="rgcvpack"; version="0.1-4"; sha256="1vlvw9slrra18qaizqk2xglzky0i6z3bsan85x908wrg8drss4h5"; depends=[]; };
-  rgdal = derive { name="rgdal"; version="0.8-16"; sha256="17qk7kd0l0l52nyf6drr0gv4b0ibkggyn6g3ky9flsjy05b3wg8j"; depends=[sp]; };
+  rgdal = derive { name="rgdal"; version="0.8-16"; sha256="17qk7kd0l0l52nyf6drr0gv4b0ibkggyn6g3ky9flsjy05b3wg8j"; depends=[sp pkgs.gdal pkgs.proj]; };
   RGENERATE = derive { name="RGENERATE"; version="1.1"; sha256="1da3b50cfv5jb63ijzbnr226jadbww2bapcxzx8am7zydm6gqnss"; depends=[RMAWGEN]; };
   RGenetics = derive { name="RGenetics"; version="0.1"; sha256="0x5sspd67hh08qm62whlnnd838m0np29q3bfzgwp6j85lhil3jrx"; depends=[]; };
   rgenoud = derive { name="rgenoud"; version="5.7-12"; sha256="17gzkn4laylnksy8h2w8c0whcxpchsx7bwjzk1q5sfqxswclqq0g"; depends=[]; };
-  rgeos = derive { name="rgeos"; version="0.3-6"; sha256="134cppgg5349i5qs9k2161fakd15l1fx1x6mgv28c5vic2xdm4wl"; depends=[sp]; };
+  rgeos = derive { name="rgeos"; version="0.3-6"; sha256="134cppgg5349i5qs9k2161fakd15l1fx1x6mgv28c5vic2xdm4wl"; depends=[sp pkgs.geos]; };
   rgexf = derive { name="rgexf"; version="0.14.3.11"; sha256="16mil1csyzkaywcdrjzz5r60n4xhhinxawg30skc7d9awkf26qfa"; depends=[XML Rook igraph]; };
   rggobi = derive { name="rggobi"; version="2.1.20"; sha256="1a7l68h3m9cq14k7y96ijgh0iz3d6j4j2anxg50pykz20lnykr9g"; depends=[RGtk2]; };
   RGIFT = derive { name="RGIFT"; version="0.1-5"; sha256="1745fs4bq0ss39fiwljspvrmnkgbbpc1fjvhvcrsmp2iizq12sgn"; depends=[]; };

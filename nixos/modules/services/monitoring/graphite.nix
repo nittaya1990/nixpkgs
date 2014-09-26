@@ -18,6 +18,12 @@ let
     ${cfg.api.extraConfig}
   '';
 
+  seyrenConfig = {
+    SEYREN_URL = cfg.seyren.seyrenUrl;
+    MONGO_URL = cfg.seyren.mongoUrl;
+    GRAPHITE_URL = cfg.seyren.graphiteUrl;
+  } // cfg.seyren.extraConfig;
+
   configDir = pkgs.buildEnv {
     name = "graphite-config";
     paths = lists.filter (el: el != null) [
@@ -98,12 +104,44 @@ in {
         type = types.listOf types.str;
       };
 
+      host = mkOption {
+        description = "Graphite web service listen address.";
+        default = "127.0.0.1";
+        type = types.str;
+      };
+
+      port = mkOption {
+        description = "Graphite api service port.";
+        default = 8080;
+        type = types.int;
+      };
+
+      package = mkOption {
+        description = "Package to use for graphite api.";
+        default = pkgs.python27Packages.graphite_api;
+        type = types.package;
+      };
+
       extraConfig = mkOption {
         description = "Extra configuration for graphite api.";
         default = ''
           whisper:
             directories:
                 - ${dataDir}/whisper
+        '';
+        example = literalExample ''
+          allowed_origins:
+            - dashboard.example.com
+          cheat_times: true
+          influxdb:
+            host: localhost
+            port: 8086
+            user: influxdb
+            pass: influxdb
+            db: metrics
+          cache:
+            CACHE_TYPE: 'filesystem'
+            CACHE_DIR: '/tmp/graphite-api-cache'
         '';
         type = types.str;
       };
@@ -216,11 +254,65 @@ in {
         '';
       };
     };
+
+    seyren = {
+      enable = mkOption {
+        description = "Whether to enable seyren service.";
+        default = false;
+        type = types.uniq types.bool;
+      };
+
+      port = mkOption {
+        description = "Seyren listening port.";
+        default = 8081;
+        type = types.int;
+      };
+
+      seyrenUrl = mkOption {
+        default = "http://localhost:${toString cfg.seyren.port}/";
+        description = "Host where seyren is accessible.";
+        type = types.str;
+      };
+
+      graphiteUrl = mkOption {
+        default = "http://${cfg.web.host}:${toString cfg.web.port}";
+        description = "Host where graphite service runs.";
+        type = types.str;
+      };
+
+      mongoUrl = mkOption {
+        default = "mongodb://${config.services.mongodb.bind_ip}:27017/seyren";
+        description = "Mongodb connection string.";
+        type = types.str;
+      };
+
+      extraConfig = mkOption {
+        default = {};
+        description = ''
+          Extra seyren configuration. See
+          <link xlink:href='https://github.com/scobal/seyren#config' />
+        '';
+        type = types.attrsOf types.str;
+        example = literalExample ''
+          {
+            GRAPHITE_USERNAME = "user";
+            GRAPHITE_PASSWORD = "pass"; 
+          }
+        '';
+      };
+    };
   };
 
   ###### implementation
 
-  config = mkIf (cfg.carbon.enableAggregator || cfg.carbon.enableCache || cfg.carbon.enableRelay || cfg.web.enable || cfg.api.enable) {
+  config = mkIf (
+    cfg.carbon.enableAggregator ||
+    cfg.carbon.enableCache ||
+    cfg.carbon.enableRelay ||
+    cfg.web.enable ||
+    cfg.api.enable ||
+    cfg.seyren.enable
+  ) {
     systemd.services.carbonCache = {
       enable = cfg.carbon.enableCache;
       description = "Graphite Data Storage Backend";
@@ -312,7 +404,7 @@ in {
       after = [ "network-interfaces.target" ];
       environment = {
         PYTHONPATH =
-          "${pkgs.python27Packages.graphite_api}/lib/python2.7/site-packages:" +
+          "${cfg.api.package}/lib/python2.7/site-packages:" +
           concatMapStringsSep ":" (f: f + "/lib/python2.7/site-packages") cfg.api.finders;
         GRAPHITE_API_CONFIG = graphiteApiConfig;
         LD_LIBRARY_PATH = "${pkgs.cairo}/lib";
@@ -320,7 +412,7 @@ in {
       serviceConfig = {
         ExecStart = ''
           ${pkgs.python27Packages.waitress}/bin/waitress-serve \
-          --host=${cfg.web.host} --port=${toString cfg.web.port} \
+          --host=${cfg.api.host} --port=${toString cfg.api.port} \
           graphite_api.app:app 
         '';
         User = "graphite";
@@ -338,6 +430,28 @@ in {
         fi
       '';
     };
+
+    systemd.services.seyren = {
+      enable = cfg.seyren.enable;
+      description = "Graphite Alerting Dashboard";
+      wantedBy = [ "multi-user.target" ];
+      after = [ "network-interfaces.target" "mongodb.service" ];
+      environment = seyrenConfig;
+      serviceConfig = {
+        ExecStart = "${pkgs.seyren}/bin/seyren -httpPort ${toString cfg.seyren.port}";
+        WorkingDirectory = dataDir;
+        User = "graphite";
+        Group = "graphite"; 
+      };
+      preStart = ''
+        if ! test -e ${dataDir}/db-created; then
+          mkdir -p ${dataDir}
+          chown -R graphite:graphite ${dataDir}
+        fi
+      '';
+    };
+
+    services.mongodb.enable = mkDefault cfg.seyren.enable;
 
     environment.systemPackages = [
       pkgs.pythonPackages.carbon
