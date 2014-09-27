@@ -3878,7 +3878,7 @@ let
   python33 = callPackage ../development/interpreters/python/3.3 { };
   python34 = hiPrio (callPackage ../development/interpreters/python/3.4 { });
 
-  pypy = callPackage ../development/interpreters/pypy/2.3 { };
+  pypy = callPackage ../development/interpreters/pypy/2.4 { };
 
   python26Full = callPackage ../development/interpreters/python/wrapper.nix {
     extraLibs = [];
@@ -4848,6 +4848,8 @@ let
     vpxSupport = !stdenv.isMips;
   };
 
+  ffmpeg_2_3 = callPackage ../development/libraries/ffmpeg/2.3.x.nix { };
+
   ffmpeg_2 = callPackage ../development/libraries/ffmpeg/2.x.nix { };
 
   ffmpeg = ffmpeg_2;
@@ -5082,6 +5084,8 @@ let
 
   qt_gstreamer = callPackage ../development/libraries/gstreamer/legacy/qt-gstreamer {};
 
+  qt_gstreamer1 = callPackage ../development/libraries/gstreamer/qt-gstreamer {};
+
   gnet = callPackage ../development/libraries/gnet { };
 
   gnu-efi = callPackage ../development/libraries/gnu-efi { };
@@ -5249,6 +5253,8 @@ let
 
   indilib = callPackage ../development/libraries/indilib { };
 
+  indilib_0_9_9 = callPackage ../development/libraries/indilib/0_9_9.nix { };
+
   iniparser = callPackage ../development/libraries/iniparser { };
 
   intltool = callPackage ../development/tools/misc/intltool { };
@@ -5377,8 +5383,6 @@ let
   libchamplain = callPackage ../development/libraries/libchamplain {
     inherit (gnome) libsoup;
   };
-
-  libchamplain_0_6 = callPackage ../development/libraries/libchamplain/0.6.nix {};
 
   libchardet = callPackage ../development/libraries/libchardet { };
 
@@ -6782,12 +6786,16 @@ let
 
   ### DEVELOPMENT / LIBRARIES / AGDA
 
+  aaronStumpStdlib = callPackage ../development/libraries/agda/aaron-stump-stdlib {};
+
   agda = callPackage ../build-support/agda {
     glibcLocales = if pkgs.stdenv.isLinux then pkgs.glibcLocales else null;
     extension = self : super : {};
     Agda = haskellPackages.Agda;
     inherit writeScriptBin;
   };
+
+  agdaPrelude = callPackage ../development/libraries/agda/agda-prelude {};
 
   AgdaStdlib = callPackage ../development/compilers/agda/stdlib.nix {
     inherit (haskellPackages) ghc filemanip;
@@ -6798,6 +6806,10 @@ let
   bitvector = callPackage ../development/libraries/agda/bitvector {};
 
   categories = callPackage ../development/libraries/agda/categories {};
+
+  pretty = callPackage ../development/libraries/agda/pretty {};
+
+  TotalParserCombinators = callPackage ../development/libraries/agda/TotalParserCombinators {};
 
   ### DEVELOPMENT / LIBRARIES / JAVA
 
@@ -9030,6 +9042,8 @@ let
 
   fossil = callPackage ../applications/version-management/fossil { };
 
+  freewheeling = callPackage ../applications/audio/freewheeling { };
+
   fribid = callPackage ../applications/networking/browsers/mozilla-plugins/fribid { };
 
   fvwm = callPackage ../applications/window-managers/fvwm { };
@@ -10423,7 +10437,9 @@ let
     inherit (xlibs) libX11;
   };
 
-  vlc = callPackage ../applications/video/vlc { };
+  vlc = callPackage ../applications/video/vlc {
+    ffmpeg = ffmpeg_2_3;
+  };
 
   vmpk = callPackage ../applications/audio/vmpk { };
 
@@ -11123,13 +11139,18 @@ let
 
   kde4 = recurseIntoAttrs pkgs.kde412;
 
-  kde4_next = recurseIntoAttrs( lib.lowPrioSet pkgs.kde412 );
+  kde4_next = recurseIntoAttrs( lib.lowPrioSet pkgs.kde414 );
 
   kde412 = kdePackagesFor (pkgs.kde412 // {
       eigen = eigen2;
       libusb = libusb1;
       libcanberra = libcanberra_kde;
     }) ../desktops/kde-4.12;
+
+  kde414 = kdePackagesFor (pkgs.kde414 // {
+      libusb = libusb1;
+      libcanberra = libcanberra_kde;
+    }) ../desktops/kde-4.14;
 
   kdePackagesFor = self: dir:
     let callPackageOrig = callPackage; in
