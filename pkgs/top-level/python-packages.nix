@@ -40,6 +40,9 @@ let
 
   # helpers
 
+  # glibcLocales doesn't build on Darwin
+  localePath = optionalString (! stdenv.isDarwin) "${pkgs.glibcLocales}/lib/locale/locale-archive";
+
   callPackage = pkgs.newScope pythonPackages;
 
   # global distutils config used by buildPythonPackage
@@ -1164,6 +1167,22 @@ let
     };
   };
 
+  certifi = buildPythonPackage rec {
+    name = "certifi-${version}";
+    version = "14.05.14";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/c/certifi/${name}.tar.gz";
+      sha256 = "0s8vxzfz6s4m6fvxc7z25k9j35w0rh6jkw3wwcd1az1mssncn6qy";
+    };
+
+    meta = with stdenv.lib; {
+      homepage = http://certifi.io/;
+      description = "Python package for providing Mozilla's CA Bundle.";
+      license = licenses.isc;
+      maintainers = [ maintainers.koral ];
+    };
+  };
 
   characteristic = buildPythonPackage rec {
     name = "characteristic-14.1.0";
@@ -1391,6 +1410,8 @@ let
 
     # error: invalid command 'test'
     doCheck = false;
+
+    propagatedBuildInputs = [ six ];
 
     meta = {
       description = "Config file reading, writing and validation.";
@@ -2317,7 +2338,7 @@ let
     };
 
     preBuild = ''
-      export LOCALE_ARCHIVE=${pkgs.glibcLocales}/lib/locale/locale-archive
+      export LOCALE_ARCHIVE=${localePath}
       export LC_ALL="en_US.UTF-8"
     '';
 
@@ -3266,40 +3287,41 @@ let
 
 
   dulwich = buildPythonPackage rec {
-    name = "dulwich-0.8.7";
-    disabled = isPy3k || isPyPy;
+    name = "dulwich-${version}";
+    version = "0.9.7";
 
     src = fetchurl {
-      url = "http://samba.org/~jelmer/dulwich/${name}.tar.gz";
-      sha256 = "041qp5v2x8fbwkmws6hwwiny74lavkz723dj8gwbm40b2383d8vv";
+      url = "https://pypi.python.org/packages/source/d/dulwich/${name}.tar.gz";
+      sha256 = "1wq083g9b1xsk89kb0wwpi4mxy63x6760vn9x5sk1fx36h27prqj";
     };
 
-    buildPhase = "make build";
+    # Only test dependencies
+    buildInputs = [ pkgs.git gevent geventhttpclient mock fastimport ];
 
-    # For some reason "python setup.py test" doesn't work with Python 2.6.
-    # pretty sure that is about import behaviour.
-    doCheck = python.majorVersion != "2.6";
-
-    meta = {
+    meta = with stdenv.lib; {
       description = "Simple Python implementation of the Git file formats and protocols.";
       homepage = http://samba.org/~jelmer/dulwich/;
+      license = licenses.gpl2Plus;
+      maintainers = [ maintainers.koral ];
     };
   };
 
 
-  hggit = buildPythonPackage rec {
-    name = "hg-git-0.3.1";
+  hg-git = buildPythonPackage rec {
+    name = "hg-git-${version}";
+    version = "0.6.1";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/h/hg-git/${name}.tar.gz";
-      md5 = "4b15867a07abb0be985177581ce64cee";
+      sha256 = "136kz4w377ldcjdg865azi8aym0xnxzxl3rycnflgay26ar1309s";
     };
 
-    propagatedBuildInputs = [ dulwich ];
+    propagatedBuildInputs = [ pkgs.mercurial dulwich ];
 
-    meta = {
+    meta = with stdenv.lib; {
       description = "Push and pull from a Git server using Mercurial.";
       homepage = http://hg-git.github.com/;
+      maintainers = [ maintainers.koral ];
     };
   };
 
@@ -3459,6 +3481,23 @@ let
     meta = {
       homepage = http://pypi.python.org/pypi/eventlet/;
       description = "A concurrent networking library for Python";
+    };
+  };
+
+  fastimport = buildPythonPackage rec {
+    name = "fastimport-${version}";
+    version = "0.9.4";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/f/fastimport/${name}.tar.gz";
+      sha256 = "0k8x7552ypx9rc14vbsvg2lc6z0r8pv9laah28pdwyynbq10825d";
+    };
+
+    meta = with stdenv.lib; {
+      homepage = https://launchpad.net/python-fastimport;
+      description = "VCS fastimport/fastexport parser";
+      maintainers = [ maintainers.koral ];
+      license = licenses.gpl2Plus;
     };
   };
 
@@ -3797,6 +3836,24 @@ let
     };
   };
 
+  geventhttpclient = buildPythonPackage rec {
+    name = "geventhttpclient-${version}";
+    version = "1.1.0";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/g/geventhttpclient/${name}.tar.gz";
+      sha256 = "1k7s4dnkmcfqqkmbqi0vvb2ns53r9cl2652mq20bgg65zj26j2l6";
+    };
+
+    propagatedBuildInputs = [ gevent certifi backports_ssl_match_hostname_3_4_0_2 ];
+
+    meta = with stdenv.lib; {
+      homepage = http://github.com/gwik/geventhttpclient;
+      description = "HTTP client library for gevent";
+      license = licenses.mit;
+      maintainers = [ maintainers.koral ];
+    };
+  };
 
   gevent-socketio = buildPythonPackage rec {
     name = "gevent-socketio-0.3.6";
@@ -4028,7 +4085,7 @@ let
     };
 
     preBuild = ''
-      export LOCALE_ARCHIVE=${pkgs.glibcLocales}/lib/locale/locale-archive
+      export LOCALE_ARCHIVE=${localePath}
       export LC_ALL="en_US.UTF-8"
     '';
 
@@ -4789,7 +4846,7 @@ let
     doCheck = false;
 
     preBuild = ''
-      export LOCALE_ARCHIVE=${pkgs.glibcLocales}/lib/locale/locale-archive
+      export LOCALE_ARCHIVE=${localePath}
       export LC_ALL="en_US.UTF-8"
     '';
 
@@ -4961,7 +5018,7 @@ let
 
     # some files in tests dir include unicode names
     preBuild = ''
-      export LOCALE_ARCHIVE=${pkgs.glibcLocales}/lib/locale/locale-archive
+      export LOCALE_ARCHIVE=${localePath}
       export LC_ALL="en_US.UTF-8"
     '';
 
@@ -5004,7 +5061,7 @@ let
     };
 
     preCheck = ''
-      export LOCALE_ARCHIVE=${pkgs.glibcLocales}/lib/locale/locale-archive
+      export LOCALE_ARCHIVE=${localePath}
       export LC_ALL="en_US.UTF-8"
     '';
 
@@ -6086,7 +6143,7 @@ let
 
     preCheck = ''
       export LANG="en_US.UTF-8"
-      export LOCALE_ARCHIVE=${pkgs.glibcLocales}/lib/locale/locale-archive
+      export LOCALE_ARCHIVE=${localePath}
     '';
 
     meta = {
@@ -7944,8 +8001,7 @@ let
 
     preConfigure = ''
       export LANG="en_US.UTF-8";
-    '' + stdenv.lib.optionalString stdenv.isLinux ''
-      export LOCALE_ARCHIVE="${pkgs.glibcLocales}/lib/locale/locale-archive";
+      export LOCALE_ARCHIVE=${localePath}
     '';
 
     patchPhase = ''
@@ -8003,7 +8059,7 @@ let
 
     preCheck = ''
       export LANG="en_US.UTF-8"
-      export LOCALE_ARCHIVE=${pkgs.glibcLocales}/lib/locale/locale-archive
+      export LOCALE_ARCHIVE=${localePath}
     '';
 
     meta = with stdenv.lib; {
@@ -8066,7 +8122,7 @@ let
 
     preCheck = ''
       export LANG="en_US.UTF-8"
-      export LOCALE_ARCHIVE=${pkgs.glibcLocales}/lib/locale/locale-archive
+      export LOCALE_ARCHIVE=${localePath}
     '';
 
     buildInputs = [ pytest py mock ];
@@ -8527,7 +8583,7 @@ let
     version = "1.2.7";
 
     preBuild = ''
-      export LOCALE_ARCHIVE=${pkgs.glibcLocales}/lib/locale/locale-archive
+      export LOCALE_ARCHIVE=${localePath}
       export LC_ALL="en_US.UTF-8"
     '';
 
@@ -10833,22 +10889,24 @@ let
   };
 
   udiskie = buildPythonPackage rec {
-    name = "udiskie-0.8.0";
+    version = "1.1.2";
+    name = "udiskie-${version}";
 
     src = fetchurl {
-      url = "https://github.com/coldfix/udiskie/archive/0.8.0.tar.gz";
-      sha256 = "0yzrnl7bq0dkcd3wh55kbf41c4dbh7dky0mqx0drvnpxlrvzhvp2";
+      url = "https://github.com/coldfix/udiskie/archive/${version}.tar.gz";
+      sha256 = "07fyvwp4rga47ayfsmb79p2784sqrih0sglwnd9c4x6g63xgljvb";
     };
 
-    propagatedBuildInputs = with pythonPackages; [ pygtk pyyaml dbus notify pkgs.udisks2 ];
+    propagatedBuildInputs = with pythonPackages; [ pygtk pyyaml pygobject dbus notify pkgs.udisks2 pkgs.gettext ];
 
     # tests require dbusmock
     doCheck = false;
 
     meta = with stdenv.lib; {
-      description = "Removable disk automounter for udisks.";
+      description = "Removable disk automounter for udisks";
       license = licenses.mit;
       homepage = https://github.com/coldfix/udiskie;
+      maintainers = [ maintainers.AndersonTorres ];
     };
   };
 
