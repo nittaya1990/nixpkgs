@@ -7455,6 +7455,27 @@ let
   };
 
 
+  restview = buildPythonPackage rec {
+    name = "restview-${version}";
+    version = "2.1.1";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/r/restview/${name}.tar.gz";
+      sha256 = "07scf80hhr9rijrbfrplyi3gwkx74knnzfhvlg6yf1cd0x2yiy8v";
+    };
+
+    propagatedBuildInputs = [ docutils mock pygments ];
+
+    meta = with stdenv.lib; {
+      description = "ReStructuredText viewer";
+      homepage = http://mg.pov.lt/restview/;
+      license = licenses.gpl2;
+      platforms = platforms.all;
+      maintainers = [ maintainers.koral ];
+    };
+  };
+
+
   reviewboard = buildPythonPackage rec {
     name = "ReviewBoard-1.6.16";
 
@@ -9266,12 +9287,12 @@ let
 
 
   webob = buildPythonPackage rec {
-    version = "1.3.1";
+    version = "1.4";
     name = "webob-${version}";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/W/WebOb/WebOb-${version}.tar.gz";
-      md5 = "20918251c5726956ba8fef22d1556177";
+      md5 = "8437607c0cc00c35f658f972516ffb55";
     };
 
     propagatedBuildInputs = [ nose modules.ssl ];
