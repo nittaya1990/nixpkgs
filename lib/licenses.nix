@@ -25,7 +25,7 @@ rec {
     shortName = "amd";
     fullName = "AMD License Agreement";
     url = http://developer.amd.com/amd-license-agreement/;
-  };#
+  };
 
   apsl20 = spdx {
     shortName = "APSL-2.0";
@@ -70,6 +70,11 @@ rec {
   cc-by-30 = spdx {
     shortName = "CC-BY-3.0";
     fullName = "Creative Commons Attribution 3.0";
+  };
+
+  cc-by-sa-30 = spdx {
+    shortName = "CC-BY-SA-3.0";
+    fullName = "Creative Commons Attribution Share Alike 3.0";
   };
 
   cc-by-40 = spdx {

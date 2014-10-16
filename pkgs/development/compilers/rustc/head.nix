@@ -18,19 +18,19 @@ assert stdenv.gcc.gcc != null;
 
 */
 
-with ((import ./common.nix) {inherit stdenv; version = "0.12.0-pre-9a68da740"; });
+with ((import ./common.nix) {inherit stdenv; version = "0.12.0-pre-127-ga0ea210";});
 
 let snapshot = if stdenv.system == "i686-linux"
-      then "5c2132b65f45c21b43d28de6a9460978b1a7b08a"
+      then "0644637db852db8a6c603ded0531ccaa60291bd3"
       else if stdenv.system == "x86_64-linux"
-      then "152be582853c2cf1ddcc88b085153b52ebbeb065"
+      then "656b8c23fbb97794e85973aca725a4b9cd07b29e"
       else if stdenv.system == "i686-darwin"
-      then "7adbb076aeae8e1d9bdf3fe968bc7ef8a8fe0096"
+      then "e4d9709fcfe485fcca00f0aa1fe456e2f164ed96"
       else if stdenv.system == "x86_64-darwin"
-      then "152be582853c2cf1ddcc88b085153b52ebbeb065"
+      then "6b1aa5a441965da87961be81950e8663eadba377"
       else abort "no-snapshot for platform ${stdenv.system}";
-    snapshotDate = "2014-09-22";
-    snapshotRev = "437179e";
+    snapshotDate = "2014-10-10";
+    snapshotRev = "78a7676";
     snapshotName = "rust-stage0-${snapshotDate}-${snapshotRev}-${platform}-${snapshot}.tar.bz2";
 
 in stdenv.mkDerivation {
@@ -40,8 +40,8 @@ in stdenv.mkDerivation {
 
   src = fetchgit {
     url = https://github.com/rust-lang/rust;
-    rev = "9a68da7401d9bef645a8b6a4e0ce4cae12604df4";
-    sha256 = "1nrmahz9scv06v8pyfgjl902dh9947irpqi78lh11r5lyixia8ci";
+    rev = "a0ea210b394aa1b61d341593a3f9098fe5bf7806";
+    sha256 = "0flwzj6dywaq9s77ayinshqbz8na2a1jabkr9s7zj74s2ya5096i";
   };
 
   # We need rust to build rust. If we don't provide it, configure will try to download it.
@@ -65,7 +65,7 @@ in stdenv.mkDerivation {
   configureFlags = [ "--enable-local-rust" "--local-rust-root=$snapshot" ];
 
   # The compiler requires cc, so we patch the source to tell it where to find it
-  patches = [ ./hardcode_paths.HEAD.patch ./local_stage0.HEAD.patch ./override_env.HEAD.patch ];
+  patches = [ ./hardcode_paths.HEAD.patch ./local_stage0.HEAD.patch ];
   postPatch = ''
     substituteInPlace src/librustc/back/link.rs \
       --subst-var-by "ccPath" "${stdenv.gcc}/bin/cc"

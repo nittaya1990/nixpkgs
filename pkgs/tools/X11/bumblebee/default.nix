@@ -98,8 +98,8 @@ in stdenv.mkDerivation {
   # create a wrapper environment for bumblebeed and optirun
   postInstall = ''
     wrapProgram "$out/sbin/bumblebeed" \
-      --prefix PATH : "${x11Env}/sbin:${x11Env}/bin:${x64Env}/bin" \
-      --prefix LD_LIBRARY_PATH : "${x11Env}/lib:${x64Env}/lib" \
+      --prefix PATH : "${x11Env}/sbin:${x11Env}/bin:${x64Env}/bin:\$PATH" \
+      --prefix LD_LIBRARY_PATH : "${x11Env}/lib:${x64Env}/lib:\$LD_LIBRARY_PATH" \
       --set FONTCONFIG_FILE "/etc/fonts/fonts.conf" \
       --set XKB_BINDIR "${xorg.xkbcomp}/bin" \
       --set XKB_DIR "${xkeyboard_config}/etc/X11/xkb"

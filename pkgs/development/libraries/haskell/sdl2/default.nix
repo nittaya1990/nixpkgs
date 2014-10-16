@@ -4,12 +4,12 @@
 
 cabal.mkDerivation (self: {
   pname = "sdl2";
-  version = "1.1.0";
-  sha256 = "1ppxskh810nbziszlkdmk38x74lspsrqm1kpyiir1xj2a7122fkv";
+  version = "1.1.2";
+  sha256 = "1viy6f8iqbw264hmsvfqjf8b27h8klyybywd5976yin6ianbqm2a";
   extraLibraries = [ SDL2 ];
   pkgconfigDepends = [ SDL2 ];
   meta = {
-    description = "Bindings to SDL2";
+    description = "Low-level bindings to SDL2";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
   };

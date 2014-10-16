@@ -399,8 +399,8 @@ in
     services.xserver.drivers = flip concatMap cfg.videoDrivers (name:
       let driver =
         attrByPath [name]
-          (if (hasAttr ("xf86video" + name) xorg)
-           then { modules = [(getAttr ("xf86video" + name) xorg) ]; }
+          (if xorg ? ${"xf86video" + name}
+           then { modules = [xorg.${"xf86video" + name}]; }
            else null)
           knownVideoDrivers;
       in optional (driver != null) ({ inherit name; driverName = name; } // driver));
@@ -458,7 +458,7 @@ in
         restartIfChanged = false;
 
         environment =
-          { FONTCONFIG_FILE = "/etc/fonts/fonts.conf"; # !!! cleanup
+          {
             XKB_BINDIR = "${xorg.xkbcomp}/bin"; # Needed for the Xkb extension.
             XORG_DRI_DRIVER_PATH = "/run/opengl-driver/lib/dri"; # !!! Depends on the driver selected at runtime.
             LD_LIBRARY_PATH = concatStringsSep ":" (
