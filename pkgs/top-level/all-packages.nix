@@ -401,6 +401,10 @@ let
     inherit stdenv;
   };
 
+  substituteAllFiles = import ../build-support/substitute-files/substitute-all-files.nix {
+    inherit stdenv;
+  };
+
   replaceDependency = import ../build-support/replace-dependency.nix {
     inherit runCommand nix lib;
   };
@@ -616,6 +620,8 @@ let
   };
 
   bitbucket-cli = pythonPackages.bitbucket-cli;
+
+  blink = callPackage ../applications/networking/instant-messengers/blink { };
 
   blockdiag = pythonPackages.blockdiag;
 
@@ -1868,7 +1874,7 @@ let
   openobex = callPackage ../tools/bluetooth/openobex { };
 
   openopc = callPackage ../tools/misc/openopc {
-    pythonFull = python27Full.override {
+    pythonFull = python27FullBuildEnv.override {
       extraLibs = [ python27Packages.pyro3 ];
     };
   };
@@ -3929,9 +3935,6 @@ let
   python2Packages = python27Packages;
   python3Packages = python34Packages;
 
-  pythonFull = python2Full;
-  python2Full = python27Full;
-
   python26 = callPackage ../development/interpreters/python/2.6 { db = db47; };
   python27 = callPackage ../development/interpreters/python/2.7 { };
   python32 = callPackage ../development/interpreters/python/3.2 { };
@@ -3940,18 +3943,24 @@ let
 
   pypy = callPackage ../development/interpreters/pypy/2.4 { };
 
-  python26Full = callPackage ../development/interpreters/python/wrapper.nix {
-    extraLibs = [];
-    postBuild = "";
-    python = python26;
+  pythonFull = python2Full;
+  python2Full = python27Full;
+  python26Full = python26.override {
+    includeModules = true;
+  };
+  python27Full = python27.override {
+    includeModules = true;
+  };
+  python26FullBuildEnv = callPackage ../development/interpreters/python/wrapper.nix {
+    python = python26Full;
     inherit (python26Packages) recursivePthLoader;
   };
-  python27Full = callPackage ../development/interpreters/python/wrapper.nix {
-    extraLibs = [];
-    postBuild = "";
-    python = python27;
+  python27FullBuildEnv = callPackage ../development/interpreters/python/wrapper.nix {
+    python = python27Full;
     inherit (python27Packages) recursivePthLoader;
   };
+  pythonFullBuildEnv = python2FullBuildEnv;
+  python2FullBuildEnv = python27FullBuildEnv;
 
   python2nix = callPackage ../tools/package-management/python2nix { };
 
@@ -10687,13 +10696,17 @@ let
       ++ optional (cfg.enableGambatte or false) gambatte
       ++ optional (cfg.enableGenesisPlusGX or false) genesis-plus-gx
       ++ optional (cfg.enableMupen64Plus or false) mupen64plus
+      ++ optional (cfg.enableNestopia or false) nestopia
       ++ optional (cfg.enablePicodrive or false) picodrive
       ++ optional (cfg.enablePrboom or false) prboom
       ++ optional (cfg.enablePPSSPP or false) ppsspp
+      ++ optional (cfg.enableQuickNES or false) quicknes
       ++ optional (cfg.enableScummVM or false) scummvm
+      ++ optional (cfg.enableSnes9x or false) snes9x
       ++ optional (cfg.enableSnes9xNext or false) snes9x-next
       ++ optional (cfg.enableStella or false) stella
       ++ optional (cfg.enableVbaNext or false) vba-next
+      ++ optional (cfg.enableVbaM or false) vba-m
       );
 
   wrapRetroArch = { retroarch }: import ../misc/emulators/retroarch/wrapper.nix {
@@ -12070,12 +12083,10 @@ let
 
   retroarchBare = callPackage ../misc/emulators/retroarch { };
 
-  retroarchBareMaster = callPackage ../misc/emulators/retroarch/master.nix { };
-
-  retroarch = wrapRetroArch { retroarch = retroarchBareMaster; };
+  retroarch = wrapRetroArch { retroarch = retroarchBare; };
 
   libretro = recurseIntoAttrs (callPackage ../misc/emulators/retroarch/cores.nix {
-    retroarch = retroarchBareMaster;
+    retroarch = retroarchBare;
   });
 
   rssglx = callPackage ../misc/screensavers/rss-glx { };
