@@ -45,6 +45,8 @@ cabal.mkDerivation (self: {
     description = "A Haskell backend kernel for the IPython project";
     license = licenses.mit;
     platforms = self.ghc.meta.platforms;
+    hydraPlatforms = self.stdenv.lib.platforms.none;
     maintainers = with maintainers; [ edwtjo ];
+    broken = true;
   };
 })

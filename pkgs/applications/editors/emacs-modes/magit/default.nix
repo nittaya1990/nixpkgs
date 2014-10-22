@@ -1,16 +1,15 @@
 { stdenv, fetchurl, emacs, texinfo }:
 
 let
-  version = "1.2.0";
+  version = "1.2.1";
 in
 stdenv.mkDerivation rec {
   name = "magit-${version}";
 
   src = fetchurl {
-    url = "https://github.com/downloads/magit/magit/${name}.tar.gz";
-    sha256 = "1a8vvilhd5y5vmlpsh194qpl4qlg0a1brylfscxcacpfp0cmhlzg";
+    url = "https://github.com/magit/magit/releases/download/${version}/${name}.tar.gz";
+    sha256 = "1in48g5l5xdc9cf2apnpgx73mqlz2njrpi1w52dgql4qxv3kg6gr";
   };
-
   buildInputs = [ emacs texinfo ];
 
   configurePhase = "makeFlagsArray=( PREFIX=$out SYSCONFDIR=$out/etc )";
