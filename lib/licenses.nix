@@ -87,6 +87,11 @@ rec {
     fullName = "Common Development and Distribution License 1.0";
   };
 
+  cecill20 = spdx {
+    shortName = "CECILL-2.0";
+    fullName = "CeCILL Free Software License Agreement v2.0";
+  };
+
   cecill-b = spdx {
     shortName = "CECILL-B";
     fullName  = "CeCILL-B Free Software License Agreement";
@@ -284,6 +289,12 @@ rec {
   unfreeRedistributable = "unfree-redistributable";
 
   unfreeRedistributableFirmware = "unfree-redistributable-firmware";
+
+  unlicense = {
+    shortName = "Unlicense";
+    fullName = "Unlicense";
+    url = http://unlicense.org/;
+  };
 
   wadalab = {
     shortName = "wadalab";

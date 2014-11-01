@@ -112,7 +112,7 @@ rec {
 
   gucharmap = callPackage ./core/gucharmap { };
 
-  gvfs = pkgs.gvfs.override { gnome = gnome3; lightWeight = false; };
+  gvfs = pkgs.gvfs.override { gnome = gnome3; gnomeSupport = true; };
 
   eog = callPackage ./core/eog { };
 
@@ -168,7 +168,9 @@ rec {
 
   vte = callPackage ./core/vte { };
 
-  vte-select-text = callPackage ./core/vte { selectTextPatch = true; };
+  vte_038 = callPackage ./core/vte/0.38.0.nix { }; # To be moved in gnome 3.14 when available
+
+  vte-select-text = vte_038.override { selectTextPatch = true; };
 
   vino = callPackage ./core/vino { };
 
@@ -233,7 +235,9 @@ rec {
 
   libgda = callPackage ./misc/libgda { };
 
-  libgit2-glib = callPackage ./misc/libgit2-glib { };
+  libgit2-glib = callPackage ./misc/libgit2-glib {
+    libgit2 = pkgs.libgit2.override { libssh2 = null; };
+  };
 
   libmediaart = callPackage ./misc/libmediaart { };
 
