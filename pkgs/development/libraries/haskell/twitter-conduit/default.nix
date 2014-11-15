@@ -9,8 +9,8 @@
 
 cabal.mkDerivation (self: {
   pname = "twitter-conduit";
-  version = "0.0.7";
-  sha256 = "1xwfyhjkbdl19b7cpw12lgnjzqhpiqvfhag2l8zhks21yv0l3kg0";
+  version = "0.0.8";
+  sha256 = "16yxf9qdy1x2w4l4ix1kp1a9vcgmd1cvkqffkj52rzckcjpyd6fs";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
@@ -31,5 +31,6 @@ cabal.mkDerivation (self: {
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = with self.stdenv.lib.maintainers; [ ocharles ];
+    broken = true;
   };
 })

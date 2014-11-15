@@ -109,6 +109,72 @@ let
       };
     });
 
+  buildClion = { name, version, build, src, license, description }:
+    (mkIdeaProduct rec {
+      inherit name version build src;
+      patchSnappy = false;
+      product = "CLion";
+      meta = with stdenv.lib; {
+        homepage = "https://www.jetbrains.com/clion/";
+        inherit description license;
+        longDescription = ''
+          Enhancing productivity for every C and C++
+          developer on Linux, OS X and Windows.
+        '';
+        maintainers = with maintainers; [ edwtjo ];
+        platforms = platforms.linux;
+      };
+    });
+
+  buildIdea = { name, version, build, src, license, description }:
+    (mkIdeaProduct rec {
+      inherit name version build src;
+      patchSnappy = false;
+      product = "IDEA";
+      meta = with stdenv.lib; {
+        homepage = "https://www.jetbrains.com/idea/";
+        inherit description license;
+        longDescription = ''
+          IDE for Java SE, Groovy & Scala development Powerful
+          environment for building Google Android apps Integration
+          with JUnit, TestNG, popular SCMs, Ant & Maven.
+        '';
+        maintainers = with maintainers; [ edwtjo ];
+        platforms = platforms.linux;
+      };
+    });
+
+  buildRubyMine = { name, version, build, src, license, description }:
+    (mkIdeaProduct rec {
+      inherit name version build src;
+      product = "RubyMine";
+      meta = with stdenv.lib; {
+        homepage = "https://www.jetbrains.com/ruby/";
+        inherit description license;
+        longDescription = description;
+        maintainers = with maintainers; [ edwtjo ];
+        platforms = platforms.linux;
+      };
+    });
+
+  buildPhpStorm = { name, version, build, src, license, description }:
+    (mkIdeaProduct {
+      inherit name version build src;
+      product = "PhpStorm";
+      patchSnappy = false;
+      meta = with stdenv.lib; {
+        homepage = "https://www.jetbrains.com/phpstorm/";
+        inherit description license;
+        longDescription = ''
+          PhpStorm provides an editor for PHP, HTML and JavaScript
+          with on-the-fly code analysis, error prevention and
+          automated refactorings for PHP and JavaScript code.
+        '';
+        maintainers = with maintainers; [ schristo ];
+        platforms = platforms.linux;
+      };
+    });
+
   buildPycharm = { name, version, build, src, license, description }:
     (mkIdeaProduct rec {
       inherit name version build src;
@@ -136,41 +202,6 @@ let
       propagatedUserEnvPkgs = [ python ];
     };
 
-  buildIdea = { name, version, build, src, license, description }:
-    (mkIdeaProduct rec {
-      inherit name version build src;
-      product = "IDEA";
-      meta = with stdenv.lib; {
-        homepage = "https://www.jetbrains.com/idea/";
-        inherit description license;
-        longDescription = ''
-          IDE for Java SE, Groovy & Scala development Powerful
-          environment for building Google Android apps Integration
-          with JUnit, TestNG, popular SCMs, Ant & Maven.
-        '';
-        maintainers = with maintainers; [ edwtjo ];
-        platforms = platforms.linux;
-      };
-    });
-
-  buildPhpStorm = { name, version, build, src, license, description }:
-    (mkIdeaProduct {
-      inherit name version build src;
-      product = "PhpStorm";
-      patchSnappy = false;
-      meta = with stdenv.lib; {
-        homepage = "https://www.jetbrains.com/phpstorm/";
-        inherit description license;
-        longDescription = ''
-          PhpStorm provides an editor for PHP, HTML and JavaScript
-          with on-the-fly code analysis, error prevention and
-          automated refactorings for PHP and JavaScript code.
-        '';
-        maintainers = with maintainers; [ schristo ];
-        platforms = platforms.linux;
-      };
-    });
-
 in
 
 {
@@ -188,27 +219,51 @@ in
     };
   };
 
+  clion = buildClion rec {
+    name = "clion";
+    version = "eap";
+    build = "138.2344.17";
+    description  = "C/C++ IDE. New. Intelligent. Cross-platform.";
+    license = stdenv.lib.licenses.unfree;
+    src = fetchurl {
+      url = "http://download.jetbrains.com/cpp/${name}-${build}.tar.gz";
+      sha256 = "4b568d31132a787b748bc41c69b614dcd90229db69b02406677361bc077efab3";
+    };
+  };
+
   idea-community = buildIdea rec {
     name = "idea-community-${version}";
-    version = "13.1.5";
-    build = "IC-135.1289";
+    version = "14";
+    build = "IC-139.224";
     description = "Integrated Development Environment (IDE) by Jetbrains, community edition";
     license = stdenv.lib.licenses.asl20;
     src = fetchurl {
       url = "http://download-ln.jetbrains.com/idea/ideaIC-${version}.tar.gz";
-      sha256 = "e08b9adad0ed9aa62a43f3026a1b499d1663710314d00a3bec2e171a6c375f09";
+      sha256 = "72e1e7659aa90c0b520eed8190fa96899e26bde7448a9fe4ed43929ef25c508a";
     };
   };
 
   idea-ultimate = buildIdea rec {
     name = "idea-ultimate-${version}";
-    version = "13.1.5";
-    build = "IU-135.1289";
+    version = "14";
+    build = "IU-139.224";
     description = "Integrated Development Environment (IDE) by Jetbrains, requires paid license";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "http://download-ln.jetbrains.com/idea/ideaIU-${version}.tar.gz";
-      sha256 = "0800b1ffc135f884e46f1004289fb75850148d705afc447d3374cfd281c231a2";
+      sha256 = "e1c86f0b39e74b3468f7512d299ad9e0ca0c492316e996e65089368aff5446c6";
+    };
+  };
+
+  ruby-mine = buildRubyMine rec {
+    name = "ruby-mine-${version}";
+    version = "6.3.3";
+    build = "135.1104";
+    description = "The Most Intelligent Ruby and Rails IDE";
+    license = stdenv.lib.licenses.unfree;
+    src = fetchurl {
+      url = "http://download.jetbrains.com/ruby/RubyMine-${version}.tar.gz";
+      sha256 = "58d555c2702a93fe62f3809a5cc34e566ecce0c3f1f15daaf87744402157dfac";
     };
   };
 

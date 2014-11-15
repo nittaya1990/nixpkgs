@@ -123,7 +123,7 @@ foreach my $g (@{$spec->{groups}}) {
 }
 
 # Update the persistent list of declarative groups.
-write_file($declGroupsFile, join(" ", sort(keys %groupsOut)));
+write_file($declGroupsFile, { binmode => ':utf8' }, join(" ", sort(keys %groupsOut)));
 
 # Merge in the existing /etc/group.
 foreach my $name (keys %groupsCur) {
@@ -140,7 +140,7 @@ foreach my $name (keys %groupsCur) {
 # Rewrite /etc/group. FIXME: acquire lock.
 my @lines = map { join(":", $_->{name}, $_->{password}, $_->{gid}, $_->{members}) . "\n" }
     (sort { $a->{gid} <=> $b->{gid} } values(%groupsOut));
-write_file("/etc/group.tmp", @lines);
+write_file("/etc/group.tmp", { binmode => ':utf8' }, @lines);
 rename("/etc/group.tmp", "/etc/group") or die;
 system("nscd --invalidate group");
 
@@ -169,6 +169,12 @@ foreach my $u (@{$spec->{users}}) {
     } else {
         $u->{uid} = allocUid($u->{isSystemUser}) if !defined $u->{uid};
 
+        if (defined $u->{initialPassword}) {
+            $u->{hashedPassword} = hashPassword($u->{initialPassword});
+        } elsif (defined $u->{initialHashedPassword}) {
+            $u->{hashedPassword} = $u->{initialHashedPassword};
+        }
+
         # Create a home directory.
         if ($u->{createHome}) {
             make_path($u->{home}, { mode => 0700 }) if ! -e $u->{home};
@@ -192,7 +198,7 @@ foreach my $u (@{$spec->{users}}) {
 }
 
 # Update the persistent list of declarative users.
-write_file($declUsersFile, join(" ", sort(keys %usersOut)));
+write_file($declUsersFile, { binmode => ':utf8' }, join(" ", sort(keys %usersOut)));
 
 # Merge in the existing /etc/passwd.
 foreach my $name (keys %usersCur) {
@@ -208,7 +214,7 @@ foreach my $name (keys %usersCur) {
 # Rewrite /etc/passwd. FIXME: acquire lock.
 @lines = map { join(":", $_->{name}, $_->{fakePassword}, $_->{uid}, $_->{gid}, $_->{description}, $_->{home}, $_->{shell}) . "\n" }
     (sort { $a->{uid} <=> $b->{uid} } (values %usersOut));
-write_file("/etc/passwd.tmp", @lines);
+write_file("/etc/passwd.tmp", { binmode => ':utf8' }, @lines);
 rename("/etc/passwd.tmp", "/etc/passwd") or die;
 system("nscd --invalidate passwd");
 
@@ -222,6 +228,7 @@ foreach my $line (-f "/etc/shadow" ? read_file("/etc/shadow") : ()) {
     my ($name, $hashedPassword, @rest) = split(':', $line, -9);
     my $u = $usersOut{$name};;
     next if !defined $u;
+    $hashedPassword = "!" if !$spec->{mutableUsers};
     $hashedPassword = $u->{hashedPassword} if defined $u->{hashedPassword} && !$spec->{mutableUsers}; # FIXME
     push @shadowNew, join(":", $name, $hashedPassword, @rest) . "\n";
     $shadowSeen{$name} = 1;
@@ -235,5 +242,5 @@ foreach my $u (values %usersOut) {
     push @shadowNew, join(":", $u->{name}, $hashedPassword, "1::::::") . "\n";
 }
 
-write_file("/etc/shadow.tmp", { perms => 0600 }, @shadowNew);
+write_file("/etc/shadow.tmp", { binmode => ':utf8', perms => 0600 }, @shadowNew);
 rename("/etc/shadow.tmp", "/etc/shadow") or die;

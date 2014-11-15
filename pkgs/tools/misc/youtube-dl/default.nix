@@ -1,14 +1,14 @@
 { stdenv, fetchurl, python, zip }:
 
 let
-  version = "2014.10.25";
+  version = "2014.11.12";
 in
 stdenv.mkDerivation rec {
   name = "youtube-dl-${version}";
 
   src = fetchurl {
     url = "http://youtube-dl.org/downloads/${version}/${name}.tar.gz";
-    sha256 = "0llgallsvvwxr52kzpd91rz1vxm4drj2jzns30jfdqv81a9d98wa";
+    sha256 = "1cjwyvwdgwfw1gsyqfgq7clczh01wjacdic20n0hyyjv37xhr1nq";
   };
 
   buildInputs = [ python ];
@@ -29,6 +29,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.unlicense;
 
     platforms = with stdenv.lib.platforms; linux ++ darwin;
-    maintainers = with stdenv.lib.maintainers; [ bluescreen303 simons phreedom ];
+    maintainers = with stdenv.lib.maintainers; [ bluescreen303 simons phreedom AndersonTorres ];
   };
 }

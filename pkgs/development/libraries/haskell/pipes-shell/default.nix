@@ -6,14 +6,15 @@
 
 cabal.mkDerivation (self: {
   pname = "pipes-shell";
-  version = "0.1.2";
-  sha256 = "18ikjkppds7k9fgjn39qvdp8avj8vv3csiqcrhgrpfqy1d0hgrlw";
+  version = "0.1.3";
+  sha256 = "0w49il312ns8pyl05144gznxfdchd0rnq8hprmjrgy8yp3v8j4v1";
   buildDepends = [
     async pipes pipesBytestring pipesSafe stm stmChans text
   ];
   testDepends = [
     async hspec pipes pipesBytestring pipesSafe stm stmChans text
   ];
+  jailbreak = true;
   doCheck = false;
   meta = {
     description = "Create proper Pipes from System.Process";

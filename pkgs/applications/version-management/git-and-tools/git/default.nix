@@ -54,7 +54,7 @@ stdenv.mkDerivation {
       # Install git-subtree.
       pushd contrib/subtree
       make
-      make install install-doc
+      make install ${stdenv.lib.optionalString withManual "install-doc"}
       popd
       rm -rf contrib/subtree
 
