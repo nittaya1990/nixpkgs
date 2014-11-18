@@ -25,6 +25,9 @@ stdenv.mkDerivation rec {
       # removes the system sleep directory from install directories. NixOS handles creating the
       # directory.
       ./no-install-system-sleep-dir.patch
+      # Fixes systemd-journald so that it does not get killed
+      # by systemd-journal-flush starting too quickly
+      ./systemd-journald-type-notify.patch
     ];
 
   buildInputs =

@@ -578,6 +578,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   dataFix = callPackage ../development/libraries/haskell/data-fix {};
 
+  dataFlags = callPackage ../development/libraries/haskell/data-flags {};
+
   dataHash = callPackage ../development/libraries/haskell/data-hash {};
 
   dataInttrie = callPackage ../development/libraries/haskell/data-inttrie {};
@@ -649,6 +651,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   digest = callPackage ../development/libraries/haskell/digest {
     inherit (pkgs) zlib;
   };
+
+  digestPure = callPackage ../development/libraries/haskell/digest-pure {};
 
   digestiveFunctors = callPackage ../development/libraries/haskell/digestive-functors {};
 
@@ -1084,6 +1088,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   hastePerch = callPackage ../development/libraries/haskell/haste-perch {};
 
   HaTeX = callPackage ../development/libraries/haskell/HaTeX {};
+
+  hayland = callPackage ../development/libraries/haskell/hayland {};
 
   hcltest = callPackage ../development/libraries/haskell/hcltest {};
 

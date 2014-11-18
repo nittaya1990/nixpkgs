@@ -2173,6 +2173,8 @@ let
 
   qjoypad = callPackage ../tools/misc/qjoypad { };
 
+  qpdf = callPackage ../development/libraries/qpdf { };
+
   qscintilla = callPackage ../development/libraries/qscintilla {
     qt = qt4;
   };
@@ -2356,11 +2358,6 @@ let
 
   snort = callPackage ../applications/networking/ids/snort { };
 
-  snx = callPackage_i686 ../tools/networking/snx {
-    inherit (pkgsi686Linux) pam gcc33;
-    inherit (pkgsi686Linux.xlibs) libX11;
-  };
-
   solr = callPackage ../servers/search/solr { };
 
   solvespace = callPackage ../applications/graphics/solvespace { };
@@ -2376,6 +2373,8 @@ let
   stardict = callPackage ../applications/misc/stardict/stardict.nix {
     inherit (gnome) libgnomeui scrollkeeper;
   };
+
+  stdman = callPackage ../data/documentation/stdman { };
 
   storebrowse = callPackage ../tools/system/storebrowse { };
 
@@ -2818,6 +2817,10 @@ let
 
   xvfb_run = callPackage ../tools/misc/xvfb-run { inherit (texFunctions) fontsConf; };
 
+  xvkbd = callPackage ../tools/X11/xvkbd {
+    inherit (xlibs) libXt libXaw libXtst xextproto libXi libXpm gccmakedep;
+  };
+
   youtube-dl = callPackage ../tools/misc/youtube-dl { };
 
   zbar = callPackage ../tools/graphics/zbar {
@@ -2971,10 +2974,6 @@ let
   gcc_multi = gcc48_multi;
 
   gccApple = throw "gccApple is no longer supported";
-
-  gcc33 = wrapGCC (import ../development/compilers/gcc/3.3 {
-    inherit fetchurl stdenv noSysDirs;
-  });
 
   gcc34 = wrapGCC (import ../development/compilers/gcc/3.4 {
     inherit fetchurl stdenv noSysDirs;
@@ -3545,6 +3544,8 @@ let
 
     camlp5_transitional = camlp5_6_transitional;
 
+    camlpdf = callPackage ../development/ocaml-modules/camlpdf { };
+
     calendar = callPackage ../development/ocaml-modules/calendar { };
 
     camlzip = callPackage ../development/ocaml-modules/camlzip { };
@@ -3830,6 +3831,8 @@ let
   urweb = callPackage ../development/compilers/urweb { };
 
   vala = callPackage ../development/compilers/vala/default.nix { };
+
+  vala_0_26 = callPackage ../development/compilers/vala/0.26.nix { };
 
   visualcpp = callPackage ../development/compilers/visual-c++ { };
 
@@ -5490,6 +5493,8 @@ let
 
   imlib2 = callPackage ../development/libraries/imlib2 { };
 
+  ijs = callPackage ../development/libraries/ijs { };
+
   incrtcl = callPackage ../development/libraries/incrtcl { };
 
   indilib = callPackage ../development/libraries/indilib { };
@@ -5851,6 +5856,8 @@ let
 
   libnatspec = callPackage ../development/libraries/libnatspec { };
 
+  libndp = callPackage ../development/libraries/libndp { };
+  
   libnfc = callPackage ../development/libraries/libnfc { };
 
   libnfsidmap = callPackage ../development/libraries/libnfsidmap { };
@@ -7567,7 +7574,7 @@ let
   };
   nginxUnstable = callPackage ../servers/http/nginx/unstable.nix {
     fullWebDAV  = true;
-    syslog      = true;
+    syslog      = false; # the patch is not found
     moreheaders = true;
   };
 
@@ -7656,6 +7663,16 @@ let
   oracleXE = callPackage ../servers/sql/oracle-xe { };
 
   OVMF = callPackage ../applications/virtualization/OVMF { };
+
+  pgpool92 = callPackage ../servers/sql/pgpool/default.nix {
+    postgresql = postgresql92;
+  };
+
+  pgpool93 = callPackage ../servers/sql/pgpool/default.nix {
+    postgresql = postgresql93;
+  };
+
+  pgpool = pgpool92;
 
   postgresql = postgresql92;
 
@@ -8057,7 +8074,6 @@ let
   libcgroup = callPackage ../os-specific/linux/libcgroup { };
 
   libnl = callPackage ../os-specific/linux/libnl { };
-  libnl_3_2_19 = callPackage ../os-specific/linux/libnl/3.2.19.nix { };
 
   linuxConsoleTools = callPackage ../os-specific/linux/consoletools { };
 
@@ -8569,6 +8585,7 @@ let
 
   udev145 = callPackage ../os-specific/linux/udev/145.nix { };
   udev = pkgs.systemd;
+  eudev = callPackage ../os-specific/linux/eudev {};
 
   udisks1 = callPackage ../os-specific/linux/udisks/1-default.nix { };
   udisks2 = callPackage ../os-specific/linux/udisks/2-default.nix { };
@@ -9343,7 +9360,7 @@ let
 
     metaweblog = callPackage ../applications/editors/emacs-modes/metaweblog { };
 
-    notmuch = lowPrio (callPackage ../applications/networking/mailreaders/notmuch { });
+    notmuch = lowPrio (pkgs.notmuch.override { inherit emacs; });
 
     ocamlMode = callPackage ../applications/editors/emacs-modes/ocaml { };
 
@@ -10279,8 +10296,11 @@ let
   netsurf = recurseIntoAttrs (import ../applications/networking/browsers/netsurf { inherit pkgs; });
 
   notmuch = callPackage ../applications/networking/mailreaders/notmuch {
-    # use emacsPackages.notmuch if you want emacs support
+    # No need to build Emacs - notmuch.el works just fine without
+    # byte-compilation. Use emacs24Packages.notmuch if you want to
+    # byte-compiled files
     emacs = null;
+    sphinx = pythonPackages.sphinx;
   };
 
   nova = callPackage ../applications/virtualization/nova { };
@@ -12336,7 +12356,6 @@ let
   ghostscript = callPackage ../misc/ghostscript {
     x11Support = false;
     cupsSupport = config.ghostscript.cups or (!stdenv.isDarwin);
-    gnuFork = config.ghostscript.gnu or false;
   };
 
   ghostscriptX = appendToName "with-X" (ghostscript.override {

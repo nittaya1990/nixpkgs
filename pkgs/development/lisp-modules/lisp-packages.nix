@@ -202,7 +202,7 @@ let lispPackages = rec {
     overrides = x:{
       preConfigure = ''
         export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${pkgs.mysql}/include/mysql"
-	export NIX_LDFLAGS="$NIX_LDFLAGS -L${pkgs.mysql}/lib/mysql"
+        export NIX_LDFLAGS="$NIX_LDFLAGS -L${pkgs.mysql}/lib/mysql"
       '';
     };
   };
@@ -231,6 +231,17 @@ let lispPackages = rec {
       sha256 = "4ed66f255e50d2c9ea9f0b3fbaa92bde9b8acf6a5fafb0d7f12b254be9de99e9";
       rev = ''831f0180967f09b1dd345fef82144f48334279c3'';
     };
+    overrides = x: {
+      linkedSystems = [];
+      postInstall = ''
+        export CL_SOURCE_REGISTRY="$CL_SOURCE_REGISTRY:$out/lib/common-lisp/query-fs"
+	export HOME=$PWD
+	build-with-lisp.sh sbcl \
+	  ":query-fs $(echo "$linkedSystems" | sed -re 's/(^| )([^ :])/:\2/g')" \
+	  "$out/bin/query-fs" \
+	  "(query-fs:run-fs-with-cmdline-args)"
+      '';
+    };
   };
 
   cl-fuse = buildLispPackage rec {
@@ -248,7 +259,7 @@ let lispPackages = rec {
     overrides = x : {
       configurePhase = ''
         export CL_SOURCE_REGISTRY="$CL_SOURCE_REGISTRY:$PWD"
-	export makeFlags="$makeFlags LISP=common-lisp.sh"
+        export makeFlags="$makeFlags LISP=common-lisp.sh"
       '';
     };
   };
@@ -494,6 +505,45 @@ let lispPackages = rec {
       url = ''https://github.com/gwkkwg/cl-html-parse'';
       sha256 = "0153d4962493f106849fc7cbfe03c5ff874adae8d307ea2e1ceebbb009e2f89f";
       rev = ''b21e8757210a1eb2a47104a563f58bf82ba9a579'';
+    };
+  };
+
+  nibbles = buildLispPackage rec {
+    baseName = "nibbles";
+    version = "git-20141116";
+    description = "A library for accessing octet-addressed blocks of data";
+    deps = [];
+    # Source type: git
+    src = pkgs.fetchgit {
+      url = ''https://github.com/froydnj/nibbles'';
+      sha256 = "39ad95be2b9f9ea80dbccd205a0ed6f9c5ef175a10da6eec55b7ba09a8f1a76a";
+      rev = ''ace095d85e48b18bf9cf9e21249ba7fb57e3efe2'';
+    };
+  };
+
+  ironclad = buildLispPackage rec {
+    baseName = "ironclad";
+    version = "0.33.0";
+    description = "A cryptographic toolkit written in pure Common Lisp";
+    deps = [nibbles];
+    # Source type: http
+    src = pkgs.fetchurl {
+      url = ''http://method-combination.net/lisp/files/ironclad_0.33.0.tar.gz'';
+      sha256 = "1ld0xz8gmi566zxl1cva5yi86aw1wb6i6446gxxdw1lisxx3xwz7";
+    };
+  };
+
+  cl-smtp = buildLispPackage rec {
+    baseName = "cl-smtp";
+    version = "cvs-2014-11-15";
+    description = "SMTP client library";
+    deps = [cl-ssl cl-base64 flexi-streams trivial-gray-streams usocket];
+    # Source type: cvs
+    src = pkgs.fetchcvs {
+      sha256 = "15b7lvayn1izzfism7s7rcw2mv1hwgp9l2lgb5na9qxmqzjlw0r9";
+      date = ''2014-11-15'';
+      module = ''cl-smtp'';
+      cvsRoot = '':pserver:anonymous:anonymous@common-lisp.net:/project/cl-smtp/cvsroot'';
     };
   };
 };
