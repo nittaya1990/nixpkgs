@@ -3,7 +3,7 @@
 , nvidia
 }:
 let
-  version = "1.0.0";
+  version = "1.0.0748176";
 in
 stdenv.mkDerivation {
   name = "primus-lib-${version}";
