@@ -10976,7 +10976,7 @@ let
 
     primusLib_i686 = if system == "x86_64-linux"
       then callPackage_i686 ../tools/X11/primus/lib.nix {
-             nvidia = callPackage_i686 ../os-specific/linux/nvidia-x11 { libsOnly = true; };
+             nvidia = pkgsi686Linux.linuxPackages.nvidia_x11.override { libsOnly = true; };
            }
       else null;
   };
@@ -10984,7 +10984,7 @@ let
   bumblebee = callPackage ../tools/X11/bumblebee {
     nvidia_x11 = linuxPackages.nvidia_x11;
     nvidia_x11_i686 = if system == "x86_64-linux"
-      then callPackage_i686 ../os-specific/linux/nvidia-x11 { libsOnly = true; }
+      then pkgsi686Linux.linuxPackages.nvidia_x11.override { libsOnly = true; }
       else null;
     virtualgl = virtualgl;
     virtualgl_i686 = if system == "x86_64-linux"
