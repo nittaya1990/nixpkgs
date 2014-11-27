@@ -23,7 +23,12 @@ stdenv.mkDerivation {
     sha256 = "062z4j4hfhfdlvkxs2mzarsyvbqvfy4kv8j5h4c75ymb5yp8iklk";
   };
 
-  patches = [ ./docbook2texi.patch ./symlinks-in-bin.patch ./cert-path.patch ];
+  patches = [
+    ./docbook2texi.patch
+    ./symlinks-in-bin.patch
+    ./cert-path.patch
+    ./ssl-cert-file.patch
+  ];
 
   buildInputs = [curl openssl zlib expat gettext cpio makeWrapper]
     ++ stdenv.lib.optionals withManual [ asciidoc texinfo xmlto docbook2x
@@ -141,6 +146,6 @@ stdenv.mkDerivation {
     '';
 
     platforms = stdenv.lib.platforms.all;
-    maintainers = with stdenv.lib.maintainers; [ simons the-kenny ];
+    maintainers = with stdenv.lib.maintainers; [ simons the-kenny wmertens ];
   };
 }
