@@ -63,8 +63,8 @@ in
         mkdir -m 0755 -p /var/lib/upower
       '';
 
-    systemd.sleepHooks = [
-      "${pkgs.upower}/lib/systemd/system-sleep/system-sleep/notify-upower.sh"
-    ];
+    powerManagement.powerUpCommands = ''
+      ${pkgs.upower}/lib/systemd/system-sleep/system-sleep/notify-upower.sh post
+    '';
   };
 }
