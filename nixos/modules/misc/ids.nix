@@ -169,6 +169,9 @@
       opentsdb = 159;
       scollector = 160;
       bosun = 161;
+      kubernetes = 162;
+      peerflix = 163;
+      chronos = 164;
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
@@ -302,6 +305,7 @@
       liquidsoap = 155;
       scollector = 156;
       bosun = 157;
+      kubernetes = 158;
 
       # When adding a gid, make sure it doesn't match an existing uid. And don't use gids above 399!
 

@@ -58,6 +58,8 @@ let
 
         ${optionalString (!readOnly) "nix.readOnlyStore = false;"}
 
+        swapDevices = mkOverride 0 [ ];
+
         environment.systemPackages = [ ${optionalString testChannel "pkgs.rlwrap"} ];
       }
     '';
