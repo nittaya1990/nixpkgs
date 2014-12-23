@@ -428,13 +428,13 @@ let
 
 
   apscheduler = buildPythonPackage rec {
-    name = "APScheduler-2.1.2";
+    name = "APScheduler-3.0.1";
 
-    propagatedBuildInputs = with self; [ futures tzlocal six pytest mock];
+    propagatedBuildInputs = with self; [ futures tzlocal six pytest mock sqlalchemy9 ];
 
     src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/A/APScheduler/APScheduler-2.1.2.tar.gz";
-      md5 = "6862959d460c16ef325d63e1fc3a6684";
+      url = "https://pypi.python.org/packages/source/A/APScheduler/${name}.tar.gz";
+      sha256 = "1dcyk58svhhd7flpq0fbyzcp0z3a1as4ddmdv1rxqvqng0sxhwaf";
     };
 
     meta = with pkgs.stdenv.lib; {
@@ -522,11 +522,11 @@ let
   });
 
   astroid = buildPythonPackage (rec {
-    name = "astroid-1.2.1";
-    propagatedBuildInputs = with self; [ logilab_common ];
+    name = "astroid-1.3.2";
+    propagatedBuildInputs = with self; [ logilab_common six ];
     src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/a/astroid/${name}.zip";
-      md5 = "337017c82a28c97741797493fb2c980f";
+      url = "https://pypi.python.org/packages/source/a/astroid/${name}.tar.gz";
+      md5 = "2ab96129a977b6eba27765a15d1a9bf2";
     };
   });
 
@@ -1856,11 +1856,11 @@ let
   };
 
   pycollada = buildPythonPackage rec {
-    name = "pycollada-0.4";
+    name = "pycollada-0.4.1";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/p/pycollada/${name}.tar.gz";
-      md5 = "5d0f00c035491b945cdccdfd8a698ad2";
+      sha256 = "0i50lh98550pwr95zgzrgiqzsspm09wl52xlv83y5nrsz4mblylv";
     };
 
     # pycollada-0.4 needs python-dateutil==1.5
@@ -2025,6 +2025,29 @@ let
     };
 
     propagatedBuildInputs = with self; [ self.six ];
+
+    meta = {
+      description = "Powerful extensions to the standard datetime module";
+      homepage = http://pypi.python.org/pypi/python-dateutil;
+      license = "BSD-style";
+    };
+  });
+
+  # flexget requires 2.1
+  dateutil_2_1 = buildPythonPackage (rec {
+    name = "dateutil-2.1";
+
+    src = pkgs.fetchurl {
+      url = "http://pypi.python.org/packages/source/p/python-dateutil/python-${name}.tar.gz";
+      sha256 = "1vlx0lpsxjxz64pz87csx800cwfqznjyr2y7nk3vhmzhkwzyqi2c";
+    };
+
+    propagatedBuildInputs = with self; [ self.six ];
+
+    preBuild = ''
+      export LOCALE_ARCHIVE=${localePath}
+      export LC_ALL="en_US.UTF-8"
+    '';
 
     meta = {
       description = "Powerful extensions to the standard datetime module";
@@ -2355,12 +2378,12 @@ let
 
 
   dropbox = buildPythonPackage rec {
-    name = "dropbox-2.0.0";
-    doCheck = !isPy3k; # failures with hash randomization
+    name = "dropbox-2.2.0";
+    doCheck = false; # python 2.7.9 does verify ssl certificates
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/d/dropbox/${name}.zip";
-      sha256 = "1bi2z1lql6ryylfflmizhqn98ab55777vn7n5krhqz40pdcjilkx";
+      sha256 = "069jrwb67brqh0sics8fgqdf2mv5y5jl9k5729x8vf80pq2c9p36";
     };
 
     propagatedBuildInputs = with self; [ urllib3 mock setuptools ];
@@ -2729,6 +2752,42 @@ let
     meta = with stdenv.lib; {
       description = "helpers to pass trusted data to untrusted environments and back";
       homepage = "https://pypi.python.org/pypi/itsdangerous/";
+    };
+  };
+
+  jsonpatch = buildPythonPackage rec {
+    name = "jsonpatch-1.8";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/j/jsonpatch/jsonpatch-1.8.tar.gz";
+      sha256 = "0xhp6prvk219vnzixbj231wymd458nqbnmsf5fn4252092prvig5";
+    };
+
+    propagatedBuildInputs = with self; [ six jsonpointer ];
+
+    meta = {
+      description = "Apply JSON-Patches (RFC 6902)";
+      homepage = "https://github.com/stefankoegl/python-json-patch";
+      license = stdenv.lib.licenses.bsd3;
+      platforms = stdenv.lib.platforms.all;
+    };
+  };
+
+  jsonpointer = buildPythonPackage rec {
+    name = "jsonpointer-1.4";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/j/jsonpointer/jsonpointer-1.4.tar.gz";
+      sha256 = "1d0555smqwdbi0nm48hyqzywb9m2jlz5izgv56ll3zk7viz3b7fb";
+    };
+
+    #propagatedBuildInputs = with self; [ six jsonpointer ];
+
+    meta = {
+      description = "Identify specific nodes in a JSON document (RFC 6901)";
+      homepage = "https://github.com/stefankoegl/python-json-pointer";
+      license = stdenv.lib.licenses.bsd3;
+      platforms = stdenv.lib.platforms.all;
     };
   };
 
@@ -3475,11 +3534,11 @@ let
   };
 
   deluge = buildPythonPackage rec {
-    name = "deluge-1.3.10";
+    name = "deluge-1.3.11";
 
     src = pkgs.fetchurl {
       url = "http://download.deluge-torrent.org/source/${name}.tar.bz2";
-      sha256 = "1x8ylcw88a6x3zyvyxmzjsbcy9dr2s5dxam2aw6harb4n1l2v9kd";
+      sha256 = "16681sg7yi03jqyifhalnw4vavb8sj94cisldal7nviai8dz9qc3";
     };
 
     propagatedBuildInputs = with self; [
@@ -3975,21 +4034,22 @@ let
   };
 
   flexget = buildPythonPackage rec {
-    version = "1.2.201";
+    version = "1.2.234";
     name = "FlexGet-${version}";
     disabled = isPy3k;
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/F/FlexGet/${name}.tar.gz";
-      md5 = "e940845fc38ee602109a876455a02084";
+      md5 = "0897b6db25e8a28e809d131a8ad017e4";
     };
 
+    doCheck = false;
+
     buildInputs = with self; [ nose ];
-    propagatedBuildInputs = with self; [ paver feedparser sqlalchemy pyyaml rpyc
+    propagatedBuildInputs = with self; [ paver feedparser sqlalchemy9 pyyaml rpyc
 	    beautifulsoup4 html5lib pyrss2gen pynzb progressbar jinja2 flask
-	    cherrypy requests dateutil_1_5 jsonschema python_tvrage tmdb3
-            guessit pathpy
-        ]
+	    cherrypy requests dateutil_2_1 jsonschema python_tvrage tmdb3
+      guessit pathpy apscheduler ]
 	# enable deluge and transmission plugin support, if they're installed
 	++ stdenv.lib.optional (pkgs.config.pythonPackages.deluge or false)
 	    pythonpackages.deluge
@@ -4462,17 +4522,17 @@ let
   };
 
   guessit = buildPythonPackage rec {
-    version = "0.9.3";
+    version = "0.9.4";
     name = "guessit-${version}";
     disabled = isPy3k;
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/g/guessit/${name}.tar.gz";
-      sha256 = "16kbxdz5zm3mfn739ynis04zw76x2gn1lz5d7vcwh8hzaj16yyk6";
+      sha256 = "068d3dmyk4v04p2zna0340lsdnpkm10gyza62apd9akgjh9rfs48";
     };
 
     propagatedBuildInputs = with self; [
-      dateutil_1_5 requests stevedore babelfish pyyaml
+      dateutil_2_1 requests stevedore babelfish pyyaml
     ];
 
     # A unicode test fails
@@ -5612,6 +5672,23 @@ let
     };
   };
 
+  mutag = buildPythonPackage rec {
+    disabled = ! isPy3k;
+    name = "mutag-0.0.1-b1b3ff2ad8";
+    src = pkgs.fetchgit {
+      url = "https://github.com/aroig/mutag.git";
+      sha256 = "1x9wl789ib62zmrbjy96jhcbjnym6fb1jvdjiw4smapifm2hnyr7";
+      rev = "efc9bc7e1ea345e7bd0568848598de";
+    };
+
+    propagatedBuildInputs = with self; [ pyparsing ];
+
+    meta = {
+      homepage = https://github.com/aroig/mutag;
+      license = stdenv.lib.licenses.gpl3;
+      maintainers = [ stdenv.lib.maintainers.DamienCassou ];
+    };
+  };
 
   mutagen = buildPythonPackage (rec {
     name = "mutagen-1.23";
@@ -6095,6 +6172,22 @@ let
     };
   };
 
+  oauth = buildPythonPackage (rec {
+    name = "oauth-1.0.1";
+
+    src = pkgs.fetchurl {
+      url = "http://pypi.python.org/packages/source/o/oauth/oauth-1.0.1.tar.gz";
+      sha256 = "0pdgi35hczsslil4890xqawnbpdazkgf2v1443847h5hy2gq2sg7";
+    };
+
+    meta = {
+      homepage = "http://code.google.com/p/oauth";
+      description = "Library for OAuth version 1.0a.";
+      license = licenses.mit;
+      platforms = stdenv.lib.platforms.all;
+    };
+  });
+
   oauth2 = buildPythonPackage (rec {
     name = "oauth2-1.5.211";
     disabled = isPy3k;
@@ -6141,20 +6234,23 @@ let
 
 
   obfsproxy = buildPythonPackage ( rec {
-    name = "obfsproxy-0.2.2";
+    name = "obfsproxy-${version}";
+    version = "0.2.12";
+
     src = pkgs.fetchgit {
       url = meta.repositories.git;
-      rev = "3c4e843a30c430aec1de03e0e09ef654072efc03";
-      sha256 = "8fd1e63a37bc42add7609d97d50ecd81da81881bcf7015a9e2958531dbf39018";
+      rev = "refs/tags/${name}";
+      sha256 = "82d694aa7f3de7327fc4dc517fb262ab076f536ed6d4377573c76df8cf019dcf";
     };
 
-    propagatedBuildInputs = with self; [ pyptlib argparse twisted pycrypto ];
+    propagatedBuildInputs = with self;
+      [ pyptlib argparse twisted pycrypto pyyaml ];
 
     meta = {
       description = "a pluggable transport proxy";
       homepage = https://www.torproject.org/projects/obfsproxy;
       repositories.git = https://git.torproject.org/pluggable-transports/obfsproxy.git;
-      maintainers = [ stdenv.lib.maintainers.phreedom ];
+      maintainers = with stdenv.lib.maintainers; [ phreedom thoughtpolice ];
     };
   });
 
@@ -6308,6 +6404,9 @@ let
     # https://github.com/paramiko/paramiko/issues/449
     doCheck = !(isPyPy || isPy33);
     checkPhase = ''
+      # test_util needs to resolve an hostname, thus failing when the fw blocks it
+      sed '/UtilTest/d' -i test.py
+
       ${python}/bin/${python.executable} test.py --no-sftp --no-big-file
     '';
 
@@ -6857,6 +6956,27 @@ let
     };
   };
 
+  pycosat = pythonPackages.buildPythonPackage rec {
+    name = "pycosat-0.6.0";
+
+    propagatedBuildInputs = with pythonPackages; [  ];
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pycosat/${name}.tar.gz";
+      sha256 = "02sdn2998jlrm35smn1530hix3kzwyc1jv49cjdcnvfvrqqi3rww";
+    };
+
+    meta = with stdenv.lib; {
+      description = ''PicoSAT is a popular SAT solver written by Armin
+          Biere in pure C. This package provides efficient Python bindings
+          to picosat on the C level, i.e. when importing pycosat, the
+          picosat solver becomes part of the Python process itself. For
+          ease of deployment, the picosat source (namely picosat.c and
+          picosat.h) is included in this project.'';
+      homepage = https://github.com/ContinuumIO/pycosat;
+      license = licenses.mit;
+    };
+  };
 
   pygit2 = buildPythonPackage rec {
     name = "pygit2-0.21.2";
@@ -7391,10 +7511,14 @@ let
 
   pyptlib = buildPythonPackage (rec {
     name = "pyptlib-${version}";
-    version = "0.0.3";
+    disabled = isPyPy || isPy3k;
+    version = "0.0.6";
+
+    doCheck = false;  # No such file or directory errors on 32bit
+
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/p/pyptlib/pyptlib-${version}.tar.gz";
-      sha256 = "0mklak456jqifx57j9jmpb69h3ybxc880qk86pg4g8jk0i14pxh3";
+      sha256 = "01y6vbwncqb0hxlnin6whd9wrrm5my4qzjhk76fnix78v7ip515r";
     };
     meta = {
       description = "A python implementation of the Pluggable Transports for Circumvention specification for Tor";
@@ -8646,8 +8770,6 @@ let
 
   scikitlearn = buildPythonPackage {
     name = "scikit-learn-0.15.2";
-
-    disabled = isPy3k;
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/s/scikit-learn/scikit-learn-0.15.2.tar.gz";
@@ -11963,12 +12085,12 @@ let
     };
   };
 
-  pythonefl_1_11 = buildPythonPackage rec {
+  pythonefl_1_12 = buildPythonPackage rec {
     name = "python-efl-${version}";
-    version = "1.11.0";
+    version = "1.12.0";
     src = pkgs.fetchurl {
-      url = "http://download.enlightenment.org/rel/bindings/python/${name}.tar.xz";
-      sha256 = "1d4hj39alg6j7ah1bc8wvlka9d13i8iy3fxxraik2f60w6811i48";
+      url = "http://download.enlightenment.org/rel/bindings/python/${name}.tar.gz";
+      sha256 = "0rxv5nrqg5c2l93ns2k6gjil1y7qq6amfh5slkarm3kv8fzk17xv";
     };
     preConfigure = ''
       export NIX_CFLAGS_COMPILE="-I${pkgs.e19.efl}/include/eo-1 -I${pkgs.e19.efl}/include/eina-1 -I${pkgs.e19.efl}/include/eina-1/eina -I${pkgs.e19.efl}/include/evas-1 -I${self.dbus}/include/dbus-1.0 -I${pkgs.e19.efl}/include/efl-1 -I${pkgs.e19.efl}/include/eet-1 -I${pkgs.e19.efl}/include/ecore-1 -I${pkgs.e19.efl}/include/ecore-evas-1 -I${pkgs.e19.efl}/include/ecore-file-1 -I${pkgs.e19.efl}/include/ecore-input-1 -I${pkgs.e19.efl}/include/ecore-imf-1 -I${pkgs.e19.efl}/include/ecore-con-1 -I${pkgs.e19.efl}/include/edje-1 -I${pkgs.e19.efl}/include/eldbus-1 -I${pkgs.e19.efl}/include/efreet-1 -I${pkgs.e19.efl}/include/ethumb-client-1 -I${pkgs.e19.efl}/include/ethumb-1 -I${pkgs.e19.efl}/include/ecore-x-1 $NIX_CFLAGS_COMPILE"
@@ -12078,7 +12200,7 @@ let
     };
 
     propagatedBuildInputs = with self; [ boto-230 crcmod httplib2 gcs-oauth2-boto-plugin google_api_python_client gflags
-                                         retry_decorator pkgs.pyopenssl socksipy-branch ];
+                                         retry_decorator pkgs.pyopenssl socksipy-branch crcmod ];
   };
 
   pypi2nix = self.buildPythonPackage rec {
