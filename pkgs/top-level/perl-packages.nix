@@ -548,6 +548,21 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  Cairo = buildPerlPackage rec {
+    name = "Cairo-1.105";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/X/XA/XAOC/${name}.tar.gz";
+      sha256 = "0im025wy1346w7b7hi6im08bfn6x4ma0cxmjz6xnk8riizm1s84q";
+    };
+    buildInputs = [ ExtUtilsDepends ExtUtilsPkgConfig pkgs.cairo ];
+    meta = {
+      homepage = http://gtk2-perl.sourceforge.net/;
+      description = "Perl interface to the cairo 2d vector graphics library";
+      maintainers = with maintainers; [ nckx ];
+      license = with stdenv.lib.licenses; [ lgpl21Plus ];
+    };
+  };
+
   cam_pdf = buildPerlPackage rec {
     name = "CAM-PDF-1.60";
     src = fetchurl {
@@ -2142,6 +2157,7 @@ let self = _self // overrides; _self = with self; {
       sha256 = "14yvbgy9n8icwlm5zi86lskvxd6nsl42i1g9f5dwdaw9my463diy";
     };
     propagatedBuildInputs = [CarpClan BitVector];
+    doCheck = false; # some of the checks rely on the year being <2015
     meta = {
       maintainers = with maintainers; [ ocharles ];
       platforms   = stdenv.lib.platforms.unix;
@@ -3993,6 +4009,21 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  Glib = buildPerlPackage rec {
+    name = "Glib-1.306";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/X/XA/XAOC/${name}.tar.gz";
+      sha256 = "0j4kf707vy9vhpifwl6icc7rqyf75z2lhc626af7ag8srqva81ic";
+    };
+    buildInputs = [ ExtUtilsDepends ExtUtilsPkgConfig pkgs.glib ];
+    meta = {
+      homepage = http://gtk2-perl.sourceforge.net/;
+      description = "Perl wrappers for the GLib utility and Object libraries";
+      maintainers = with maintainers; [ nckx ];
+      license = with stdenv.lib.licenses; [ lgpl3Plus ];
+    };
+  };
+
   GnuPG = buildPerlPackage {
     name = "GnuPG-0.19";
     src = fetchurl {
@@ -4056,6 +4087,21 @@ let self = _self // overrides; _self = with self; {
       sha256 = "150x65lwf7pfsygcpmvj3679lhlfwx87xylwnrmwll67f9dpkjdi";
     };
     buildInputs = [ DataUUID CryptCBC ];
+  };
+
+  Gtk2 = buildPerlPackage rec {
+    name = "Gtk2-1.2493";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/X/XA/XAOC/${name}.tar.gz";
+      sha256 = "1zhrvwl584yrf0b1rrkli0k2ly221xhdyix8ykmm9zs674gain0z";
+    };
+    buildInputs = [ ExtUtilsDepends ExtUtilsPkgConfig Pango pkgs.gtk2 ];
+    meta = {
+      homepage = http://gtk2-perl.sourceforge.net/;
+      description = "Perl interface to the 2.x series of the Gimp Toolkit library";
+      maintainers = with maintainers; [ nckx ];
+      license = with stdenv.lib.licenses; [ lgpl21Plus ];
+    };
   };
 
   Guard = buildPerlPackage {
@@ -5859,7 +5905,7 @@ let self = _self // overrides; _self = with self; {
     buildInputs = [ TestFatal ];
     propagatedBuildInputs = [ ClassMethodModifiers DevelGlobalDestruction ImportInto ModuleRuntime RoleTiny strictures ];
     meta = {
-      description = "Minimalist Object Orientation (with Moose compatiblity)";
+      description = "Minimalist Object Orientation (with Moose compatibility)";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -6573,6 +6619,20 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  MozillaLdap = buildPerlPackage {
+    name = "Mozilla-Ldap-1.5.3";
+    USE_OPENLDAP=1;
+    LDAPSDKDIR=pkgs.openldap;
+    src = fetchurl {
+      url = "ftp://ftp.mozilla.org/pub/mozilla.org/directory/perldap/releases/1.5.3/src/perl-mozldap-1.5.3.tar.gz";
+      sha256 = "0s0albdw0zvg3w37s7is7gddr4mqwicjxxsy400n1p96l7ipnw4x";
+    };
+    meta = {
+      description = "Mozilla's ldap client library.";
+      license = "unknown";
+    };
+  };
+
   MROCompat = buildPerlPackage {
     name = "MRO-Compat-0.12";
     src = fetchurl {
@@ -6639,10 +6699,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   NetAddrIP = buildPerlPackage rec {
-    name = "NetAddr-IP-4.072";
+    name = "NetAddr-IP-4.075";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MI/MIKER/${name}.tar.gz";
-      sha256 = "17gwhhbz25021w5k4ggp8j3plix5yixgb2vr1mj39fa0p3gafm09";
+      sha256 = "0fc8jvrcp42szscnn41sxz8z8qa4fr4dr9i9s067hvrhiyxpb0mb";
     };
   };
 
@@ -7090,6 +7150,22 @@ let self = _self // overrides; _self = with self; {
       homepage = http://metacpan.org/release/Package-Stash-XS;
       description = "Faster and more correct implementation of the Package::Stash API";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  Pango = buildPerlPackage rec {
+    name = "Pango-1.226";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/X/XA/XAOC/${name}.tar.gz";
+      sha256 = "0r4jx7d6gj6ixk2r5yr70biy1lpjxir08aywkw02g85wg6zkjw4z";
+    };
+    buildInputs = [ ExtUtilsDepends ExtUtilsPkgConfig pkgs.pango ];
+    propagatedBuildInputs = [ Cairo Glib ];
+    meta = {
+      homepage = http://gtk2-perl.sourceforge.net/;
+      description = "Layout and render international text";
+      maintainers = with maintainers; [ nckx ];
+      license = with stdenv.lib.licenses; [ lgpl21Plus ];
     };
   };
 
@@ -10192,6 +10268,20 @@ let self = _self // overrides; _self = with self; {
     };
     propagatedBuildInputs = [ Wx OpenGL pkgs.mesa_glu ];
     doCheck = false;
+  };
+
+  X11IdleTime = buildPerlPackage rec {
+    name = "X11-IdleTime-0.09";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/A/AW/AWENDT/${name}.tar.gz";
+      sha256 = "0j27cb9yy9ymni8cbiyxplbg086b8lv6b330nwqyx0briq3xrzfq";
+    };
+    buildInputs = [ pkgs.xlibs.libXext pkgs.xlibs.libXScrnSaver pkgs.xlibs.libX11 ];
+    propagatedBuildInputs = [ InlineC ];
+    patchPhase = ''sed -ie 's,-L/usr/X11R6/lib/,-L${pkgs.xlibs.libX11}/lib/ -L${pkgs.xlibs.libXext}/lib/ -L${pkgs.xlibs.libXScrnSaver}/lib/,' IdleTime.pm'';
+    meta = {
+      description = "Get the idle time of X11";
+    };
   };
 
   X11Protocol = buildPerlPackage rec {
