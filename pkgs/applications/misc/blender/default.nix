@@ -10,18 +10,12 @@
 with lib;
 
 stdenv.mkDerivation rec {
-  name = "blender-2.73";
+  name = "blender-2.73a";
 
   src = fetchurl {
     url = "http://download.blender.org/source/${name}.tar.gz";
-    sha256 = "140fcxjb73gim430v08021ls3civ3yghld63ljkgxi5vaww1cq95";
+    sha256 = "114ipidrja6ryi6wv0w55wmh10ikazy24r8js596g7b9fpkzpymc";
   };
-
-  patches = [(fetchpatch {
-    url = "https://raw.githubusercontent.com/Exherbo/media-unofficial/b5b09fa35ed/"
-      + "packages/media-gfx/blender/files/blender-2.71-Fix-build-with-freetype-2.5.4.patch";
-    sha256 = "19kx9h030zy2f0ah5v69ank2ak8gfp1zv26pm4ixngfdbsiy5lvk";
-  })];
 
   buildInputs =
     [ SDL boost cmake ffmpeg gettext glew ilmbase libXi

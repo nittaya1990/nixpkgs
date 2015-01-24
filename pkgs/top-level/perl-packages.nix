@@ -3742,6 +3742,15 @@ let self = _self // overrides; _self = with self; {
     preCheck = "export HOME=$TMPDIR";
   };
 
+  FileKeePass = buildPerlPackage rec {
+    name = "File-KeePass-2.03";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/R/RH/RHANDOM/${name}.tar.gz";
+      sha256 = "c30c688027a52ff4f58cd69d6d8ef35472a7cf106d4ce94eb73a796ba7c7ffa7";
+    };
+    propagatedBuildInputs = [ CryptRijndael ];
+  };
+
   FileListing = buildPerlPackage rec {
     name = "File-Listing-6.04";
     src = fetchurl {
@@ -4010,10 +4019,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   Glib = buildPerlPackage rec {
-    name = "Glib-1.306";
+    name = "Glib-1.307";
     src = fetchurl {
       url = "mirror://cpan/authors/id/X/XA/XAOC/${name}.tar.gz";
-      sha256 = "0j4kf707vy9vhpifwl6icc7rqyf75z2lhc626af7ag8srqva81ic";
+      sha256 = "1km4261a5kaazz77qplpqj2yv91p0bqcjjvd6xdvdgdd4rib7ngr";
     };
     buildInputs = [ ExtUtilsDepends ExtUtilsPkgConfig pkgs.glib ];
     meta = {
@@ -4090,10 +4099,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   Gtk2 = buildPerlPackage rec {
-    name = "Gtk2-1.2493";
+    name = "Gtk2-1.2494";
     src = fetchurl {
       url = "mirror://cpan/authors/id/X/XA/XAOC/${name}.tar.gz";
-      sha256 = "1zhrvwl584yrf0b1rrkli0k2ly221xhdyix8ykmm9zs674gain0z";
+      sha256 = "1kkm1z1xqnrfdfjric5y3935dbi9qnhcd6c1z58g4m0y95mwpv9v";
     };
     buildInputs = [ ExtUtilsDepends ExtUtilsPkgConfig Pango pkgs.gtk2 ];
     meta = {
@@ -8128,6 +8137,13 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  SortNaturally = buildPerlPackage rec {
+    name = "Sort-Naturally-1.03";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/B/BI/BINGOS/${name}.tar.gz";
+      sha256 = "eaab1c5c87575a7826089304ab1f8ffa7f18e6cd8b3937623e998e865ec1e746";
+    };
+  };
 
   Starman = buildPerlModule {
     name = "Starman-0.4010";
@@ -8831,6 +8847,14 @@ let self = _self // overrides; _self = with self; {
 
     # Tests don't work because they require /dev/tty.
     doCheck = false;
+  };
+
+  TermShellUI = buildPerlPackage rec {
+    name = "Term-ShellUI-0.92";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/B/BR/BRONSON/${name}.tar.gz";
+      sha256 = "3279c01c76227335eeff09032a40f4b02b285151b3576c04cacd15be05942bdb";
+    };
   };
 
   TermSizeAny = buildPerlPackage {
@@ -10105,7 +10129,7 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/M/MS/MSCHWERN/URI-Find-20111103.tar.gz;
       sha256 = "1igbbj14j5fssdqrbr60mg3w95wldfxdikplqdmqgf2zn5j65ibr";
     };
-    propagatedBuildInputs = [ URI URIURL ];
+    propagatedBuildInputs = [ URI ];
     meta = {
       homepage = http://search.cpan.org/dist/URI-Find;
       description = "Find URIs in arbitrary text";
@@ -10135,18 +10159,6 @@ let self = _self // overrides; _self = with self; {
       sha256 = "00hq5cpsk7sa04n0wg52qhpqf9i2849yyvw2zk83ayh1qqpc50js";
     };
     buildInputs = [URI TestMore];
-  };
-
-  URIURL = buildPerlPackage {
-    name = "URI-URL-1.60";
-    src = fetchurl {
-      url = mirror://cpan/authors/id/G/GA/GAAS/URI-1.60.tar.gz;
-      sha256 = "0xr31mf7lfrwhyvlx4pzp6p7alls5gi4bj8pk5g89f5cckfd74hz";
-    };
-    meta = {
-      description = "Uniform Resource Identifiers (absolute and relative)";
-      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-    };
   };
 
   VariableMagic = buildPerlPackage rec {

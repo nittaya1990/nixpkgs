@@ -446,6 +446,10 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   circlePacking = callPackage ../development/libraries/haskell/circle-packing {};
 
+  clashLib = callPackage ../development/libraries/haskell/clash-lib {};
+
+  clashPrelude = callPackage ../development/libraries/haskell/clash-prelude {};
+
   classyPrelude = callPackage ../development/libraries/haskell/classy-prelude {};
 
   classyPreludeConduit = callPackage ../development/libraries/haskell/classy-prelude-conduit {};
@@ -525,6 +529,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   contravariant = callPackage ../development/libraries/haskell/contravariant {};
 
   concurrentExtra = callPackage ../development/libraries/haskell/concurrent-extra {};
+
+  concurrentSupply = callPackage ../development/libraries/haskell/concurrent-supply {};
 
   converge = callPackage ../development/libraries/haskell/converge {};
 
@@ -775,7 +781,9 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
     optparseApplicative = self.optparseApplicative_0_10_0;
   };
 
-  elmPackage = callPackage ../development/compilers/elm/elm-package.nix {};
+  elmPackage = callPackage ../development/compilers/elm/elm-package.nix {
+    optparseApplicative = self.optparseApplicative_0_10_0;
+  };
 
   elmServer = callPackage ../development/compilers/elm/elm-server.nix {};
 
@@ -825,6 +833,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   esqueleto = callPackage ../development/libraries/haskell/esqueleto {};
 
   eventList = callPackage ../development/libraries/haskell/event-list {};
+
+  exhaustive = callPackage ../development/libraries/haskell/exhaustive {};
 
   exPool = callPackage ../development/libraries/haskell/ex-pool {};
 
@@ -2328,6 +2338,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   silently = callPackage ../development/libraries/haskell/silently {};
 
+  sitemap = callPackage ../development/libraries/haskell/sitemap {};
+
   sized = callPackage ../development/libraries/haskell/sized {};
 
   sizedTypes = callPackage ../development/libraries/haskell/sized-types {};
@@ -2983,7 +2995,11 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   yesodJson = callPackage ../development/libraries/haskell/yesod-json {};
 
+  yesodMarkdown = callPackage ../development/libraries/haskell/yesod-markdown {};
+
   yesodNewsfeed = callPackage ../development/libraries/haskell/yesod-newsfeed {};
+
+  yesodPagination = callPackage ../development/libraries/haskell/yesod-pagination {};
 
   yesodPersistent = callPackage ../development/libraries/haskell/yesod-persistent {};
 
@@ -3099,6 +3115,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   # Applications.
 
   arbtt = callPackage ../applications/misc/arbtt {};
+
+  clashGhc = callPackage ../development/compilers/clash-ghc {};
 
   idris_plain = callPackage ../development/compilers/idris {};
 

@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   name = "syncthing-${version}";
-  version = "0.10.18";
+  version = "0.10.21";
 
   src = fetchgit {
     url = "git://github.com/syncthing/syncthing.git";
     rev = "refs/tags/v${version}";
-    sha256 = "145i7rrqjly6h07b5kf0zwlxy8gh0jlpq6pwfgjmf0kilrvncla1";
+    sha256 = "60cd8607cf7d2837252680f6c2879aba1f35a2c74a47c2f2ea874d6eed2adaa5";
   };
 
   buildInputs = [ go ];

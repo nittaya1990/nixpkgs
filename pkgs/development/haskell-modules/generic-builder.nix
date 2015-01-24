@@ -1,5 +1,5 @@
 { stdenv, fetchurl, ghc, pkgconfig, glibcLocales, coreutils, gnugrep, gnused
-, jailbreak-cabal, hscolour
+, jailbreak-cabal, hscolour, cpphs
 }:
 
 { pname
@@ -7,6 +7,7 @@
 , sha256 ? null
 , src ? fetchurl { url = "mirror://hackage/${pname}-${version}.tar.gz"; inherit sha256; }
 , buildDepends ? []
+, buildTarget ? ""
 , buildTools ? []
 , configureFlags ? []
 , description ? ""
@@ -26,19 +27,22 @@
 , jailbreak ? false
 , license
 , maintainers ? []
-, noHaddock ? false
+, doHaddock ? true
 , passthru ? {}
 , pkgconfigDepends ? []
 , platforms ? ghc.meta.platforms
 , testDepends ? []
 , testTarget ? ""
 , broken ? false
+, preUnpack ? "", postUnpack ? ""
 , patches ? [], patchPhase ? "", prePatch ? "", postPatch ? ""
 , preConfigure ? "", postConfigure ? ""
 , preBuild ? "", postBuild ? ""
 , preInstall ? "", postInstall ? ""
 , checkPhase ? "", preCheck ? "", postCheck ? ""
 , preFixup ? "", postFixup ? ""
+, coreSetup ? false # Use only core packages to build Setup.hs.
+, useCpphs ? false
 }:
 
 assert pkgconfigDepends != [] -> pkgconfig != null;
@@ -48,12 +52,31 @@ let
   inherit (stdenv.lib) optional optionals optionalString versionOlder
                        concatStringsSep enableFeature optionalAttrs;
 
+  newCabalFile = fetchurl {
+    url = "http://hackage.haskell.org/package/${pname}-${version}/${pname}.cabal";
+    sha256 = editedCabalFile;
+  };
+
   defaultSetupHs = builtins.toFile "Setup.hs" ''
                      import Distribution.Simple
                      main = defaultMain
                    '';
 
+  ghc76xOrLater = stdenv.lib.versionOlder "7.6" ghc.version;
+  packageDbFlag = if ghc76xOrLater then "package-db" else "package-conf";
+
+  hasActiveLibrary = isLibrary && (enableStaticLibraries || enableSharedLibraries || enableLibraryProfiling);
+
+  enableParallelBuilding = versionOlder "7.8" ghc.version && !hasActiveLibrary;
+
   defaultConfigureFlags = [
+    "--verbose" "--prefix=$out" "--libdir=\\$prefix/lib/\\$compiler" "--libsubdir=\\$pkgid"
+    "--with-gcc=$CC"            # Clang won't work without that extra information.
+    "--package-db=$packageConfDir"
+    (optionalString (enableSharedExecutables && stdenv.isLinux) "--ghc-option=-optl=-Wl,-rpath=$out/lib/${ghc.name}/${pname}-${version}")
+    (optionalString (enableSharedExecutables && stdenv.isDarwin) "--ghc-option=-optl=-Wl,-headerpad_max_install_names")
+    (optionalString enableParallelBuilding "--ghc-option=-j$NIX_BUILD_CORES")
+    (optionalString (useCpphs) "--with-cpphs=${cpphs}/bin/cpphs --ghc-options=-cpp --ghc-options=-pgmP${cpphs}/bin/cpphs --ghc-options=-optP--cpp")
     (enableFeature enableSplitObjs "split-objs")
     (enableFeature enableLibraryProfiling "library-profiling")
     (enableFeature enableSharedLibraries "shared")
@@ -62,61 +85,54 @@ let
     (optionalString (versionOlder "7" ghc.version) (enableFeature doCheck "tests"))
   ];
 
-  hasActiveLibrary = isLibrary && (enableStaticLibraries || enableSharedLibraries);
+  setupCompileFlags = [
+    (optionalString (!coreSetup) "-${packageDbFlag}=$packageConfDir")
+    (optionalString (versionOlder "7.8" ghc.version) "-j$NIX_BUILD_CORES")
+  ];
 
-  newCabalFile = fetchurl {
-    url = "http://hackage.haskell.org/package/${pname}-${version}/${pname}.cabal";
-    sha256 = editedCabalFile;
-  };
-
-  isHaskellPkg = x: (x ? pname) && (x ? version);
+  isHaskellPkg = x: (x ? pname) && (x ? version) && (x ? env);
   isSystemPkg = x: !isHaskellPkg x;
 
-  allBuildInputs = stdenv.lib.filter (x: x != null) (
-                     buildDepends ++ extraLibraries ++ buildTools ++
+  propagatedBuildInputs = buildDepends;
+  otherBuildInputs = extraLibraries ++
+                     buildTools ++
                      optionals (pkgconfigDepends != []) ([pkgconfig] ++ pkgconfigDepends) ++
-                     optionals doCheck testDepends
-                   );
+                     optionals doCheck testDepends;
+  allBuildInputs = propagatedBuildInputs ++ otherBuildInputs;
+
   haskellBuildInputs = stdenv.lib.filter isHaskellPkg allBuildInputs;
   systemBuildInputs = stdenv.lib.filter isSystemPkg allBuildInputs;
+
+  ghcEnv = ghc.withPackages (p: haskellBuildInputs);
 
 in
 stdenv.mkDerivation ({
   name = "${optionalString hasActiveLibrary "haskell-"}${pname}-${version}";
 
+  prePhases = ["setupCompilerEnvironmentPhase"];
+  preConfigurePhases = ["jailbreakPhase" "compileBuildDriverPhase"];
+  preInstallPhases = ["haddockPhase"];
+
   inherit src;
 
-  nativeBuildInputs = extraLibraries ++ buildTools ++
-    optionals (pkgconfigDepends != []) ([pkgconfig] ++ pkgconfigDepends) ++
-    optionals doCheck testDepends;
-  propagatedNativeBuildInputs = buildDepends;
+  nativeBuildInputs = otherBuildInputs ++ optionals (!hasActiveLibrary) propagatedBuildInputs;
+  propagatedNativeBuildInputs = optionals hasActiveLibrary propagatedBuildInputs;
 
-  # GHC needs the locale configured during the Haddock phase.
-  LANG = "en_US.UTF-8";
+  LANG = "en_US.UTF-8";         # GHC needs the locale configured during the Haddock phase.
   LOCALE_ARCHIVE = optionalString stdenv.isLinux "${glibcLocales}/lib/locale/locale-archive";
 
-  configurePhase = ''
-    runHook preConfigure
+  setupCompilerEnvironmentPhase = ''
+    runHook preSetupCompilerEnvironment
 
     echo "Building with ${ghc}."
     export PATH="${ghc}/bin:$PATH"
     ${optionalString (hasActiveLibrary && hyperlinkSource) "export PATH=${hscolour}/bin:$PATH"}
 
-    configureFlags="--verbose --prefix=$out --libdir=\$prefix/lib/\$compiler --libsubdir=\$pkgid $configureFlags"
-    configureFlags+=' ${concatStringsSep " " defaultConfigureFlags}'
-    ${optionalString (enableSharedExecutables && stdenv.isLinux) ''
-      configureFlags+=" --ghc-option=-optl=-Wl,-rpath=$out/lib/${ghc.name}/${pname}-${version}"
-    ''}
-    ${optionalString (enableSharedExecutables && stdenv.isDarwin) ''
-      configureFlags+=" --ghc-option=-optl=-Wl,-headerpad_max_install_names"
-    ''}
-    ${optionalString (versionOlder "7.8" ghc.version && !isLibrary) ''
-      configureFlags+=" --ghc-option=-j$NIX_BUILD_CORES"
-      setupCompileFlags="-j$NIX_BUILD_CORES"
-    ''}
-
     packageConfDir="$TMP/package.conf.d"
     mkdir -p $packageConfDir
+
+    setupCompileFlags="${concatStringsSep " " setupCompileFlags}"
+    configureFlags="${concatStringsSep " " defaultConfigureFlags} $configureFlags"
 
     local inputClosure=""
     for i in $propagatedNativeBuildInputs $nativeBuildInputs; do
@@ -136,26 +152,44 @@ stdenv.mkDerivation ({
         fi
       done
     done
-    ghc-pkg --package-db="$packageConfDir" recache
-    configureFlags+=" --package-db=$packageConfDir"
+    ghc-pkg --${packageDbFlag}="$packageConfDir" recache
+
+    runHook postSetupCompilerEnvironment
+  '';
+
+  jailbreakPhase = ''
+    runHook preJailbreak
 
     ${optionalString (editedCabalFile != null) ''
       echo "Replacing Cabal file with edited version ${newCabalFile}."
       cp ${newCabalFile} ${pname}.cabal
-    ''}
-
-    ${optionalString jailbreak ''
+    ''}${optionalString jailbreak ''
       echo "Running jailbreak-cabal to lift version restrictions on build inputs."
       ${jailbreak-cabal}/bin/jailbreak-cabal ${pname}.cabal
     ''}
 
+    runHook postJailbreak
+  '';
+
+  compileBuildDriverPhase = ''
+    runHook preCompileBuildDriver
+
     for i in Setup.hs Setup.lhs ${defaultSetupHs}; do
       test -f $i && break
     done
-    ghc -package-db=$packageConfDir $setupCompileFlags --make -o Setup -odir $TMPDIR -hidir $TMPDIR $i
+
+    echo setupCompileFlags: $setupCompileFlags
+    ghc $setupCompileFlags --make -o Setup -odir $TMPDIR -hidir $TMPDIR $i
+
+    runHook postCompileBuildDriver
+  '';
+
+  configurePhase = ''
+    runHook preConfigure
+
+    unset GHC_PACKAGE_PATH      # Cabal complains if this variable is set during configure.
 
     echo configureFlags: $configureFlags
-    unset GHC_PACKAGE_PATH      # Cabal complains if this variable is set during configure.
     ./Setup configure $configureFlags 2>&1 | ${coreutils}/bin/tee "$NIX_BUILD_TOP/cabal-configure.log"
     if ${gnugrep}/bin/egrep -q '^Warning:.*depends on multiple versions' "$NIX_BUILD_TOP/cabal-configure.log"; then
       echo >&2 "*** abort because of serious configure-time warning from Cabal"
@@ -169,12 +203,7 @@ stdenv.mkDerivation ({
 
   buildPhase = ''
     runHook preBuild
-    ./Setup build
-    ${optionalString (!noHaddock && hasActiveLibrary) ''
-      ./Setup haddock --html \
-        ${optionalString doHoogle "--hoogle"} \
-        ${optionalString (hasActiveLibrary && hyperlinkSource) "--hyperlink-source"}
-    ''}
+    ./Setup build ${buildTarget}
     runHook postBuild
   '';
 
@@ -182,6 +211,16 @@ stdenv.mkDerivation ({
     runHook preCheck
     ./Setup test ${testTarget}
     runHook postCheck
+  '';
+
+  haddockPhase = ''
+    runHook preHaddock
+    ${optionalString (doHaddock && hasActiveLibrary) ''
+      ./Setup haddock --html \
+        ${optionalString doHoogle "--hoogle"} \
+        ${optionalString (hasActiveLibrary && hyperlinkSource) "--hyperlink-source"}
+    ''}
+    runHook postHaddock
   '';
 
   installPhase = ''
@@ -212,19 +251,35 @@ stdenv.mkDerivation ({
 
     env = stdenv.mkDerivation {
       name = "interactive-${optionalString hasActiveLibrary "haskell-"}${pname}-${version}-environment";
-      nativeBuildInputs = [ (ghc.withPackages (p: haskellBuildInputs)) systemBuildInputs ];
-      shellHook = "eval $(grep export $(type -p ghc))";
+      nativeBuildInputs = [ ghcEnv systemBuildInputs ];
+      LANG = "en_US.UTF-8";
+      LOCALE_ARCHIVE = optionalString stdenv.isLinux "${glibcLocales}/lib/locale/locale-archive";
+      shellHook = ''
+        export NIX_GHC="${ghcEnv}/bin/ghc"
+        export NIX_GHCPKG="${ghcEnv}/bin/ghc"
+        export NIX_GHC_DOCDIR="${ghcEnv}/share/doc/ghc/html"
+        export NIX_GHC_LIBDIR="${ghcEnv}/lib/${ghcEnv.name}"
+      '';
+      buildCommand = ''
+        echo >&2 ""
+        echo >&2 "*** Haskell 'env' attributes are intended for interactive nix-shell sessions, not for building! ***"
+        echo >&2 ""
+        exit 1
+      '';
     };
 
   };
 
-  meta = { inherit homepage license platforms hydraPlatforms; }
+  meta = { inherit homepage license platforms; }
          // optionalAttrs broken               { inherit broken; }
          // optionalAttrs (description != "")  { inherit description; }
          // optionalAttrs (maintainers != [])  { inherit maintainers; }
+         // optionalAttrs (hydraPlatforms != platforms) { inherit hydraPlatforms; }
          ;
 
 }
+// optionalAttrs (preUnpack != "")      { inherit preUnpack; }
+// optionalAttrs (postUnpack != "")     { inherit postUnpack; }
 // optionalAttrs (configureFlags != []) { inherit configureFlags; }
 // optionalAttrs (patches != [])        { inherit patches; }
 // optionalAttrs (patchPhase != "")     { inherit patchPhase; }
@@ -234,11 +289,12 @@ stdenv.mkDerivation ({
 // optionalAttrs (postConfigure != "")  { inherit postConfigure; }
 // optionalAttrs (preBuild != "")       { inherit preBuild; }
 // optionalAttrs (postBuild != "")      { inherit postBuild; }
-// optionalAttrs (preInstall != "")     { inherit preInstall; }
-// optionalAttrs (postInstall != "")    { inherit postInstall; }
+// optionalAttrs (doCheck)              { inherit doCheck; }
 // optionalAttrs (checkPhase != "")     { inherit checkPhase; }
 // optionalAttrs (preCheck != "")       { inherit preCheck; }
 // optionalAttrs (postCheck != "")      { inherit postCheck; }
+// optionalAttrs (preInstall != "")     { inherit preInstall; }
+// optionalAttrs (postInstall != "")    { inherit postInstall; }
 // optionalAttrs (preFixup != "")       { inherit preFixup; }
 // optionalAttrs (postFixup != "")      { inherit postFixup; }
 )
