@@ -729,8 +729,7 @@ let
 
   fop = callPackage ../tools/typesetting/fop { };
 
-  # Evaluation broken by recent ruby changes.
-  # gist = callPackage ../tools/text/gist { };
+  gist = callPackage ../tools/text/gist { };
 
   mcrl = callPackage ../tools/misc/mcrl { };
 
@@ -839,6 +838,8 @@ let
   ccid = callPackage ../tools/security/ccid { };
 
   ccrypt = callPackage ../tools/security/ccrypt { };
+
+  ccze = callPackage ../tools/misc/ccze { };
 
   cdecl = callPackage ../development/tools/cdecl { };
 
@@ -1224,6 +1225,8 @@ let
 
   libbsd = callPackage ../development/libraries/libbsd { };
 
+  libbladeRF = callPackage ../development/libraries/libbladeRF { };
+
   lprof = callPackage ../tools/graphics/lprof { };
 
   fdk_aac = callPackage ../development/libraries/fdk-aac { };
@@ -1314,13 +1317,14 @@ let
 
   gifsicle = callPackage ../tools/graphics/gifsicle { };
 
-  # Evaluation broken by recent ruby changes.
-  # gitlab = callPackage ../applications/version-management/gitlab {
-  #  libiconv = libiconvOrLibc;
-  # };
+  gitlab = callPackage ../applications/version-management/gitlab {
+    libiconv = libiconvOrLibc;
+    ruby = ruby_2_1_3;
+  };
 
-  # Evaluation broken by recent ruby changes.
-  # gitlab-shell = callPackage ../applications/version-management/gitlab-shell { };
+  gitlab-shell = callPackage ../applications/version-management/gitlab-shell {
+    ruby = ruby_2_1_3;
+  };
 
   glusterfs = callPackage ../tools/filesystems/glusterfs { };
 
@@ -1949,6 +1953,11 @@ let
   };
 
   pnmixer = callPackage ../tools/audio/pnmixer { };
+
+  pwsafe = callPackage ../applications/misc/pwsafe {
+    inherit (xlibs) libXt libXtst libXi xextproto;
+    wxGTK = wxGTK30;
+  };
 
   nifskope = callPackage ../tools/graphics/nifskope { };
 
@@ -3455,9 +3464,6 @@ let
 
   fsharp = callPackage ../development/compilers/fsharp {};
 
-  # Evaluation broken by recent ruby changes.
-  # gem-nix = callPackage ../tools/package-management/gem-nix { };
-
   go_1_0 = callPackage ../development/compilers/go { };
 
   go_1_1 =
@@ -3776,6 +3782,8 @@ let
 
     patoline = callPackage ../tools/typesetting/patoline { };
 
+    gapi_ocaml = callPackage ../development/ocaml-modules/gapi-ocaml { };
+
     gg = callPackage ../development/ocaml-modules/gg { };
 
     gmetadom = callPackage ../development/ocaml-modules/gmetadom { };
@@ -3829,6 +3837,8 @@ let
     ocaml_data_notation = callPackage ../development/ocaml-modules/odn { };
 
     ocaml_expat = callPackage ../development/ocaml-modules/expat { };
+
+    ocamlfuse = callPackage ../development/ocaml-modules/ocamlfuse { };
 
     ocamlgraph = callPackage ../development/ocaml-modules/ocamlgraph { };
 
@@ -3911,6 +3921,8 @@ let
     ocaml_extlib_maximal = callPackage ../development/ocaml-modules/extlib {
       minimal = false;
     };
+
+    ocurl = callPackage ../development/ocaml-modules/ocurl { };
 
     pprint = callPackage ../development/ocaml-modules/pprint { };
 
@@ -4339,8 +4351,6 @@ let
   };
   defaultGemConfig = callPackage ../development/interpreters/ruby/bundler-env/default-gem-config.nix { };
   buildRubyGem = callPackage ../development/interpreters/ruby/gem.nix { };
-  # Evaluation broken by recent ruby changes.
-  # loadRubyEnv = callPackage ../development/interpreters/ruby/load-ruby-env.nix { };
   bundlerEnv = callPackage ../development/interpreters/ruby/bundler-env { };
 
   ruby_1_8_7 = callPackage ../development/interpreters/ruby/ruby-1.8.7.nix { };
@@ -9939,6 +9949,8 @@ let
 
   goldendict = callPackage ../applications/misc/goldendict { };
 
+  google-drive-ocamlfuse = callPackage ../applications/networking/google-drive-ocamlfuse { };
+
   google-musicmanager = callPackage ../applications/audio/google-musicmanager { };
 
   gpicview = callPackage ../applications/graphics/gpicview { };
@@ -10504,9 +10516,7 @@ let
 
   mediainfo-gui = callPackage ../applications/misc/mediainfo-gui { };
 
-  meld = callPackage ../applications/version-management/meld {
-    inherit (gnome) scrollkeeper;
-  };
+  meld = callPackage ../applications/version-management/meld { };
 
   mcomix = callPackage ../applications/graphics/mcomix { };
 
@@ -12588,7 +12598,13 @@ let
 
     bedrock = callPackage ../development/coq-modules/bedrock {};
 
-    containers = callPackage ../development/coq-modules/containers {};
+    contribs =
+      let contribs =
+        import ../development/coq-modules/contribs
+        contribs
+        callPackage { };
+      in
+        recurseIntoAttrs contribs;
 
     coqExtLib = callPackage ../development/coq-modules/coq-ext-lib {};
 
