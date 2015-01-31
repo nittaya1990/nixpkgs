@@ -2052,6 +2052,11 @@ let
 
   openntpd = callPackage ../tools/networking/openntpd { };
 
+  opennx = callPackage ../tools/admin/opennx {
+    wxGTK = wxGTK28;
+    inherit (xlibs) libX11 libXau libXmu;
+  };
+
   openobex = callPackage ../tools/bluetooth/openobex { };
 
   openopc = callPackage ../tools/misc/openopc {
