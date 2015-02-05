@@ -189,6 +189,7 @@
   ./services/misc/nix-gc.nix
   ./services/misc/nixos-manual.nix
   ./services/misc/nix-ssh-serve.nix
+  ./services/misc/parsoid.nix
   ./services/misc/phd.nix
   ./services/misc/redmine.nix
   ./services/misc/rippled.nix
@@ -292,6 +293,7 @@
   ./services/networking/syncthing.nix
   ./services/networking/tcpcrypt.nix
   ./services/networking/teamspeak3.nix
+  ./services/networking/tinc.nix
   ./services/networking/tftpd.nix
   ./services/networking/tlsdated.nix
   ./services/networking/tox-bootstrapd.nix
@@ -340,6 +342,7 @@
   ./services/web-servers/nginx/default.nix
   ./services/web-servers/phpfpm.nix
   ./services/web-servers/tomcat.nix
+  ./services/web-servers/uwsgi.nix
   ./services/web-servers/varnish/default.nix
   ./services/web-servers/winstone.nix
   ./services/web-servers/zope2.nix

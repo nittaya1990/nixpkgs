@@ -499,12 +499,9 @@ let
 
   arcanist = callPackage ../development/tools/misc/arcanist {};
 
-  arduino = arduino-core.override { withGui = true; };
-
   arduino-core = callPackage ../development/arduino/arduino-core {
     jdk = jdk;
     jre = jdk;
-    withGui = false;
   };
 
   apitrace = callPackage ../applications/graphics/apitrace {};
@@ -1568,6 +1565,12 @@ let
     inherit (haskellPackages) ihaskell ghc;
   };
 
+  ihaskell-with-packages = callPackage ../development/tools/haskell/ihaskell/ng-wrapper.nix {
+    inherit (pythonPackages) ipython;
+    inherit (haskellngPackages) ihaskell ghcWithPackages;
+    packages = self: [];
+  };
+
   imapproxy = callPackage ../tools/networking/imapproxy { };
 
   imapsync = callPackage ../tools/networking/imapsync {
@@ -2071,6 +2074,11 @@ let
   opennx = callPackage ../tools/admin/opennx {
     wxGTK = wxGTK28;
     inherit (xlibs) libX11 libXau libXmu;
+  };
+
+  openntpd_nixos = openntpd.override {
+    privsepUser = "ntp";
+    privsepPath = "/var/empty";
   };
 
   openobex = callPackage ../tools/bluetooth/openobex { };
@@ -2733,6 +2741,10 @@ let
 
   usbmuxd = callPackage ../tools/misc/usbmuxd {};
 
+  uwsgi = callPackage ../servers/uwsgi {
+    plugins = [];
+  };
+
   vacuum = callPackage ../applications/networking/instant-messengers/vacuum {};
 
   volatility = callPackage ../tools/security/volatility { };
@@ -2828,6 +2840,8 @@ let
 
   tm = callPackage ../tools/system/tm { };
 
+  tradcpp = callPackage ../development/tools/tradcpp { };
+
   trang = callPackage ../tools/text/xml/trang { };
 
   tre = callPackage ../development/libraries/tre { };
@@ -2883,8 +2897,6 @@ let
   urlwatch = callPackage ../tools/networking/urlwatch { };
 
   varnish = callPackage ../servers/varnish { };
-
-  varnish2 = callPackage ../servers/varnish/2.1.nix { };
 
   venus = callPackage ../tools/misc/venus {
     python = python27;
@@ -3646,7 +3658,7 @@ let
 
   llvm_v = path: callPackage path { };
 
-  llvmPackages = if stdenv.isDarwin then llvmPackages_35 else llvmPackages_34;
+  llvmPackages = llvmPackages_35;
 
   llvmPackages_34 = recurseIntoAttrs (import ../development/compilers/llvm/3.4 {
     inherit stdenv newScope fetchurl;
@@ -4344,7 +4356,7 @@ let
   python34 = hiPrio (callPackage ../development/interpreters/python/3.4 {
     self = python34;
   });
-  pypy = callPackage ../development/interpreters/pypy/2.4 {
+  pypy = callPackage ../development/interpreters/pypy {
     self = pypy;
   };
 
@@ -7386,6 +7398,8 @@ let
 
   xcb-util-cursor = callPackage ../development/libraries/xcb-util-cursor { };
 
+  xcb-util-cursor-HEAD = callPackage ../development/libraries/xcb-util-cursor/HEAD.nix { };
+
   xdo = callPackage ../tools/misc/xdo { };
 
   xineLib = callPackage ../development/libraries/xine-lib {
@@ -8194,8 +8208,9 @@ let
   xorg = recurseIntoAttrs (import ../servers/x11/xorg/default.nix {
     inherit clangStdenv fetchurl fetchgit fetchpatch stdenv pkgconfig intltool freetype fontconfig
       libxslt expat libpng zlib perl mesa_drivers spice_protocol
-      dbus libuuid openssl gperf m4 libevdev
+      dbus libuuid openssl gperf m4 libevdev tradcpp
       autoconf automake libtool xmlto asciidoc flex bison python mtdev pixman;
+    bootstrap_cmds = if stdenv.isDarwin then darwin.bootstrap_cmds else null;
     mesa = mesa_noglu;
     udev = if stdenv.isLinux then udev else null;
     libdrm = if stdenv.isLinux then libdrm else null;
@@ -9152,9 +9167,11 @@ let
 
   ### DATA
 
-  andagii = callPackage ../data/fonts/andagii {};
+  andagii = callPackage ../data/fonts/andagii { };
 
-  anonymousPro = callPackage ../data/fonts/anonymous-pro {};
+  android-udev-rules = callPackage ../os-specific/linux/android-udev-rules { };
+
+  anonymousPro = callPackage ../data/fonts/anonymous-pro { };
 
   arkpandora_ttf = builderDefsPackage (import ../data/fonts/arkpandora) { };
 
@@ -9450,7 +9467,9 @@ let
 
   avrdudess = callPackage ../applications/misc/avrdudess { };
 
-  avxsynth = callPackage ../applications/video/avxsynth { };
+  avxsynth = callPackage ../applications/video/avxsynth {
+    libjpeg = libjpeg_original; # error: 'JCOPYRIGHT_SHORT' was not declared in this scope
+  };
 
   awesome-3-4 = callPackage ../applications/window-managers/awesome/3.4.nix {
     cairo = cairo.override { xcbSupport = true; };
@@ -10298,7 +10317,9 @@ let
 
   hydrogen = callPackage ../applications/audio/hydrogen { };
 
-  i3 = callPackage ../applications/window-managers/i3 { };
+  i3 = callPackage ../applications/window-managers/i3 {
+    xcb-util-cursor = if stdenv.isDarwin then xcb-util-cursor-HEAD else xcb-util-cursor;
+  };
 
   i3lock = callPackage ../applications/window-managers/i3/lock.nix {
     inherit (xorg) libxkbfile;
