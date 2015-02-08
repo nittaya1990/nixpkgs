@@ -37,7 +37,7 @@ self: super: {
   zeromq4-haskell = super.zeromq4-haskell.override { zeromq = pkgs.zeromq4; };
 
   # These changes are required to support Darwin.
-  git-annex = super.git-annex.override {
+  git-annex = (disableSharedExecutables super.git-annex).override {
     dbus = if pkgs.stdenv.isLinux then self.dbus else null;
     fdo-notify = if pkgs.stdenv.isLinux then self.fdo-notify else null;
     hinotify = if pkgs.stdenv.isLinux then self.hinotify else self.fsnotify;
@@ -151,8 +151,9 @@ self: super: {
   wizards = doJailbreak super.wizards;
 
   # https://github.com/NixOS/cabal2nix/issues/136
-  gtk = addBuildDepends super.gtk [pkgs.pkgconfig pkgs.gtk];
   glib = addBuildDepends super.glib [pkgs.pkgconfig pkgs.glib];
+  gtk3 = super.gtk3.override { inherit (pkgs) gtk3; };
+  gtk = addBuildDepends super.gtk [pkgs.pkgconfig pkgs.gtk];
 
   # https://github.com/jgm/zip-archive/issues/21
   zip-archive = addBuildTool super.zip-archive pkgs.zip;
@@ -193,6 +194,7 @@ self: super: {
 
   # These packages try to access the network.
   amqp = dontCheck super.amqp;
+  amqp-conduit = dontCheck super.amqp-conduit;
   concurrent-dns-cache = dontCheck super.concurrent-dns-cache;
   dbus = dontCheck super.dbus;                          # http://hydra.cryp.to/build/498404/log/raw
   hadoop-rpc = dontCheck super.hadoop-rpc;              # http://hydra.cryp.to/build/527461/nixlog/2/raw
@@ -370,8 +372,8 @@ self: super: {
   # https://github.com/chrisdone/hindent/issues/83
   hindent = dontCheck super.hindent;
 
-  # https://github.com/begriffs/postgrest/issues/127
-  postgrest = dontDistribute super.postgrest;
+  # https://github.com/begriffs/postgrest/issues/131
+  postgrest = markBrokenVersion "0.2.5.2" super.postgrest;
 
   # Needs older versions of its dependencies.
   structured-haskell-mode = (dontJailbreak super.structured-haskell-mode).override {
@@ -417,9 +419,6 @@ self: super: {
 
   # https://github.com/haskell-hub/hub-src/issues/24
   hub = markBrokenVersion "1.4.0" super.hub;
-
-  # https://github.com/audreyt/MoeDict.hs/issues/1
-  MoeDict = markBrokenVersion "0.0.1" super.MoeDict;
 
   # https://github.com/pixbi/duplo/issues/25
   duplo = dontCheck super.duplo;

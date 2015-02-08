@@ -1,8 +1,8 @@
 { stdenv, fetchurl, fetchgit, autogen, flex, bison, python, autoconf, automake
 , gettext, ncurses, libusb, freetype, qemu, devicemapper
-, linuxPackages ? null
-, efiSupport ? false
-, zfsSupport ? false
+, zfs ? null
+, efiSupport ? true
+, zfsSupport ? true
 }:
 
 with stdenv.lib;
@@ -13,8 +13,6 @@ let
   };
 
   canEfi = any (system: stdenv.system == system) (mapAttrsToList (name: _: name) efiSystems);
-
-  prefix = "grub${if efiSupport then "-efi" else ""}${optionalString zfsSupport "-zfs"}";
 
   version = "2.02-git-1de3a4";
 
@@ -32,10 +30,10 @@ let
 in (
 
 assert efiSupport -> canEfi;
-assert zfsSupport -> linuxPackages != null && linuxPackages.zfs != null;
+assert zfsSupport -> zfs != null;
 
 stdenv.mkDerivation rec {
-  name = "${prefix}-${version}";
+  name = "grub-${version}";
 
   src = fetchgit {
     url = "git://git.savannah.gnu.org/grub.git";
@@ -46,7 +44,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autogen flex bison python autoconf automake ];
   buildInputs = [ ncurses libusb freetype gettext devicemapper ]
     ++ optional doCheck qemu
-    ++ optional zfsSupport linuxPackages.zfs;
+    ++ optional zfsSupport zfs;
 
   preConfigure =
     '' for i in "tests/util/"*.in
