@@ -1,7 +1,7 @@
 # TODO check that no license information gets lost
 { fetchurl, bash, stdenv, python, cmake, vim, vimUtils, perl, ruby, unzip,
-  which, fetchgit, fetchhg, fetchzip, llvmPackages, zip, vim_configurable,
-  vimPlugins, xkb_switch
+  which, fetchgit, fetchFromGitHub, fetchhg, fetchzip, llvmPackages, zip,
+  vim_configurable, vimPlugins, xkb_switch
 }:
 
 let
@@ -486,6 +486,27 @@ rec {
     '';
   };
 
+  wakatime = buildVimPlugin {
+    name = "wakatime-3.0.8";
+
+    src = fetchFromGitHub {
+      sha256 = "0sb3vgwnn8x1g50qlcimhw0rnkiw26rmk1d3j2a5bipx69xcl9pb";
+      rev = "d6816d3766b31dd247a68023b04913b4a15fe565";
+      repo = "vim-wakatime";
+      owner = "wakatime";
+    };
+
+    meta = with stdenv.lib; {
+      description = "Analytics about your programming";
+      homepage = https://wakatime.com;
+      license = with licenses; bsd3;
+      platforms = with platforms; linux;
+      maintainers = with maintainers; [ nckx ];
+    };
+
+    buildInputs = [ python ];
+  };
+
   watchdogs = buildVimPlugin {
     name = "watchdogs-git-2014-10-18";
     src = fetchgit {
@@ -531,7 +552,7 @@ rec {
     src = fetchgit {
       rev = "035b6ca862da3bba0ab8aad388a485758311a464";
       url = "https://github.com/Valloric/YouCompleteMe.git";
-      sha256 = "9cd8fc8bb9b35e7a164d62fa8e3a1bd3be7e18f4d46c78b5827612f32b9541d5";
+      sha256 = "0l4a7mp0r888gdfzl59z8vk5jx4km58kzzqbn8v48i1k6scryvl7";
      };
 
     name = "vimplugin-youcompleteme-2015-02-05";
@@ -832,10 +853,10 @@ rec {
     name = "github-MarcWeber-vim-addon-vim2nix";
     src = fetchgit {
       url = "git://github.com/MarcWeber/vim-addon-vim2nix";
-      rev = "74345fa9858eb979c8d66cb59f07211f7c07ae69";
-      sha256 = "76dbe055b9eecd107a4607ab8af32b39de3a342e63eadac5a9ddae6852ffdcec";
-    };
-    dependencies = ["vim-addon-manager"];
+       rev = "5507ee4db7599873d72fab035c752dea245e2cd4";
+       sha256 = "1rqvgg3wq1grkh4nfj2wqmjg7a9r4hd82m89s9520kyzvldp8sgx";
+     };
+     dependencies = ["vim-addon-manager"];
 
   };
   "matchit.zip" = buildVimPluginFrom2Nix { # created by nix#NixDerivation
@@ -898,6 +919,15 @@ rec {
     };
     dependencies = [];
 
+  };
+  "sensible" = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "sensible";
+    src = fetchgit {
+      url = "git://github.com/tpope/vim-sensible";
+      rev = "b30dcf387af977acfa21732592bfca05598b2188";
+      sha256 = "6a9fc68c3eb0ee500ac59bdbc2c48d98e88a2936ee544f7203fa1a0296002b5f";
+    };
+    dependencies = [];
   };
   "snipmate" = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "snipmate";
@@ -1044,7 +1074,7 @@ rec {
     src = fetchgit {
       url = "git://github.com/MarcWeber/vim-addon-manager";
       rev = "fda9d2f4522024aa8bd8b8305e6a71c4a4a28c07";
-      sha256 = "a3b5da9bcc01c6f0fb0a5e13a6f9efb58471339ed32c480fde96856bb9e1e7be";
+      sha256 = "1gp7w6wnp1cnvq7lhb6kkqrp315mxzwsc4sy1bxz1ih1rjdxmdd3";
     };
     dependencies = [];
 

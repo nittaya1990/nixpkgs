@@ -11,12 +11,14 @@ let
   phononBackends = {
     gstreamer = [
       pkgs.phonon_backend_gstreamer
+      pkgs.gst_all.gstreamer
       pkgs.gst_all.gstPluginsBase
       pkgs.gst_all.gstPluginsGood
       pkgs.gst_all.gstPluginsUgly
       pkgs.gst_all.gstPluginsBad
       pkgs.gst_all.gstFfmpeg # for mp3 playback
       pkgs.phonon_qt5_backend_gstreamer
+      pkgs.gst_all_1.gstreamer
       pkgs.gst_all_1.gst-plugins-base
       pkgs.gst_all_1.gst-plugins-good
       pkgs.gst_all_1.gst-plugins-ugly
@@ -33,7 +35,7 @@ let
   phononBackendPackages = flip concatMap cfg.phononBackends
     (name: attrByPath [name] (throw "unknown phonon backend `${name}'") phononBackends);
 
-  kf5 = pkgs.kf5_stable;
+  kf5 = plasma5.kf5;
 
   plasma5 = pkgs.plasma5_stable;
 
@@ -56,8 +58,8 @@ in
         default = ["gstreamer"];
         example = ["gstreamer" "vlc"];
         description = ''
-          Phonon backends to use in KDE. Only the VLC and gstreamer backends are
-          available. The VLC backend is preferred by upstream.
+          Phonon backends to use in KDE. Only the VLC and GStreamer backends are
+          available. The GStreamer backend is preferred by upstream.
         '';
       };
 
@@ -85,36 +87,24 @@ in
       setuid = true;
     };
 
-    environment.systemPackages = with plasma5; with kf5;
-      (builtins.attrValues
-        (removeAttrs plasma5
-          [ "deepOverride" "override" "overrideDerivation"
-            "recurseForDerivations" "scope"
-          ]))
-      ++
-      (builtins.attrValues
-        (removeAttrs kf5
-          [ "deepOverride" "extra-cmake-modules" "mkDerivation" "override"
-            "overrideDerivation" "recurseForDerivations" "scope"
-          ]))
-      ++
-      [
+    environment.systemPackages =
+      filter isDerivation (builtins.attrValues plasma5)
+      ++ filter isDerivation (builtins.attrValues kf5)
+      ++ [
         pkgs.qt4 # qtconfig is the only way to set Qt 4 theme
 
         kdeApps.kde-baseapps
         kdeApps.kde-base-artwork
-        kdeApps.kde-workspace
-        kdeApps.kde-runtime
         kdeApps.kmix
         kdeApps.konsole
         kdeApps.oxygen-icons
 
+        kdeApps.kde-runtime
+
         pkgs.hicolor_icon_theme
 
         pkgs.orion # GTK theme, nearly identical to Breeze
-      ]
-      ++ (optional config.networking.networkmanager.enable plasma-nm)
-      ++ phononBackendPackages;
+      ] ++ phononBackendPackages;
 
     environment.pathsToLink = [ "/share" ];
 
@@ -132,9 +122,14 @@ in
 
     fonts.fonts = [ plasma5.oxygen-fonts ];
 
+    programs.ssh.askPassword = "${plasma5.ksshaskpass}/bin/ksshaskpass";
+
     # Enable helpful DBus services.
     services.udisks2.enable = true;
     services.upower.enable = config.powerManagement.enable;
+
+    # Extra UDEV rules used by Solid
+    services.udev.packages = [ pkgs.media-player-info ];
 
     security.pam.services.kde = { allowNullPassword = true; };
 

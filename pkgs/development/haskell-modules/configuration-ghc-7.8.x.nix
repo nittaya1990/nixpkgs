@@ -35,12 +35,15 @@ self: super: {
   xhtml = null;
 
   # mtl 2.2.x needs the latest transformers.
-  mtl_2_2_1 = super.mtl_2_2_1.override { transformers = self.transformers_0_4_2_0; };
+  mtl_2_2_1 = super.mtl_2_2_1.override { transformers = self.transformers_0_4_3_0; };
+
+  # Configure build for mtl 2.1.x.
+  mtl-compat = addBuildDepend (enableCabalFlag super.mtl-compat "two-point-one") self.transformers-compat;
 
   # Idris requires mtl 2.2.x.
   idris = overrideCabal (super.idris.overrideScope (self: super: {
     mkDerivation = drv: super.mkDerivation (drv // { doCheck = false; });
-    transformers = super.transformers_0_4_2_0;
+    transformers = super.transformers_0_4_3_0;
     transformers-compat = disableCabalFlag super.transformers-compat "three";
     haskeline = self.haskeline_0_7_1_3;
     mtl = super.mtl_2_2_1;
@@ -75,42 +78,24 @@ self: super: {
   hosc = dontDistribute super.hosc;
   tidal-midi = dontDistribute super.tidal-midi;
 
+  # These packages need mtl 2.2.x directly or indirectly via dependencies.
+  amazonka = markBroken super.amazonka;
+  apiary-purescript = markBroken super.apiary-purescript;
+  clac = dontDistribute super.clac;
+  highlighter2 = markBroken super.highlighter2;
+  hypher = markBroken super.hypher;
+  miniforth = markBroken super.miniforth;
+  purescript = markBroken super.purescript;
+  xhb-atom-cache = markBroken super.xhb-atom-cache;
+  xhb-ewmh = markBroken super.xhb-ewmh;
+  yesod-purescript = markBroken super.yesod-purescript;
+  yet-another-logger = markBroken super.yet-another-logger;
+
+  # https://github.com/frosch03/arrowVHDL/issues/2
+  ArrowVHDL = markBroken super.ArrowVHDL;
+
+  # https://ghc.haskell.org/trac/ghc/ticket/9625
+  wai-middleware-preprocessor = dontCheck super.wai-middleware-preprocessor;
+  incremental-computing = dontCheck super.incremental-computing;
+
 }
-
-// # packages relating to amazonka
-
-(let
-  Cabal = self.Cabal_1_18_1_6.overrideScope amazonkaEnv;
-  amazonkaEnv = self: super: {
-    mkDerivation = drv: super.mkDerivation (drv // {
-      doCheck = false;
-      hyperlinkSource = false;
-      buildTools = (drv.buildTools or []) ++ [ (
-        if pkgs.stdenv.lib.elem drv.pname [
-          "Cabal"
-          "time"
-          "unix"
-          "directory"
-          "process"
-          "jailbreak-cabal"
-        ] then null else Cabal
-      ) ];
-    });
-    mtl = self.mtl_2_2_1;
-    transformers = self.transformers_0_4_2_0;
-    transformers-compat = disableCabalFlag super.transformers-compat "three";
-    hscolour = super.hscolour;
-    time = self.time_1_5_0_1;
-    unix = self.unix_2_7_1_0;
-    directory = self.directory_1_2_1_0;
-    process = overrideCabal self.process_1_2_1_0 (drv: { coreSetup = true; });
-    inherit amazonka-core amazonkaEnv amazonka amazonka-cloudwatch;
-  };
-  amazonka = super.amazonka.overrideScope amazonkaEnv;
-  amazonka-cloudwatch = super.amazonka-cloudwatch.overrideScope amazonkaEnv;
-  amazonka-core = super.amazonka-core.overrideScope amazonkaEnv;
-  amazonka-kms = super.amazonka-kms.overrideScope amazonkaEnv;
-in {
-  inherit amazonkaEnv;
-  inherit amazonka amazonka-cloudwatch amazonka-core amazonka-kms;
-})

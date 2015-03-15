@@ -55,10 +55,12 @@
   ./programs/atop.nix
   ./programs/bash/bash.nix
   ./programs/blcr.nix
+  ./programs/cdemu.nix
   ./programs/command-not-found/command-not-found.nix
   ./programs/dconf.nix
   ./programs/environment.nix
   ./programs/info.nix
+  ./programs/ibus.nix
   ./programs/light.nix
   ./programs/nano.nix
   ./programs/screen.nix
@@ -165,6 +167,7 @@
   ./services/logging/syslogd.nix
   ./services/logging/syslog-ng.nix
   ./services/mail/dovecot.nix
+  ./services/mail/exim.nix
   ./services/mail/freepops.nix
   ./services/mail/mail.nix
   ./services/mail/mlmmj.nix
@@ -173,6 +176,7 @@
   ./services/mail/spamassassin.nix
   ./services/misc/apache-kafka.nix
   #./services/misc/autofs.nix
+  ./services/misc/canto-daemon.nix
   ./services/misc/cpuminer-cryptonight.nix
   ./services/misc/cgminer.nix
   ./services/misc/dictd.nix
@@ -225,6 +229,7 @@
   ./services/network-filesystems/rsyncd.nix
   ./services/network-filesystems/samba.nix
   ./services/network-filesystems/diod.nix
+  ./services/network-filesystems/u9fs.nix
   ./services/network-filesystems/yandex-disk.nix
   ./services/networking/amuled.nix
   ./services/networking/atftpd.nix
@@ -287,6 +292,7 @@
   ./services/networking/searx.nix
   ./services/networking/seeks.nix
   ./services/networking/spiped.nix
+  ./services/networking/sslh.nix
   ./services/networking/ssh/lshd.nix
   ./services/networking/ssh/sshd.nix
   ./services/networking/strongswan.nix
@@ -312,6 +318,7 @@
   ./services/scheduling/chronos.nix
   ./services/scheduling/cron.nix
   ./services/scheduling/fcron.nix
+  ./services/scheduling/marathon.nix
   ./services/search/elasticsearch.nix
   ./services/search/solr.nix
   ./services/security/clamav.nix
@@ -347,12 +354,14 @@
   ./services/web-servers/varnish/default.nix
   ./services/web-servers/winstone.nix
   ./services/web-servers/zope2.nix
+  ./services/x11/unclutter.nix
   ./services/x11/desktop-managers/default.nix
   ./services/x11/display-managers/auto.nix
   ./services/x11/display-managers/default.nix
   ./services/x11/display-managers/gdm.nix
   ./services/x11/display-managers/kdm.nix
   ./services/x11/display-managers/lightdm.nix
+  ./services/x11/display-managers/sddm.nix
   ./services/x11/display-managers/slim.nix
   ./services/x11/hardware/multitouch.nix
   ./services/x11/hardware/synaptics.nix
@@ -423,9 +432,9 @@
   ./virtualisation/docker.nix
   ./virtualisation/libvirtd.nix
   ./virtualisation/lxc.nix
-  #./virtualisation/nova.nix
+  ./virtualisation/amazon-options.nix
   ./virtualisation/openvswitch.nix
   ./virtualisation/parallels-guest.nix
   ./virtualisation/virtualbox-guest.nix
-  #./virtualisation/xen-dom0.nix
+  ./virtualisation/xen-dom0.nix
 ]

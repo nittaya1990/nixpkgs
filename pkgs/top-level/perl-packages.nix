@@ -101,7 +101,7 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/M/MD/MDOOTSON/${name}.tar.gz";
       sha256 = "0h4g7jl0p8a35kyvsji3qlb75mbcfqpvvmwh7s9krkbqklqjlxxl";
     };
-    propagatedBuildInputs = [ pkgs.pkgconfig pkgs.gtk2 pkgs.wxGTK ];
+    propagatedBuildInputs = [ pkgs.pkgconfig pkgs.gtk2 pkgs.wxGTK ModulePluggable ];
   };
 
   AnyEvent = buildPerlPackage {
@@ -224,6 +224,14 @@ let self = _self // overrides; _self = with self; {
     src = fetchurl {
       url = mirror://cpan/authors/id/D/DA/DAVECROSS/Array-Compare-1.18.tar.gz;
       sha256 = "0zbvr1bj9bp836b3g9s32193vvn53d03xv0zn317hz247skn15lh";
+    };
+  };
+
+  ListCompare = buildPerlPackage {
+    name = "List-Compare-1.18";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/J/JK/JKEENAN/List-Compare-0.39.tar.gz;
+      sha256 = "1v4gn176faanzf1kr9axdp1220da7nkvz0d66mnk34nd0skjjxcl";
     };
   };
 
@@ -5096,6 +5104,8 @@ let self = _self // overrides; _self = with self; {
 
   LocaleGettext = buildPerlPackage {
     name = "LocaleGettext-1.05";
+    buildInputs = stdenv.lib.optional stdenv.isDarwin pkgs.gettext;
+    NIX_CFLAGS_LINK = if stdenv.isDarwin then "-lintl" else null;
     src = fetchurl {
       url = mirror://cpan/authors/id/P/PV/PVANDRY/gettext-1.05.tar.gz;
       sha256 = "15262a00vx714szpx8p2z52wxkz46xp7acl72znwjydyq4ypydi7";
@@ -9960,6 +9970,24 @@ let self = _self // overrides; _self = with self; {
     src = fetchurl {
       url = "mirror://cpan/modules/by-module/Time/${name}.tar.gz";
       sha256 = "17hhd53p72z08l1riwz5f6rch6hngby1pympkla5miznn7cjlrpz";
+    };
+  };
+
+  Tk = buildPerlPackage rec {
+    name = "Tk-804.032_501";
+    src = fetchurl {
+      url = "http://search.cpan.org/CPAN/authors/id/S/SR/SREZIC/${name}.tar.gz";
+      sha256 = "10fsvyr56gm59chc8b70n6bvhd3lh9c05sp8m4arcahid0rpgbwa";
+    };
+    makeMakerFlags = "X11LIB=${pkgs.xlibs.libX11}/lib";
+    buildInputs = with pkgs; [ xlibs.libX11 libpng ];
+    configurePhase = ''
+      perl Makefile.PL PREFIX=$out $makeMakerFlags
+    '';
+    doCheck = false;
+    meta ={
+      homepage = "http://search.cpan.org/~srezic/Tk-804.032/Tk.pod";
+      license = stdenv.lib.licenses.tcltk;
     };
   };
 

@@ -178,6 +178,9 @@
       nylon = 168;
       apache-kafka = 169;
       panamax = 170;
+      marathon = 171;
+      exim = 172;
+      sddm = 175;
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
@@ -299,8 +302,6 @@
       mlmmj = 135;
       riemann = 137;
       riemanndash = 138;
-      hbase = 139;
-      opentsdb = 140;
       uhub = 142;
       mailpile = 146;
       redmine = 147;
@@ -311,13 +312,18 @@
       systemd-resolve = 153;
       systemd-timesync = 154;
       liquidsoap = 155;
-      fleet = 159;
+      hbase = 158;
+      opentsdb = 159;
       scollector = 160;
       bosun = 161;
       kubernetes = 162;
       gitlab = 165;
-      nylon = 166;
+      nylon = 168;
       panamax = 170;
+      exim = 172;
+      fleet = 173;
+      input = 174;
+      sddm = 175;
 
       # When adding a gid, make sure it doesn't match an existing
       # uid. Users and groups with the same name should have equal

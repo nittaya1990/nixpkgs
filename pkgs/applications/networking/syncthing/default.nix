@@ -4,12 +4,12 @@ with goPackages;
 
 buildGoPackage rec {
   name = "syncthing-${version}";
-  version = "0.10.21";
+  version = "0.10.26";
   goPackagePath = "github.com/syncthing/syncthing";
   src = fetchgit {
     url = "git://github.com/syncthing/syncthing.git";
     rev = "refs/tags/v${version}";
-    sha256 = "60cd8607cf7d2837252680f6c2879aba1f35a2c74a47c2f2ea874d6eed2adaa5";
+    sha256 = "023vnns8ns2pgvqjisw466mw7323rv61cbl1indpfai412y7xjbk";
   };
 
   subPackages = [ "cmd/syncthing" ];

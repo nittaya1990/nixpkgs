@@ -1,20 +1,20 @@
-{ stdenv, fetchurl, perl, curl, bzip2, sqlite, openssl ? null
-, pkgconfig, boehmgc, perlPackages
+{ lib, stdenv, fetchurl, perl, curl, bzip2, sqlite, openssl ? null
+, pkgconfig, boehmgc, perlPackages, libsodium
 , storeDir ? "/nix/store"
 , stateDir ? "/nix/var"
 }:
 
 stdenv.mkDerivation rec {
-  name = "nix-1.9pre4028_0d1dafa";
+  name = "nix-1.9pre4074_e659978";
 
   src = fetchurl {
-    url = "http://hydra.nixos.org/build/19375273/download/4/${name}.tar.xz";
-    sha256 = "592da6102a777c13652f7350f40f5693fa005076e06c7ce6f570a854576d104e";
+    url = "http://hydra.nixos.org/build/20175576/download/4/${name}.tar.xz";
+    sha256 = "51cafd9428cce907a735e37e5dd46f36218351175e458d0834b306d257760204";
   };
 
   nativeBuildInputs = [ perl pkgconfig ];
 
-  buildInputs = [ curl openssl sqlite ];
+  buildInputs = [ curl openssl sqlite ] ++ lib.optional stdenv.isLinux libsodium;
 
   propagatedBuildInputs = [ boehmgc ];
 

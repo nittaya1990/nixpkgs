@@ -38,7 +38,7 @@ in
         type = types.bool;
         default = false;
         description = ''
-          Enable the testing grsecurity patch, based on Linux 3.18.
+          Enable the testing grsecurity patch, based on Linux 3.19.
         '';
       };
 
@@ -245,7 +245,7 @@ in
           message   = ''
             If grsecurity is enabled, you must select either the
             stable patch (with kernel 3.14), or the testing patch (with
-            kernel 3.18) to continue.
+            kernel 3.19) to continue.
           '';
         }
         { assertion = (cfg.stable -> !cfg.testing) || (cfg.testing -> !cfg.stable);
@@ -286,10 +286,11 @@ in
 
     systemd.services.grsec-lock = mkIf cfg.config.sysctl {
       description     = "grsecurity sysctl-lock Service";
-      requires        = [ "sysctl.service" ];
+      requires        = [ "systemd-sysctl.service" ];
       wantedBy        = [ "multi-user.target" ];
       serviceConfig.Type = "oneshot";
       serviceConfig.RemainAfterExit = "yes";
+      unitConfig.ConditionPathIsReadWrite = "/proc/sys/kernel/grsecurity/grsec_lock";
       script = ''
         locked=`cat /proc/sys/kernel/grsecurity/grsec_lock`
         if [ "$locked" == "0" ]; then

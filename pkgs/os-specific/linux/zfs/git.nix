@@ -1,17 +1,16 @@
-{ callPackage, fetchgit, spl_git, ... } @ args:
+{ callPackage, stdenv, fetchgit, spl_git, ... } @ args:
 
 callPackage ./generic.nix (args // rec {
-  version = "33b4de5";
+  version = "2015-03-10";
 
   src = fetchgit {
     url = git://github.com/zfsonlinux/zfs.git;
-    rev = "33b4de513ee81c2a87e1b954a9544a5eec1f8f94";
-    sha256 = "07kdml65l22z1xi8jif5hr7zr7a8mykyms4f5yrf8nyad20kp6il";
+    rev = "7f3e4662832269b687ff20dafc6a33f8e1d28912";
+    sha256 = "1z0aizn212m6vygp4iqd3dv2xpqb883bvz12sw6hg7w8isq83ila";
   };
 
   patches = [
     ./nix-build-git.patch
-    ./3.19-compat-git.patch # Remove once PR-3084 is mainlined
   ];
 
   spl = spl_git;

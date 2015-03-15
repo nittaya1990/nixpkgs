@@ -9,7 +9,7 @@ in
 
 composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed) version; in {
 
-  version = "5.4.37";
+  version = "5.4.38";
 
   name = "php-${version}";
 
@@ -189,6 +189,10 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
         configureFlags = ["--enable-maintainer-zts"];
       };
 
+      calendar = {
+        configureFlags = ["--enable-calendar"];
+      };
+
       /*
          php is build within this derivation in order to add the xdebug lines to the php.ini.
          So both Apache and command line php both use xdebug without having to configure anything.
@@ -229,6 +233,7 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
     fpmSupport = config.php.fpm or true;
     mssqlSupport = config.php.mssql or (!stdenv.isDarwin);
     ztsSupport = config.php.zts or false;
+    calendarSupport = config.php.calendar or false;
   };
 
   configurePhase = ''
@@ -253,15 +258,16 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
 
   src = fetchurl {
     url = "http://www.php.net/distributions/php-${version}.tar.bz2";
-    sha256 = "1bd8yciy13v3aw4aiw57zpf8kgxpm6rcv73grp1yj2pbbrkzcyw5";
+    sha256 = "121ybn55c9f65r1mwiy4yks67bb6m5m5zwwx9y0vpjddryq7vwxb";
   };
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "An HTML-embedded scripting language";
     homepage = http://www.php.net/;
     license = stdenv.lib.licenses.php301;
+    maintainers = with maintainers; [ globin ];
   };
 
-  patches = [ ./fix-5.4.patch ];
+  patches = [ ./fix-paths.patch ];
 
 })
