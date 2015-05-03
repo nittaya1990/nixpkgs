@@ -6,6 +6,7 @@
 , snapshotHashLinux686, snapshotHashLinux64
 , snapshotHashDarwin686, snapshotHashDarwin64
 , snapshotDate, snapshotRev
+, configureFlags ? []
 
 , patches
 }:
@@ -113,7 +114,8 @@ stdenv.mkDerivation {
     '' else "");
   };
 
-  configureFlags = [ "--enable-local-rust" "--local-rust-root=$snapshot" ]
+  configureFlags = configureFlags
+                ++ [ "--enable-local-rust" "--local-rust-root=$snapshot" ]
                 ++ stdenv.lib.optional (stdenv.cc ? clang) "--enable-clang";
 
   inherit patches;
@@ -132,7 +134,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ which file perl curl python27 makeWrapper git valgrind procps ];
 
-  enableParallelBuilding = false; # disabled due to rust-lang/rust#16305
+  enableParallelBuilding = true;
 
   preCheck = "export TZDIR=${tzdata}/share/zoneinfo";
 

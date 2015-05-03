@@ -17,15 +17,6 @@
   ghcHEADPrefs = self : super : super // {
     cabalInstall_1_20_0_6 = super.cabalInstall_1_20_0_6.override { Cabal = null; };
     mtl = self.mtl_2_2_1;
-    ghcjsBase = null;
-    ghcjsDom = with self; super.ghcjsDom.override {
-      cabal = self.cabal.override {
-        extension = self: super: {
-          configureFlags = [ "-f-ghcjs" "-fwebkit" "-f-gtk3" ];
-          buildDepends = [ mtl glib transformers gtk webkit ];
-        };
-      };
-    };
   };
 
   ghc784Prefs = self : super : ghcHEADPrefs self super // {
@@ -53,7 +44,6 @@
     attoparsec = self.attoparsec_0_11_3_1;
     binaryConduit = super.binaryConduit.override { binary = self.binary_0_7_2_2; };
     bson = super.bson.override { dataBinaryIeee754 = self.dataBinaryIeee754.override { binary = self.binary_0_7_2_2; }; };
-    cabal2nix = super.cabal2nix.override { hackageDb = super.hackageDb.override { Cabal = self.Cabal_1_18_1_3; }; };
     cabalInstall_1_16_0_2 = super.cabalInstall_1_16_0_2.override {
       HTTP = self.HTTP.override { network = self.network_2_5_0_0; };
       network = self.network_2_5_0_0;
@@ -199,88 +189,6 @@
     packages { ghc = pkgs.haskell-ng.compiler.ghc784;
                prefFun = ghc784Prefs;
              };
-
-  packages_ghcjs =
-    packages {
-      ghc = pkgs.haskell-ng.compiler.ghc784;
-      prefFun = self : super : super // {
-        ghc = let parent = packages_ghc784; in
-          callPackage ../development/compilers/ghcjs/wrapper.nix {
-            ghc = parent.ghcjs // { inherit parent; };
-          };
-        cabal = self.cabalJs;
-        buildLocalCabalWithArgs = args: super.buildLocalCabalWithArgs (args // {
-          nativePkgs = packages_ghc784;
-        });
-        ghcjsDom = with self; super.ghcjsDom.override {
-          cabal = self.cabal.override {
-            extension = self: super: {
-              configureFlags = [ ];
-              buildDepends = [ mtl ghcjsBase ];
-            };
-          };
-        };
-        # This is the list of packages that are built into a booted ghcjs installation
-        # It can be generated with the command:
-        # nix-shell '<nixpkgs>' -A pkgs.haskellPackages_ghcjs.ghc --command "ghcjs-pkg list | sed -n 's/^    \(.*\)-\([0-9.]*\)$/\1_\2/ p' | sed 's/\./_/g' | sed 's/-\(.\)/\U\1/' | sed 's/^\([^_]*\)\(.*\)$/\1 = null;/'"
-        Cabal = null;
-        aeson = null;
-        array = null;
-        async = null;
-        attoparsec = null;
-        base = null;
-        binary = null;
-        rts = null;
-        bytestring = null;
-        caseInsensitive = null;
-        containers = null;
-        deepseq = null;
-        directory = null;
-        dlist = null;
-        extensibleExceptions = null;
-        filepath = null;
-        ghcPrim = null;
-        ghcjsBase = null;
-        ghcjsPrim = null;
-        hashable = null;
-        integerGmp = null;
-        mtl = null;
-        oldLocale = null;
-        oldTime = null;
-        parallel = null;
-        pretty = null;
-        primitive = null;
-        process = null;
-        scientific = null;
-        stm = null;
-        syb = null;
-        templateHaskell = null;
-        text = null;
-        time = null;
-        transformers = null;
-        unix = null;
-        unorderedContainers = null;
-        vector = null;
-
-        # GHCJS-specific workarounds
-        split = super.split.override {
-          cabal = self.cabal.override {
-            extension = self: super: {
-              doCheck = false; # Under ghcjs, the tests hang
-            };
-          };
-        };
-        dependentMap = super.dependentMap.override {
-          cabal = self.cabal.override {
-            extension = self: super: {
-              preConfigure = ''
-                sed -i 's/^.*ghc-options:.*$//' *.cabal
-              ''; # Without this, we get "target ‘base’ is not a module name or a source file"
-            };
-          };
-        };
-      };
-    };
 
   packages_ghc763 =
     packages { ghc = pkgs.haskell-ng.compiler.ghc763;

@@ -1,17 +1,15 @@
 { callPackage, stdenv, fetchgit, spl_git, ... } @ args:
 
 callPackage ./generic.nix (args // rec {
-  version = "2015-03-10";
+  version = "2015-04-08";
 
   src = fetchgit {
     url = git://github.com/zfsonlinux/zfs.git;
-    rev = "7f3e4662832269b687ff20dafc6a33f8e1d28912";
-    sha256 = "1z0aizn212m6vygp4iqd3dv2xpqb883bvz12sw6hg7w8isq83ila";
+    rev = "d07a16360c1ee219b8820f80d035e56a18c58b84";
+    sha256 = "0yyc0n960bzd4fmrg1mwp0xy1db7yn90g33ds44chh4g74mrfgdz";
   };
 
-  patches = [
-    ./nix-build-git.patch
-  ];
+  patches = [ ./nix-build.patch ];
 
   spl = spl_git;
 })

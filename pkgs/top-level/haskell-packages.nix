@@ -103,15 +103,6 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
     extension = self : super : {};
   };
 
-  cabalJs = callPackage ../build-support/cabal/ghcjs.nix {
-    Cabal = null;               # prefer the Cabal version shipped with the compiler
-    hscolour = self.hscolourBootstrap;
-    inherit enableLibraryProfiling enableCheckPhase
-      enableStaticLibraries enableSharedLibraries enableSharedExecutables;
-    glibcLocales = if pkgs.stdenv.isLinux then pkgs.glibcLocales else null;
-    extension = self : super : {};
-  };
-
   # A variant of the cabal build driver that disables unit testing.
   # Useful for breaking cycles, where the unit test of a package A
   # depends on package B, which has A as a regular build input.
@@ -968,16 +959,6 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   ghcid = callPackage ../development/tools/haskell/ghcid {};
 
-  ghcjs = callPackage ../development/compilers/ghcjs {
-    Cabal = self.Cabal_1_22_0_0;
-    cabalInstall = self.cabalInstall_1_22_0_0;
-    haddock = self.haddock.override {
-      Cabal = null;
-    };
-  };
-
-  ghcjsDom = callPackage ../development/libraries/haskell/ghcjs-dom {};
-
   ghcjsCodemirror = callPackage ../development/libraries/haskell/ghcjs-codemirror {};
 
   ghcjsPrim = callPackage ../development/libraries/haskell/ghcjs-prim {};
@@ -1638,7 +1619,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   ListZipper = callPackage ../development/libraries/haskell/ListZipper {};
 
-  llvmGeneral = callPackage ../development/libraries/haskell/llvm-general { llvmConfig = pkgs.llvm; };
+  llvmGeneral = callPackage ../development/libraries/haskell/llvm-general { llvmConfig = pkgs.llvmPackages_34.llvm; };
 
   llvmGeneralPure = callPackage ../development/libraries/haskell/llvm-general-pure {};
 
@@ -2056,7 +2037,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   pop3client = callPackage ../development/libraries/haskell/pop3-client {};
 
   poppler = callPackage ../development/libraries/haskell/poppler {
-    popplerGlib = pkgs.poppler.poppler_glib;
+    popplerGlib = pkgs.poppler;
     libc = pkgs.stdenv.cc.libc;
   };
 
@@ -3158,13 +3139,9 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   wordTrie = callPackage ../development/libraries/haskell/word-trie {};
 
-  # This is an unwrapped version of Yi, it will not behave well (no
-  # M-x or reload). Use ‘yiCustom’ instead.
+  # This is an unwrapped version of Yi, it will not behave well. Use
+  # ‘yi’ from all-packages.nix instead.
   yi = callPackage ../applications/editors/yi/yi.nix { };
-
-  yiCustom = callPackage ../applications/editors/yi/yi-custom.nix {
-    extraPackages = pkgs: [];
-  };
 
   yiFuzzyOpen = callPackage ../development/libraries/haskell/yi-fuzzy-open {};
 
@@ -3180,7 +3157,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   cabalDb = callPackage ../development/tools/haskell/cabal-db {};
 
-  cabal2nix = callPackage ../development/tools/haskell/cabal2nix {};
+  cabal2nix = pkgs.cabal2nix;
 
   # Build a cabal package given a local .cabal file
   buildLocalCabalWithArgs = { src

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, audiofile
+{ stdenv, fetchurl, pkgconfig, audiofile, libcap
 , openglSupport ? false, mesa ? null
 , alsaSupport ? true, alsaLib ? null
 , x11Support ? true, x11 ? null, libXrandr ? null
@@ -7,7 +7,7 @@
 
 # OSS is no longer supported, for it's much crappier than ALSA and
 # PulseAudio.
-assert !(stdenv ? cross) -> alsaSupport || pulseaudioSupport;
+assert (stdenv.isLinux && !(stdenv ? cross)) -> alsaSupport || pulseaudioSupport;
 
 assert openglSupport -> (mesa != null && x11Support);
 assert x11Support -> (x11 != null && libXrandr != null);
@@ -31,7 +31,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = let
     notMingw = !(stdenv ? cross) || stdenv.cross.libc != "msvcrt";
-  in stdenv.lib.optional notMingw audiofile;
+  in [ libcap ]
+    ++ (stdenv.lib.optional notMingw audiofile);
 
   nativeBuildInputs = [ pkgconfig ] ++
     stdenv.lib.optional openglSupport [ mesa ];
@@ -50,6 +51,13 @@ stdenv.mkDerivation rec {
   ] ++ stdenv.lib.optionals (stdenv ? cross) ([
     "--without-x"
   ] ++ stdenv.lib.optional alsaSupport "--with-alsa-prefix=${alsaLib}/lib");
+
+  # Fix a build failure on OS X Mavericks
+  # Ticket: https://bugzilla.libsdl.org/show_bug.cgi?id=2085
+  patches = stdenv.lib.optional stdenv.isDarwin [ (fetchurl {
+    url = "http://bugzilla-attachments.libsdl.org/attachment.cgi?id=1320";
+    sha1 = "3137feb503a89a8d606405373905b92dcf7e293b";
+  }) ];
 
   crossAttrs =stdenv.lib.optionalAttrs (stdenv.cross.libc == "libSystem") {
     patches = let
@@ -72,6 +80,6 @@ stdenv.mkDerivation rec {
     description = "A cross-platform multimedia library";
     homepage    = http://www.libsdl.org/;
     maintainers = with maintainers; [ lovek323 ];
-    platforms   = platforms.linux;
+    platforms   = platforms.unix;
   };
 }
