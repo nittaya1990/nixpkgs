@@ -349,6 +349,7 @@ self: super: {
   conduit-connection = dontCheck super.conduit-connection;
   craftwerk = dontCheck super.craftwerk;
   damnpacket = dontCheck super.damnpacket;              # http://hydra.cryp.to/build/496923/log
+  data-hash = dontCheck super.data-hash;
   Deadpan-DDP = dontCheck super.Deadpan-DDP;            # http://hydra.cryp.to/build/496418/log/raw
   DigitalOcean = dontCheck super.DigitalOcean;
   directory-layout = dontCheck super.directory-layout;
@@ -786,5 +787,8 @@ self: super: {
 
   # https://github.com/ndmitchell/shake/issues/206
   shake = overrideCabal super.shake (drv: { doCheck = !pkgs.stdenv.isDarwin; });
+
+  # https://github.com/nushio3/doctest-prop/issues/1
+  doctest-prop = dontCheck super.doctest-prop;
 
 }
