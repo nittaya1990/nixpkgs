@@ -99,4 +99,16 @@ self: super: {
     buildDepends = [ self.base self.mtl self.text self.ghcjs-base ];
   });
 
+  ghc-paths = overrideCabal super.ghc-paths (drv: {
+    patches = [ ./ghc-paths-nix-ghcjs.patch ];
+  });
+
+  reflex-dom = overrideCabal super.reflex-dom (drv: {
+    buildDepends = [
+      self.aeson self.base self.bytestring self.containers self.data-default
+      self.dependent-map self.dependent-sum self.ghcjs-dom self.lens self.mtl
+      self.ref-tf self.reflex self.safe self.semigroups self.text self.these
+      self.time self.transformers
+    ];
+  });
 }

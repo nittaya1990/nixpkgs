@@ -560,6 +560,10 @@ let
 
   arp-scan = callPackage ../tools/misc/arp-scan { };
 
+  artyFX = callPackage ../applications/audio/artyFX {
+    inherit (xlibs) libpthreadstubs;
+  };
+
   ascii = callPackage ../tools/text/ascii { };
 
   asymptote = callPackage ../tools/graphics/asymptote {
@@ -785,6 +789,10 @@ let
   datamash = callPackage ../tools/misc/datamash { };
 
   ddate = callPackage ../tools/misc/ddate { };
+
+  diagrams-builder = callPackage ../tools/graphics/diagrams-builder {
+    inherit (haskellngPackages) ghcWithPackages diagrams-builder;
+  };
 
   direnv = callPackage ../tools/misc/direnv { };
 
@@ -1884,7 +1892,7 @@ let
   else
     nodePackages_0_12;
 
-  iojs = callPackage ../development/web/iojs { libuv = libuvVersions.v1_4_0; };
+  iojs = callPackage ../development/web/iojs { libuv = libuvVersions.v1_4_2; };
 
   iojsPackages = callPackage ./node-packages.nix { self = iojsPackages; nodejs = iojs; };
 
@@ -2342,6 +2350,8 @@ let
   openvpn_learnaddress = callPackage ../tools/networking/openvpn/openvpn_learnaddress.nix { };
 
   update-resolv-conf = callPackage ../tools/networking/openvpn/update-resolv-conf.nix { };
+
+  open-pdf-presenter = callPackage ../applications/misc/open-pdf-presenter { };
 
   openvswitch = callPackage ../os-specific/linux/openvswitch { };
 
@@ -2964,6 +2974,8 @@ let
   trace-cmd = callPackage ../os-specific/linux/trace-cmd { };
 
   traceroute = callPackage ../tools/networking/traceroute { };
+
+  tracebox = callPackage ../tools/networking/tracebox { };
 
   trash-cli = callPackage ../tools/misc/trash-cli { };
 
@@ -4688,6 +4700,8 @@ let
 
   php56 = callPackage ../development/interpreters/php/5.6.nix { };
 
+  picoc = callPackage ../development/interpreters/picoc {};
+
   picolisp = callPackage ../development/interpreters/picolisp {};
 
   pltScheme = racket; # just to be sure
@@ -4869,7 +4883,7 @@ let
   jdtsdk = callPackage ../development/eclipse/jdt-sdk { };
 
   jruby165 = callPackage ../development/interpreters/jruby { };
-  
+
   jython = callPackage ../development/interpreters/jython {};
 
   guileCairo = callPackage ../development/guile-modules/guile-cairo { };
@@ -4902,6 +4916,8 @@ let
   xidel = callPackage ../tools/text/xidel { };
 
   ### DEVELOPMENT / TOOLS
+
+  alloy = callPackage ../development/tools/alloy { };
 
   augeas = callPackage ../tools/system/augeas { };
 
@@ -5140,6 +5156,8 @@ let
 
   eggdbus = callPackage ../development/tools/misc/eggdbus { };
 
+  egypt = callPackage ../development/tools/analysis/egypt { };
+
   elfutils = callPackage ../development/tools/misc/elfutils { };
 
   epm = callPackage ../development/tools/misc/epm { };
@@ -5165,6 +5183,8 @@ let
   flex_2_5_35 = callPackage ../development/tools/parsing/flex/2.5.35.nix { };
   flex_2_5_39 = callPackage ../development/tools/parsing/flex/2.5.39.nix { };
   flex = flex_2_5_39;
+
+  flexcpp = callPackage ../development/tools/parsing/flexc++ { };
 
   m4 = gnum4;
 
@@ -5551,6 +5571,8 @@ let
   beecrypt = callPackage ../development/libraries/beecrypt { };
 
   belle-sip = callPackage ../development/libraries/belle-sip { };
+
+  bobcat = callPackage ../development/libraries/bobcat { };
 
   boehmgc = callPackage ../development/libraries/boehm-gc { };
 
@@ -6017,17 +6039,10 @@ let
 
   gnutls = gnutls33;
 
-  gnutls32 = callPackage ../development/libraries/gnutls/3.2.nix {
-    guileBindings = config.gnutls.guile or false;
-    nettle = nettle27;
-  };
-
   gnutls33 = callPackage ../development/libraries/gnutls/3.3.nix {
     guileBindings = config.gnutls.guile or false;
     nettle = nettle27;
   };
-
-  gnutls32_with_guile = lowPrio (gnutls32.override { guileBindings = true; });
 
   gnutls33_with_guile = lowPrio (gnutls33.override { guileBindings = true; });
 
@@ -6362,6 +6377,8 @@ let
   };
 
   libchardet = callPackage ../development/libraries/libchardet { };
+
+  libcrafter = callPackage ../development/libraries/libcrafter { };
 
   libuchardet = callPackage ../development/libraries/libuchardet { };
 
@@ -6815,6 +6832,8 @@ let
 
   libpseudo = callPackage ../development/libraries/libpseudo { };
 
+  libpsl = callPackage ../development/libraries/libpsl { };
+
   libpst = callPackage ../development/libraries/libpst { };
 
   libpwquality = callPackage ../development/libraries/libpwquality { };
@@ -6932,6 +6951,8 @@ let
   libuvVersions = recurseIntoAttrs (callPackage ../development/libraries/libuv {
     automake = automake113x; # fails with 14
   });
+
+  libuv = libuvVersions.v1_4_2;
 
   libv4l = lowPrio (v4l_utils.override {
     alsaLib = null;
@@ -7218,6 +7239,8 @@ let
   nssTools = callPackage ../development/libraries/nss {
     includeTools = true;
   };
+
+  ntk = callPackage ../development/libraries/audio/ntk { };
 
   ntrack = callPackage ../development/libraries/ntrack { };
 
@@ -7531,6 +7554,7 @@ let
   libsmf = callPackage ../development/libraries/audio/libsmf { };
 
   lilv = callPackage ../development/libraries/audio/lilv { };
+  lilv-svn = callPackage ../development/libraries/audio/lilv/lilv-svn.nix { };
 
   lv2 = callPackage ../development/libraries/audio/lv2 { };
 
@@ -7563,11 +7587,6 @@ let
     alsaSupport = (!stdenv.isDarwin);
     x11Support = true;
     pulseaudioSupport = (!stdenv.isDarwin);
-
-    # resolve the unrecognized -fpascal-strings option error
-    stdenv = if stdenv.isDarwin
-      then clangStdenv
-      else stdenv;
   };
 
   SDL_gfx = callPackage ../development/libraries/SDL_gfx { };
@@ -7642,6 +7661,7 @@ let
   soqt = callPackage ../development/libraries/soqt { };
 
   sord = callPackage ../development/libraries/sord {};
+  sord-svn = callPackage ../development/libraries/sord/sord-svn.nix {};
 
   soundtouch = callPackage ../development/libraries/soundtouch {};
 
@@ -7985,7 +8005,9 @@ let
 
   czmq = callPackage ../development/libraries/czmq { };
 
-  zita-alsa-pcmi = callPackage ../development/libraries/zita-alsa-pcmi { };
+  zita-convolver = callPackage ../development/libraries/audio/zita-convolver { };
+
+  zita-alsa-pcmi = callPackage ../development/libraries/audio/zita-alsa-pcmi { };
 
   zziplib = callPackage ../development/libraries/zziplib { };
 
@@ -9358,6 +9380,8 @@ let
     netatop = callPackage ../os-specific/linux/netatop { };
 
     perf = callPackage ../os-specific/linux/kernel/perf.nix { };
+
+    phc-intel = callPackage ../os-specific/linux/phc-intel { };
 
     prl-tools = callPackage ../os-specific/linux/prl-tools { };
 
@@ -11063,6 +11087,8 @@ let
 
   guvcview = callPackage ../os-specific/linux/guvcview { };
 
+  hackrf = callPackage ../applications/misc/hackrf { };
+
   hello = callPackage ../applications/misc/hello/ex-2 { };
 
   helmholtz = callPackage ../applications/audio/pd-plugins/helmholtz { };
@@ -11190,6 +11216,8 @@ let
   irssi_fish = callPackage ../applications/networking/irc/irssi/fish { };
 
   irssi_otr = callPackage ../applications/networking/irc/irssi/otr { };
+
+  ir.lv2 = callPackage ../applications/audio/ir.lv2 { };
 
   bip = callPackage ../applications/networking/irc/bip { };
 
@@ -11978,6 +12006,8 @@ let
 
   sooperlooper = callPackage ../applications/audio/sooperlooper { };
 
+  sorcer = callPackage ../applications/audio/sorcer { };
+
   sound-juicer = callPackage ../applications/audio/sound-juicer { };
 
   spideroak = callPackage ../applications/networking/spideroak { };
@@ -12575,6 +12605,8 @@ let
 
   x2vnc = callPackage ../tools/X11/x2vnc { };
 
+  x42-plugins = callPackage ../applications/audio/x42-plugins { };
+
   xaos = builderDefsPackage (import ../applications/graphics/xaos) {
     inherit (xlibs) libXt libX11 libXext xextproto xproto;
     inherit gsl aalib zlib intltool gettext perl;
@@ -12765,10 +12797,12 @@ let
     fltk = fltk13;
   };
 
+  zam-plugins = callPackage ../applications/audio/zam-plugins { inherit (xlibs) libX11; };
+
   zathuraCollection = recurseIntoAttrs
     (let callPackage = newScope pkgs.zathuraCollection; in
       import ../applications/misc/zathura {
-        inherit callPackage pkgs fetchurl;
+        inherit callPackage pkgs fetchurl lib;
         stdenv = overrideCC stdenv gcc49;
         useMupdf = config.zathura.useMupdf or false;
       });
@@ -13630,6 +13664,8 @@ let
     mathcomp = callPackage ../development/coq-modules/mathcomp {};
 
     paco = callPackage ../development/coq-modules/paco {};
+
+    QuickChick = callPackage ../development/coq-modules/QuickChick {};
 
     ssreflect = callPackage ../development/coq-modules/ssreflect {};
 
