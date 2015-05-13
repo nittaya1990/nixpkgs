@@ -517,10 +517,6 @@ self: super: {
   # https://github.com/cgaebel/stm-conduit/issues/33
   stm-conduit = dontCheck super.stm-conduit;
 
-  # https://github.com/fumieval/call/issues/3
-  call = markBrokenVersion "0.1.2" super.call;
-  rhythm-game-tutorial = dontDistribute super.rhythm-game-tutorial;     # depends on call
-
   # The install target tries to run lots of commands as "root". WTF???
   hannahci = markBroken super.hannahci;
 
@@ -665,7 +661,7 @@ self: super: {
   vivid = markBroken super.vivid;
 
   # Test suite wants to connect to $DISPLAY.
-  hsqml = dontCheck super.hsqml;
+  hsqml = dontCheck (super.hsqml.override { qt5 = pkgs.qt53; });
 
   # https://github.com/lookunder/RedmineHs/issues/4
   Redmine = markBroken super.Redmine;
@@ -724,14 +720,8 @@ self: super: {
 
   # https://github.com/fumieval/audiovisual/issues/1
   audiovisual = markBroken super.audiovisual;
-
-  # https://github.com/alephcloud/hs-stm-queue-extras/issues/2
-  stm-queue-extras = overrideCabal super.stm-queue-extras (drv: { editedCabalFile = null; });
-
-  # https://github.com/GaloisInc/cryptol/issues/197
-  cryptol = overrideCabal super.cryptol (drv: {
-    postUnpack = "rm -v ${drv.pname}-${drv.version}/Setup.hs";
-  });
+  call = dontDistribute super.call;
+  rhythm-game-tutorial = dontDistribute super.rhythm-game-tutorial;
 
   # https://github.com/haskell/haddock/issues/378
   haddock-library = dontCheck super.haddock-library;
@@ -811,7 +801,7 @@ self: super: {
   # https://github.com/adamwalker/sdr/issues/1
   sdr = dontCheck super.sdr;
 
-  # Reported upstream by e-mail.
-  smaoin = dontCheck super.smaoin;
+  # https://github.com/bos/aeson/issues/253
+  aeson = dontCheck super.aeson;
 
 }
