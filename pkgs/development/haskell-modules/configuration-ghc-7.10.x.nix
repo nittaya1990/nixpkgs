@@ -41,8 +41,6 @@ self: super: {
   # Cabal_1_22_1_1 requires filepath >=1 && <1.4
   cabal-install = dontCheck (super.cabal-install.override { Cabal = null; });
 
-  HStringTemplate = self.HStringTemplate_0_8_3;
-
   # We have Cabal 1.22.x.
   jailbreak-cabal = super.jailbreak-cabal.override { Cabal = null; };
 
@@ -77,7 +75,6 @@ self: super: {
   utf8-string = overrideCabal super.utf8-string (drv: {
     patchPhase = "sed -i -e 's|base >= 3 && < 4.8|base|' utf8-string.cabal";
   });
-  esqueleto = doJailbreak super.esqueleto;
   pointfree = doJailbreak super.pointfree;
 
   # acid-state/safecopy#25 acid-state/safecopy#26
@@ -105,10 +102,6 @@ self: super: {
 
   # Test suite fails in "/tokens_bytestring_unicode.g.bin".
   alex = dontCheck super.alex;
-
-  # https://github.com/haskell/haddock/issues/378
-  haddock-library_1_2_0 = dontCheck super.haddock-library_1_2_0;
-  haddock-library = self.haddock-library_1_2_0;
 
   # Upstream was notified about the over-specified constraint on 'base'
   # but refused to do anything about it because he "doesn't want to
@@ -181,10 +174,6 @@ self: super: {
   jsaddle = let jsaddle' = disableCabalFlag super.jsaddle "ghcjs";
             in addBuildDepends jsaddle' [ self.glib self.gtk3 self.webkitgtk3
                                           self.webkitgtk3-javascriptcore ];
-
-  # FIXME: remove with the next Hackage update
-  brainfuck = appendPatch super.brainfuck ./brainfuck-fix-ghc710.patch;
-  unlambda = appendPatch super.unlambda ./unlambda-fix-ghc710.patch;
 
   # https://github.com/BNFC/bnfc/issues/137
   BNFC = markBrokenVersion "2.7.1" super.BNFC;
@@ -318,15 +307,7 @@ self: super: {
   # https://github.com/purefn/hipbot/issues/1
   hipbot = dontDistribute super.hipbot;
 
-  # https://github.com/solatis/haskell-bitcoin-api/issues/1
-  bitcoin-api = markBroken super.bitcoin-api;
-  bitcoin-api-extra = dontDistribute super.bitcoin-api-extra;
-
   # https://github.com/HugoDaniel/RFC3339/issues/14
   timerep = dontCheck super.timerep;
-
-  # Ugly hack that triggers a rebuild to fix the broken package on Hydra.
-  cabal-lenses = appendConfigureFlag super.cabal-lenses "-fignore-me-1";
-  text = appendConfigureFlag super.text "-fignore-me-1";
 
 }

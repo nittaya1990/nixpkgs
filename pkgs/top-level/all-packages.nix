@@ -544,6 +544,10 @@ let
 
   arandr = callPackage ../tools/X11/arandr { };
 
+  arangodb = callPackage ../servers/nosql/arangodb {
+    inherit (pythonPackages) gyp;
+  };
+
   arcanist = callPackage ../development/tools/misc/arcanist {};
 
   arduino = arduino-core.override { withGui = true; };
@@ -1349,6 +1353,8 @@ let
     plugins = [ ];
   };
 
+  fcppt = callPackage ../development/libraries/fcppt/default.nix { };
+
   fcron = callPackage ../tools/system/fcron { };
 
   fdm = callPackage ../tools/networking/fdm {};
@@ -1791,6 +1797,8 @@ let
 
   jdiskreport = callPackage ../tools/misc/jdiskreport { };
 
+  jekyll = callPackage ../applications/misc/jekyll { };
+
   jfsutils = callPackage ../tools/filesystems/jfsutils { };
 
   jhead = callPackage ../tools/graphics/jhead { };
@@ -1891,7 +1899,7 @@ let
   else
     nodePackages_0_12;
 
-  iojs = callPackage ../development/web/iojs { libuv = libuvVersions.v1_4_2; };
+  iojs = callPackage ../development/web/iojs { libuv = libuvVersions.v1_5_0; };
 
   iojsPackages = callPackage ./node-packages.nix { self = iojsPackages; nodejs = iojs; };
 
@@ -2990,6 +2998,8 @@ let
 
   ttysnoop = callPackage ../os-specific/linux/ttysnoop {};
 
+  ttylog = callPackage ../tools/misc/ttylog { };
+
   twitterBootstrap = callPackage ../development/web/twitter-bootstrap {};
 
   txt2man = callPackage ../tools/misc/txt2man { };
@@ -3438,6 +3448,7 @@ let
 
   clangWrapSelf = build: (import ../build-support/cc-wrapper) {
     cc = build;
+    isClang = true;
     stdenv = clangStdenv;
     libc = glibc;
     binutils = binutils;
@@ -3757,15 +3768,6 @@ let
     };
   };
 
-  jhc = callPackage ../development/compilers/jhc {
-    inherit (haskell.packages.ghc763) ghcWithPackages;
-  };
-
-  uhc = callPackage ../development/compilers/uhc/default.nix ({
-    stdenv = clangStdenv;
-    inherit (haskellPackages) ghcWithPackages;
-  });
-
   gcc-arm-embedded-4_7 = callPackage_i686 ../development/compilers/gcc-arm-embedded {
     version = "4.7-2013q3-20130916";
     releaseType = "update";
@@ -3849,7 +3851,7 @@ let
 
   ikarus = callPackage ../development/compilers/ikarus { };
 
-  hugs = callPackage ../development/compilers/hugs { };
+  hugs = callPackage ../development/interpreters/hugs { };
 
   path64 = callPackage ../development/compilers/path64 { };
 
@@ -4398,9 +4400,8 @@ let
     ocaml = ocaml_3_08_0;
   };
 
-  rustcBeta   = callPackage ../development/compilers/rustc/1.0.0-beta.nix {};
   rustcMaster = callPackage ../development/compilers/rustc/head.nix {};
-  rustc = rustcBeta;
+  rustc = callPackage ../development/compilers/rustc/1.0.0.nix {};
 
   rustPlatform = rustStable;
 
@@ -4498,6 +4499,8 @@ let
     nativePrefix = stdenv.cc.nativePrefix or "";
     cc = baseCC;
     libc = libc;
+    isGNU = baseCC.isGNU or false;
+    isClang = baseCC.isClang or false;
     inherit stdenv binutils coreutils zlib;
   };
 
@@ -4537,6 +4540,7 @@ let
     nativePrefix = stdenv.cc.nativePrefix or "";
     cc = baseGCC;
     libc = glibc;
+    isGNU = true;
     inherit stdenv binutils coreutils zlib;
     setupHook = ../build-support/cc-wrapper/setup-hook-stdinc.sh;
   };
@@ -5094,6 +5098,11 @@ let
   };
 
   ctodo = callPackage ../applications/misc/ctodo { };
+
+  cmake-2_8 = callPackage ../development/tools/build-managers/cmake/2.8.nix {
+    wantPS = stdenv.isDarwin;
+    ps     = if stdenv.isDarwin then darwin.ps else null;
+  };
 
   cmake = callPackage ../development/tools/build-managers/cmake {
     wantPS = stdenv.isDarwin;
@@ -6211,7 +6220,7 @@ let
 
   gvfs = callPackage ../development/libraries/gvfs { gconf = gnome.GConf; };
 
-  gwenhywfar = callPackage ../development/libraries/gwenhywfar { };
+  gwenhywfar = callPackage ../development/libraries/gwenhywfar { gnutls = gnutls33; };
 
   hamlib = callPackage ../development/libraries/hamlib { };
 
@@ -6343,9 +6352,9 @@ let
     automake = automake111x;
   };
 
-  kf59 = recurseIntoAttrs (callPackage ../development/libraries/kde-frameworks-5.9 { });
-  kf5_latest = kf59;
-  kf5_stable = kf59;
+  kf510 = recurseIntoAttrs (callPackage ../development/libraries/kde-frameworks-5.10 { });
+  kf5_latest = kf510;
+  kf5_stable = kf510;
 
   kinetic-cpp-client = callPackage ../development/libraries/kinetic-cpp-client { };
 
@@ -6532,8 +6541,12 @@ let
   libdvdcss = callPackage ../development/libraries/libdvdcss { };
 
   libdvdnav = callPackage ../development/libraries/libdvdnav { };
+  libdvdnav_4_2_1 = callPackage ../development/libraries/libdvdnav/4.2.1.nix {
+    libdvdread = libdvdread_4_9_9;
+  };
 
   libdvdread = callPackage ../development/libraries/libdvdread { };
+  libdvdread_4_9_9 = callPackage ../development/libraries/libdvdread/4.9.9.nix { };
 
   libdwarf = callPackage ../development/libraries/libdwarf { };
 
@@ -6695,7 +6708,11 @@ let
   libmsgpack = callPackage ../development/libraries/libmsgpack { };
   libmsgpack_0_5 = callPackage ../development/libraries/libmsgpack/0.5.nix { };
 
-  libnatspec = callPackage ../development/libraries/libnatspec { };
+  libnatspec = callPackage ../development/libraries/libnatspec (
+    stdenv.lib.optionalAttrs stdenv.isDarwin {
+      inherit (darwin) libiconv;
+    }
+  );
 
   libndp = callPackage ../development/libraries/libndp { };
 
@@ -7032,7 +7049,7 @@ let
     automake = automake113x; # fails with 14
   });
 
-  libuv = libuvVersions.v1_4_2;
+  libuv = libuvVersions.v1_5_0;
 
   libv4l = lowPrio (v4l_utils.override {
     alsaLib = null;
@@ -7333,9 +7350,9 @@ let
 
   oniguruma = callPackage ../development/libraries/oniguruma { };
 
-  openal = callPackage ../development/libraries/openal { };
-
-  # added because I hope that it has been easier to compile on x86 (for blender)
+  # openalSoft is 100% ABI compatible to openalLegacy and should be a default
+  openal = openalSoft;
+  openalLegacy = callPackage ../development/libraries/openal { };
   openalSoft = callPackage ../development/libraries/openal-soft { };
 
   openbabel = callPackage ../development/libraries/openbabel { };
@@ -7513,6 +7530,8 @@ let
 
   qca2 = callPackage ../development/libraries/qca2 { qt = qt4; };
 
+  qca-qt5 = callPackage ../development/libraries/qca-qt5 { };
+
   qimageblitz = callPackage ../development/libraries/qimageblitz {};
 
   qjson = callPackage ../development/libraries/qjson { };
@@ -7650,7 +7669,6 @@ let
   rocksdb = callPackage ../development/libraries/rocksdb { };
 
   rubberband = callPackage ../development/libraries/rubberband {
-    fftw = fftwSinglePrec;
     inherit (vamp) vampSDK;
   };
 
@@ -9235,6 +9253,8 @@ let
 
   kbd = callPackage ../os-specific/linux/kbd { };
 
+  kbdlight = callPackage ../os-specific/linux/kbdlight { };
+
   kmscon = callPackage ../os-specific/linux/kmscon { };
 
   latencytop = callPackage ../os-specific/linux/latencytop { };
@@ -9641,6 +9661,11 @@ let
   nftables = callPackage ../os-specific/linux/nftables { };
 
   numactl = callPackage ../os-specific/linux/numactl { };
+
+  open-vm-tools = callPackage ../applications/virtualization/open-vm-tools {
+    inherit (xlibs) libXinerama libXi libXrender libXrandr libXtst;
+    inherit (gnome) gtk gtkmm;
+  };
 
   gocode = callPackage ../development/tools/gocode { };
 
@@ -10473,6 +10498,7 @@ let
   cinepaint = callPackage ../applications/graphics/cinepaint {
     fltk = fltk13;
     libpng = libpng12;
+    cmake = cmake-2_8;
   };
 
   codeblocks = callPackage ../applications/editors/codeblocks { };
@@ -10995,7 +11021,9 @@ let
     ffmpeg = ffmpeg_1;
   };
 
-  freerdpUnstable = callPackage ../applications/networking/remote/freerdp/unstable.nix { };
+  freerdpUnstable = callPackage ../applications/networking/remote/freerdp/unstable.nix {
+    cmake = cmake-2_8;
+  };
 
   freicoin = callPackage ../applications/misc/freicoin { };
 
@@ -11352,7 +11380,7 @@ let
   };
 
   kdeApps_15_04 = recurseIntoAttrs (callPackage ../applications/kde-apps-15.04 {
-    kf5 = kf59;
+    kf5 = kf510;
   });
   kdeApps_stable = kdeApps_15_04;
   kdeApps_latest = kdeApps_15_04;
@@ -11391,11 +11419,13 @@ let
 
   lash = callPackage ../applications/audio/lash { };
 
-  ladspaH = callPackage ../applications/audio/ladspa-plugins/ladspah.nix { };
+  ladspaH = callPackage ../applications/audio/ladspa-sdk/ladspah.nix { };
 
   ladspaPlugins = callPackage ../applications/audio/ladspa-plugins {
     fftw = fftwSinglePrec;
   };
+
+  ladspa-sdk = callPackage ../applications/audio/ladspa-sdk { };
 
   caps = callPackage ../applications/audio/caps { };
 
@@ -11618,6 +11648,7 @@ let
 
   mplayer = callPackage ../applications/video/mplayer ({
     pulseSupport = config.pulseaudio or false;
+    libdvdnav = libdvdnav_4_2_1;
   } // (config.mplayer or {}));
 
   MPlayerPlugin = browser:
@@ -13043,6 +13074,8 @@ let
 
   gtypist = callPackage ../games/gtypist { };
 
+  gzdoom = callPackage ../games/gzdoom { };
+
   hedgewars = callPackage ../games/hedgewars {
     inherit (haskellPackages) ghcWithPackages;
   };
@@ -13578,7 +13611,7 @@ let
   numix-gtk-theme = callPackage ../misc/themes/gtk3/numix-gtk-theme { };
 
   plasma53 = recurseIntoAttrs (callPackage ../desktops/plasma-5.3 {
-    kf5 = kf59;
+    kf5 = kf510;
   });
   plasma5_latest = plasma53;
   plasma5_stable = plasma53;
@@ -13917,7 +13950,7 @@ let
 
   maxima = callPackage ../applications/science/math/maxima { };
 
-  wxmaxima = callPackage ../applications/science/math/wxmaxima { };
+  wxmaxima = callPackage ../applications/science/math/wxmaxima { wxGTK = wxGTK30; };
 
   pari = callPackage ../applications/science/math/pari {};
 
@@ -14558,6 +14591,7 @@ let
   rssglx = rss-glx; #added 2015-03-25
   haskell-ng = haskell;                 # 2015-04-19
   haskellngPackages = haskellPackages;  # 2015-04-19
+  inherit (haskell.compiler) jhc uhc;   # 2015-05-15
 
   opentsdb = callPackage ../tools/misc/opentsdb {};
 

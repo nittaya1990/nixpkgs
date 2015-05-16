@@ -65,17 +65,17 @@ rec {
   };
 
   grsecurity_stable = grsecPatch
-    { kversion  = "3.14.41";
-      revision  = "201505101121";
+    { kversion  = "3.14.42";
+      revision  = "201505141745";
       branch    = "stable";
-      sha256    = "1jiwc6qvimccmlm62sfp2ch173h7ki1h11facywpnb4wms7izk6g";
+      sha256    = "1565ggx42w0j038avz9d4pydf4j29rli2hz5wangf3vnjbhixh39";
     };
 
   grsecurity_unstable = grsecPatch
-    { kversion  = "4.0.2";
-      revision  = "201505101122";
+    { kversion  = "4.0.3";
+      revision  = "201505141746";
       branch    = "test";
-      sha256    = "14fi31xwlgirbwk7f1xh8vanjxk8b473rz7z38savl4nx2wr5r24";
+      sha256    = "0w65d5nmfir8kxgsxrq09mijjp09k193hyqmskia6a17n29943p1";
     };
 
   grsec_fix_path =
