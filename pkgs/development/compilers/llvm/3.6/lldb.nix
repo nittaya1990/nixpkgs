@@ -15,7 +15,7 @@
 stdenv.mkDerivation {
   name = "lldb-${version}";
 
-  src = fetch "lldb" "1cphxbc8c0yqs2rxn94vcn8his465m97rnynklpzm8sf5kad26ib";
+  src = fetch "lldb" "1fmaz7zcc1f54ns4x8rx9nvhh4pyrhbz103bl02sv1cfwxj5ryyf";
 
   patchPhase = ''
     sed -i 's|/usr/bin/env||' \
@@ -38,7 +38,6 @@ stdenv.mkDerivation {
     description = "A next-generation high-performance debugger";
     homepage    = http://llvm.org/;
     license     = stdenv.lib.licenses.bsd3;
-    maintainers = [ stdenv.lib.maintainers.shlevy ];
     platforms   = stdenv.lib.platforms.all;
   };
 }

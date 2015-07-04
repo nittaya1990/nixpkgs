@@ -72,7 +72,10 @@ let
 
   hasActiveLibrary = isLibrary && (enableStaticLibraries || enableSharedLibraries || enableLibraryProfiling);
 
-  enableParallelBuilding = versionOlder "7.10" ghc.version || (versionOlder "7.8" ghc.version && !hasActiveLibrary);
+  # We cannot enable -j<n> parallelism for libraries because GHC is far more
+  # likely to generate a non-determistic library ID in that case. Further
+  # details are at <https://github.com/peti/ghc-library-id-bug>.
+  enableParallelBuilding = versionOlder "7.8" ghc.version && !hasActiveLibrary;
 
   defaultConfigureFlags = [
     "--verbose" "--prefix=$out" "--libdir=\\$prefix/lib/\\$compiler" "--libsubdir=\\$pkgid"
@@ -244,7 +247,7 @@ stdenv.mkDerivation ({
       mv $packageConfFile $packageConfDir/$pkgId.conf
     ''}
 
-    ${optionalString (enableSharedExecutables && isExecutable && stdenv.isDarwin && stdenv.lib.versionOlder ghc.version "7.10") ''
+    ${optionalString (enableSharedExecutables && isExecutable && !isGhcjs && stdenv.isDarwin && stdenv.lib.versionOlder ghc.version "7.10") ''
       for exe in "$out/bin/"* ; do
         install_name_tool -add_rpath "$out/lib/ghc-${ghc.version}/${pname}-${version}" "$exe"
       done

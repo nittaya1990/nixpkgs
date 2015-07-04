@@ -54,6 +54,7 @@ with stdenv.lib;
   STANDALONE n
 
   # Make /proc/config.gz available.
+  IKCONFIG y
   IKCONFIG_PROC y
 
   # Optimize with -O2, not -Os.
@@ -131,6 +132,8 @@ with stdenv.lib;
   FB_SIS_300 y
   FB_SIS_315 y
   FB_3DFX_ACCEL y
+  FB_VESA y
+  FRAMEBUFFER_CONSOLE y
   ${optionalString (versionOlder version "3.9" || stdenv.system == "i686-linux") ''
     FB_GEODE y
   ''}
@@ -234,7 +237,7 @@ with stdenv.lib;
   # Security related features.
   STRICT_DEVMEM y # Filter access to /dev/mem
   SECURITY_SELINUX_BOOTPARAM_VALUE 0 # Disable SELinux by default
-  ${optionalString (!features.grsecurity or true) ''
+  ${optionalString (!(features.grsecurity or false)) ''
     DEVKMEM n # Disable /dev/kmem
   ''}
   ${if versionOlder version "3.14" then ''
@@ -380,7 +383,7 @@ with stdenv.lib;
 
   # Virtualisation.
   PARAVIRT? y
-  ${optionalString (!features.grsecurity or true)
+  ${optionalString (!(features.grsecurity or false))
     (if versionAtLeast version "3.10" then ''
       HYPERVISOR_GUEST y
     '' else ''
@@ -393,10 +396,10 @@ with stdenv.lib;
     KVM_CLOCK? y
   ''}
   ${optionalString (versionAtLeast version "4.0") ''
-    KVM_COMPAT y
+    KVM_COMPAT? y
   ''}
   ${optionalString (versionAtLeast version "3.10") ''
-    KVM_DEVICE_ASSIGNMENT y
+    KVM_DEVICE_ASSIGNMENT? y
   ''}
   ${optionalString (versionAtLeast version "4.0") ''
     KVM_GENERIC_DIRTYLOG_READ_PROTECT y

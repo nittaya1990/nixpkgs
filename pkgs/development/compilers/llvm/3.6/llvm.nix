@@ -15,7 +15,7 @@
 }:
 
 let
-  src = fetch "llvm" "1kmr5vlnz1419nnvyc7lsrcfx09n65ravjbmzxrqz7ml07jnk6mk";
+  src = fetch "llvm" "0ypwcqrld91jn0zz4mkdksl2mbb0ds9lh5gf0xkbb81sj4awc01g";
 in stdenv.mkDerivation rec {
   name = "llvm-${version}";
 
@@ -68,7 +68,7 @@ in stdenv.mkDerivation rec {
     description = "Collection of modular and reusable compiler and toolchain technologies";
     homepage    = http://llvm.org/;
     license     = stdenv.lib.licenses.bsd3;
-    maintainers = with stdenv.lib.maintainers; [ shlevy lovek323 raskin viric ];
+    maintainers = with stdenv.lib.maintainers; [ lovek323 raskin viric ];
     platforms   = stdenv.lib.platforms.all;
   };
 }

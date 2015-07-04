@@ -9,6 +9,8 @@ import ./make-test.nix (
 }: rec {
   name = "chromium";
 
+  enableOCR = true;
+
   machine.imports = [ ./common/x11.nix ];
   machine.virtualisation.memorySize = 1024;
 
@@ -106,15 +108,11 @@ import ./make-test.nix (
         "ulimit -c unlimited; ".
         "$pkg/bin/chromium $args \"$url\" & disown"
       );
+      $machine->waitForText(qr/Type to search or enter a URL to navigate/);
       $machine->waitUntilSucceeds("${xdo "check-startup" ''
         search --sync --onlyvisible --name "startup done"
         # close first start help popup
         key -delay 1000 Escape
-        # XXX: This is to make sure the popup is closed, but we better do
-        # screenshots to detect visual changes.
-        key -delay 2000 Escape
-        key -delay 3000 Escape
-        key -delay 4000 Escape
         windowfocus --sync
         windowactivate --sync
       ''}");
@@ -159,10 +157,11 @@ import ./make-test.nix (
 
           my $clipboard = $machine->succeed("${pkgs.xclip}/bin/xclip -o");
           die "sandbox not working properly: $clipboard"
-          unless $clipboard =~ /(?:suid|namespace) sandbox.*yes/mi
+          unless $clipboard =~ /namespace sandbox.*yes/mi
               && $clipboard =~ /pid namespaces.*yes/mi
               && $clipboard =~ /network namespaces.*yes/mi
-              && $clipboard =~ /seccomp.*sandbox.*yes/mi;
+              && $clipboard =~ /seccomp.*sandbox.*yes/mi
+              && $clipboard =~ /you are adequately sandboxed/mi;
         };
       };
     }

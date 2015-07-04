@@ -1,16 +1,16 @@
 { stdenv, fetchurl, automake, pkgconfig
 , cups, zlib, libjpeg, libusb1, pythonPackages, saneBackends, dbus
-, polkit, qtSupport ? true, qt4, pythonDBus, pyqt4, net_snmp
-, withPlugin ? false, substituteAll
+, polkit, qtSupport ? true, qt4, pyqt4, net_snmp
+, withPlugin ? false, substituteAll, makeWrapper
 }:
 
 let
 
-  name = "hplip-3.15.4";
+  name = "hplip-3.15.6";
 
   src = fetchurl {
     url = "mirror://sourceforge/hplip/${name}.tar.gz";
-    sha256 = "0s1yiifp002n8qy0i4cv6j0hq9ikp4jabki5w3xzlaqgd4bjz1x3";
+    sha256 = "1jbnjw7vrn1qawrjfdv8j58w69q8ki1qkzvlh0nk8nxacpp17i9h";
   };
 
   hplip_state =
@@ -31,7 +31,7 @@ let
 
   plugin = fetchurl {
     url = "http://www.openprinting.org/download/printdriver/auxfiles/HP/plugins/${name}-plugin.run";
-    sha256 = "00zhaq48m7p6nrxfy16086hzghf2pfr32s53sndbpp2514v2j392";
+    sha256 = "1rymxahz12s1s37rri5qyvka6q0yi0yai08kgspg24176ry3a3fx";
   };
 
 in
@@ -74,7 +74,21 @@ stdenv.mkDerivation {
 
   postInstall =
     ''
-    wrapPythonPrograms
+      # Wrap the user-facing Python scripts in /bin without turning the ones
+      # in /share into shell scripts (they need to be importable).
+      # Complicated by the fact that /bin contains just symlinks to /share.
+      for bin in $out/bin/*; do
+        py=`readlink -m $bin`
+        rm $bin
+        cp $py $bin
+        wrapPythonProgramsIn $bin "$out $pythonPath"
+        sed -i "s@$(dirname $bin)/[^ ]*@$py@g" $bin
+      done
+
+      # Remove originals. Knows a little too much about wrapPythonProgramsIn.
+      rm -f $out/bin/.*-wrapped
+
+      wrapPythonPrograms $out/lib "$out $pythonPath"
     ''
     + (stdenv.lib.optionalString withPlugin
     (let hplip_arch =
@@ -125,13 +139,15 @@ stdenv.mkDerivation {
       pythonPackages.wrapPython
       saneBackends
       dbus
-      pkgconfig
       net_snmp
     ] ++ stdenv.lib.optional qtSupport qt4;
+  nativeBuildInputs = [
+    pkgconfig
+  ];
 
   pythonPath = with pythonPackages; [
+      dbus
       pillow
-      pythonDBus
       pygobject
       recursivePthLoader
       reportlab
@@ -144,6 +160,6 @@ stdenv.mkDerivation {
       then licenses.unfree
       else with licenses; [ mit bsd2 gpl2Plus ];
     platforms = [ "i686-linux" "x86_64-linux" "armv6l-linux" "armv7l-linux" ];
-    maintainers = with maintainers; [ ttuegel jgeerds ];
+    maintainers = with maintainers; [ ttuegel jgeerds nckx ];
   };
 }

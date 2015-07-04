@@ -65,7 +65,7 @@ let
       greeters-directory = ${cfg.greeter.package}
       sessions-directory = ${dmcfg.session.desktops}
 
-      [SeatDefaults]
+      [Seat:*]
       xserver-command = ${xserverWrapper}
       session-wrapper = ${dmcfg.session.script}
       greeter-session = ${cfg.greeter.name}
@@ -104,7 +104,7 @@ in
       };
 
       background = mkOption {
-        default = "${pkgs.nixos-artwork}/gnome/Gnome_Dark.png";
+        default = "${pkgs.nixos-artwork}/share/artwork/gnome/Gnome_Dark.png";
         description = ''
           The background image or color to use.
         '';
@@ -143,8 +143,26 @@ in
     services.dbus.enable = true;
     services.dbus.packages = [ lightdm ];
 
-    security.pam.services.lightdm = { allowNullPassword = true; startSession = true; };
-    security.pam.services.lightdm-greeter = { allowNullPassword = true; startSession = true; };
+    security.pam.services.lightdm = {
+      allowNullPassword = true;
+      startSession = true;
+    };
+    security.pam.services.lightdm-greeter = {
+      allowNullPassword = true;
+      startSession = true;
+      text = ''
+        auth     required pam_env.so
+        auth     required pam_permit.so
+
+        account  required pam_permit.so
+
+        password required pam_deny.so
+
+        session  required pam_env.so envfile=${config.system.build.pamEnvironment}
+        session  required pam_unix.so
+        session  optional ${pkgs.systemd}/lib/security/pam_systemd.so
+      '';
+    };
 
     users.extraUsers.lightdm = {
       createHome = true;

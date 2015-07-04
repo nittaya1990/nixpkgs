@@ -14,13 +14,13 @@ stdenv.mkDerivation rec {
     inherit version;
     description = "Brokken's Own Base Classes And Templates";
     downloadPage = http://sourceforge.net/projects/bobcat/files/;
-    license = with licenses; gpl3;
+    license = licenses.gpl3;
     platforms = with platforms; linux;
     maintainers = with maintainers; [ nckx ];
   };
 
-  buildInputs = [ gcc49 icmake libmilter libX11 openssl readline utillinux
-    yodl ];
+  buildInputs = [ gcc49 libmilter libX11 openssl readline utillinux ];
+  nativeBuildInputs = [ icmake yodl ];
 
   postPatch = ''
     substituteInPlace INSTALL.im --replace /usr $out

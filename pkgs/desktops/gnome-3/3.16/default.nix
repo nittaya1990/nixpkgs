@@ -1,9 +1,22 @@
-{ callPackage, pkgs, self }:
+{ pkgs }:
 
-rec {
+let
+
+  pkgsFun = overrides:
+    let 
+      self = self_ // overrides;
+      self_ = with self; {
+
+  overridePackages = f:
+    let newself = pkgsFun (f newself self);
+    in newself;
+
+  callPackage = pkgs.newScope self;
+
   corePackages = with gnome3; [
     pkgs.desktop_file_utils pkgs.ibus
     pkgs.shared_mime_info # for update-mime-database
+    glib # for gsettings
     gtk3 # for gtk-update-icon-cache
     glib_networking gvfs dconf gnome-backgrounds gnome_control_center
     gnome-menus gnome_settings_daemon gnome_shell
@@ -16,13 +29,11 @@ rec {
     gnome-shell-extensions gnome-system-log gnome-system-monitor
     gnome_terminal gnome-user-docs bijiben evolution file-roller gedit
     gnome-clocks gnome-music gnome-tweak-tool gnome-photos
-    nautilus-sendto dconf-editor
+    nautilus-sendto dconf-editor vinagre
   ];
 
-  inherit (pkgs) libsoup glib gtk2;
+  inherit (pkgs) libsoup glib gtk2 webkitgtk24x gtk3 gtkmm3 libcanberra;
   inherit (pkgs.gnome2) ORBit2;
-  gtk3 = pkgs.gtk3_16;
-  gtkmm3 = pkgs.gtkmm3_16;
   orbit = ORBit2;
   gnome3 = self // { recurseForDerivations = false; };
   clutter = pkgs.clutter_1_22;
@@ -31,31 +42,14 @@ rec {
   cogl = pkgs.cogl_1_20;
   gtk = gtk3;
   gtkmm = gtkmm3;
+  gtkvnc = pkgs.gtkvnc.override { enableGTK3 = true; };
   vala = pkgs.vala_0_26;
   gegl_0_3 = pkgs.gegl_0_3.override { inherit gtk; };
-
-  # Due to gtk 3.12 -> 3.16 transition
-  libcanberra_gtk3 = pkgs.libcanberra_gtk3.override { inherit gtk; }; 
-  libcanberra = libcanberra_gtk3;
-  ibus = pkgs.ibus.override { inherit gnome3; };
-  colord-gtk = pkgs.colord-gtk.override { inherit gtk3; };
-  webkitgtk24x = pkgs.webkitgtk24x.override { inherit gtk3; };
-  webkitgtk = pkgs.webkitgtk.override { inherit gtk3; };
-  libwnck3 = pkgs.libwnck3.override { inherit gtk3; };
-  gtkspell3 = pkgs.gtkspell3.override { inherit gtk3; };
-  librsvg = pkgs.librsvg.override { inherit gtk3; };
-  iconnamingutils = pkgs.iconnamingutils.override { inherit librsvg; };
-  libchamplain = pkgs.libchamplain.override { inherit gtk3 clutter_gtk; };
-  djvulibre = pkgs.djvulibre.override { inherit librsvg; };
 
   version = "3.16";
 
 # Simplify the nixos module and gnome packages
   defaultIconTheme = adwaita-icon-theme;
-
-# Backward compatibility, must be removed in favor of defaultIconTheme
-  gnome_icon_theme = adwaita-icon-theme;
-  gnome_icon_theme_symbolic = adwaita-icon-theme;
 
 #### Core (http://ftp.acc.umu.se/pub/GNOME/core/)
 
@@ -277,7 +271,7 @@ rec {
 
   seahorse = callPackage ./apps/seahorse { };
 
-  pomodoro = callPackage ./apps/pomodoro { };
+  vinagre = callPackage ./apps/vinagre { };
 
 #### Dev http://ftp.gnome.org/pub/GNOME/devtools/
 
@@ -287,13 +281,13 @@ rec {
 
 #### Misc -- other packages on http://ftp.gnome.org/pub/GNOME/sources/
 
+  california = callPackage ./misc/california { };
+
   geary = callPackage ./misc/geary { 
     webkitgtk = webkitgtk24x;
   };
 
   gfbgraph = callPackage ./misc/gfbgraph { };
-
-  goffice = callPackage ./misc/goffice { };
 
   gitg = callPackage ./misc/gitg { 
     webkitgtk = webkitgtk24x;
@@ -315,4 +309,9 @@ rec {
 
   gtkhtml = callPackage ./misc/gtkhtml { };
 
-}
+  pomodoro = callPackage ./misc/pomodoro { };
+
+    };
+  in self; # pkgsFun
+
+in pkgsFun {}
