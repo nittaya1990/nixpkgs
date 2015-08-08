@@ -149,12 +149,15 @@ let
   makeInstallerTest = name:
     { createPartitions, preBootCommands ? "", extraConfig ? ""
     , grubVersion ? 2, grubDevice ? "/dev/vda"
-    , grubIdentifier ? "uuid", enableOCR ? false
+    , grubIdentifier ? "uuid", enableOCR ? false, meta ? {}
     }:
     makeTest {
       inherit enableOCR;
       name = "installer-" + name;
-
+      meta = with pkgs.stdenv.lib.maintainers; {
+        # put global maintainers here, individuals go into makeInstallerTest fkt call
+        maintainers = [ wkennington ] ++ (meta.maintainers or []);
+      };
       nodes = {
 
         # The configuration of the machine used to run "nixos-install". It
@@ -250,6 +253,27 @@ in {
               "mkfs.ext3 -L boot /dev/vda1",
               "mkdir -p /mnt/boot",
               "mount LABEL=boot /mnt/boot",
+          );
+        '';
+    };
+
+  # Same as the previous, but with fat32 /boot.
+  separateBootFat = makeInstallerTest "separateBootFat"
+    { createPartitions =
+        ''
+          $machine->succeed(
+              "parted /dev/vda mklabel msdos",
+              "parted /dev/vda -- mkpart primary ext2 1M 50MB", # /boot
+              "parted /dev/vda -- mkpart primary linux-swap 50MB 1024M",
+              "parted /dev/vda -- mkpart primary ext2 1024M -1s", # /
+              "udevadm settle",
+              "mkswap /dev/vda2 -L swap",
+              "swapon -L swap",
+              "mkfs.ext3 -L nixos /dev/vda3",
+              "mount LABEL=nixos /mnt",
+              "mkfs.vfat -n BOOT /dev/vda1",
+              "mkdir -p /mnt/boot",
+              "mount LABEL=BOOT /mnt/boot",
           );
         '';
     };

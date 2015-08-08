@@ -1,9 +1,9 @@
-{ stdenv, fetchurl, pkgconfig, zlib, libjpeg, libpng, libtiff, pam, openssl
+{ stdenv, fetchurl, pkgconfig, zlib, libjpeg, libpng, libtiff, pam
 , dbus, acl, gmp, xdg_utils
 , libusb ? null, gnutls ? null, avahi ? null, libpaper ? null
 }:
 
-let version = "2.0.2"; in
+let version = "2.0.3"; in
 
 with stdenv.lib;
 stdenv.mkDerivation {
@@ -13,13 +13,13 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://www.cups.org/software/${version}/cups-${version}-source.tar.bz2";
-    sha256 = "12xild9nrhqnrzx8zqh78v3chm4mpp5gf5iamr0h9zb6dgvj11w5";
+    sha256 = "10c84ppc9prx6gcyskmm6fh0rks346yryzd356gkg9whhq26fcdw";
   };
 
   buildInputs = [ pkgconfig zlib libjpeg libpng libtiff libusb gnutls avahi libpaper ]
     ++ optionals stdenv.isLinux [ pam dbus.libs acl xdg_utils ] ;
 
-  propagatedBuildInputs = [ openssl gmp ];
+  propagatedBuildInputs = [ gmp ];
 
   configureFlags = [
     "--localstatedir=/var"

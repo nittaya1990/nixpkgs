@@ -42,22 +42,34 @@ self: super: {
   cabal-install = dontCheck (super.cabal-install.override { Cabal = null; });
 
   # Don't use jailbreak built with Cabal 1.22.x because of https://github.com/peti/jailbreak-cabal/issues/9.
-  jailbreak-cabal = pkgs.haskell.packages.ghc784.jailbreak-cabal;
-
-  # GHC 7.10.x's Haddock binary cannot generate hoogle files.
-  # https://ghc.haskell.org/trac/ghc/ticket/9921
-  mkDerivation = drv: super.mkDerivation (drv // { doHoogle = false; });
+  Cabal_1_23_0_0 = overrideCabal super.Cabal_1_22_4_0 (drv: {
+    version = "1.23.0.0";
+    src = pkgs.fetchFromGitHub {
+      owner = "haskell";
+      repo = "cabal";
+      rev = "fe7b8784ac0a5848974066bdab76ce376ba67277";
+      sha256 = "1d70ryz1l49pkr70g8r9ysqyg1rnx84wwzx8hsg6vwnmg0l5am7s";
+    };
+    jailbreak = false;
+    doHaddock = false;
+    postUnpack = "sourceRoot+=/Cabal";
+  });
+  jailbreak-cabal = overrideCabal super.jailbreak-cabal (drv: {
+    executableHaskellDepends = [ self.Cabal_1_23_0_0 ];
+    preConfigure = "sed -i -e 's/Cabal == 1.20\\.\\*/Cabal >= 1.23/' jailbreak-cabal.cabal";
+  });
 
   idris =
     let idris' = overrideCabal super.idris (drv: {
       # "idris" binary cannot find Idris library otherwise while building.
-      # After installing it's completely fine though.
-      # Seems like Nix-specific issue so not reported.
-      preBuild = ''
-        export LD_LIBRARY_PATH=$PWD/dist/build:$LD_LIBRARY_PATH
-      '';
+      # After installing it's completely fine though. Seems like Nix-specific
+      # issue so not reported.
+      preBuild = "export LD_LIBRARY_PATH=$PWD/dist/build:$LD_LIBRARY_PATH";
+      # https://github.com/idris-lang/Idris-dev/issues/2499
+      librarySystemDepends = (drv.librarySystemDepends or []) ++ [pkgs.gmp];
     });
     in idris'.overrideScope (self: super: {
+      # https://github.com/idris-lang/Idris-dev/issues/2500
       zlib = self.zlib_0_5_4_2;
     });
 
@@ -121,9 +133,6 @@ self: super: {
     sha256 = "1vn3xm38v2f4lzyzkadvq322f3s2yf8c88v56wpdpzfxmvlzaqr8";
   });
 
-  # Already applied in darcs repository.
-  gnuplot = appendPatch super.gnuplot ./gnuplot-fix-new-time.patch;
-
   ghcjs-prim = self.callPackage ({ mkDerivation, fetchgit, primitive }: mkDerivation {
     pname = "ghcjs-prim";
     version = "0.1.0.0";
@@ -149,11 +158,6 @@ self: super: {
   # diagrams/diagrams-core#83
   diagrams-core = overrideCabal super.diagrams-core (drv: {
     prePatch = "sed -i 's|4\.8|4.9|' diagrams-core.cabal";
-  });
-
-  misfortune = appendPatch super.misfortune (pkgs.fetchpatch {
-    url = "https://github.com/mokus0/misfortune/commit/9e0a38cf8d59a0de9ae1156034653f32099610e4.patch";
-    sha256 = "01m1l199ihq85j9pyc3n0wqv1z4my453hhhcvg3yz3gpz3lf224r";
   });
 
   timezone-series = doJailbreak super.timezone-series;
@@ -217,7 +221,7 @@ self: super: {
   tasty-rerun = dontHaddock (appendConfigureFlag super.tasty-rerun "--ghc-option=-XFlexibleContexts");
 
   # http://hub.darcs.net/ivanm/graphviz/issue/5
-  graphviz = dontCheck (dontJailbreak (appendPatch super.graphviz ./graphviz-fix-ghc710.patch));
+  graphviz = dontCheck (dontJailbreak (appendPatch super.graphviz ./patches/graphviz-fix-ghc710.patch));
 
   # Broken with GHC 7.10.x.
   aeson_0_7_0_6 = markBroken super.aeson_0_7_0_6;
@@ -231,8 +235,8 @@ self: super: {
   seqid-streams_0_1_0 = markBroken super.seqid-streams_0_1_0;
   vector_0_10_9_3 = markBroken super.vector_0_10_9_3;
 
-  # https://github.com/purefn/hipbot/issues/1
-  hipbot = dontDistribute super.hipbot;
+  # http://hub.darcs.net/shelarcy/regex-tdfa-text/issue/1 -- upstream seems to be asleep
+  regex-tdfa-text = appendPatch super.regex-tdfa-text ./patches/regex-tdfa-text.patch;
 
   # https://github.com/HugoDaniel/RFC3339/issues/14
   timerep = dontCheck super.timerep;
@@ -271,5 +275,15 @@ self: super: {
 
   # Won't work with LLVM 3.5.
   llvm-general = markBrokenVersion "3.4.5.3" super.llvm-general;
+
+  # Inexplicable haddock failure
+  # https://github.com/gregwebs/aeson-applicative/issues/2
+  aeson-applicative = dontHaddock super.aeson-applicative;
+
+  # GHC 7.10.1 is affected by https://github.com/srijs/hwsl2/issues/1.
+  hwsl2 = dontCheck super.hwsl2;
+
+  # https://github.com/haskell/haddock/issues/427
+  haddock = dontCheck super.haddock;
 
 }

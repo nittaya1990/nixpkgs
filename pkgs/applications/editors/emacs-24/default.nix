@@ -1,5 +1,5 @@
 { stdenv, fetchurl, ncurses, x11, libXaw, libXpm, Xaw3d
-, pkgconfig, gtk, libXft, dbus, libpng, libjpeg, libungif
+, pkgconfig, gettext, gtk, libXft, dbus, libpng, libjpeg, libungif
 , libtiff, librsvg, texinfo, gconf, libxml2, imagemagick, gnutls
 , alsaLib, cairo, acl, gpm
 , withX ? !stdenv.isDarwin
@@ -7,8 +7,8 @@
 , withGTK2 ? true, gtk2
 }:
 
-assert (libXft != null) -> libpng != null;	# probably a bug
-assert stdenv.isDarwin -> libXaw != null;	# fails to link otherwise
+assert (libXft != null) -> libpng != null;      # probably a bug
+assert stdenv.isDarwin -> libXaw != null;       # fails to link otherwise
 assert withGTK2 -> withX || stdenv.isDarwin;
 assert withGTK3 -> withX || stdenv.isDarwin;
 assert withGTK2 -> !withGTK3 && gtk2 != null;
@@ -35,8 +35,12 @@ stdenv.mkDerivation rec {
     ./at-fdcwd.patch
   ];
 
+  postPatch = ''
+    sed -i 's|/usr/share/locale|${gettext}/share/locale|g' lisp/international/mule-cmds.el
+  '';
+
   buildInputs =
-    [ ncurses gconf libxml2 gnutls alsaLib pkgconfig texinfo acl gpm ]
+    [ ncurses gconf libxml2 gnutls alsaLib pkgconfig texinfo acl gpm gettext ]
     ++ stdenv.lib.optional stdenv.isLinux dbus
     ++ stdenv.lib.optionals withX
       [ x11 libXaw Xaw3d libXpm libpng libjpeg libungif libtiff librsvg libXft

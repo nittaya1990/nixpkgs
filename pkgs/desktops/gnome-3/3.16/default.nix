@@ -20,24 +20,31 @@ let
     gtk3 # for gtk-update-icon-cache
     glib_networking gvfs dconf gnome-backgrounds gnome_control_center
     gnome-menus gnome_settings_daemon gnome_shell
-    gnome_themes_standard defaultIconTheme
+    gnome_themes_standard defaultIconTheme gnome-shell-extensions
+    pkgs.hicolor_icon_theme
   ];
 
   optionalPackages = with gnome3; [ baobab empathy eog epiphany evince
     gucharmap nautilus totem vino yelp gnome-bluetooth
     gnome-calculator gnome-contacts gnome-font-viewer gnome-screenshot
-    gnome-shell-extensions gnome-system-log gnome-system-monitor
+    gnome-system-log gnome-system-monitor
     gnome_terminal gnome-user-docs bijiben evolution file-roller gedit
     gnome-clocks gnome-music gnome-tweak-tool gnome-photos
     nautilus-sendto dconf-editor vinagre
   ];
 
-  inherit (pkgs) libsoup glib gtk2 webkitgtk24x gtk3 gtkmm3 libcanberra;
+  gamesPackages = with gnome3; [ swell-foop lightsoff iagno
+    tali quadrapassel
+  ];
+
+  inherit (pkgs) glib gtk2 webkitgtk24x gtk3 gtkmm3 libcanberra;
   inherit (pkgs.gnome2) ORBit2;
+  libsoup = pkgs.libsoup.override { gnomeSupport = true; };
   orbit = ORBit2;
   gnome3 = self // { recurseForDerivations = false; };
   clutter = pkgs.clutter_1_22;
   clutter_gtk = pkgs.clutter_gtk_1_6.override { inherit clutter gtk3; };
+  clutter-gst_2 = pkgs.clutter-gst;
   clutter-gst = pkgs.clutter-gst_3_0.override { inherit clutter; };
   cogl = pkgs.cogl_1_20;
   gtk = gtk3;
@@ -47,6 +54,7 @@ let
   gegl_0_3 = pkgs.gegl_0_3.override { inherit gtk; };
 
   version = "3.16";
+  maintainers = with pkgs.lib.maintainers; [ lethalman jgeerds ];
 
 # Simplify the nixos module and gnome packages
   defaultIconTheme = adwaita-icon-theme;
@@ -239,6 +247,8 @@ let
     webkitgtk = webkitgtk24x;
   };
 
+  cheese = callPackage ./apps/cheese { };
+
   evolution = callPackage ./apps/evolution {
     webkitgtk = webkitgtk24x;
   };
@@ -279,6 +289,18 @@ let
 
   gdl = callPackage ./devtools/gdl { };
 
+#### Games
+
+  iagno = callPackage ./games/iagno { };
+
+  lightsoff = callPackage ./games/lightsoff { };
+
+  swell-foop = callPackage ./games/swell-foop { };
+
+  tali = callPackage ./games/tali { };
+
+  quadrapassel = callPackage ./games/quadrapassel { };
+
 #### Misc -- other packages on http://ftp.gnome.org/pub/GNOME/sources/
 
   california = callPackage ./misc/california { };
@@ -310,6 +332,8 @@ let
   gtkhtml = callPackage ./misc/gtkhtml { };
 
   pomodoro = callPackage ./misc/pomodoro { };
+
+  gnome-video-effects = callPackage ./misc/gnome-video-effects { };
 
     };
   in self; # pkgsFun

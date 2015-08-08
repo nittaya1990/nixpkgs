@@ -212,14 +212,14 @@ in
 
   android-studio = buildAndroidStudio rec {
     name = "android-studio-${version}";
-    version = "1.2.1.1";
-    build = "141.1903250";
+    version = "1.2.2.0";
+    build = "141.1980579";
     description = "Android development environment based on IntelliJ IDEA";
     license = stdenv.lib.licenses.asl20;
     src = fetchurl {
       url = "https://dl.google.com/dl/android/studio/ide-zips/${version}" +
             "/android-studio-ide-${build}-linux.zip";
-      sha256 = "17n0hsw0655b2w7a3avj5hw6njhv4gayxnsj1bwi9p3dgzr5d5zp";
+      sha256 = "08bayp2kxxg0zdmd1rcfg89g80wmwxf56fzmk5xkz1qg6s9b98a6";
     };
   };
 
@@ -273,37 +273,37 @@ in
 
   pycharm-community = buildPycharm rec {
     name = "pycharm-community-${version}";
-    version = "4.5.2";
-    build = "141.1580";
+    version = "4.5.3";
+    build = "141.1899";
     description = "PyCharm Community Edition";
     license = stdenv.lib.licenses.asl20;
     src = fetchurl {
       url = "https://download.jetbrains.com/python/${name}.tar.gz";
-      sha256 = "09v1ni06h381y7d5cglifwsz81kln2y4ld7hgpz1sn56fwbi8ld9";
+      sha256 = "13f3mp7gcl27fikxjlwk7n1gyxa46q0wfgniang4knb596wlfli0";
     };
   };
 
   pycharm-professional = buildPycharm rec {
     name = "pycharm-professional-${version}";
-    version = "4.5.2";
-    build = "141.1580";
+    version = "4.5.3";
+    build = "141.1899";
     description = "PyCharm Professional Edition";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/python/${name}.tar.gz";
-      sha256 = "1dgpzn7wgaxicgw48z83fp462g5mxsr7iwkgp11ffypz93ba2dm7";
+      sha256 = "00b66fy841vjm54n2fby5wf7y8ihihqgydr6329iv9p5s0mgzh2s";
     };
   };
 
   phpstorm = buildPhpStorm rec {
     name = "phpstorm-${version}";
-    version = "8.0.3";
-    build = "PS-139.1348";
+    version = "9.0";
+    build = "PS-141.1912";
     description = "Professional IDE for Web and PHP developers";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/webide/PhpStorm-${version}.tar.gz";
-      sha256 = "1x67nfr3nap93cx7yhdrp02xvp1v6g74zy7hdmhx41sal7hzy49b";
+      sha256 = "1n6p8xiv0nrs6yf0250mpga291msnrfamv573dva9f17cc3df2pp";
     };
   };
 

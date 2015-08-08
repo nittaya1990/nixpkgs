@@ -8,7 +8,7 @@ import ./make-test.nix ({ pkgs, ... }: with pkgs.lib; let
         #!${pkgs.stdenv.shell} -xe
         export PATH="${pkgs.coreutils}/bin:${pkgs.utillinux}/bin"
 
-        ${pkgs.linuxPackages.virtualboxGuestAdditions}/sbin/VBoxService
+        ${pkgs.linuxPackages.virtualboxGuestAdditions}/bin/VBoxService
         ${(attrs.vmScript or (const "")) pkgs}
 
         i=0
@@ -39,7 +39,7 @@ import ./make-test.nix ({ pkgs, ... }: with pkgs.lib; let
     ];
 
     boot.initrd.extraUtilsCommands = ''
-      copy_bin_and_libs "${pkgs.linuxPackages.virtualboxGuestAdditions}/sbin/mount.vboxsf"
+      copy_bin_and_libs "${pkgs.linuxPackages.virtualboxGuestAdditions}/bin/mount.vboxsf"
       copy_bin_and_libs "${pkgs.utillinux}/bin/unshare"
       ${(attrs.extraUtilsCommands or (const "")) pkgs}
     '';
@@ -298,6 +298,9 @@ import ./make-test.nix ({ pkgs, ... }: with pkgs.lib; let
 
 in {
   name = "virtualbox";
+  meta = with pkgs.stdenv.lib.maintainers; {
+    maintainers = [ aszlig wkennington ];
+  };
 
   machine = { pkgs, lib, config, ... }: {
     imports = let

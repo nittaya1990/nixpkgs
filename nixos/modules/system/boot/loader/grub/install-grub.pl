@@ -7,6 +7,7 @@ use File::Path;
 use File::stat;
 use File::Copy;
 use File::Slurp;
+use File::Temp;
 require List::Compare;
 use POSIX;
 use Cwd;
@@ -185,7 +186,7 @@ sub GrubFs {
                 if ($status != 0) {
                     die "Failed to retrieve subvolume info for @{[$fs->mount]}\n";
                 }
-                my @ids = join("", @id_info) =~ m/Object ID:[ \t\n]*([^ \t\n]*)/;
+                my @ids = join("", @id_info) =~ m/Subvolume ID:[ \t\n]*([^ \t\n]*)/;
                 if ($#ids > 0) {
                     die "Btrfs subvol name for @{[$fs->device]} listed multiple times in mount\n"
                 } elsif ($#ids == 0) {
@@ -236,6 +237,7 @@ else {
         $conf .= "
             " . $grubStore->search;
     }
+    # FIXME: should use grub-mkconfig.
     $conf .= "
         " . $grubBoot->search . "
         if [ -s \$prefix/grubenv ]; then
@@ -244,14 +246,12 @@ else {
 
         # ‘grub-reboot’ sets a one-time saved entry, which we process here and
         # then delete.
-        if [ \"\${saved_entry}\" ]; then
-          # The next line *has* to look exactly like this, otherwise KDM's
-          # reboot feature won't work properly with GRUB 2.
+        if [ \"\${next_entry}\" ]; then
+          # FIXME: KDM expects the next line to be present.
           set default=\"\${saved_entry}\"
-          set saved_entry=
-          set prev_saved_entry=
-          save_env saved_entry
-          save_env prev_saved_entry
+          set default=\"\${next_entry}\"
+          set next_entry=
+          save_env next_entry
           set timeout=1
         else
           set default=$defaultEntry
@@ -433,15 +433,18 @@ foreach my $fn (glob "$bootPath/kernels/*") {
 #
 
 struct(GrubState => {
+    name => '$',
     version => '$',
     efi => '$',
     devices => '$',
     efiMountPoint => '$',
 });
 sub readGrubState {
-    my $defaultGrubState = GrubState->new(version => "", efi => "", devices => "", efiMountPoint => "" );
+    my $defaultGrubState = GrubState->new(name => "", version => "", efi => "", devices => "", efiMountPoint => "" );
     open FILE, "<$bootPath/grub/state" or return $defaultGrubState;
     local $/ = "\n";
+    my $name = <FILE>;
+    chomp($name);
     my $version = <FILE>;
     chomp($version);
     my $efi = <FILE>;
@@ -451,7 +454,7 @@ sub readGrubState {
     my $efiMountPoint = <FILE>;
     chomp($efiMountPoint);
     close FILE;
-    my $grubState = GrubState->new(version => $version, efi => $efi, devices => $devices, efiMountPoint => $efiMountPoint );
+    my $grubState = GrubState->new(name => $name, version => $version, efi => $efi, devices => $devices, efiMountPoint => $efiMountPoint );
     return $grubState
 }
 
@@ -496,20 +499,16 @@ my $efiTarget = getEfiTarget();
 my $prevGrubState = readGrubState();
 my @prevDeviceTargets = split/:/, $prevGrubState->devices;
 
-my $devicesDiffer = scalar (List::Compare->new( '-u', '-a', \@deviceTargets, \@prevDeviceTargets)->get_symmetric_difference() );
-my $versionDiffer = (get("fullVersion") eq \$prevGrubState->version);
-my $efiDiffer = ($efiTarget eq \$prevGrubState->efi);
-my $efiMountPointDiffer = ($efiSysMountPoint eq \$prevGrubState->efiMountPoint);
-my $requireNewInstall = $devicesDiffer || $versionDiffer || $efiDiffer || $efiMountPointDiffer || (($ENV{'NIXOS_INSTALL_GRUB'} // "") eq "1");
+my $devicesDiffer = scalar (List::Compare->new( '-u', '-a', \@deviceTargets, \@prevDeviceTargets)->get_symmetric_difference());
+my $nameDiffer = get("fullName") ne $prevGrubState->name;
+my $versionDiffer = get("fullVersion") ne $prevGrubState->version;
+my $efiDiffer = $efiTarget ne $prevGrubState->efi;
+my $efiMountPointDiffer = $efiSysMountPoint ne $prevGrubState->efiMountPoint;
+my $requireNewInstall = $devicesDiffer || $nameDiffer || $versionDiffer || $efiDiffer || $efiMountPointDiffer || (($ENV{'NIXOS_INSTALL_GRUB'} // "") eq "1");
 
-# install a symlink so that grub can detect the boot drive when set
-# as the root directory
-if (! -l "$bootPath/boot") {
-    if (-e "$bootPath/boot") {
-        unlink "$bootPath/boot";
-    }
-    symlink ".", "$bootPath/boot";
-}
+# install a symlink so that grub can detect the boot drive
+my $tmpDir = File::Temp::tempdir(CLEANUP => 1) or die "Failed to create temporary space";
+symlink "$bootPath", "$tmpDir/boot" or die "Failed to symlink $tmpDir/boot";
 
 # install non-EFI GRUB
 if (($requireNewInstall != 0) && ($efiTarget eq "no" || $efiTarget eq "both")) {
@@ -517,10 +516,10 @@ if (($requireNewInstall != 0) && ($efiTarget eq "no" || $efiTarget eq "both")) {
         next if $dev eq "nodev";
         print STDERR "installing the GRUB $grubVersion boot loader on $dev...\n";
         if ($grubTarget eq "") {
-            system("$grub/sbin/grub-install", "--recheck", "--root-directory=$bootPath", Cwd::abs_path($dev)) == 0
+            system("$grub/sbin/grub-install", "--recheck", "--root-directory=$tmpDir", Cwd::abs_path($dev)) == 0
                 or die "$0: installation of GRUB on $dev failed\n";
         } else {
-            system("$grub/sbin/grub-install", "--recheck", "--root-directory=$bootPath", "--target=$grubTarget", Cwd::abs_path($dev)) == 0
+            system("$grub/sbin/grub-install", "--recheck", "--root-directory=$tmpDir", "--target=$grubTarget", Cwd::abs_path($dev)) == 0
                 or die "$0: installation of GRUB on $dev failed\n";
         }
     }
@@ -543,6 +542,7 @@ if (($requireNewInstall != 0) && ($efiTarget eq "only" || $efiTarget eq "both"))
 # update GRUB state file
 if ($requireNewInstall != 0) {
     open FILE, ">$bootPath/grub/state" or die "cannot create $bootPath/grub/state: $!\n";
+    print FILE get("fullName"), "\n" or die;
     print FILE get("fullVersion"), "\n" or die;
     print FILE $efiTarget, "\n" or die;
     print FILE join( ":", @deviceTargets ), "\n" or die;
