@@ -37,11 +37,6 @@ self: super: {
   # Use the default version of mysql to build this package (which is actually mariadb).
   mysql = super.mysql.override { mysql = pkgs.mysql.lib; };
 
-  # Please also remove optparse-applicative special case from
-  # cabal2nix/hackage2nix.hs when removing the following.
-  elm-make = super.elm-make.override { optparse-applicative = self.optparse-applicative_0_10_0; };
-  elm-package = super.elm-package.override { optparse-applicative = self.optparse-applicative_0_10_0; };
-
   # Link the proper version.
   zeromq4-haskell = super.zeromq4-haskell.override { zeromq = pkgs.zeromq4; };
 
@@ -171,7 +166,7 @@ self: super: {
   # Jailbreak doesn't get the job done because the Cabal file uses conditionals a lot.
   darcs = (overrideCabal super.darcs (drv: {
     doCheck = false;            # The test suite won't even start.
-    patchPhase = "sed -i -e 's|attoparsec .*,|attoparsec,|' darcs.cabal";
+    postPatch = "sed -i -e 's|attoparsec .*,|attoparsec,|' -e 's|vector .*,|vector,|' darcs.cabal";
   })).overrideScope (self: super: { zlib = self.zlib_0_5_4_2; });
 
   # https://github.com/massysett/rainbox/issues/1
@@ -211,7 +206,7 @@ self: super: {
   x509-system = if pkgs.stdenv.isDarwin && !pkgs.stdenv.cc.nativeLibc
     then let inherit (pkgs.darwin) security_tool;
       in pkgs.lib.overrideDerivation (addBuildDepend super.x509-system security_tool) (drv: {
-        patchPhase = (drv.patchPhase or "") + ''
+        postPatch = (drv.postPatch or "") + ''
           substituteInPlace System/X509/MacOS.hs --replace security ${security_tool}/bin/security
         '';
       })
@@ -221,7 +216,7 @@ self: super: {
     then super.double-conversion
     else overrideCabal super.double-conversion (drv:
       {
-        patchPhase = ''
+        postPatch = ''
           substituteInPlace double-conversion.cabal --replace stdc++ c++
         '';
       });
@@ -259,14 +254,8 @@ self: super: {
   gtk = addBuildDepends super.gtk [pkgs.pkgconfig pkgs.gtk];
   gtksourceview3 = super.gtksourceview3.override { inherit (pkgs.gnome3) gtksourceview; };
 
-  # webkit does not recognize its system library build input any more.
-  webkit = markBroken super.webkit; # http://hydra.cryp.to/build/1041942/nixlog/1/raw
-  ghcjs-dom-hello = dontDistribute super.ghcjs-dom-hello;       # depends on broken webkit
-  ghcjs-dom = dontDistribute super.ghcjs-dom;                   # depends on broken webkit
-  jsaddle-hello = dontDistribute super.jsaddle-hello;           # depends on broken webkit
-  reflex-dom = dontDistribute super.reflex-dom;                 # depends on broken webkit
-
   # Need WebkitGTK, not just webkit.
+  webkit = super.webkit.override { webkit = pkgs.webkitgtk2; };
   webkitgtk3 = super.webkitgtk3.override { webkit = pkgs.webkitgtk24x; };
   webkitgtk3-javascriptcore = super.webkitgtk3-javascriptcore.override { webkit = pkgs.webkitgtk24x; };
   websnap = super.websnap.override { webkit = pkgs.webkitgtk24x; };
@@ -325,6 +314,7 @@ self: super: {
   xkbcommon = dontCheck super.xkbcommon;
   xmlgen = dontCheck super.xmlgen;
   ide-backend = dontCheck super.ide-backend;
+  msgpack-rpc = dontCheck super.msgpack-rpc;
 
   # These packages try to access the network.
   amqp = dontCheck super.amqp;
@@ -404,7 +394,6 @@ self: super: {
   dotfs = dontCheck super.dotfs;                        # http://hydra.cryp.to/build/498599/log/raw
   DRBG = dontCheck super.DRBG;                          # http://hydra.cryp.to/build/498245/nixlog/1/raw
   either-unwrap = dontCheck super.either-unwrap;        # http://hydra.cryp.to/build/498782/log/raw
-  elm-repl = dontCheck super.elm-repl;                  # http://hydra.cryp.to/build/501878/nixlog/1/raw
   etcd = dontCheck super.etcd;
   fb = dontCheck super.fb;                              # needs credentials for Facebook
   fptest = dontCheck super.fptest;                      # http://hydra.cryp.to/build/499124/log/raw
@@ -412,7 +401,6 @@ self: super: {
   ghc-events-parallel = dontCheck super.ghc-events-parallel;    # http://hydra.cryp.to/build/496828/log/raw
   ghcid = dontCheck super.ghcid;
   ghc-imported-from = dontCheck super.ghc-imported-from;
-  ghc-mod = dontCheck super.ghc-mod;                    # http://hydra.cryp.to/build/499674/log/raw
   ghc-parmake = dontCheck super.ghc-parmake;
   gitlib-cmdline = dontCheck super.gitlib-cmdline;
   git-vogue = dontCheck super.git-vogue;
@@ -733,7 +721,7 @@ self: super: {
 
   # Already fixed in upstream darcs repo.
   xmonad-contrib = overrideCabal super.xmonad-contrib (drv: {
-    patchPhase = ''
+    postPatch = ''
       sed -i -e '24iimport Control.Applicative' XMonad/Util/Invisible.hs
       sed -i -e '22iimport Control.Applicative' XMonad/Hooks/DebugEvents.hs
     '';
@@ -744,7 +732,7 @@ self: super: {
 
   # Hardcoded include path
   poppler = overrideCabal super.poppler (drv: {
-    patchPhase = ''
+    postPatch = ''
       sed -i -e 's,glib/poppler.h,poppler.h,' poppler.cabal
       sed -i -e 's,glib/poppler.h,poppler.h,' Graphics/UI/Gtk/Poppler/Structs.hsc
     '';
@@ -781,9 +769,7 @@ self: super: {
   # https://github.com/nushio3/doctest-prop/issues/1
   doctest-prop = dontCheck super.doctest-prop;
 
-  # https://github.com/goldfirere/singletons/issues/116
   # https://github.com/goldfirere/singletons/issues/117
-  # https://github.com/goldfirere/singletons/issues/118
   clash-lib = dontDistribute super.clash-lib;
   clash-verilog = dontDistribute super.clash-verilog;
   Frames = dontDistribute super.Frames;
@@ -793,6 +779,12 @@ self: super: {
   singleton-nats = dontDistribute super.singleton-nats;
   singletons = markBroken super.singletons;
   units-attoparsec = dontDistribute super.units-attoparsec;
+  ihaskell-widgets = dontDistribute super.ihaskell-widgets;
+  exinst-bytes = dontDistribute super.exinst-bytes;
+  exinst-deepseq = dontDistribute super.exinst-deepseq;
+  exinst-aeson = dontDistribute super.exinst-aeson;
+  exinst = dontDistribute super.exinst;
+  exinst-hashable = dontDistribute super.exinst-hashable;
 
   # https://github.com/anton-k/temporal-music-notation/issues/1
   temporal-music-notation = markBroken super.temporal-music-notation;
@@ -819,9 +811,6 @@ self: super: {
   # https://github.com/kkardzis/curlhs/issues/6
   curlhs = dontCheck super.curlhs;
 
-  # This needs the latest version of errors to compile.
-  pipes-errors = super.pipes-errors.override { errors = self.errors_2_0_0; };
-
   # https://github.com/hvr/token-bucket/issues/3
   token-bucket = dontCheck super.token-bucket;
 
@@ -833,9 +822,6 @@ self: super: {
 
   # FPCO's fork of Cabal won't succeed its test suite.
   Cabal-ide-backend = dontCheck super.Cabal-ide-backend;
-
-  # https://github.com/DanielG/cabal-helper/issues/2
-  cabal-helper = overrideCabal super.cabal-helper (drv: { preCheck = "export HOME=$TMPDIR"; });
 
   # https://github.com/ekmett/comonad/issues/25
   comonad = dontCheck super.comonad;
@@ -881,23 +867,6 @@ self: super: {
   # https://github.com/hspec/mockery/issues/6
   mockery = overrideCabal super.mockery (drv: { preCheck = "export TRAVIS=true"; });
 
-  # https://github.com/diagrams/diagrams-lib/issues/258
-  # https://github.com/diagrams/diagrams-lib/issues/259
-  diagrams-lib = markBroken super.diagrams-lib;
-  diagrams-cairo = dontDistribute super.diagrams-cairo;
-  diagrams-gtk = dontDistribute super.diagrams-gtk;
-  diagrams-html5 = dontDistribute super.diagrams-html5;
-  diagrams-pandoc = dontDistribute super.diagrams-pandoc;
-  diagrams-postscript = dontDistribute super.diagrams-postscript;
-  diagrams-rasterific = dontDistribute super.diagrams-rasterific;
-  diagrams-rubiks-cube = dontDistribute super.diagrams-rubiks-cube;
-  diagrams-svg = dontDistribute super.diagrams-svg;
-  halma = dontDistribute super.halma;
-  midi-music-box = dontDistribute super.midi-music-box;
-  potrace-diagrams = dontDistribute super.potrace-diagrams;
-  SVGFonts = dontDistribute super.SVGFonts;
-  yesod-media-simple = dontDistribute super.yesod-media-simple;
-
   # https://github.com/alphaHeavy/lzma-conduit/issues/5
   lzma-conduit = dontCheck super.lzma-conduit;
 
@@ -925,5 +894,87 @@ self: super: {
 
   # https://github.com/liyang/thyme/issues/36
   thyme = dontCheck super.thyme;
+
+  # https://github.com/k0ral/hbro-contrib/issues/1
+  hbro-contrib = dontDistribute super.hbro-contrib;
+
+  # https://github.com/aka-bash0r/multi-cabal/issues/4
+  multi-cabal = markBroken super.multi-cabal;
+
+  # Elm is no longer actively maintained on Hackage: https://github.com/NixOS/nixpkgs/pull/9233.
+  Elm = markBroken super.Elm;
+  elm-build-lib = markBroken super.elm-build-lib;
+  elm-compiler = markBroken super.elm-compiler;
+  elm-get = markBroken super.elm-get;
+  elm-make = markBroken super.elm-make;
+  elm-package = markBroken super.elm-package;
+  elm-reactor = markBroken super.elm-reactor;
+  elm-repl = markBroken super.elm-repl;
+  elm-server = markBroken super.elm-server;
+  elm-yesod = markBroken super.elm-yesod;
+
+  # https://github.com/GaloisInc/HaNS/pull/8
+  hans = appendPatch super.hans ./patches/hans-disable-webserver.patch;
+
+  # https://github.com/athanclark/sets/issues/2
+  sets = dontCheck super.sets;
+
+  # https://github.com/lens/lens-aeson/issues/18
+  lens-aeson = dontCheck super.lens-aeson;
+
+  # Byte-compile elisp code for Emacs.
+  ghc-mod = overrideCabal super.ghc-mod (drv: {
+    preCheck = "export HOME=$TMPDIR";
+    testToolDepends = drv.testToolDepends or [] ++ [self.cabal-install];
+    doCheck = false;            # https://github.com/kazu-yamamoto/ghc-mod/issues/335
+    executableToolDepends = drv.executableToolDepends or [] ++ [pkgs.emacs];
+    postInstall = ''
+      local lispdir=( "$out/share/"*"-${self.ghc.name}/${drv.pname}-${drv.version}/elisp" )
+      make -C $lispdir
+      mkdir -p $out/share/emacs/site-lisp
+      ln -s "$lispdir/"*.el{,c} $out/share/emacs/site-lisp/
+    '';
+  });
+
+  # Byte-compile elisp code for Emacs.
+  structured-haskell-mode = overrideCabal super.structured-haskell-mode (drv: {
+    executableToolDepends = drv.executableToolDepends or [] ++ [pkgs.emacs];
+    postInstall = ''
+      local lispdir=( "$out/share/"*"-${self.ghc.name}/${drv.pname}-${drv.version}/elisp" )
+      pushd >/dev/null $lispdir
+      for i in *.el; do
+        emacs -Q -L . -L ${pkgs.emacs24Packages.haskellMode}/share/emacs/site-lisp \
+          --batch --eval "(byte-compile-disable-warning 'cl-functions)" \
+          -f batch-byte-compile $i
+      done
+      popd >/dev/null
+      mkdir -p $out/share/emacs
+      ln -s $lispdir $out/share/emacs/site-lisp
+    '';
+  });
+
+  # Byte-compile elisp code for Emacs.
+  hindent = overrideCabal super.hindent (drv: {
+    executableToolDepends = drv.executableToolDepends or [] ++ [pkgs.emacs];
+    postInstall = ''
+      local lispdir=( "$out/share/"*"-${self.ghc.name}/${drv.pname}-${drv.version}/elisp" )
+      pushd >/dev/null $lispdir
+      for i in *.el; do
+        emacs -Q -L . -L ${pkgs.emacs24Packages.haskellMode}/share/emacs/site-lisp \
+          --batch --eval "(byte-compile-disable-warning 'cl-functions)" \
+          -f batch-byte-compile $i
+      done
+      popd >/dev/null
+      mkdir -p $out/share/emacs
+      ln -s $lispdir $out/share/emacs/site-lisp
+    '';
+  });
+
+  # https://github.com/yesodweb/Shelly.hs/issues/106
+  # https://github.com/yesodweb/Shelly.hs/issues/108
+  shelly = dontCheck super.shelly;
+
+  # https://github.com/bos/configurator/issues/22
+  configurator = dontCheck super.configurator;
 
 }
