@@ -22,7 +22,8 @@
 , enableStaticLibraries ? true
 , extraLibraries ? [], librarySystemDepends ? [], executableSystemDepends ? []
 , homepage ? "http://hackage.haskell.org/package/${pname}"
-, hydraPlatforms ? ghc.meta.hydraPlatforms or ghc.meta.platforms
+, platforms ? ghc.meta.platforms
+, hydraPlatforms ? platforms
 , hyperlinkSource ? true
 , isExecutable ? false, isLibrary ? !isExecutable
 , jailbreak ? false
@@ -31,7 +32,6 @@
 , doHaddock ? !stdenv.isDarwin || stdenv.lib.versionAtLeast ghc.version "7.8"
 , passthru ? {}
 , pkgconfigDepends ? [], libraryPkgconfigDepends ? [], executablePkgconfigDepends ? [], testPkgconfigDepends ? []
-, platforms ? ghc.meta.platforms
 , testDepends ? [], testHaskellDepends ? [], testSystemDepends ? []
 , testTarget ? ""
 , broken ? false
@@ -42,6 +42,7 @@
 , installPhase ? "", preInstall ? "", postInstall ? ""
 , checkPhase ? "", preCheck ? "", postCheck ? ""
 , preFixup ? "", postFixup ? ""
+, shellHook ? ""
 , coreSetup ? false # Use only core packages to build Setup.hs.
 , useCpphs ? false
 } @ args:
@@ -130,7 +131,7 @@ in
 assert allPkgconfigDepends != [] -> pkgconfig != null;
 
 stdenv.mkDerivation ({
-  name = "${optionalString (hasActiveLibrary && pname != "ghcjs") "haskell-"}${pname}-${version}";
+  name = "${pname}-${version}";
 
   pos = builtins.unsafeGetAttrPos "pname" args;
 
@@ -270,7 +271,7 @@ stdenv.mkDerivation ({
     isHaskellLibrary = hasActiveLibrary;
 
     env = stdenv.mkDerivation {
-      name = "interactive-${optionalString (hasActiveLibrary && pname != "ghcjs") "haskell-"}${pname}-${version}-environment";
+      name = "interactive-${pname}-${version}-environment";
       nativeBuildInputs = [ ghcEnv systemBuildInputs ];
       LANG = "en_US.UTF-8";
       LOCALE_ARCHIVE = optionalString stdenv.isLinux "${glibcLocales}/lib/locale/locale-archive";
@@ -279,6 +280,7 @@ stdenv.mkDerivation ({
         export NIX_${ghcCommandCaps}PKG="${ghcEnv}/bin/${ghcCommand}-pkg"
         export NIX_${ghcCommandCaps}_DOCDIR="${ghcEnv}/share/doc/ghc/html"
         export NIX_${ghcCommandCaps}_LIBDIR="${ghcEnv}/lib/${ghcEnv.name}"
+        ${shellHook}
       '';
     };
 

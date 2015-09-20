@@ -23,6 +23,10 @@ in
         <emphasis>GDM is very experimental and may render system unusable.</emphasis>
       '';
 
+      debug = mkEnableOption ''
+        debugging messages in GDM
+      '';
+
       autoLogin = mkOption {
         default = {};
         description = ''
@@ -35,7 +39,7 @@ in
               type = types.bool;
               default = false;
               description = ''
-                Automatically log in as the sepecified <option>auto.user</option>.
+                Automatically log in as the sepecified <option>autoLogin.user</option>.
               '';
             };
 
@@ -67,6 +71,12 @@ in
   ###### implementation
 
   config = mkIf cfg.gdm.enable {
+
+    assertions = [
+      { assertion = cfg.gdm.autoLogin.enable -> cfg.gdm.autoLogin.user != null;
+        message = "GDM auto-login requires services.xserver.displayManager.gdm.autoLogin.user to be set";
+      }
+    ];
 
     services.xserver.displayManager.slim.enable = false;
 
@@ -102,13 +112,21 @@ in
 
     programs.dconf.profiles.gdm = "${gdm}/share/dconf/profile/gdm";
 
+    # Use AutomaticLogin if delay is zero, because it's immediate.
+    # Otherwise with TimedLogin with zero seconds the prompt is still
+    # presented and there's a little delay.
     environment.etc."gdm/custom.conf".text = ''
       [daemon]
-      ${optionalString cfg.gdm.autoLogin.enable ''
-      TimedLoginEnable=true
-      TimedLogin=${cfg.gdm.autoLogin.user}
-      TimedLoginDelay=${toString cfg.gdm.autoLogin.delay}
-      ''}
+      ${optionalString cfg.gdm.autoLogin.enable (
+        if cfg.gdm.autoLogin.delay > 0 then ''
+          TimedLoginEnable=true
+          TimedLogin=${cfg.gdm.autoLogin.user}
+          TimedLoginDelay=${toString cfg.gdm.autoLogin.delay}
+        '' else ''
+          AutomaticLoginEnable=true
+          AutomaticLogin=${cfg.gdm.autoLogin.user}
+        '')
+      }
 
       [security]
 
@@ -119,6 +137,7 @@ in
       [chooser]
 
       [debug]
+      ${optionalString cfg.gdm.debug "Enable=true"}
     '';
 
     # GDM LFS PAM modules, adapted somehow to NixOS

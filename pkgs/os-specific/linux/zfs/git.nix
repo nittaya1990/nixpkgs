@@ -1,13 +1,13 @@
 { callPackage, stdenv, fetchFromGitHub, spl_git, ... } @ args:
 
 callPackage ./generic.nix (args // rec {
-  version = "2015-07-21";
+  version = "2015-09-19";
 
   src = fetchFromGitHub {
     owner = "zfsonlinux";
     repo = "zfs";
-    rev = "3b79cef21294f3ec46c4f71cc5a68a75a4d0ebc7";
-    sha256 = "01l4cg62wgn3wzasskx2nh3a4c74vq8qcwz090x8x1r4c2r4v943";
+    rev = "3af56fd95fbe8b417d7ed7c9c25ef59d6f1ee161";
+    sha256 = "08sx1jzwrsdyvvlcf5as7rkglgbx5x6zvfn8ps8gk4miqfckq4z0";
   };
 
   patches = [ ./nix-build.patch ];

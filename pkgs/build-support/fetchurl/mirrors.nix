@@ -173,6 +173,7 @@ rec {
 
   # Debian.
   debian = [
+    http://httpredir.debian.org/debian/
     ftp://ftp.au.debian.org/debian/
     ftp://ftp.de.debian.org/debian/
     ftp://ftp.es.debian.org/debian/
@@ -280,6 +281,7 @@ rec {
     http://archive.apache.org/dist/ # fallback for old releases
     ftp://ftp.funet.fi/pub/mirrors/apache.org/
     http://apache.cs.uu.nl/dist/
+    http://apache.cs.utah.edu/
   ];
 
   postgresql = [

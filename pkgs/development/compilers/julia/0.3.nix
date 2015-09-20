@@ -1,24 +1,35 @@
 { stdenv, fetchgit, fetchurl
 # build tools
-, gfortran, git, m4, patchelf, perl, which
+, gfortran, git, m4, patchelf, perl, which, python2
 # libjulia dependencies
 , libunwind, llvm, readline, utf8proc, zlib
 # standard library dependencies
 , double_conversion, fftwSinglePrec, fftw, glpk, gmp, mpfr, pcre
+# linear algebra
 , openblas, arpack, suitesparse
 }:
 
 with stdenv.lib;
 
+# All dependencies should use the same OpenBLAS.
+let
+  arpack_ = arpack;
+  suitesparse_ = suitesparse;
+in
+let
+  arpack = arpack_.override { inherit openblas; };
+  suitesparse = suitesparse_.override { inherit openblas; };
+in
+
 stdenv.mkDerivation rec {
   pname = "julia";
-  version = "0.3.10";
+  version = "0.3.11";
   name = "${pname}-${version}";
 
   src = fetchgit {
     url = "git://github.com/JuliaLang/julia.git";
     rev = "refs/tags/v${version}";
-    sha256 = "0px1zd7qmz6rrjf58k4kq55s7h8mny1w6xvcsrny2wbgckxzhqsg";
+    sha256 = "06xmv2l8hskdh1s5y2dh28vpb5pc0gzmfl5a03yp0qjjsl5cb284";
     name = "julia-git-v${version}";
   };
 
@@ -33,6 +44,7 @@ stdenv.mkDerivation rec {
         name = "dsfmt-${dsfmt_ver}.tar.gz";
         md5 = "cb61be3be7254eae39684612c524740d";
       };
+
     in [ dsfmt_src ];
 
   prePatch = ''
@@ -58,22 +70,18 @@ stdenv.mkDerivation rec {
     sed -e "s@/sbin/ldconfig@true@" -i src/ccall.*
   '';
 
-  buildInputs =
-    [ libunwind llvm readline utf8proc zlib
-      double_conversion fftw fftwSinglePrec glpk gmp mpfr pcre
-      openblas arpack suitesparse
-    ];
+  buildInputs = [
+    arpack double_conversion fftw fftwSinglePrec glpk gmp libunwind
+    llvm mpfr pcre openblas readline suitesparse utf8proc zlib
+  ];
 
-  nativeBuildInputs = [ gfortran git m4 patchelf perl which ];
+  nativeBuildInputs = [ gfortran git m4 patchelf perl python2 which ];
 
   makeFlags =
     let
       arch = head (splitString "-" stdenv.system);
-      march =
-        { "x86_64-linux" = "x86-64";
-          "x86_64-darwin" = "x86-64";
-          "i686-linux" = "i686";
-        }."${stdenv.system}" or (throw "unsupported system: ${stdenv.system}");
+      march = { "x86_64" = "x86-64"; "i686" = "i686"; }."${arch}"
+              or (throw "unsupported architecture: ${arch}");
     in [
       "ARCH=${arch}"
       "MARCH=${march}"
@@ -142,6 +150,5 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.mit;
     maintainers = with stdenv.lib.maintainers; [ raskin ttuegel ];
     platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" ];
-    broken = false;
   };
 }
