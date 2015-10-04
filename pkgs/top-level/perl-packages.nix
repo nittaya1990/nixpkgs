@@ -715,15 +715,15 @@ let self = _self // overrides; _self = with self; {
   };
 
   Cairo = buildPerlPackage rec {
-    name = "Cairo-1.105";
+    name = "Cairo-1.106";
     src = fetchurl {
       url = "mirror://cpan/authors/id/X/XA/XAOC/${name}.tar.gz";
-      sha256 = "0im025wy1346w7b7hi6im08bfn6x4ma0cxmjz6xnk8riizm1s84q";
+      sha256 = "1i25kks408c54k2zxskvg54l5k3qadzm8n72ffga9jy7ic0h6j76";
     };
     buildInputs = [ ExtUtilsDepends ExtUtilsPkgConfig pkgs.cairo ];
     meta = {
       homepage = http://gtk2-perl.sourceforge.net/;
-      description = "Perl interface to the cairo 2d vector graphics library";
+      description = "Perl interface to the cairo 2D vector graphics library";
       maintainers = with maintainers; [ nckx ];
       license = stdenv.lib.licenses.lgpl21Plus;
     };
@@ -3739,10 +3739,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   EmailAddress = buildPerlPackage {
-    name = "Email-Address-1.901";
+    name = "Email-Address-1.908";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RJ/RJBS/Email-Address-1.901.tar.gz;
-      sha256 = "00svsmv2hk35ybpd7jxcsn7k54i0q9ph5lf8ksv9nkh1abraprkz";
+      url = mirror://cpan/authors/id/R/RJ/RJBS/Email-Address-1.908.tar.gz;
+      sha256 = "0i6ljdvpy279hpbqf6lgv4figr376rb2sh4yphj86xkdzsyn1y75";
     };
     meta = {
       homepage = http://search.cpan.org/perldoc?CPAN::Meta::Spec;
@@ -4469,10 +4469,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   FileLibMagic = buildPerlPackage rec {
-    name = "File-LibMagic-1.13";
+    name = "File-LibMagic-1.15";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DR/DROLSKY/${name}.tar.gz";
-      sha256 = "61f92c3137a3b86d63e61313b51aa2673991110d655eee792ea11c68bf2c0092";
+      sha256 = "2c7fb54912caf2c22d06b02d6a88edad970e0f8b017634dc30eec46e53763e84";
     };
     buildInputs = [ TestFatal pkgs.file ];
     makeMakerFlags = "--lib=${pkgs.file}/lib";
@@ -4767,7 +4767,7 @@ let self = _self // overrides; _self = with self; {
     };
 
     buildInputs = [ pkgs.gd pkgs.libjpeg pkgs.zlib pkgs.freetype
-                    pkgs.libpng pkgs.fontconfig pkgs.xlibs.libXpm GetoptLong ];
+                    pkgs.libpng pkgs.fontconfig pkgs.xorg.libXpm GetoptLong ];
 
     # Patch needed to get arguments past the first GetOptions call
     # and to specify libfontconfig search path.
@@ -4777,7 +4777,7 @@ let self = _self // overrides; _self = with self; {
     # tests fail
     doCheck = false;
 
-    makeMakerFlags = "--lib_png_path=${pkgs.libpng} --lib_jpeg_path=${pkgs.libjpeg} --lib_zlib_path=${pkgs.zlib} --lib_ft_path=${pkgs.freetype} --lib_fontconfig_path=${pkgs.fontconfig} --lib_xpm_path=${pkgs.xlibs.libXpm}";
+    makeMakerFlags = "--lib_png_path=${pkgs.libpng} --lib_jpeg_path=${pkgs.libjpeg} --lib_zlib_path=${pkgs.zlib} --lib_ft_path=${pkgs.freetype} --lib_fontconfig_path=${pkgs.fontconfig} --lib_xpm_path=${pkgs.xorg.libXpm}";
   };
 
   GDSecurityImage = buildPerlPackage {
@@ -4843,10 +4843,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   Glib = buildPerlPackage rec {
-    name = "Glib-1.313";
+    name = "Glib-1.314";
     src = fetchurl {
       url = "mirror://cpan/authors/id/X/XA/XAOC/${name}.tar.gz";
-      sha256 = "162g342bhzy2ca4xwk63j10q9jycsps0s8l8y8pda70m7zcmr7xj";
+      sha256 = "13lhyksm7fgj6rgrgs06kr0hinbyhiq3lfr6gd2qal1j2w0rwzml";
     };
     buildInputs = [ ExtUtilsDepends ExtUtilsPkgConfig pkgs.glib ];
     meta = {
@@ -5621,10 +5621,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   IOSocketSSL = buildPerlPackage {
-    name = "IO-Socket-SSL-2.016";
+    name = "IO-Socket-SSL-2.020";
     src = fetchurl {
-      url = mirror://cpan/authors/id/S/SU/SULLR/IO-Socket-SSL-2.016.tar.gz;
-      sha256 = "0hgyggdbw16nm85fds48m79lxy5318panqhpkh7r192jq6rnhqlk";
+      url = mirror://cpan/authors/id/S/SU/SULLR/IO-Socket-SSL-2.020.tar.gz;
+      sha256 = "1nqjwnyd8iy0whisa352a97ihxw2zc78cmbxa0ccs4547bljr3js";
     };
     propagatedBuildInputs = [ URI NetSSLeay ];
     meta = {
@@ -8376,7 +8376,7 @@ let self = _self // overrides; _self = with self; {
       sha256 = "0k2k8zg84qj1ry77i9dvmfdfpg13s6117wy5bc4nvnzv37qcvy32";
     };
 
-    buildInputs = with pkgs; [ mesa mesa_glu freeglut xlibs.libX11 xlibs.libXi xlibs.libXmu xlibs.libXext xdummy ];
+    buildInputs = with pkgs; [ mesa mesa_glu freeglut xorg.libX11 xorg.libXi xorg.libXmu xorg.libXext xdummy ];
 
     patches = [ ../development/perl-modules/perl-opengl.patch ];
 
@@ -8715,18 +8715,18 @@ let self = _self // overrides; _self = with self; {
   };
 
   PerlOSType = buildPerlPackage rec {
-    name = "Perl-OSType-1.007";
+    name = "Perl-OSType-1.009";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DA/DAGOLDEN/${name}.tar.gz";
-      sha256 = "0aryn8dracfjfnks07b5rvsza4csinlsj6cn92jv3sv8sg3rmdxk";
+      sha256 = "01mfvh6x9mgfnwb31bmaw0jkqkxbl8gn50mwqgjwajk1yz4z8p14";
     };
   };
 
   PerlTidy = buildPerlPackage rec {
-    name = "Perl-Tidy-20130922";
+    name = "Perl-Tidy-20150815";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SH/SHANCOCK/${name}.tar.gz";
-      sha256 = "0qmp6308917lsvms5dbihdj85cnkhy821azc5i6q3p3703qdd375";
+      sha256 = "1mzb2df3bhxcgm7i9vx29bz5581cr8bbfrmajjrzla04djg9v5ha";
     };
   };
 
@@ -9050,11 +9050,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  PodEscapes = buildPerlPackage {
-    name = "Pod-Escapes-1.06";
+  PodEscapes = let version = "1.07"; in buildPerlPackage {
+    name = "Pod-Escapes-${version}";
     src = fetchurl {
-      url = mirror://cpan/authors/id/N/NE/NEILB/Pod-Escapes-1.06.tar.gz;
-      sha256 = "15dpzlgc2ywyxk2svc810nmyx6pm1nj8cji7a0rqr9x6m0v11xdm";
+      url = "mirror://cpan/authors/id/N/NE/NEILB/Pod-Escapes-${version}.tar.gz";
+      sha256 = "0213lmbbw3vy50ahlp2lqmmnkwhrizyl1y87i4jgnla9k0kwixyv";
     };
   };
 
@@ -9689,16 +9689,17 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  Starman = buildPerlModule {
-    name = "Starman-0.4010";
+  Starman = let version = "0.4014"; in buildPerlModule {
+    name = "Starman-${version}";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MI/MIYAGAWA/Starman-0.4010.tar.gz;
-      sha256 = "abe8e2e0519b7326d64db1e93d9c32d853a7be083792d0d7e5f5a1ddf1472d42";
+      url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/Starman-${version}.tar.gz";
+      sha256 = "1sbb5rb3vs82rlh1fjkgkcmj5pj62b4y9si4ihh45sl9m8c2qxx5";
     };
     buildInputs = [ LWP ModuleBuildTiny TestRequires ];
     propagatedBuildInputs = [ DataDump HTTPDate HTTPMessage HTTPParserXS NetServer Plack TestTCP ];
     doCheck = false; # binds to various TCP ports
     meta = {
+      inherit version;
       homepage = https://github.com/miyagawa/Starman;
       description = "High-performance preforking PSGI/Plack web server";
       license = "perl";
@@ -9940,13 +9941,14 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  StringUtil = buildPerlPackage {
-    name = "String-Util-1.21";
+  StringUtil = let version = "1.24"; in buildPerlPackage {
+    name = "String-Util-${version}";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MI/MIKO/String-Util-1.21.tar.gz;
-      sha256 = "1ndvm9pbngf1j0fm02ghl4nfcqi5404sxdlm42g3ismf1ms1fnxa";
+      url = "mirror://cpan/authors/id/M/MI/MIKO/String-Util-${version}.tar.gz";
+      sha256 = "16c7dbpz87ywq49lnsaml0k28jbkraf1p2njh72jc5xcxys7vykv";
     };
     meta = {
+      inherit version;
       description = "String::Util -- String processing utilities";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -10006,14 +10008,15 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  SubExporterUtil = buildPerlPackage {
-    name = "Sub-Exporter-Util-0.984";
+  SubExporterUtil = let version = "0.987"; in buildPerlPackage {
+    name = "Sub-Exporter-Util-${version}";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RJ/RJBS/Sub-Exporter-0.984.tar.gz;
-      sha256 = "190qly7nv7zf17c1v0gnqhyf25p6whhh2m132mh4xzs5mqadwq0f";
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/Sub-Exporter-${version}.tar.gz";
+      sha256 = "1ml3n1ck4ln9qjm2mcgkczj1jb5n1fkscz9c4x23v4db0glb4g2l";
     };
     propagatedBuildInputs = [ DataOptList ParamsUtil SubInstall ];
     meta = {
+      inherit version;
       homepage = https://github.com/rjbs/sub-exporter;
       description = "A sophisticated exporter for custom-built routines";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
@@ -10357,13 +10360,14 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  TermCap = buildPerlPackage {
-    name = "Term-Cap-1.16";
+  TermCap = let version = "1.17"; in buildPerlPackage {
+    name = "Term-Cap-${version}";
     src = fetchurl {
-      url = mirror://cpan/authors/id/J/JS/JSTOWE/Term-Cap-1.16.tar.gz;
-      sha256 = "b99728ac19b740b43e6a8d3c749c336f4a5d59ffd684c42c222681ee924e4a20";
+      url = "mirror://cpan/authors/id/J/JS/JSTOWE/Term-Cap-${version}.tar.gz";
+      sha256 = "0qyicyk4aikw6w3fm8c4y6hd7ff70crkl6bf64qmiakbgxy9p6p7";
     };
     meta = {
+      inherit version;
       description = "Perl termcap interface";
       license = "perl";
     };
@@ -11876,8 +11880,8 @@ let self = _self // overrides; _self = with self; {
       url = "http://search.cpan.org/CPAN/authors/id/S/SR/SREZIC/${name}.tar.gz";
       sha256 = "10fsvyr56gm59chc8b70n6bvhd3lh9c05sp8m4arcahid0rpgbwa";
     };
-    makeMakerFlags = "X11LIB=${pkgs.xlibs.libX11}/lib";
-    buildInputs = with pkgs; [ xlibs.libX11 libpng ];
+    makeMakerFlags = "X11LIB=${pkgs.xorg.libX11}/lib";
+    buildInputs = with pkgs; [ xorg.libX11 libpng ];
     configurePhase = ''
       perl Makefile.PL PREFIX=$out $makeMakerFlags
     '';
@@ -12302,9 +12306,9 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/A/AW/AWENDT/${name}.tar.gz";
       sha256 = "0j27cb9yy9ymni8cbiyxplbg086b8lv6b330nwqyx0briq3xrzfq";
     };
-    buildInputs = [ pkgs.xlibs.libXext pkgs.xlibs.libXScrnSaver pkgs.xlibs.libX11 ];
+    buildInputs = [ pkgs.xorg.libXext pkgs.xorg.libXScrnSaver pkgs.xorg.libX11 ];
     propagatedBuildInputs = [ InlineC ];
-    patchPhase = ''sed -ie 's,-L/usr/X11R6/lib/,-L${pkgs.xlibs.libX11}/lib/ -L${pkgs.xlibs.libXext}/lib/ -L${pkgs.xlibs.libXScrnSaver}/lib/,' IdleTime.pm'';
+    patchPhase = ''sed -ie 's,-L/usr/X11R6/lib/,-L${pkgs.xorg.libX11}/lib/ -L${pkgs.xorg.libXext}/lib/ -L${pkgs.xorg.libXScrnSaver}/lib/,' IdleTime.pm'';
     meta = {
       description = "Get the idle time of X11";
     };
@@ -12316,7 +12320,7 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/S/SM/SMCCAM/${name}.tar.gz";
       sha256 = "1dq89bh6fqv7l5mbffqcismcljpq5f869bx7g8lg698zgindv5ny";
     };
-    buildInputs = [pkgs.x11];
+    buildInputs = [pkgs.xlibsWrapper];
     NIX_CFLAGS_LINK = "-lX11";
     doCheck = false; # requires an X server
   };
@@ -12327,7 +12331,7 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/C/CT/CTRONDLP/${name}.tar.gz";
       sha256 = "0jznws68skdzkhgkgcgjlj40qdyh9i75r7fw8bqzy406f19xxvnw";
     };
-    buildInputs = [pkgs.x11 pkgs.xorg.libXtst pkgs.xorg.libXi];
+    buildInputs = [pkgs.xlibsWrapper pkgs.xorg.libXtst pkgs.xorg.libXi];
     NIX_CFLAGS_LINK = "-lX11 -lXext -lXtst";
     doCheck = false; # requires an X server
   };

@@ -490,6 +490,20 @@ let
     };
   };
 
+  deis = buildFromGitHub {
+    rev = "v1.10.0";
+    owner = "deis";
+    repo = "deis";
+    sha256 = "0qji0dcfqgvjrfn5fjagjib606n24iy9qank2ckh202s75rxx5w9";
+    subPackages = [ "client" ];
+    buildInputs = [ docopt-go crypto yaml-v2 ];
+    postInstall = ''
+      if [ -f "$bin/bin/client" ]; then
+        mv "$bin/bin/client" "$bin/bin/deis"
+      fi
+    '';
+  };
+
   dns = buildFromGitHub {
     rev    = "e59f851c912767b1db587dcabee6e6652e495c75";
     date   = "2015-07-22";
@@ -665,6 +679,26 @@ let
     subPackages = [ "./" ];  # don't try to build test fixtures
   };
 
+  git-lfs = buildFromGitHub {
+    rev = "v1.0.0";
+    owner = "github";
+    repo = "git-lfs";
+    sha256 = "1zlg3rm5yxak6d88brffv1wpj0iq4qgzn6sgg8xn0pbnzxjd1284";
+
+    # Tests fail with 'lfstest-gitserver.go:46: main redeclared in this block'
+    excludedPackages = [ "test" ];
+
+    preBuild = ''
+      pushd go/src/github.com/github/git-lfs
+        go generate ./commands
+      popd
+    '';
+
+    postInstall = ''
+      rm -v $bin/bin/{man,script}
+    '';
+  };
+
   glide = buildFromGitHub {
     rev    = "0.5.0";
     owner  = "Masterminds";
@@ -794,6 +828,22 @@ let
     owner  = "influxdb";
     repo   = "gomdb";
     sha256 = "0yg1jpr7lcaqh6i8n9wbs9r128kk541qjv06r9a6fp9vj56rqr3m";
+  };
+
+  gotty = buildFromGitHub {
+    rev     = "v0.0.10";
+    owner   = "yudai";
+    repo    = "gotty";
+    sha256  = "0gvnbr61d5si06ik2j075jg00r9b94ryfgg06nqxkf10dp8lgi09";
+
+    buildInputs = [ cli-go go manners go-bindata-assetfs go-multierror structs websocket hcl pty ];
+
+    meta = with stdenv.lib; {
+      description = "Share your terminal as a web application";
+      homepage = "https://github.com/yudai/gotty";
+      maintainers = with maintainers; [ matthiasbeyer ];
+      license = licenses.mit;
+    };
   };
 
   govers = buildFromGitHub {
@@ -986,6 +1036,22 @@ let
       maintainers = with maintainers; [ cstrahan ];
       license     = licenses.cc0 ;
       platforms   = platforms.all;
+    };
+  };
+
+  go-bindata-assetfs = buildFromGitHub {
+    rev     = "d5cac425555ca5cf00694df246e04f05e6a55150";
+    owner   = "elazarl";
+    repo    = "go-bindata-assetfs";
+    sha256  = "636ce247ff6f85c14f38a421f46662fa77bdc29762692e1f72b3cd1f9d7a1d17";
+
+    date = "2015-08-13";
+
+    meta = with stdenv.lib; {
+      description = "Serves embedded files from jteeuwen/go-bindata with net/http";
+      homepage = "https://github.com/elazarl/go-bindata-assetfs";
+      maintainers = with maintainers; [ matthiasbeyer ];
+      license = licenses.bsd2;
     };
   };
 
@@ -1546,11 +1612,11 @@ let
   };
 
   ipfs = buildFromGitHub{
-    rev = "ff26c312000da12d395c9cdba05c43f29b68b456";
+    rev = "9c6ec296e396cc6be551c9807ae220fb50dd07d4";
+    date   = "2015-09-23";
     owner  = "ipfs";
     repo   = "go-ipfs";
-    sha256 = "0qj3rwq5i4aiwn0i09skpi1s3mzqm8ma9v1cpjl7rya2y6ypx8xg";
-    disabled = !isGo14;
+    sha256 = "0lmj2s9ihl1a5r8yn6w0lvb8z3n6c9b8wi1yvi77vgzm6b6lfl3a";
   };
 
   ldap = buildGoPackage rec {
@@ -1674,6 +1740,20 @@ let
     postInstall = ''
       cp go/src/$goPackagePath/scripts/lxd-images $bin/bin
     '';
+  };
+
+  manners = buildFromGitHub {
+    rev = "0.4.0";
+    owner = "braintree";
+    repo = "manners";
+    sha256 = "07985pbfhwlhbglr9zwh2wx8kkp0wzqr1lf0xbbxbhga4hn9q3ak";
+
+    meta = with stdenv.lib; {
+      description = "A polite Go HTTP server that shuts down gracefully";
+      homepage = "https://github.com/braintree/manners";
+      maintainers = with maintainers; [ matthiasbeyer ];
+      license = licenses.mit;
+    };
   };
 
   mapstructure = buildFromGitHub {
@@ -2745,8 +2825,9 @@ let
     sha256 = "1l7nw00pazp317n5nprrxwhcq56kdblc774lsznxmbb30xcp8nmf";
   };
 
-  syncthing = buildFromGitHub {
-    rev = "v0.11.25";
+  syncthing = buildFromGitHub rec {
+    version = "0.11.25";
+    rev = "v${version}";
     owner = "syncthing";
     repo = "syncthing";
     sha256 = "17phkj0dxzc1j755ddpf15rq34yp52pw2lx9kpg7gyc9qp0pzacl";
@@ -2755,6 +2836,10 @@ let
       go-lz4 du luhn xdr snappy ratelimit osext syncthing-protocol relaysrv
       goleveldb suture qart crypto net text
     ];
+    postPatch = ''
+      # Mostly a costmetic change
+      sed -i 's,unknown-dev,${version},g' cmd/syncthing/main.go
+    '';
   };
 
   syncthing-lib = buildFromGitHub {

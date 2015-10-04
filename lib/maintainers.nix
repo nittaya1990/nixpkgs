@@ -19,6 +19,7 @@
   akc = "Anders Claesson <akc@akc.is>";
   algorith = "Dries Van Daele <dries_van_daele@telenet.be>";
   all = "Nix Committers <nix-commits@lists.science.uu.nl>";
+  ambrop72 = "Ambroz Bizjak <ambrop7@gmail.com>";
   amiddelk = "Arie Middelkoop <amiddelk@gmail.com>";
   amorsillo = "Andrew Morsillo <andrew.morsillo@gmail.com>";
   AndersonTorres = "Anderson Torres <torres.anderson.85@gmail.com>";
@@ -70,6 +71,7 @@
   cstrahan = "Charles Strahan <charles.c.strahan@gmail.com>";
   cwoac = "Oliver Matthews <oliver@codersoffortune.net>";
   DamienCassou = "Damien Cassou <damien@cassou.me>";
+  davidak = "David Kleuker <post@davidak.de>";
   davidrusu = "David Rusu <davidrusu.me@gmail.com>";
   dbohdan = "Danyil Bohdan <danyil.bohdan@gmail.com>";
   DerGuteMoritz = "Moritz Heidkamp <moritz@twoticketsplease.de>";
@@ -142,6 +144,7 @@
   jwilberding = "Jordan Wilberding <jwilberding@afiniate.com>";
   jzellner = "Jeff Zellner <jeffz@eml.cc>";
   kamilchm = "Kamil Chmielewski <kamil.chm@gmail.com>";
+  kampfschlaefer = "Arnold Krille <arnold@arnoldarts.de>";
   khumba = "Bryan Gardiner <bog@khumba.net>";
   kkallio = "Karn Kallio <tierpluspluslists@gmail.com>";
   koral = "Koral <koral@mailoo.org>";
@@ -177,6 +180,7 @@
   meditans = "Carlo Nucera <meditans@gmail.com>";
   meisternu = "Matt Miemiec <meister@krutt.org>";
   michelk = "Michel Kuhlmann <michel@kuhlmanns.info>";
+  michaelpj = "Michael Peyton Jones <michaelpj@gmail.com>";
   mirdhyn = "Merlin Gaillard <mirdhyn@gmail.com>";
   mschristiansen = "Mikkel Christiansen <mikkel@rheosystems.com>";
   modulistic = "Pablo Costa <modulistic@gmail.com>";
