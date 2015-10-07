@@ -278,8 +278,9 @@ let
   };
 
   buildFHSUserEnv = args: userFHSEnv {
-    env = buildFHSEnv (removeAttrs args [ "runScript" ]);
+    env = buildFHSEnv (removeAttrs args [ "runScript" "extraBindMounts" ]);
     runScript = args.runScript or "bash";
+    extraBindMounts = args.extraBindMounts or [];
   };
 
   buildMaven = callPackage ../build-support/build-maven.nix {};
@@ -3177,7 +3178,9 @@ let
 
   torbutton = callPackage ../tools/security/torbutton { };
 
-  torbrowser = callPackage ../tools/security/tor/torbrowser.nix { };
+  torbrowser = callPackage ../tools/security/tor/torbrowser.nix {
+    stdenv = overrideCC stdenv gcc5;
+  };
 
   touchegg = callPackage ../tools/inputmethods/touchegg { };
 
@@ -3572,6 +3575,8 @@ let
 
   # To expose more packages for Yi, override the extraPackages arg.
   yi = callPackage ../applications/editors/yi/wrapper.nix { };
+
+  zbackup = callPackage ../tools/backup/zbackup {};
 
   zbar = callPackage ../tools/graphics/zbar {
     pygtk = lib.overrideDerivation pygtk (x: {
@@ -4222,7 +4227,7 @@ let
 
   ocaml_4_01_0 = callPackage ../development/compilers/ocaml/4.01.0.nix { };
 
-  ocaml_4_02_1 = callPackage ../development/compilers/ocaml/4.02.1.nix { };
+  ocaml_4_02 = callPackage ../development/compilers/ocaml/4.02.nix { };
 
   orc = callPackage ../development/compilers/orc { };
 
@@ -4363,8 +4368,6 @@ let
     custom_printf = callPackage ../development/ocaml-modules/custom_printf { };
 
     ctypes = callPackage ../development/ocaml-modules/ctypes { };
-
-    deriving = callPackage ../development/tools/ocaml/deriving { };
 
     dolog = callPackage ../development/ocaml-modules/dolog { };
 
@@ -4663,8 +4666,8 @@ let
   // { camlimages = ocamlPackages_3_12_1.camlimages_4_0; };
   ocamlPackages_4_00_1 = mkOcamlPackages ocaml_4_00_1 pkgs.ocamlPackages_4_00_1;
   ocamlPackages_4_01_0 = mkOcamlPackages ocaml_4_01_0 pkgs.ocamlPackages_4_01_0;
-  ocamlPackages_4_02_1 = mkOcamlPackages ocaml_4_02_1 pkgs.ocamlPackages_4_02_1;
-  ocamlPackages_latest = ocamlPackages_4_02_1;
+  ocamlPackages_4_02 = mkOcamlPackages ocaml_4_02 pkgs.ocamlPackages_4_02;
+  ocamlPackages_latest = ocamlPackages_4_02;
 
   ocaml_make = callPackage ../development/ocaml-modules/ocamlmake { };
 
@@ -6429,6 +6432,8 @@ let
     gnupg1 = gnupg1orig;
   };
 
+  gpgstats = callPackage ../tools/security/gpgstats { };
+
   grantlee = callPackage ../development/libraries/grantlee { };
 
   grantlee5 = callPackage ../development/libraries/grantlee/5.x-old.nix { };
@@ -6645,9 +6650,9 @@ let
 
   kf510 = recurseIntoAttrs (callPackage ../development/libraries/kde-frameworks-5.10 { });
   kf512 = recurseIntoAttrs (callPackage ../development/libraries/kde-frameworks-5.12 { });
+  kf514 = recurseIntoAttrs (import ../development/libraries/kde-frameworks-5.14 { inherit pkgs; });
   kf5_latest = kf512;
   kf5_stable = kf510;
-  kf513 = recurseIntoAttrs (import ../development/libraries/kde-frameworks-5.13 { inherit pkgs; });
 
   kf5PackagesFun = self: with self; {
 
@@ -6687,8 +6692,8 @@ let
 
   };
 
-  kf513Packages = lib.makeScope kf513.newScope kf5PackagesFun;
-  kf5Packages = kf513Packages;
+  kf514Packages = lib.makeScope kf514.newScope kf5PackagesFun;
+  kf5Packages = kf514Packages;
 
   kinetic-cpp-client = callPackage ../development/libraries/kinetic-cpp-client { };
 
@@ -9488,6 +9493,11 @@ let
 
     cctools = (callPackage ../os-specific/darwin/cctools/port.nix { inherit libobjc; }).native;
 
+    cf-private = callPackage ../os-specific/darwin/cf-private {
+      inherit (apple-source-releases) CF;
+      inherit osx_private_sdk;
+    };
+
     maloader = callPackage ../os-specific/darwin/maloader {
       inherit opencflite;
     };
@@ -11371,6 +11381,7 @@ let
   fvwm = callPackage ../applications/window-managers/fvwm { };
 
   geany = callPackage ../applications/editors/geany { };
+  geany-with-vte = callPackage ../applications/editors/geany/with-vte.nix { };
 
   gksu = callPackage ../applications/misc/gksu { };
 
@@ -11973,8 +11984,8 @@ let
   };
 
   llpp = callPackage ../applications/misc/llpp {
-    inherit (ocamlPackages_4_02_1) lablgl findlib;
-    ocaml = ocaml_4_02_1;
+    inherit (ocamlPackages_4_02) lablgl findlib;
+    ocaml = ocaml_4_02;
   };
 
   lmms = callPackage ../applications/audio/lmms { };
@@ -12131,6 +12142,8 @@ let
 
   ncmpcpp = callPackage ../applications/audio/ncmpcpp { };
 
+  nload = callPackage ../applications/networking/nload { };
+
   normalize = callPackage ../applications/audio/normalize { };
 
   mplayer = callPackage ../applications/video/mplayer ({
@@ -12170,22 +12183,17 @@ let
     inherit (gnome) ORBit2 libbonobo libgnomeui GConf;
   };
 
-  mumble = callPackage ../applications/networking/mumble {
-    avahi = avahi.override {
-      withLibdnssdCompat = true;
-    };
-    celt = celt_0_7;
-    jackSupport = config.mumble.jackSupport or false;
-    speechdSupport = config.mumble.speechdSupport or false;
-    pulseSupport = config.pulseaudio or false;
-  };
-
-  murmur = callPackage ../applications/networking/mumble/murmur.nix {
-    avahi = avahi.override {
-      withLibdnssdCompat = true;
-    };
-    iceSupport = config.murmur.iceSupport or true;
-  };
+  inherit (callPackages ../applications/networking/mumble {
+      avahi = avahi.override {
+        withLibdnssdCompat = true;
+      };
+      qt5 = qt54; # Mumble is not compatible with qt55 yet
+      celt = celt_0_7;
+      jackSupport = config.mumble.jackSupport or false;
+      speechdSupport = config.mumble.speechdSupport or false;
+      pulseSupport = config.pulseaudio or false;
+      iceSupport = config.murmur.iceSupport or true;
+    }) mumble mumble_git murmur murmur_git;
 
   musescore = qt5Libs.callPackage ../applications/audio/musescore { };
 
@@ -12412,6 +12420,8 @@ let
   pidginmsnpecan = callPackage ../applications/networking/instant-messengers/pidgin-plugins/msn-pecan { };
 
   pidgin-mra = callPackage ../applications/networking/instant-messengers/pidgin-plugins/pidgin-mra { };
+
+  pidgin-skypeweb = callPackage ../applications/networking/instant-messengers/pidgin-plugins/pidgin-skypeweb { };
 
   pidginotr = callPackage ../applications/networking/instant-messengers/pidgin-plugins/otr { };
 
@@ -13008,7 +13018,7 @@ let
 
   vim = callPackage ../applications/editors/vim {
     inherit (darwin.apple_sdk.frameworks) CoreServices Cocoa Foundation CoreData;
-    inherit (darwin) libobjc;
+    inherit (darwin) libobjc cf-private;
   };
 
   macvim = callPackage ../applications/editors/vim/macvim.nix { stdenv = clangStdenv; };
@@ -14363,6 +14373,8 @@ let
     inherit callPackage;
 
     coq = coq_8_5;
+
+    coq-ext-lib = callPackage ../development/coq-modules/coq-ext-lib {};
 
     mathcomp = callPackage ../development/coq-modules/mathcomp { };
 
