@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, ncurses, pkgconfig, texinfo, libxml2, gnutls, Carbon, Foundation,
-libobjc, Cocoa, WebKit, Quartz, ImageCaptureCore, OSAKit
+{ stdenv, fetchurl, ncurses, pkgconfig, texinfo, libxml2, gnutls
+, Carbon, Cocoa, ImageCaptureCore, OSAKit, Quartz, WebKit
 }:
 
 stdenv.mkDerivation rec {
@@ -18,15 +18,14 @@ stdenv.mkDerivation rec {
     sha256 = "0p4jh6s1qi6jm6zr82grk65x33ix1hb0fbpih4vh3vnx6310iwsb";
   };
 
-  NIX_CFLAGS_COMPILE = "-Wno-deprecated-declarations";
-  NIX_LDFLAGS = stdenv.lib.optional stdenv.isDarwin
-    "/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation";
-
   enableParallelBuilding = true;
 
   buildInputs = [
-    ncurses pkgconfig texinfo libxml2 gnutls Carbon Cocoa Foundation libobjc WebKit Quartz
-    ImageCaptureCore OSAKit
+    ncurses pkgconfig texinfo libxml2 gnutls
+  ];
+
+  propagatedBuildInputs = [
+    Carbon Cocoa ImageCaptureCore OSAKit Quartz WebKit
   ];
 
   postUnpack = ''
@@ -36,6 +35,7 @@ stdenv.mkDerivation rec {
   '';
 
   preConfigure = ''
+    substituteInPlace lisp/international/mule-cmds.el --replace /usr $TMPDIR
     substituteInPlace Makefile.in --replace "/bin/pwd" "pwd"
     substituteInPlace lib-src/Makefile.in --replace "/bin/pwd" "pwd"
 
