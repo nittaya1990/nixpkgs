@@ -1253,6 +1253,25 @@ let
     };
   };
 
+  cycler = buildPythonPackage rec {
+    name = "cycler-${version}";
+    version = "0.9.0";
+    
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/C/Cycler/${name}.tar.gz";
+      sha256 = "96dc4ddf27ef62c09990c6196ac1167685e89168042ec0ae4db586de023355bc";
+    };
+
+    propagatedBuildInputs = with self; [ six ];
+
+    meta = {
+      description = "Composable style cycles";
+      homepage = http://github.com/matplotlib/cycler;
+      license = licenses.bsd3;
+      maintainer = with maintainers; [ fridh ];
+    };
+  };
+
   debian = buildPythonPackage rec {
     name = "${pname}-${version}";
     pname = "python-debian";
@@ -8897,7 +8916,6 @@ let
 
   mock = buildPythonPackage (rec {
     name = "mock-1.3.0";
-    disabled = isPy35;
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/m/mock/${name}.tar.gz";
@@ -13162,6 +13180,23 @@ let
     };
   };
 
+  pyelasticsearch = buildPythonPackage (rec {
+    name = "pyelasticsearch-1.4";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pyelasticsearch/${name}.tar.gz";
+      sha256 = "18wp6llfjv6hvyhr3f6i8dm9wc5rf46wiqsfxwpvnf6mdrvk6xr7";
+    };
+
+    # Tests require a local instance of elasticsearch
+    doCheck = false;
+
+    meta = {
+      description = "A clean, future-proof, high-scale API to elasticsearch.";
+      homepage = https://pyelasticsearch.readthedocs.org;
+      license = licenses.bsd3;
+    };
+  });
 
   pyenchant = pythonPackages.buildPythonPackage rec {
     name = "pyenchant-1.6.6";
@@ -18754,12 +18789,13 @@ let
 
   cliapp = buildPythonPackage rec {
     name = "cliapp-${version}";
-    version = "1.20140719";
+    version = "1.20150305";
     disabled = isPy3k;
 
-    src = pkgs.fetchurl rec {
-      url = "http://code.liw.fi/debian/pool/main/p/python-cliapp/python-cliapp_${version}.orig.tar.gz";
-      sha256 = "0kxl2q85n4ggvbw2m8crl11x8n637mx6y3a3b5ydw8nhlsiqijgp";
+    src = pkgs.fetchgit {
+        url = "http://git.liw.fi/cgi-bin/cgit/cgit.cgi/cliapp";
+        rev = "569df8a5959cd8ef46f78c9497461240a5aa1123";
+        sha256 = "882c5daf933e4cf089842995efc721e54361d98f64e0a075e7373b734cd899f3";
     };
 
     buildInputs = with self; [ sphinx ];
