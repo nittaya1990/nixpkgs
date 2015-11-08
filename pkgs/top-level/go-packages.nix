@@ -6,15 +6,15 @@
 let
   isGo14 = go.meta.branch == "1.4";
 
+  self = _self // overrides; _self = with self; {
+
+  inherit go buildGoPackage;
+
   buildFromGitHub = { rev, date ? null, owner, repo, sha256, name ? repo, goPackagePath ? "github.com/${owner}/${repo}", ... }@args: buildGoPackage (args // {
     inherit rev goPackagePath;
     name = "${name}-${if date != null then date else if builtins.stringLength rev != 40 then rev else stdenv.lib.strings.substring 0 7 rev}";
     src  = fetchFromGitHub { inherit rev owner repo sha256; };
   });
-
-  self = _self // overrides; _self = with self; {
-
-  inherit go buildGoPackage;
 
   ## OFFICIAL GO PACKAGES
 
@@ -1070,14 +1070,16 @@ let
   };
 
   go-bindata = buildGoPackage rec {
-    version = "3.0.7";
+    rev = "a0ff2567cfb70903282db057e799fd826784d41d";
+    date = "2015-10-23";
+    version = "${date}-${stdenv.lib.strings.substring 0 7 rev}";
     name = "go-bindata-${version}";
     goPackagePath = "github.com/jteeuwen/go-bindata";
     src = fetchFromGitHub {
+      inherit rev;
       repo = "go-bindata";
       owner = "jteeuwen";
-      rev = "v${version}";
-      sha256 = "1v8xwwlv6my5ixvis31m3vgz4sdc0cq82855j8gxmjp1scinv432";
+      sha256 = "0d6zxv0hgh938rf59p1k5lj0ymrb8kcps2vfrb9kaarxsvg7y69v";
     };
 
     subPackages = [ "./" "go-bindata" ]; # don't build testdata
@@ -1679,11 +1681,12 @@ let
   };
 
   ipfs = buildFromGitHub{
-    rev = "9c6ec296e396cc6be551c9807ae220fb50dd07d4";
-    date   = "2015-09-23";
+    rev = "43622bd5eed1f62d53d364dc771bbb500939d9e6";
+    date   = "2015-10-30";
     owner  = "ipfs";
     repo   = "go-ipfs";
-    sha256 = "0lmj2s9ihl1a5r8yn6w0lvb8z3n6c9b8wi1yvi77vgzm6b6lfl3a";
+    sha256 = "0g80b65ysj995dj3mkh3lp4v616fzjl7bx2wf14mkxfri4gr5icb";
+    disabled = isGo14;
   };
 
   ldap = buildGoPackage rec {
@@ -3147,6 +3150,26 @@ let
     owner  = "tools";
     repo   = "godep";
     sha256 = "0zc1ah5cvaqa3zw0ska89a40x445vwl1ixz8v42xi3zicx16ibwz";
+  };
+
+  acbuild = stdenv.mkDerivation rec {
+    version = "0.1.1";
+    name = "acbuild-${version}";
+    src = fetchFromGitHub {
+      rev    = "beae3971de6b2c35807a98ef1d0fa3167cc3a4a8";
+      owner  = "appc";
+      repo   = "acbuild";
+      sha256 = "1mjmg2xj190dypp2yqslrx8xhwcyrrz38xxp0rig4fr60i2qy41j";
+    };
+    buildInputs = [ go ];
+    patchPhase = ''
+      sed -i -e 's|\$(git describe --dirty)|"${version}"|' build
+      sed -i -e 's|\$GOBIN/acbuild|$out/bin/acbuild|' build
+    '';
+    installPhase = ''
+      mkdir -p $out/bin
+      ./build
+    '';
   };
 
 }; in self
