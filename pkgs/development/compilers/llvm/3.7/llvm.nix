@@ -14,6 +14,7 @@
 , compiler-rt_src
 , libcxxabi
 , debugVersion ? false
+, enableSharedLibraries ? !stdenv.isDarwin
 }:
 
 let
@@ -29,7 +30,7 @@ in stdenv.mkDerivation rec {
     mv compiler-rt-* $sourceRoot/projects/compiler-rt
   '';
 
-  buildInputs = [ perl groff cmake libxml2 python libffi ] /* ++ stdenv.lib.optional stdenv.isLinux valgrind */
+  buildInputs = [ perl groff cmake libxml2 python libffi ]
     ++ stdenv.lib.optional stdenv.isDarwin libcxxabi;
 
   propagatedBuildInputs = [ ncurses zlib ];
@@ -46,11 +47,12 @@ in stdenv.mkDerivation rec {
     "-DLLVM_BUILD_TESTS=ON"
     "-DLLVM_ENABLE_FFI=ON"
     "-DLLVM_ENABLE_RTTI=ON"
-  ] ++ stdenv.lib.optionals (!isDarwin) [
+  ] ++ stdenv.lib.optional enableSharedLibraries
     "-DBUILD_SHARED_LIBS=ON"
+    ++ stdenv.lib.optional (!isDarwin)
     "-DLLVM_BINUTILS_INCDIR=${binutils}/include"
-  ] ++ stdenv.lib.optionals ( isDarwin) [
-    "-DCMAKE_CXX_FLAGS=-stdlib=libc++"
+    ++ stdenv.lib.optionals ( isDarwin) [
+    "-DLLVM_ENABLE_LIBCXX=ON"
     "-DCAN_TARGET_i386=false"
   ];
 

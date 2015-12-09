@@ -662,9 +662,6 @@ self: super: {
   # https://github.com/nushio3/doctest-prop/issues/1
   doctest-prop = dontCheck super.doctest-prop;
 
-  # https://github.com/adamwalker/sdr/issues/1
-  sdr = dontCheck super.sdr;
-
   # https://github.com/bos/aeson/issues/253
   aeson = dontCheck super.aeson;
 
@@ -707,6 +704,10 @@ self: super: {
   yesod-bin = if pkgs.stdenv.isDarwin
     then addBuildDepend super.yesod-bin pkgs.darwin.apple_sdk.frameworks.Cocoa
     else super.yesod-bin;
+
+  hmatrix = if pkgs.stdenv.isDarwin
+    then addBuildDepend super.hmatrix pkgs.darwin.apple_sdk.frameworks.Accelerate
+    else super.hmatrix;
 
   # https://github.com/commercialhaskell/stack/issues/408
   # https://github.com/commercialhaskell/stack/issues/409
@@ -920,7 +921,9 @@ self: super: {
     librarySystemDepends = (drv.librarySystemDepends or []) ++ [ pkgs.ncurses ];
   });
 
-  # Re-build this package to fix broken binaries on Hydra.
-  math-functions = triggerRebuild super.math-functions 1;
+  # https://github.com/Gabriel439/Haskell-Morte-Library/issues/32
+  morte = super.morte.override { alex = self.alex_3_1_4; };
 
+  # https://github.com/mainland/language-c-quote/issues/57
+  language-c-quote = super.language-c-quote.override { alex = self.alex_3_1_4; };
 }

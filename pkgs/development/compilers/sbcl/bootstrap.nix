@@ -23,6 +23,7 @@ let
       sha256 = "0sp5445rbvms6qvzhld0kwwvydw51vq5iaf4kdqsf2d9jvaz3yx5";
     };
     armv6l-linux = armv7l-linux;
+    x86_64-solaris = x86_64-linux;
   };
   cfg = options.${stdenv.system};
 in
@@ -38,6 +39,9 @@ stdenv.mkDerivation rec {
   buildInputs = [ makeWrapper ];
 
   installPhase = ''
+    mkdir -p $out/bin
+    cp -p src/runtime/sbcl $out/bin
+
     mkdir -p $out/share/sbcl
     cp -p src/runtime/sbcl $out/share/sbcl
     cp -p output/sbcl.core $out/share/sbcl
@@ -54,7 +58,7 @@ stdenv.mkDerivation rec {
     description = "Lisp compiler";
     homepage = "http://www.sbcl.org";
     license = licenses.publicDomain; # and FreeBSD
-    maintainers = [maintainers.raskin];
+    maintainers = [maintainers.raskin maintainers.tohl];
     platforms = attrNames options;
   };
 }

@@ -6,7 +6,11 @@ let
 
 cfg = config.services.tlp;
 
-tlp = pkgs.tlp.override { kmod = config.system.sbin.modprobe; };
+enableRDW = config.networking.networkmanager.enable;
+
+tlp = pkgs.tlp.override {
+  inherit enableRDW;
+};
 
 # XXX: We can't use writeTextFile + readFile here because it triggers
 # TLP build to get the .drv (even on --dry-run).
@@ -64,6 +68,8 @@ in
           ExecStart = "${tlp}/bin/tlp init start";
           ExecStop = "${tlp}/bin/tlp init stop";
         };
+
+        environment.MODULE_DIR="/run/current-system/kernel-modules/lib/modules/";
       };
 
       tlp-sleep = {
@@ -82,6 +88,8 @@ in
           ExecStart = "${tlp}/bin/tlp suspend";
           ExecStop = "${tlp}/bin/tlp resume";
         };
+
+        environment.MODULE_DIR="/run/current-system/kernel-modules/lib/modules/";
       };
     };
 
@@ -90,12 +98,14 @@ in
     environment.etc = [{ source = confFile;
                          target = "default/tlp";
                        }
-                      ] ++ optional tlp.enableRDW {
+                      ] ++ optional enableRDW {
                         source = "${tlp}/etc/NetworkManager/dispatcher.d/99tlp-rdw-nm";
                         target = "NetworkManager/dispatcher.d/99tlp-rdw-nm";
                       };
 
     environment.systemPackages = [ tlp ];
+
+    boot.kernelModules = [ "msr" ];
 
   };
 
