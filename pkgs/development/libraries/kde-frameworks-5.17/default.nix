@@ -14,29 +14,29 @@ let
   mirror = "mirror://kde";
   srcs = import ./srcs.nix { inherit (pkgs) fetchurl; inherit mirror; };
 
-  kdeFramework = args:
-    let
-      inherit (args) name;
-      inherit (srcs."${name}") src version;
-    in stdenv.mkDerivation (args // {
-      name = "${name}-${version}";
-      inherit src;
+  packages = self: with self; {
+    kdeFramework = args:
+      let
+        inherit (args) name;
+        inherit (srcs."${name}") src version;
+      in stdenv.mkDerivation (args // {
+        name = "${name}-${version}";
+        inherit src;
 
-      cmakeFlags =
-        (args.cmakeFlags or [])
-        ++ [ "-DBUILD_TESTING=OFF" ]
-        ++ lib.optional debug "-DCMAKE_BUILD_TYPE=Debug";
+        cmakeFlags =
+          (args.cmakeFlags or [])
+          ++ [ "-DBUILD_TESTING=OFF" ]
+          ++ lib.optional debug "-DCMAKE_BUILD_TYPE=Debug";
 
-      meta = {
-        license = with lib.licenses; [
-          lgpl21Plus lgpl3Plus bsd2 mit gpl2Plus gpl3Plus fdl12
-        ];
-        platforms = lib.platforms.linux;
-        homepage = "http://www.kde.org";
-      } // (args.meta or {});
-    });
+        meta = {
+          license = with lib.licenses; [
+            lgpl21Plus lgpl3Plus bsd2 mit gpl2Plus gpl3Plus fdl12
+          ];
+          platforms = lib.platforms.linux;
+          homepage = "http://www.kde.org";
+        } // (args.meta or {});
+      });
 
-  addPackages = self: with self; {
     attica = callPackage ./attica.nix {};
     baloo = callPackage ./baloo.nix {};
     bluez-qt = callPackage ./bluez-qt.nix {};
@@ -70,7 +70,7 @@ let
     kguiaddons = callPackage ./kguiaddons.nix {};
     khtml = callPackage ./khtml.nix {};
     ki18n = callPackage ./ki18n.nix {};
-    kiconthemes = callPackage ./kiconthemes.nix {};
+    kiconthemes = callPackage ./kiconthemes {};
     kidletime = callPackage ./kidletime.nix {};
     kimageformats = callPackage ./kimageformats.nix {};
     kinit = callPackage ./kinit {};
@@ -109,6 +109,4 @@ let
     threadweaver = callPackage ./threadweaver.nix {};
   };
 
-  newScope = scope: pkgs.qt55Libs.newScope ({ inherit kdeFramework; } // scope);
-
-in lib.makeScope newScope addPackages
+in packages

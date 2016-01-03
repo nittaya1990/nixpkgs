@@ -4,6 +4,8 @@ stdenv.mkDerivation rec {
   name = "fish-${version}";
   version = "2.2.0";
 
+  patches = [ ./command-not-found.patch ];
+
   src = fetchurl {
     url = "http://fishshell.com/files/${version}/${name}.tar.gz";
     sha256 = "0ympqz7llmf0hafxwglykplw6j5cz82yhlrw50lw4bnf2kykjqx7";
@@ -23,7 +25,6 @@ stdenv.mkDerivation rec {
         -i "$out/share/fish/functions/seq.fish" \
            "$out/share/fish/functions/math.fish"
     sed -i "s|which |${which}/bin/which |" "$out/share/fish/functions/type.fish"
-    sed -i "s|(hostname\||(${nettools}/bin/hostname\||" "$out/share/fish/functions/fish_prompt.fish"
     sed -i "s|nroff |${groff}/bin/nroff |" "$out/share/fish/functions/__fish_print_help.fish"
     sed -e "s|gettext |${gettext}/bin/gettext |" \
         -e "s|which |${which}/bin/which |" \
@@ -31,6 +32,7 @@ stdenv.mkDerivation rec {
     substituteInPlace "$out/share/fish/functions/fish_default_key_bindings.fish" \
       --replace "clear;" "${ncurses}/bin/clear;"
   '' + stdenv.lib.optionalString (!stdenv.isDarwin) ''
+    sed -i "s|(hostname\||(${nettools}/bin/hostname\||" "$out/share/fish/functions/fish_prompt.fish"
     sed -i "s|Popen(\['manpath'|Popen(\['${man_db}/bin/manpath'|" "$out/share/fish/tools/create_manpage_completions.py"
   '' + ''
     sed -i "s|/sbin /usr/sbin||" \

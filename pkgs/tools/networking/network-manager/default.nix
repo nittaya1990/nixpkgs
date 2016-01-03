@@ -1,7 +1,8 @@
 { stdenv, fetchurl, intltool, wirelesstools, pkgconfig, dbus_glib, xz
 , udev, libgudev, libnl, libuuid, polkit, gnutls, ppp, dhcp, dhcpcd, iptables
 , libgcrypt, dnsmasq, avahi, bind, perl, bluez5, substituteAll, readline
-, gobjectIntrospection, modemmanager, openresolv, libndp, newt, libsoup }:
+, gobjectIntrospection, modemmanager, openresolv, libndp, newt, libsoup
+, ethtool, gnused }:
 
 stdenv.mkDerivation rec {
   name = "network-manager-${version}";
@@ -14,8 +15,11 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     substituteInPlace tools/glib-mkenums --replace /usr/bin/perl ${perl}/bin/perl
-    substituteInPlace src/ppp-manager/nm-ppp-manager.c --replace /sbin/modprobe /run/current-system/sw/sbin/modprobe
-    substituteInPlace src/devices/nm-device.c --replace /sbin/modprobe /run/current-system/sw/sbin/modprobe
+    substituteInPlace src/NetworkManagerUtils.c --replace /sbin/modprobe /run/current-system/sw/sbin/modprobe
+    substituteInPlace data/85-nm-unmanaged.rules \
+      --replace /bin/sh ${stdenv.shell} \
+      --replace /usr/sbin/ethtool ${ethtool}/sbin/ethtool \
+      --replace /bin/sed ${gnused}/bin/sed
     configureFlags="$configureFlags --with-udev-dir=$out/lib/udev"
   '';
 

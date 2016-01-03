@@ -4972,17 +4972,17 @@ let self = _self // overrides; _self = with self; {
   };
 
   Glib = buildPerlPackage rec {
-    name = "Glib-1.314";
+    name = "Glib-1.320";
     src = fetchurl {
       url = "mirror://cpan/authors/id/X/XA/XAOC/${name}.tar.gz";
-      sha256 = "13lhyksm7fgj6rgrgs06kr0hinbyhiq3lfr6gd2qal1j2w0rwzml";
+      sha256 = "15mrwscqjgwpkw9n4x6rakr9rjz2ss8d90k574fs5wx9cmgg3np3";
     };
     buildInputs = [ ExtUtilsDepends ExtUtilsPkgConfig pkgs.glib ];
     meta = {
       homepage = http://gtk2-perl.sourceforge.net/;
       description = "Perl wrappers for the GLib utility and Object libraries";
       maintainers = with maintainers; [ nckx ];
-      license = stdenv.lib.licenses.lgpl3Plus;
+      license = stdenv.lib.licenses.lgpl21Plus;
     };
   };
 
@@ -8047,17 +8047,18 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  MozillaLdap = buildPerlPackage {
-    name = "Mozilla-Ldap-1.5.3";
-    USE_OPENLDAP=1;
-    LDAPSDKDIR=pkgs.openldap;
+  MozillaLdap = buildPerlPackage rec {
+    name = "Mozilla-Ldap-${version}";
+    version = "1.5.3";
+    USE_OPENLDAP = 1;
+    LDAPSDKDIR = pkgs.openldap;
     src = fetchurl {
-      url = "ftp://ftp.mozilla.org/pub/mozilla.org/directory/perldap/releases/1.5.3/src/perl-mozldap-1.5.3.tar.gz";
+      url = "https://ftp.mozilla.org/pub/directory/perldap/releases/${version}/src/perl-mozldap-${version}.tar.gz";
       sha256 = "0s0albdw0zvg3w37s7is7gddr4mqwicjxxsy400n1p96l7ipnw4x";
     };
     meta = {
       description = "Mozilla's ldap client library";
-      license = "unknown";
+      license = with stdenv.lib.licenses; [ mpl20 lgpl21Plus gpl2Plus ];
     };
   };
 
@@ -12400,10 +12401,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   URI = buildPerlPackage {
-    name = "URI-1.68";
+    name = "URI-1.69";
     src = fetchurl {
-      url = mirror://cpan/authors/id/E/ET/ETHER/URI-1.68.tar.gz;
-      sha256 = "c840d30f7657bfd4b2acbb311bd764232911cd3dc97e92415fbd0a242185c358";
+      url = mirror://cpan/authors/id/E/ET/ETHER/URI-1.69.tar.gz;
+      sha256 = "0bdlk1cn7ipy4kdylrn73yz9i2k39ikm1cqvh9hq0vvbcbm1cjxp";
     };
     meta = {
       description = "Uniform Resource Identifiers (absolute and relative)";
