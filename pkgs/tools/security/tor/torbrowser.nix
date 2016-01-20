@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, buildEnv
+{ stdenv, fetchurl, buildEnv, makeDesktopItem
 , xorg, alsaLib, dbus, dbus_glib, glib, gtk, atk, pango, freetype, fontconfig
 , gdk_pixbuf, cairo, zlib}:
 let
@@ -16,13 +16,23 @@ let
 
 in stdenv.mkDerivation rec {
   name = "tor-browser-${version}";
-  version = "5.0.6";
+  version = "5.0.7";
 
   src = fetchurl {
     url = "https://archive.torproject.org/tor-package-archive/torbrowser/${version}/tor-browser-linux${if stdenv.is64bit then "64" else "32"}-${version}_en-US.tar.xz";
     sha256 = if stdenv.is64bit then
-      "1ix05760l9j6bwbswd2fnk4b6nrrzxp3b8abvm4y4979pkkmasfw" else
-      "1q5mf91xxj1xs4ajj9i6mdhnzqycbdvprkzskx8pl6j9ll2hlsyh";
+      "0igqh02bcdr0b4m6df46l1l1z38d4nh4pyfn6jqsvahacdl2qbsg" else
+      "1401j340348rqwd5c1m8hnxw7qkwpzqfa64q01cp08lz9cxxml4r";
+  };
+
+  desktopItem = makeDesktopItem {
+    name = "torbrowser";
+    exec = "tor-browser";
+    icon = "torbrowser";
+    desktopName = "Tor Browser";
+    genericName = "Tor Browser";
+    comment = meta.description;
+    categories = "Network;WebBrowser;Security;";
   };
 
   patchPhase = ''
@@ -46,25 +56,31 @@ in stdenv.mkDerivation rec {
     cp -R * $out/share/tor-browser
 
     cat > "$out/bin/tor-browser" << EOF
-      export HOME="\$HOME/.torbrowser4"
-      if [ ! -d \$HOME ]; then
-        mkdir -p \$HOME && cp -R $out/share/tor-browser/Browser/TorBrowser/Data \$HOME/ && chmod -R +w \$HOME
-        echo "pref(\"extensions.torlauncher.tordatadir_path\", \"\$HOME/Data/Tor/\");" >> \
-          ~/Data/Browser/profile.default/preferences/extension-overrides.js
-      fi
-      export LD_LIBRARY_PATH=${ldLibraryPath}:$out/share/tor-browser/Browser/TorBrowser/Tor
-      $out/share/tor-browser/Browser/firefox -no-remote -profile ~/Data/Browser/profile.default "$@"
+    #!${stdenv.shell}
+    export HOME="\$HOME/.torbrowser4"
+    if [ ! -d \$HOME ]; then
+      mkdir -p \$HOME && cp -R $out/share/tor-browser/Browser/TorBrowser/Data \$HOME/ && chmod -R +w \$HOME
+      echo "pref(\"extensions.torlauncher.tordatadir_path\", \"\$HOME/Data/Tor/\");" >> \
+        ~/Data/Browser/profile.default/preferences/extension-overrides.js
+    fi
+    export LD_LIBRARY_PATH=${ldLibraryPath}:$out/share/tor-browser/Browser/TorBrowser/Tor
+    $out/share/tor-browser/Browser/firefox -no-remote -profile ~/Data/Browser/profile.default "$@"
     EOF
     chmod +x $out/bin/tor-browser
+
+    mkdir -p $out/share/applications
+    cp $desktopItem/share/applications"/"* $out/share/applications
+
+    mkdir -p $out/share/pixmaps
+    cp Browser/browser/icons/mozicon128.png $out/share/pixmaps/torbrowser.png
   '';
 
   buildInputs = [ stdenv ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Tor Browser Bundle";
     homepage    = https://www.torproject.org/;
-    platforms   = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers;
-      [ offline matejc doublec thoughtpolice ];
+    platforms   = platforms.linux;
+    maintainers = with maintainers; [ offline matejc doublec thoughtpolice ];
   };
 }

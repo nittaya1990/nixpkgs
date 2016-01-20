@@ -61,6 +61,8 @@ let
       "systemd-user-sessions.service"
       "dbus-org.freedesktop.login1.service"
       "dbus-org.freedesktop.machine1.service"
+      "org.freedesktop.login1.busname"
+      "org.freedesktop.machine1.busname"
       "user@.service"
 
       # Journal.
@@ -147,10 +149,14 @@ let
       "systemd-tmpfiles-setup-dev.service"
 
       # Misc.
+      "org.freedesktop.systemd1.busname"
       "systemd-sysctl.service"
       "dbus-org.freedesktop.timedate1.service"
       "dbus-org.freedesktop.locale1.service"
       "dbus-org.freedesktop.hostname1.service"
+      "org.freedesktop.timedate1.busname"
+      "org.freedesktop.locale1.busname"
+      "org.freedesktop.hostname1.busname"
       "systemd-timedated.service"
       "systemd-localed.service"
       "systemd-hostnamed.service"
@@ -179,8 +185,9 @@ let
     ];
 
   makeJobScript = name: text:
-    let x = pkgs.writeTextFile { name = "unit-script"; executable = true; destination = "/bin/${shellEscape name}"; inherit text; };
-    in "${x}/bin/${shellEscape name}";
+    let mkScriptName =  s: (replaceChars [ "\\" ] [ "-" ] (shellEscape s) );
+        x = pkgs.writeTextFile { name = "unit-script"; executable = true; destination = "/bin/${mkScriptName name}"; inherit text; };
+    in "${x}/bin/${mkScriptName name}";
 
   unitConfig = { name, config, ... }: {
     config = {
@@ -373,6 +380,7 @@ in
 
     systemd.package = mkOption {
       default = pkgs.systemd;
+      defaultText = "pkgs.systemd";
       type = types.package;
       description = "The systemd package.";
     };

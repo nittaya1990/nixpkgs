@@ -5,17 +5,21 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.48.0";
+  version = "2.49.0";
   name = "calibre-${version}";
 
   src = fetchurl {
     url = "http://download.calibre-ebook.com/${version}/${name}.tar.xz";
-    sha256 = "0bjzw806czqxkhq9qqkhff8bhfc428pijkidb1h6gr47jqdp4hpg";
+    sha256 = "0jc476pg07c0nwccprhwgjdlvvb2fdzza9xrjqzc0c42c5v7qzxa";
   };
 
   inherit python;
 
-  patches = stdenv.lib.optional (!unrarSupport) ./dont_build_unrar_plugin.patch;
+  patches = [
+    # Patch from Debian that switches the version update change from
+    # enabled by default to disabled by default.
+    ./no_updates_dialog.patch
+  ] ++ stdenv.lib.optional (!unrarSupport) ./dont_build_unrar_plugin.patch;
 
   prePatch = ''
     sed -i "/pyqt_sip_dir/ s:=.*:= '${pyqt5}/share/sip':"  \
