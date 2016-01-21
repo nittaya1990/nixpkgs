@@ -102,12 +102,12 @@ in
         after = [ "systemd-udev-settle.service" ]
                 ++ optional vswitch.enable "vswitchd.service";
 
-        path = [ 
-            pkgs.bridge-utils 
-            pkgs.dmidecode 
+        path = [
+            pkgs.bridge-utils
+            pkgs.dmidecode
             pkgs.dnsmasq
             pkgs.ebtables
-          ] 
+          ]
           ++ optional cfg.enableKVM pkgs.qemu_kvm
           ++ optional vswitch.enable vswitch.package;
 
@@ -130,6 +130,7 @@ in
             do
                 mkdir -p /var/lib/$(dirname $i) -m 755
                 cp -npd ${pkgs.libvirt}/var/lib/$i /var/lib/$i
+                chmod 644 /var/lib/$i
             done
 
             # libvirtd puts the full path of the emulator binary in the machine
