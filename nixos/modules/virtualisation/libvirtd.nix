@@ -122,6 +122,10 @@ in
             chmod 755 /var/lib/libvirt
             chmod 755 /var/lib/libvirt/dnsmasq
 
+            chown :libvirtd /var/lib/libvirt
+            chown :libvirtd /var/lib/libvirt/dnsmasq
+            chown :libvirtd /var/lib/libvirt/qemu
+
             # Copy default libvirt network config .xml files to /var/lib
             # Files modified by the user will not be overwritten
             for i in $(cd ${pkgs.libvirt}/var/lib && echo \
@@ -131,6 +135,7 @@ in
                 mkdir -p /var/lib/$(dirname $i) -m 755
                 cp -npd ${pkgs.libvirt}/var/lib/$i /var/lib/$i
                 chmod 644 /var/lib/$i
+                chown :libvirtd /var/lib/$i
             done
 
             # libvirtd puts the full path of the emulator binary in the machine
