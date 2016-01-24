@@ -36,7 +36,7 @@ in
           ''
             [Definition]
             loglevel  = INFO
-            logtarget = SYSLOG
+            logtarget = STDERR
             socket    = /run/fail2ban/fail2ban.sock
             pidfile   = /run/fail2ban/fail2ban.pid
           '';
