@@ -230,6 +230,7 @@ in rec {
   #tests.gitlab = callTest tests/gitlab.nix {};
   tests.gnome3 = callTest tests/gnome3.nix {};
   tests.gnome3-gdm = callTest tests/gnome3-gdm.nix {};
+  tests.grsecurity = callTest tests/grsecurity.nix {};
   tests.i3wm = callTest tests/i3wm.nix {};
   tests.installer.grub1 = forAllSystems (system: hydraJob (import tests/installer.nix { inherit system; }).grub1.test);
   tests.installer.lvm = forAllSystems (system: hydraJob (import tests/installer.nix { inherit system; }).lvm.test);
@@ -247,6 +248,7 @@ in rec {
   tests.ipv6 = callTest tests/ipv6.nix {};
   tests.jenkins = callTest tests/jenkins.nix {};
   tests.kde4 = callTest tests/kde4.nix {};
+  tests.initrdNetwork = callTest tests/initrd-network.nix {};
   tests.kubernetes = hydraJob (import tests/kubernetes.nix { system = "x86_64-linux"; });
   tests.latestKernel.login = callTest tests/login.nix { latestKernel = true; };
   #tests.lightdm = callTest tests/lightdm.nix {};

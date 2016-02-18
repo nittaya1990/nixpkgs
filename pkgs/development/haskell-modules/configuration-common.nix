@@ -5,14 +5,14 @@ with import ./lib.nix { inherit pkgs; };
 self: super: {
 
   # Some packages need a non-core version of Cabal.
-  Cabal_1_18_1_6 = dontCheck super.Cabal_1_18_1_6;
-  Cabal_1_20_0_3 = dontCheck super.Cabal_1_20_0_3;
+  Cabal_1_18_1_7 = dontCheck super.Cabal_1_18_1_7;
+  Cabal_1_20_0_4 = dontCheck super.Cabal_1_20_0_4;
   Cabal_1_22_4_0 = dontCheck super.Cabal_1_22_4_0;
   cabal-install = (dontCheck super.cabal-install).overrideScope (self: super: { Cabal = self.Cabal_1_22_4_0; });
-  cabal-install_1_18_1_0 = (dontCheck super.cabal-install_1_18_1_0).overrideScope (self: super: { Cabal = self.Cabal_1_18_1_6; });
+  cabal-install_1_18_1_0 = (dontCheck super.cabal-install_1_18_1_0).overrideScope (self: super: { Cabal = self.Cabal_1_18_1_7; });
 
   # Link statically to avoid runtime dependency on GHC.
-  jailbreak-cabal = (disableSharedExecutables super.jailbreak-cabal).override { Cabal = dontJailbreak self.Cabal_1_20_0_3; };
+  jailbreak-cabal = (disableSharedExecutables super.jailbreak-cabal).override { Cabal = dontJailbreak self.Cabal_1_20_0_4; };
 
   # Apply NixOS-specific patches.
   ghc-paths = appendPatch super.ghc-paths ./patches/ghc-paths-nix.patch;
@@ -21,13 +21,14 @@ self: super: {
   clock = dontCheck super.clock;
   Dust-crypto = dontCheck super.Dust-crypto;
   hasql-postgres = dontCheck super.hasql-postgres;
-  hspec_2_1_10 = super.hspec_2_1_10.override { stringbuilder = dontCheck super.stringbuilder; };
   hspec_2_1_2 = super.hspec_2_1_2.override { stringbuilder = dontCheck super.stringbuilder; };
   hspec_2_1_3 = super.hspec_2_1_3.override { stringbuilder = dontCheck super.stringbuilder; };
   hspec_2_1_4 = super.hspec_2_1_4.override { stringbuilder = dontCheck super.stringbuilder; };
   hspec_2_1_5 = super.hspec_2_1_5.override { stringbuilder = dontCheck super.stringbuilder; };
   hspec_2_1_6 = super.hspec_2_1_6.override { stringbuilder = dontCheck super.stringbuilder; };
   hspec_2_1_7 = super.hspec_2_1_7.override { stringbuilder = dontCheck super.stringbuilder; };
+  hspec_2_1_10 = super.hspec_2_1_10.override { stringbuilder = dontCheck super.stringbuilder; };
+  hspec_2_2_1 = super.hspec_2_2_1.override { stringbuilder = dontCheck super.stringbuilder; };
   hspec-expectations_0_6_1_1 = dontCheck super.hspec-expectations_0_6_1_1;
   hspec-expectations_0_6_1 = dontCheck super.hspec-expectations_0_6_1;
   hspec-expectations_0_7_1 = dontCheck super.hspec-expectations_0_7_1;
@@ -604,14 +605,8 @@ self: super: {
   # https://github.com/junjihashimoto/test-sandbox-compose/issues/2
   test-sandbox-compose = dontCheck super.test-sandbox-compose;
 
-  # https://github.com/jgm/pandoc/issues/2190
-  pandoc = overrideCabal super.pandoc (drv: {
-    enableSharedExecutables = false;
-    postInstall = ''            # install man pages
-      mv man $out/
-      find $out/man -type f ! -name "*.[0-9]" -exec rm {} +
-    '';
-  });
+  # https://github.com/jgm/pandoc/issues/2709
+  pandoc = disableSharedExecutables super.pandoc;
 
   # Tests attempt to use NPM to install from the network into
   # /homeless-shelter. Disabled.
@@ -625,14 +620,6 @@ self: super: {
 
   # https://github.com/haskell/haddock/issues/378
   haddock-library = dontCheck super.haddock-library;
-
-  # Already fixed in upstream darcs repo.
-  xmonad-contrib = overrideCabal super.xmonad-contrib (drv: {
-    postPatch = ''
-      sed -i -e '24iimport Control.Applicative' XMonad/Util/Invisible.hs
-      sed -i -e '22iimport Control.Applicative' XMonad/Hooks/DebugEvents.hs
-    '';
-  });
 
   # https://github.com/anton-k/csound-expression-dynamic/issues/1
   csound-expression-dynamic = dontHaddock super.csound-expression-dynamic;
@@ -772,9 +759,6 @@ self: super: {
   elm-server = markBroken super.elm-server;
   elm-yesod = markBroken super.elm-yesod;
 
-  # https://github.com/GaloisInc/HaNS/pull/8
-  hans = appendPatch super.hans ./patches/hans-disable-webserver.patch;
-
   # https://github.com/athanclark/sets/issues/2
   sets = dontCheck super.sets;
 
@@ -839,6 +823,9 @@ self: super: {
   configurator = dontCheck super.configurator;
 
   # The cabal files for these libraries do not list the required system dependencies.
+  miniball = overrideCabal super.miniball (drv: {
+    librarySystemDepends = [ pkgs.miniball ];
+  });
   SDL-image = overrideCabal super.SDL-image (drv: {
     librarySystemDepends = [ pkgs.SDL pkgs.SDL_image ] ++ drv.librarySystemDepends or [];
   });

@@ -3,20 +3,19 @@
 
 let
 
-  version = "${libVersion}-list-${listVersion}";
-
-  listVersion = "2016-01-09";
+  listVersion = "2016-02-09";
   listSources = fetchFromGitHub {
-    sha256 = "1xsal9vyan954ahyn9pxvqpipmpcf6drp30xz7ag5xp3f2clcx8s";
-    rev = "0f7cc8b00498812ddaa983c56d67ef3713e48350";
+    sha256 = "17jxkwdd2l6aycg2q5img8gad3pb9k6fgikf87dybl3ydn0bpdja";
+    rev = "73668f743df8125477d38690807e3a9a1e1e9f19";
     repo = "list";
     owner = "publicsuffix";
   };
 
   libVersion = "0.12.0";
 
-in stdenv.mkDerivation {
+in stdenv.mkDerivation rec {
   name = "libpsl-${version}";
+  version = "${libVersion}-list-${listVersion}";
 
   src = fetchFromGitHub {
     sha256 = "13w3lc752az2swymg408f3w2lbqs0f2h5ri6d5jw1vv9z0ij9xlw";
@@ -54,7 +53,6 @@ in stdenv.mkDerivation {
   doCheck = true;
 
   meta = with stdenv.lib; {
-    inherit version;
     description = "C library for the Publix Suffix List";
     longDescription = ''
       libpsl is a C library for the Publix Suffix List (PSL). A "public suffix"

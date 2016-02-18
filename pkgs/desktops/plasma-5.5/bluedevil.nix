@@ -16,8 +16,11 @@ plasmaPackage {
   propagatedBuildInputs = [
     bluez-qt ki18n kio kwindowsystem plasma-framework qtdeclarative
   ];
+  propagatedUserEnvPkgs = [ bluez-qt ];
   postInstall = ''
     wrapQtProgram "$out/bin/bluedevil-wizard"
     wrapQtProgram "$out/bin/bluedevil-sendfile"
+    # Fix the location of logic.js for the plasmoid
+    ln -s $out/share/plasma/plasmoids/org.kde.plasma.bluetooth/contents/code/logic.js $out/share/plasma/plasmoids/org.kde.plasma.bluetooth/contents/ui/logic.js
   '';
 }

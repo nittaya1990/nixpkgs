@@ -165,7 +165,6 @@ in
         script = "exec venus-planet ${configFile}";
         serviceConfig.User = "${cfg.user}";
         serviceConfig.Group = "${cfg.group}";
-        environment.SSL_CERT_FILE = "/etc/ssl/certs/ca-bundle.crt";
         startAt = cfg.dates;
       };
 

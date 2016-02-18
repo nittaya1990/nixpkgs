@@ -1,12 +1,12 @@
 { stdenv, fetchurl, cairo, colord, glib, gtk3, gusb, intltool, itstool
 , libusb1, libxml2, pkgconfig, sane-backends, vala, wrapGAppsHook }:
 
-let version = "3.19.4"; in
 stdenv.mkDerivation rec {
   name = "simple-scan-${version}";
+  version = "3.19.90";
 
   src = fetchurl {
-    sha256 = "1v9sify1s38qd5sfg26m7sdg9bkrfmai2nijs4wzah7xa9p23c83";
+    sha256 = "16s8855sqrn5iiirpqva0mys8abfpzk9xryrb6rpjbynvx2lanmd";
     url = "https://launchpad.net/simple-scan/3.19/${version}/+download/${name}.tar.xz";
   };
 
@@ -26,7 +26,6 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = with stdenv.lib; {
-    inherit version;
     description = "Simple scanning utility";
     longDescription = ''
       A really easy way to scan both documents and photos. You can crop out the
