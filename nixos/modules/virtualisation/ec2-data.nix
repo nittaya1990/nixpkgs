@@ -19,6 +19,10 @@ with lib;
 
         script =
           ''
+            if ! [ -d /etc/ec2-metadata ]; then
+              exit 0
+            fi
+
             ${optionalString (config.networking.hostName == "") ''
               echo "setting host name..."
               if [ -s /etc/ec2-metadata/hostname ]; then
