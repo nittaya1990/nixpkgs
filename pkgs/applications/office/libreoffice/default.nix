@@ -11,13 +11,16 @@
 , fontsConf, pkgconfig, libzip, bluez5, libtool, maven
 , libatomic_ops, graphite2, harfbuzz, libodfgen
 , librevenge, libe-book, libmwaw, glm, glew, gst_all_1
-, gdb, commonsLogging, librdf_rasqal
+, gdb, commonsLogging, librdf_rasqal, makeWrapper, gsettings_desktop_schemas
+, defaultIconTheme, glib
 , langs ? [ "en-US" "en-GB" "ca" "ru" "eo" "fr" "nl" "de" "sl" "pl" ]
 , withHelp ? true
+, kdeIntegration ? false
 }:
 
 let
-  langsSpaces = stdenv.lib.concatStringsSep " " langs;
+  lib = stdenv.lib;
+  langsSpaces = lib.concatStringsSep " " langs;
   major = "5";
   minor = "1";
   patch = "0";
@@ -89,7 +92,6 @@ in stdenv.mkDerivation rec {
   '';
 
   QT4DIR = qt4;
-  KDE4DIR = kde4.kdelibs;
 
   # Fix boost 1.59 compat
   # Try removing in the next version
@@ -105,6 +107,9 @@ in stdenv.mkDerivation rec {
     patchShebangs .
     # It is used only as an indicator of the proper current directory
     touch solenv/inc/target.mk
+
+    # BLFS patch for Glibc 2.23 renaming isnan
+    sed -ire "s@isnan@std::&@g" xmloff/source/draw/ximp3dscene.cxx
   '';
 
   # fetch_Download_item tries to interpret the name as a variable name
@@ -141,8 +146,14 @@ in stdenv.mkDerivation rec {
   postInstall = ''
     mkdir -p $out/bin $out/share/desktop
 
+    mkdir -p "$out/share/gsettings-schemas/collected-for-libreoffice/glib-2.0/schemas/"
+
     for a in sbase scalc sdraw smath swriter spadmin simpress soffice; do
       ln -s $out/lib/libreoffice/program/$a $out/bin/$a
+      wrapProgram "$out/bin/$a" \
+         --prefix XDG_DATA_DIRS : \
+         "$out/share:$GSETTINGS_SCHEMAS_PATH" \
+         ;
     done
 
     ln -s $out/bin/soffice $out/bin/libreoffice
@@ -168,7 +179,7 @@ in stdenv.mkDerivation rec {
     "--disable-report-builder"
     "--enable-python=system"
     "--enable-dbus"
-    "--enable-kde4"
+    (lib.enableFeature kdeIntegration "kde4")
     "--with-package-format=installed"
     "--enable-epm"
     "--with-jdk-home=${jdk.home}"
@@ -220,20 +231,21 @@ in stdenv.mkDerivation rec {
     [ ant ArchiveZip autoconf automake bison boost cairo clucene_core
       CompressZlib cppunit cups curl db dbus_glib expat file flex fontconfig
       freetype GConf getopt gnome_vfs gperf gtk3 gtk
-      hunspell icu jdk kde4.kdelibs lcms libcdr libexttextcat unixODBC libjpeg
+      hunspell icu jdk lcms libcdr libexttextcat unixODBC libjpeg
       libmspack librdf_redland librsvg libsndfile libvisio libwpd libwpg libX11
       libXaw libXext libXi libXinerama libxml2 libxslt libXtst
       libXdmcp libpthreadstubs mesa mythes gst_all_1.gstreamer
-      gst_all_1.gst-plugins-base
+      gst_all_1.gst-plugins-base gsettings_desktop_schemas glib
       neon nspr nss openldap openssl ORBit2 pam perl pkgconfig poppler
       python3 sablotron sane-backends tcsh unzip vigra which zip zlib
       mdds bluez5 glibc libcmis libwps libabw
       libxshmfence libatomic_ops graphite2 harfbuzz
       librevenge libe-book libmwaw glm glew
-      libodfgen CoinMP librdf_rasqal
-    ];
+      libodfgen CoinMP librdf_rasqal defaultIconTheme makeWrapper
+    ]
+    ++ lib.optional kdeIntegration kde4.kdelibs;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Comprehensive, professional-quality productivity suite, a variant of openoffice.org";
     homepage = http://libreoffice.org/;
     license = licenses.lgpl3;

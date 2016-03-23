@@ -1,19 +1,22 @@
-/* -*- coding: utf-8; -*- */
+/* List of NixOS maintainers. The format is:
 
+    handle = "Real Name <address@example.org>";
+
+  where <handle> is preferred to be your GitHub username (so it's easy
+  to ping a package @<handle>), and <Real Name> is your real name, not
+  a pseudonym. Please keep the list alphabetically sorted. */
 {
-  /* Add your name and email address here.
-     Keep the list alphabetically sorted.
-     Prefer the same attrname as your github username, please,
-     so it's easy to ping a package @maintainer.
-  */
-
-  aaronschif = "Aaron Schif <aaronschif@gmail.com>";
   a1russell = "Adam Russell <adamlr6+pub@gmail.com>";
+  aaronschif = "Aaron Schif <aaronschif@gmail.com>";
   abaldeau = "Andreas Baldeau <andreas@baldeau.net>";
   abbradar = "Nikolay Amiantov <ab@fmap.me>";
-  adev	   = "Adrien Devresse <adev@adev.name>";
-  aforemny = "Alexander Foremny <alexanderforemny@googlemail.com>";
+  aboseley = "Adam Boseley <adam.boseley@gmail.com>";
+  adev = "Adrien Devresse <adev@adev.name>";
+  Adjective-Object = "Maxwell Huang-Hobbs <mhuan13@gmail.com>";
+  aespinosa = "Allan Espinosa <allan.espinosa@outlook.com>";
   aflatter = "Alexander Flatter <flatter@fastmail.fm>";
+  aforemny = "Alexander Foremny <alexanderforemny@googlemail.com>";
+  afranchuk = "Alex Franchuk <alex.franchuk@gmail.com>";
   aherrmann = "Andreas Herrmann <andreash87@gmx.ch>";
   ak = "Alexander Kjeldaas <ak@formalprivacy.com>";
   akaWolf = "Artjom Vejsel <akawolf0@gmail.com>";
@@ -32,6 +35,7 @@
   ardumont = "Antoine R. Dumont <eniotna.t@gmail.com>";
   aristid = "Aristid Breitkreuz <aristidb@gmail.com>";
   arobyn = "Alexei Robyn <shados@shados.net>";
+  artuuge = "Artur E. Ruuge <artuuge@gmail.com>";
   asppsa = "Alastair Pharo <asppsa@gmail.com>";
   astsmtl = "Alexander Tsamutali <astsmtl@yandex.ru>";
   aszlig = "aszlig <aszlig@redmoonstudios.org>";
@@ -45,8 +49,8 @@
   bcarrell = "Brandon Carrell <brandoncarrell@gmail.com>";
   bcdarwin = "Ben Darwin <bcdarwin@gmail.com>";
   bdimcheff = "Brandon Dimcheff <brandon@dimcheff.com>";
-  bennofs = "Benno Fünfstück <benno.fuenfstueck@gmail.com>";
   benley = "Benjamin Staffin <benley@gmail.com>";
+  bennofs = "Benno Fünfstück <benno.fuenfstueck@gmail.com>";
   berdario = "Dario Bertini <berdario@gmail.com>";
   bergey = "Daniel Bergey <bergey@teallabs.org>";
   bjg = "Brian Gough <bjg@gnu.org>";
@@ -58,6 +62,7 @@
   bosu = "Boris Sukholitko <boriss@gmail.com>";
   bramd = "Bram Duvigneau <bram@bramd.nl>";
   bstrik = "Berno Strik <dutchman55@gmx.com>";
+  bzizou = "Bruno Bzeznik <Bruno@bzizou.net>";
   c0dehero = "CodeHero <codehero@nerdpol.ch>";
   calrama = "Moritz Maxeiner <moritz@ucworks.org>";
   campadrenalin = "Philip Horger <campadrenalin@gmail.com>";
@@ -66,6 +71,7 @@
   chaoflow = "Florian Friesdorf <flo@chaoflow.net>";
   chattered = "Phil Scott <me@philscotted.com>";
   christopherpoole = "Christopher Mark Poole <mail@christopherpoole.net>";
+  cleverca22 = "Michael Bishop <cleverca22@gmail.com>";
   coconnor = "Corey O'Connor <coreyoconnor@gmail.com>";
   codsl = "codsl <codsl@riseup.net>";
   codyopel = "Cody Opel <codyopel@gmail.com>";
@@ -80,9 +86,9 @@
   davidak = "David Kleuker <post@davidak.de>";
   davidrusu = "David Rusu <davidrusu.me@gmail.com>";
   dbohdan = "Danyil Bohdan <danyil.bohdan@gmail.com>";
-  DerGuteMoritz = "Moritz Heidkamp <moritz@twoticketsplease.de>";
   deepfire = "Kosyrev Serge <_deepfire@feelingofgreen.ru>";
   demin-dmitriy = "Dmitriy Demin <demindf@gmail.com>";
+  DerGuteMoritz = "Moritz Heidkamp <moritz@twoticketsplease.de>";
   desiderius = "Didier J. Devroye <didier@devroye.name>";
   devhell = "devhell <\"^\"@regexmail.net>";
   dezgeg = "Tuomas Tynkkynen <tuomas.tynkkynen@iki.fi>";
@@ -118,10 +124,12 @@
   fpletz = "Franz Pletz <fpletz@fnordicwalking.de>";
   fps = "Florian Paul Schmidt <mista.tapas@gmx.net>";
   fridh = "Frederik Rietdijk <fridh@fridh.nl>";
+  frlan = "Frank Lanitz <frank@frank.uvena.de>";
   fro_ozen = "fro_ozen <fro_ozen@gmx.de>";
   ftrvxmtrx = "Siarhei Zirukin <ftrvxmtrx@gmail.com>";
   funfunctor = "Edward O'Callaghan <eocallaghan@alterapraxis.com>";
   fuuzetsu = "Mateusz Kowalczyk <fuuzetsu@fuuzetsu.co.uk>";
+  fxfactorial = "Edgar Aroutiounian <edgar.factorial@gmail.com>";
   gal_bolle = "Florent Becker <florent.becker@ens-lyon.org>";
   garbas = "Rok Garbas <rok@garbas.si>";
   garrison = "Jim Garrison <jim@garrison.cc>";
@@ -132,6 +140,7 @@
   gleber = "Gleb Peregud <gleber.p@gmail.com>";
   globin = "Robin Gloster <mail@glob.in>";
   goibhniu = "Cillian de Róiste <cillian.deroiste@gmail.com>";
+  Gonzih = "Max Gonzih <gonzih@gmail.com>";
   gridaphobe = "Eric Seidel <eric@seidel.io>";
   guibert = "David Guibert <david.guibert@gmail.com>";
   havvy = "Ryan Scheel <ryan.havvy@gmail.com>";
@@ -145,7 +154,6 @@
   iElectric = "Domen Kozar <domen@dev.si>";
   igsha = "Igor Sharonov <igor.sharonov@gmail.com>";
   ikervagyok = "Balázs Lengyel <ikervagyok@gmail.com>";
-  iyzsong = "Song Wenwu <iyzsong@gmail.com>";
   j-keck = "Jürgen Keck <jhyphenkeck@gmail.com>";
   jagajaga = "Arseniy Seroka <ars.seroka@gmail.com>";
   javaguirre = "Javier Aguirre <contacto@javaguirre.net>";
@@ -161,6 +169,7 @@
   joelmo = "Joel Moberg <joel.moberg@gmail.com>";
   joelteon = "Joel Taylor <me@joelt.io>";
   jpbernardy = "Jean-Philippe Bernardy <jeanphilippe.bernardy@gmail.com>";
+  jraygauthier = "Raymond Gauthier <jraygauthier@gmail.com>";
   jwiegley = "John Wiegley <johnw@newartisans.com>";
   jwilberding = "Jordan Wilberding <jwilberding@afiniate.com>";
   jzellner = "Jeff Zellner <jeffz@eml.cc>";
@@ -176,6 +185,7 @@
   lassulus = "Lassulus <lassulus@gmail.com>";
   layus = "Guillaume Maudoux <layus.on@gmail.com>";
   lebastr = "Alexander Lebedev <lebastr@gmail.com>";
+  leenaars = "Michiel Leenaars <ml.software@leenaa.rs>";
   leonardoce = "Leonardo Cecchi <leonardo.cecchi@gmail.com>";
   lethalman = "Luca Bruno <lucabru@src.gnome.org>";
   lewo = "Antoine Eiche <lewo@abesis.fr>";
@@ -188,9 +198,9 @@
   lowfatcomputing = "Andreas Wagner <andreas.wagner@lowfatcomputing.org>";
   lsix = "Lancelot SIX <lsix@lancelotsix.com>";
   ludo = "Ludovic Courtès <ludo@gnu.org>";
+  luispedro = "Luis Pedro Coelho <luis@luispedro.org>";
   lukasepple = "Lukas Epple <post@lukasepple.de>";
   lukego = "Luke Gorrie <luke@snabb.co>";
-  luispedro = "Luis Pedro Coelho <luis@luispedro.org>";
   lw = "Sergey Sofeychuk <lw@fmap.me>";
   madjar = "Georges Dubus <georges.dubus@compiletoi.net>";
   magnetophon = "Bart Brouns <bart@magnetophon.nl>";
@@ -199,25 +209,29 @@
   malyn = "Michael Alyn Miller <malyn@strangeGizmo.com>";
   manveru = "Michael Fellinger <m.fellinger@gmail.com>";
   marcweber = "Marc Weber <marco-oweber@gmx.de>";
+  markus1189 = "Markus Hauck <markus1189@gmail.com>";
   markWot = "Markus Wotringer <markus@wotringer.de>";
-  maurer = "Matthew Maurer <matthew.r.maurer+nix@gmail.com>";
   matejc = "Matej Cotman <cotman.matej@gmail.com>";
   mathnerd314 = "Mathnerd314 <mathnerd314.gph+hs@gmail.com>";
   matthiasbeyer = "Matthias Beyer <mail@beyermatthias.de>";
+  mbauer = "Matthew Bauer <mjbauer95@gmail.com>";
+  maurer = "Matthew Maurer <matthew.r.maurer+nix@gmail.com>";
   mbakke = "Marius Bakke <ymse@tuta.io>";
   mbe = "Brandon Edens <brandonedens@gmail.com>";
+  mboes = "Mathieu Boespflug <mboes@tweag.net>";
   mcmtroffaes = "Matthias C. M. Troffaes <matthias.troffaes@gmail.com>";
   meditans = "Carlo Nucera <meditans@gmail.com>";
   meisternu = "Matt Miemiec <meister@krutt.org>";
-  michelk = "Michel Kuhlmann <michel@kuhlmanns.info>";
   michaelpj = "Michael Peyton Jones <michaelpj@gmail.com>";
+  michelk = "Michel Kuhlmann <michel@kuhlmanns.info>";
+  mingchuan = "Ming Chuan <ming@culpring.com>";
   mirdhyn = "Merlin Gaillard <mirdhyn@gmail.com>";
-  mschristiansen = "Mikkel Christiansen <mikkel@rheosystems.com>";
   modulistic = "Pablo Costa <modulistic@gmail.com>";
   mog = "Matthew O'Gorman <mog-lists@rldn.net>";
   mornfall = "Petr Ročkai <me@mornfall.net>";
   MP2E = "Cray Elliott <MP2E@archlinux.us>";
   msackman = "Matthew Sackman <matthew@wellquite.org>";
+  mschristiansen = "Mikkel Christiansen <mikkel@rheosystems.com>";
   msteen = "Matthijs Steen <emailmatthijs@gmail.com>";
   mtreskin = "Max Treskin <zerthurd@gmail.com>";
   mudri = "James Wood <lamudri@gmail.com>";
@@ -244,8 +258,10 @@
   palo = "Ingolf Wanger <palipalo9@googlemail.com>";
   pashev = "Igor Pashev <pashev.igor@gmail.com>";
   pesterhazy = "Paulus Esterhazy <pesterhazy@gmail.com>";
-  phile314 = "Philipp Hausmann <nix@314.ch>";
+  peterhoeg = "Peter Hoeg <peter@hoeg.com>";
   philandstuff = "Philip Potter <philip.g.potter@gmail.com>";
+  phile314 = "Philipp Hausmann <nix@314.ch>";
+  Phlogistique = "Noé Rubinstein <noe.rubinstein@gmail.com>";
   phreedom = "Evgeny Egorochkin <phreedom@yandex.ru>";
   phunehehe = "Hoang Xuan Phu <phunehehe@gmail.com>";
   pierron = "Nicolas B. Pierron <nixos@nbp.name>";
@@ -254,7 +270,6 @@
   pjones = "Peter Jones <pjones@devalot.com>";
   pkmx = "Chih-Mao Chen <pkmx.tw@gmail.com>";
   plcplc = "Philip Lykke Carlsen <plcplc@gmail.com>";
-  Phlogistique = "Noé Rubinstein <noe.rubinstein@gmail.com>";
   pmahoney = "Patrick Mahoney <pat@polycrystal.org>";
   pmiddend = "Philipp Middendorf <pmidden@secure.mailbox.org>";
   prikhi = "Pavan Rikhi <pavan.rikhi@gmail.com>";
@@ -282,13 +297,16 @@
   rushmorem = "Rushmore Mushambi <rushmore@webenchanter.com>";
   rvl = "Rodney Lorrimar <dev+nix@rodney.id.au>";
   rvlander = "Gaëtan André <rvlander@gaetanandre.eu>";
+  ryanartecona = "Ryan Artecona <ryanartecona@gmail.com>";
   ryantm = "Ryan Mulligan <ryan@ryantm.com>";
   rycee = "Robert Helgesson <robert@rycee.net>";
   samuelrivas = "Samuel Rivas <samuelrivas@gmail.com>";
   sander = "Sander van der Burg <s.vanderburg@tudelft.nl>";
   schmitthenner = "Fabian Schmitthenner <development@schmitthenner.eu>";
   schristo = "Scott Christopher <schristopher@konputa.com>";
+  scolobb = "Sergiu Ivanov <sivanov@colimite.fr>";
   sepi = "Raffael Mancini <raffael@mancini.lu>";
+  sheenobu = "Sheena Artrip <sheena.artrip@gmail.com>";
   sheganinans = "Aistis Raulinaitis <sheganinans@gmail.com>";
   shell = "Shell Turner <cam.turn@gmail.com>";
   shlevy = "Shea Levy <shea@shealevy.com>";
@@ -298,6 +316,7 @@
   sjmackenzie = "Stewart Mackenzie <setori88@gmail.com>";
   sjourdois = "Stéphane ‘kwisatz’ Jourdois <sjourdois@gmail.com>";
   skeidel = "Sven Keidel <svenkeidel@gmail.com>";
+  skrzyp = "Jakub Skrzypnik <jot.skrzyp@gmail.com>";
   sleexyz = "Sean Lee <freshdried@gmail.com>";
   smironov = "Sergey Mironov <ierton@gmail.com>";
   spacefrogg = "Michael Raitza <spacefrogg-nixos@meterriblecrew.net>";
@@ -325,7 +344,7 @@
   tomberek = "Thomas Bereknyei <tomberek@gmail.com>";
   travisbhartwell = "Travis B. Hartwell <nafai@travishartwell.net>";
   trino = "Hubert Mühlhans <muehlhans.hubert@ekodia.de>";
-  tstrobel = "Thomas Strobel <ts468@cam.ac.uk>";
+  tstrobel = "Thomas Strobel <4ZKTUB6TEP74PYJOPWIR013S2AV29YUBW5F9ZH2F4D5UMJUJ6S@hash.domains>";
   ttuegel = "Thomas Tuegel <ttuegel@gmail.com>";
   tv = "Tomislav Viljetić <tv@shackspace.de>";
   tvestelind = "Tomas Vestelind <tomas.vestelind@fripost.org>";
@@ -346,9 +365,9 @@
   winden = "Antonio Vargas Gonzalez <windenntw@gmail.com>";
   wizeman = "Ricardo M. Correia <rcorreia@wizy.org>";
   wjlroe = "William Roe <willroe@gmail.com>";
-  womfoo = "Kranium Gikos Mendoza <kranium@gikos.net>";
   wkennington = "William A. Kennington III <william@wkennington.com>";
   wmertens = "Wout Mertens <Wout.Mertens@gmail.com>";
+  womfoo = "Kranium Gikos Mendoza <kranium@gikos.net>";
   wscott = "Wayne Scott <wsc9tt@gmail.com>";
   wyvie = "Elijah Rum <elijahrum@gmail.com>";
   yarr = "Dmitry V. <savraz@gmail.com>";
@@ -358,5 +377,4 @@
   zimbatm = "zimbatm <zimbatm@zimbatm.com>";
   zohl = "Al Zohali <zohl@fmap.me>";
   zoomulator = "Kim Simmons <zoomulator@gmail.com>";
-  Gonzih = "Max Gonzih <gonzih@gmail.com>";
 }

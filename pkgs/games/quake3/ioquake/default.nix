@@ -1,20 +1,20 @@
-{ lib, stdenv, fetchgit, xlibsWrapper, SDL2, mesa, openalSoft
+{ lib, stdenv, fetchFromGitHub, which, pkgconfig, xlibsWrapper, SDL2, mesa, openalSoft
 , curl, speex, opusfile, libogg, libopus, libjpeg, mumble, freetype
 }:
 
-stdenv.mkDerivation {
-  name = "ioquake3-git-20151228";
+stdenv.mkDerivation rec {
+  name = "ioquake3-git-${version}";
+  version = "2016-03-15";
 
-  src = fetchgit {
-    url = "https://github.com/ioquake/ioq3";
-    rev = "fe619680f8fa9794906fc82a9c8c6113770696e6";
-    sha256 = "5462441df63eebee6f8ed19a8326de5f874dad31e124d37f73d3bab1cd656a87";
+  src = fetchFromGitHub {
+    owner = "ioquake";
+    repo = "ioq3";
+    rev = "f911e32bb059f714dfc49dc2296bc6f27c442e4c";
+    sha256 = "0l60snxlgvwxbpv31nwshy0rddyyxmcvqg6xqj9ifzr1gj4np5r8";
   };
 
+  nativeBuildInputs = [ which pkgconfig ];
   buildInputs = [ xlibsWrapper SDL2 mesa openalSoft curl speex opusfile libogg libopus libjpeg freetype mumble ];
-
-  NIX_CFLAGS_COMPILE = [ "-I${SDL2}/include/SDL2" "-I${opusfile}/include/opus" "-I${libopus}/include/opus" ];
-  NIX_CFLAGS_LINK = [ "-lSDL2" ];
 
   enableParallelBuilding = true;
 

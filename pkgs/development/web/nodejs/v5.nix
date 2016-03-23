@@ -3,11 +3,10 @@
 }:
 
 # nodejs 5.0.0 can't be built on armv5tel. Armv6 with FPU, minimum I think.
-# Related post: http://zo0ok.com/techfindings/archives/1820
 assert stdenv.system != "armv5tel-linux";
 
 let
-  version = "5.5.0";
+  version = "5.9.0";
 
   deps = {
     inherit openssl zlib libuv;
@@ -31,7 +30,7 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://nodejs.org/dist/v${version}/node-v${version}.tar.gz";
-    sha256 = "0cmlk13skwag9gn1198h0ql64rv1jwwqbysq911kb6k94361i6yn";
+    sha256 = "0ghgfqs64794g6ggrvsdcqwz2lnhck0yiy2fyyg3in8z91k5l5z5";
   };
 
   configureFlags = concatMap sharedConfigureFlags (builtins.attrNames deps) ++ [ "--without-dtrace" ];

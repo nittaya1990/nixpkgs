@@ -251,6 +251,11 @@
       cfdyndns = 227;
       gammu-smsd = 228;
       pdnsd = 229;
+      octoprint = 230;
+      avahi-autoipd = 231;
+      nntp-proxy = 232;
+      mjpg-streamer = 233;
+      radicale = 234;
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
@@ -478,6 +483,8 @@
       rmilter = 226;
       cfdyndns = 227;
       pdnsd = 229;
+      octoprint = 230;
+      radicale = 234;
 
       # When adding a gid, make sure it doesn't match an existing
       # uid. Users and groups with the same name should have equal

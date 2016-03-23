@@ -2,13 +2,13 @@
 , libvpx, check, libconfig, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "tox-core-dev-20160105";
+  name = "tox-core-dev-20160319";
 
   src = fetchFromGitHub {
     owner  = "irungentoo";
     repo   = "toxcore";
-    rev    = "b9ef24875ce1d9bf5f04f0164ae95f729330a295";
-    sha256 = "0hxwp4nk5an3a2pmha6x2729mxm57j52vnrsq47gir31c0hk6x2x";
+    rev    = "532629d486e3361c7d8d95b38293cc7d61dc4ee5";
+    sha256 = "0x8mjrjiafgia9vy7w4zhfzicr2fljx8xgm2ppi4kva2r2z1wm2f";
   };
 
   NIX_LDFLAGS = "-lgcc_s";
@@ -52,4 +52,3 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
   };
 }
-

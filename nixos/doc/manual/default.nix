@@ -56,8 +56,8 @@ let
       cp -prd $sources/* . # */
       chmod -R u+w .
       cp ${../../modules/services/databases/postgresql.xml} configuration/postgresql.xml
+      cp ${../../modules/services/misc/gitlab.xml} configuration/gitlab.xml
       cp ${../../modules/security/acme.xml} configuration/acme.xml
-      cp ${../../modules/misc/nixos.xml} configuration/nixos.xml
       ln -s ${optionsDocBook} options-db.xml
       echo "${version}" > version
     '';
@@ -187,6 +187,7 @@ in rec {
         --param man.output.in.separate.dir 1 \
         --param man.output.base.dir "'$out/share/man/'" \
         --param man.endnotes.are.numbered 0 \
+        --param man.break.after.slash 1 \
         ${docbook5_xsl}/xml/xsl/docbook/manpages/docbook.xsl \
         ./man-pages.xml
     '';

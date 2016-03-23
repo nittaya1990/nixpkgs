@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   name = "simple-scan-${version}";
-  version = "3.19.90";
+  version = "3.20.0";
 
   src = fetchurl {
-    sha256 = "16s8855sqrn5iiirpqva0mys8abfpzk9xryrb6rpjbynvx2lanmd";
-    url = "https://launchpad.net/simple-scan/3.19/${version}/+download/${name}.tar.xz";
+    sha256 = "0b5ndrjwi7yipkr9bhyifpbdil65izdm677if23yj832n2jsbxcd";
+    url = "https://launchpad.net/simple-scan/3.20/${version}/+download/${name}.tar.xz";
   };
 
   buildInputs = [ cairo colord glib gusb gtk3 libusb1 libxml2 sane-backends
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--disable-packagekit" ];
 
   preBuild = ''
-    # Clean up stale generated .c files still referencing packagekit headers:
+    # Clean up stale .c files referencing packagekit headers as of 3.20.0:
     make clean
   '';
 

@@ -9,7 +9,7 @@ stdenv.mkDerivation {
   name = "ocaml-ssl-${version}";
 
   src = fetchurl {
-  url = "http://downloads.sourceforge.net/project/savonet/ocaml-ssl/0.5.2/ocaml-ssl-0.5.2.tar.gz";
+  url = "mirror://sourceforge/project/savonet/ocaml-ssl/0.5.2/ocaml-ssl-0.5.2.tar.gz";
 
     sha256 = "0341rm8aqrckmhag1lrqfnl17v6n4ci8ibda62ahkkn5cxd58cpp";
   };
@@ -26,7 +26,7 @@ stdenv.mkDerivation {
     homepage = http://savonet.rastageeks.org/;
     description = "OCaml bindings for libssl ";
     license = "LGPL+link exception";
-    platforms = ocaml.meta.platforms;
+    platforms = ocaml.meta.platforms or [];
     maintainers = [
       stdenv.lib.maintainers.z77z
     ];

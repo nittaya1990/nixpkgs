@@ -2,14 +2,14 @@
 , asciidoc, xmlto, docbook_xml_dtd_45, docbook_xsl, libxslt
 }:
 
-let version = "4.4"; in
+let version = "4.5"; in
 
 stdenv.mkDerivation rec {
   name = "btrfs-progs-${version}";
 
   src = fetchurl {
     url = "mirror://kernel/linux/kernel/people/kdave/btrfs-progs/btrfs-progs-v${version}.tar.xz";
-    sha256 = "0jssv1ys4nw2jf7mkp58c19yspaa8ybf48fxsrhhp0683mzpr73p";
+    sha256 = "04d8w1wqaij6kxhxcirwvy1bkvc7aikkyw981ciwlznblzc16y7f";
   };
 
   buildInputs = [
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     description = "Utilities for the btrfs filesystem";
     homepage = https://btrfs.wiki.kernel.org/;
     license = licenses.gpl2;
-    maintainers = with maintainers; [ raskin wkennington ];
+    maintainers = with maintainers; [ nckx raskin wkennington ];
     platforms = platforms.linux;
   };
 }

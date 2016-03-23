@@ -1,18 +1,23 @@
-{ stdenv, fetchurl, buildPythonPackage
+{ stdenv, fetchurl, buildPythonApplication
 , python, cython, pkgconfig
 , xorg, gtk3, glib, pango, cairo, gdk_pixbuf, atk, pygobject3, pycairo, gobjectIntrospection
 , makeWrapper, xkbcomp, xorgserver, getopt, xauth, utillinux, which, fontsConf, xkeyboard_config
 , ffmpeg, x264, libvpx, libwebp
 , libfakeXinerama }:
 
-buildPythonPackage rec {
-  name = "xpra-0.14.19";
+buildPythonApplication rec {
+  name = "xpra-0.16.2";
   namePrefix = "";
 
   src = fetchurl {
-    url = "https://www.xpra.org/src/${name}.tar.xz";
-    sha256 = "0jifaysz4br1v0zibnzgd0k02rgybbsysvwrgbar1452sjb3db5m";
+    url = "http://xpra.org/src/${name}.tar.xz";
+    sha256 = "0h55rv46byzv2g8g77bm0a0py8jpz3gbr5fhr5jy9sisyr0vk6ff";
   };
+
+  patchPhase = ''
+    substituteInPlace setup.py --replace 'pycairo' 'py3cairo'
+    substituteInPlace xpra/client/gtk3/cairo_workaround.pyx --replace 'pycairo/pycairo.h' 'py3cairo.h'
+  '';
 
   buildInputs = [
     pkgconfig
@@ -36,8 +41,7 @@ buildPythonPackage rec {
   preBuild = ''
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE $(pkg-config --cflags gtk+-3.0) $(pkg-config --cflags xtst)"
   '';
-  setupPyBuildFlags = [ "--with-gtk3" "--without-gtk2" "--with-Xdummy" ];
-
+  setupPyBuildFlags = [ "--without-strict" "--with-gtk3" "--without-gtk2" "--with-Xdummy" ];
 
   preInstall = ''
     # see https://bitbucket.org/pypa/setuptools/issue/130/install_data-doesnt-respect-prefix
@@ -52,6 +56,9 @@ buildPythonPackage rec {
       --prefix LD_LIBRARY_PATH : ${libfakeXinerama}/lib \
       --prefix PATH : ${getopt}/bin:${xorgserver}/bin:${xauth}/bin:${which}/bin:${utillinux}/bin
   '';
+
+  preCheck = "exit 0";
+  doInstallCheck = false;
 
   #TODO: replace postInstall with postFixup to avoid double wrapping of xpra; needs more work though
   #postFixup = ''

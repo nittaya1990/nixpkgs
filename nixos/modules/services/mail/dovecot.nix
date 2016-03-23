@@ -98,8 +98,8 @@ in
 
     package = mkOption {
       type = types.package;
-      default = pkgs.dovecot22;
-      defaultText = "pkgs.dovecot22";
+      default = pkgs.dovecot;
+      defaultText = "pkgs.dovecot";
       description = "Dovecot package to use.";
     };
 
@@ -254,7 +254,7 @@ in
         ${concatStringsSep "\n" (mapAttrsToList (to: from: ''
           if [ -d '${from}' ]; then
             mkdir '${stateDir}/sieve/${to}'
-            cp ${from}/*.sieve '${stateDir}/sieve/${to}'
+            cp "${from}/"*.sieve '${stateDir}/sieve/${to}'
           else
             cp '${from}' '${stateDir}/sieve/${to}'
           fi

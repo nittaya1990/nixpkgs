@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, buildPythonPackage, python, w3m, file }:
+{ stdenv, fetchurl, buildPythonApplication, python, w3m, file }:
 
-buildPythonPackage rec {
+buildPythonApplication rec {
   name = "ranger-1.7.2";
 
   meta = {
@@ -8,7 +8,6 @@ buildPythonPackage rec {
     homepage = "http://ranger.nongnu.org/";
     license = stdenv.lib.licenses.gpl3;
     platforms = stdenv.lib.platforms.unix;
-    maintainers = with stdenv.lib.maintainers; [ iyzsong ];
   };
 
   src = fetchurl {

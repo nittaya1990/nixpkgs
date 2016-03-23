@@ -1,5 +1,7 @@
 { stdenv, fetchurl, glib, flex, bison, pkgconfig, libffi, python
-, libintlOrEmpty, autoconf, automake, otool }:
+, libintlOrEmpty, cctools
+, substituteAll, nixStoreDir ? builtins.storeDir
+}:
 # now that gobjectIntrospection creates large .gir files (eg gtk3 case)
 # it may be worth thinking about using multiple derivation outputs
 # In that case its about 6MB which could be separated
@@ -18,11 +20,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ flex bison pkgconfig python ]
     ++ libintlOrEmpty
-    ++ stdenv.lib.optional stdenv.isDarwin otool;
+    ++ stdenv.lib.optional stdenv.isDarwin cctools;
   propagatedBuildInputs = [ libffi glib ];
 
-  # Tests depend on cairo, which is undesirable (it pulls in lots of
-  # other dependencies).
+  # The '--disable-tests' flag is no longer recognized, so can be safely removed
+  # next time this package changes.
   configureFlags = [ "--disable-tests" ];
 
   preConfigure = ''
@@ -33,7 +35,10 @@ stdenv.mkDerivation rec {
 
   setupHook = ./setup-hook.sh;
 
-  patches = [ ./absolute_shlib_path.patch ];
+  patches = stdenv.lib.singleton (substituteAll {
+    src = ./absolute_shlib_path.patch;
+    inherit nixStoreDir;
+  });
 
   meta = with stdenv.lib; {
     description = "A middleware layer between C libraries and language bindings";

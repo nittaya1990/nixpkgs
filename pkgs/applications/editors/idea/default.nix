@@ -148,14 +148,14 @@ in
 
   android-studio = buildAndroidStudio rec {
     name = "android-studio-${version}";
-    version = "1.5.1.0";
-    build = "141.2456560";
+    version = "2.0.0.0";
+    build = "143.2443734";
     description = "Android development environment based on IntelliJ IDEA";
     license = stdenv.lib.licenses.asl20;
     src = fetchurl {
       url = "https://dl.google.com/dl/android/studio/ide-zips/${version}" +
             "/android-studio-ide-${build}-linux.zip";
-      sha256 = "0p6h21jd0xx3xzdrfv9530n1ssyc3xigr3fg33r8ain4k6n02vj6";
+      sha256 = "0j6bi87hb5jxjwfhfya64s673vdkdslsqc6sqa4zl97sabvafk2w";
     };
   };
 
@@ -185,25 +185,25 @@ in
 
   idea-community = buildIdea rec {
     name = "idea-community-${version}";
-    version = "15.0.3";
-    build = "IC-143.1821";
+    version = "2016.1";
+    build = "IC-145.258.11";
     description = "Integrated Development Environment (IDE) by Jetbrains, community edition";
     license = stdenv.lib.licenses.asl20;
     src = fetchurl {
       url = "https://download.jetbrains.com/idea/ideaIC-${version}.tar.gz";
-      sha256 = "15hj4kqlpg3b4xp2v4f4iidascrc8s97mq8022nvbcs879gpajqa";
+      sha256 = "1grgyaapsbf7xn0m18x6fgghjh9n1n2zblz9608g9qgx5p28kn6q";
     };
   };
 
   idea-ultimate = buildIdea rec {
     name = "idea-ultimate-${version}";
-    version = "15.0.3";
-    build = "IU-143.1821";
+    version = "2016.1";
+    build = "IU-145.258.11";
     description = "Integrated Development Environment (IDE) by Jetbrains, requires paid license";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/idea/ideaIU-${version}.tar.gz";
-      sha256 = "02v8v2a7p620l4mlk7jqw9sl2455a1nya1dy84y23h9vq20aihlh";
+      sha256 = "15ybqdy311wi3iqi7bzk798cd91jpl73ngl86kzwr68d24nyy3zb";
     };
   };
 

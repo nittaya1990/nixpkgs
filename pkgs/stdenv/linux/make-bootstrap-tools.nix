@@ -1,6 +1,6 @@
 { system ? builtins.currentSystem }:
 
-with import ../../top-level/all-packages.nix {inherit system;};
+with import ../../.. {inherit system;};
 
 rec {
 
@@ -9,13 +9,6 @@ rec {
   coreutilsMinimal = coreutils.override (args: {
     aclSupport = false;
   });
-
-  curlMinimal = curl.override {
-    http2Support = false;
-    zlibSupport = false;
-    sslSupport = false;
-    scpSupport = false;
-  };
 
   busyboxMinimal = busybox.override {
     useMusl = true;
@@ -58,7 +51,15 @@ rec {
         cp -d ${glibc}/lib/crt?.o $out/lib
 
         cp -rL ${glibc}/include $out
-        chmod -R u+w $out/include
+        chmod -R u+w "$out"
+
+        # glibc can contain linker scripts: find them, copy their deps,
+        # and get rid of absolute paths (nuke-refs would make them useless)
+        local lScripts=$(grep --files-with-matches --max-count=1 'GNU ld script' -R "$out/lib")
+        cp -d -t "$out/lib/" $(cat $lScripts | tr " " "\n" | grep -F '${glibc}' | sort -u)
+        for f in $lScripts; do
+          substituteInPlace "$f" --replace '${glibc}/lib/' ""
+        done
 
         # Hopefully we won't need these.
         rm -rf $out/include/mtd $out/include/rdma $out/include/sound $out/include/video
@@ -84,8 +85,6 @@ rec {
         cp -d ${gnumake}/bin/* $out/bin
         cp -d ${patch}/bin/* $out/bin
         cp ${patchelf}/bin/* $out/bin
-        cp ${curlMinimal}/bin/curl $out/bin
-        cp -d ${curlMinimal}/lib/libcurl* $out/lib
 
         cp -d ${gnugrep.pcre}/lib/libpcre*.so* $out/lib # needed by grep
 

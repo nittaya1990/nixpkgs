@@ -35,9 +35,6 @@ self: super: {
   hspec-expectations = dontCheck super.hspec-expectations;
   hspec = super.hspec.override { stringbuilder = dontCheck super.stringbuilder; };
   HTTP = dontCheck super.HTTP;
-  mwc-random_0_13_2_2 = dontCheck super.mwc-random_0_13_2_2;
-  mwc-random_0_13_3_0 = dontCheck super.mwc-random_0_13_3_0;
-  mwc-random = dontCheck super.mwc-random;
   nanospec_0_2_0 = dontCheck super.nanospec_0_2_0;
   nanospec = dontCheck super.nanospec;
   options_1_2_1 = dontCheck super.options_1_2_1;
@@ -326,7 +323,7 @@ self: super: {
   github-types = dontCheck super.github-types;          # http://hydra.cryp.to/build/1114046/nixlog/1/raw
   hadoop-rpc = dontCheck super.hadoop-rpc;              # http://hydra.cryp.to/build/527461/nixlog/2/raw
   hasql = dontCheck super.hasql;                        # http://hydra.cryp.to/build/502489/nixlog/4/raw
-  hjsonschema = overrideCabal super.hjsonschema (drv: { testTarget = "local"; });
+  hjsonschema = overrideCabal (super.hjsonschema.override { hjsonpointer = self.hjsonpointer_0_2_0_4; }) (drv: { testTarget = "local"; });
   hoogle = overrideCabal super.hoogle (drv: { testTarget = "--test-option=--no-net"; });
   marmalade-upload = dontCheck super.marmalade-upload;  # http://hydra.cryp.to/build/501904/nixlog/1/raw
   network-transport-tcp = dontCheck super.network-transport-tcp;
@@ -436,6 +433,7 @@ self: super: {
   itanium-abi = dontCheck super.itanium-abi;
   katt = dontCheck super.katt;
   language-slice = dontCheck super.language-slice;
+  ldap-client = dontCheck super.ldap-client;
   lensref = dontCheck super.lensref;
   liquidhaskell = dontCheck super.liquidhaskell;
   lucid = dontCheck super.lucid; #https://github.com/chrisdone/lucid/issues/25
@@ -642,7 +640,19 @@ self: super: {
   spaceprobe = addBuildTool super.spaceprobe self.llvmPackages.llvm;
 
   # Tries to run GUI in tests
-  leksah = dontCheck super.leksah;
+  leksah = dontCheck (overrideCabal super.leksah (drv: {
+    executableSystemDepends = (drv.executableSystemDepends or []) ++ (with pkgs; [
+      gnome3.defaultIconTheme # Fix error: Icon 'window-close' not present in theme ...
+      wrapGAppsHook           # Fix error: GLib-GIO-ERROR **: No GSettings schemas are installed on the system
+      gtk3                    # Fix error: GLib-GIO-ERROR **: Settings schema 'org.gtk.Settings.FileChooser' is not installed
+    ]);
+    postPatch = (drv.postPatch or "") + ''
+      for f in src/IDE/Leksah.hs src/IDE/Utils/ServerConnection.hs
+      do
+        substituteInPlace "$f" --replace "\"leksah-server\"" "\"${self.leksah-server}/bin/leksah-server\""
+      done
+    '';
+  }));
 
   # Patch to consider NIX_GHC just like xmonad does
   dyre = appendPatch super.dyre ./patches/dyre-nix.patch;
@@ -929,4 +939,22 @@ self: super: {
 
   # https://github.com/mainland/language-c-quote/issues/57
   language-c-quote = super.language-c-quote.override { alex = self.alex_3_1_4; };
+
+  # https://github.com/agda/agda/issues/1840
+  Agda_2_4_2_3 = super.Agda_2_4_2_3.override {
+    unordered-containers = self.unordered-containers_0_2_5_1;
+    cpphs = self.cpphs_1_19_3;
+  };
+  Agda_2_4_2_4 = super.Agda_2_4_2_4.override {
+    unordered-containers = self.unordered-containers_0_2_5_1;
+    cpphs = self.cpphs_1_19_3;
+  };
+  Agda = super.Agda.override {
+    unordered-containers = self.unordered-containers_0_2_5_1;
+    cpphs = self.cpphs_1_19_3;
+  };
+
+  # We get lots of strange compiler errors during the test suite run.
+  jsaddle = dontCheck super.jsaddle;
+
 }
