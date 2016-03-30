@@ -77,6 +77,7 @@
   ./programs/shell.nix
   ./programs/ssh.nix
   ./programs/ssmtp.nix
+  ./programs/tmux.nix
   ./programs/venus.nix
   ./programs/wvdial.nix
   ./programs/xfs_quota.nix
@@ -114,6 +115,7 @@
   ./services/backup/rsnapshot.nix
   ./services/backup/sitecopy-backup.nix
   ./services/backup/tarsnap.nix
+  ./services/backup/znapzend.nix
   ./services/cluster/fleet.nix
   ./services/cluster/kubernetes.nix
   ./services/cluster/panamax.nix
