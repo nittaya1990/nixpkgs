@@ -9225,6 +9225,8 @@ in
 
   jzmq = callPackage ../development/libraries/java/jzmq { };
 
+  lombok = callPackage ../development/libraries/java/lombok { };
+
   lucene = callPackage ../development/libraries/java/lucene { };
 
   lucenepp = callPackage ../development/libraries/lucene++ {
