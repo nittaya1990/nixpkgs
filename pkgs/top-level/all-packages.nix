@@ -16120,7 +16120,9 @@ in
 
   mongoc = callPackage ../development/libraries/mongoc { };
 
-  mupen64plus = callPackage ../misc/emulators/mupen64plus { };
+  mupen64plus = callPackage ../misc/emulators/mupen64plus {
+    stdenv = overrideCC stdenv gcc49;
+  };
 
   inherit (callPackages ../tools/package-management/nix {
       storeDir = config.nix.storeDir or "/nix/store";
