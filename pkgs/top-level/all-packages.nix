@@ -9882,6 +9882,8 @@ in
 
   pumpio = callPackage ../servers/web-apps/pump.io { };
 
+  pure-ftpd = callPackage ../servers/ftp/pure-ftpd { };
+
   pyIRCt = callPackage ../servers/xmpp/pyIRCt {};
 
   pyMAILt = callPackage ../servers/xmpp/pyMAILt {};
