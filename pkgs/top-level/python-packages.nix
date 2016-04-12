@@ -23595,14 +23595,14 @@ in modules // {
 
   tunigo = buildPythonPackage rec {
     name = "tunigo-${version}";
-    version = "0.1.3";
+    version = "1.0.0";
     propagatedBuildInputs = with self; [ requests2 ];
 
     src = pkgs.fetchFromGitHub {
       owner = "trygveaa";
       repo = "python-tunigo";
       rev = "v${version}";
-      sha256 = "02ili37dbs5mk5f6v3fmi1sji39ymc4zyq44x0abxzr88nc8nh97";
+      sha256 = "07q9girrjjffzkn8xj4l3ynf9m4psi809zf6f81f54jdb330p2fs";
     };
 
     buildInputs = with self; [ mock nose ];
@@ -25813,11 +25813,11 @@ in modules // {
 
   pafy = buildPythonPackage rec {
     name = "pafy-${version}";
-    version = "0.4.3";
+    version = "0.5.0";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/p/pafy/${name}.tar.gz";
-      sha256 = "1la4nn4n66p6dmcf1dyxw7i5j0xprmq82gwmxjv1jjis7vsnk254";
+      sha256 = "1q699dcnq34nfgm0bg8mp5krhzk9cyirqdcadhs9al4fa5410igw";
     };
 
     propagatedBuildInputs = with self; [ youtube-dl ];
