@@ -782,8 +782,6 @@ in
 
   mcrl = callPackage ../tools/misc/mcrl { };
 
-  mcrl2 = callPackage ../tools/misc/mcrl2 { };
-
   meson = callPackage ../development/tools/build-managers/meson { };
 
   mp3fs = callPackage ../tools/filesystems/mp3fs { };
@@ -4293,6 +4291,13 @@ in
     version = "4.9-2015q1-20150306";
     releaseType = "update";
     sha256 = "c5e0025b065750bbd76b5357b4fc8606d88afbac9ff55b8a82927b4b96178154";
+  };
+  gcc-arm-embedded-5_2 = pkgs.callPackage_i686 ../development/compilers/gcc-arm-embedded {
+    dirName = "5.0";
+    subdirName = "5-2015-q4-major";
+    version = "5.2-2015q4-20151219";
+    releaseType = "major";
+    sha256 = "12mbwl9iwbw7h6gwwkvyvfmrsz7vgjz27jh2cz9z006ihzigi50y";
   };
   gcc-arm-embedded = self.gcc-arm-embedded-4_9;
 
@@ -10457,7 +10462,7 @@ in
   };
 
   linux_4_4 = callPackage ../os-specific/linux/kernel/linux-4.4.nix {
-    kernelPatches = [ kernelPatches.bridge_stp_helper ]
+    kernelPatches = [ kernelPatches.bridge_stp_helper kernelPatches.qat_common_Makefile ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
       [ kernelPatches.mips_fpureg_emu
         kernelPatches.mips_fpu_sigill
@@ -15780,6 +15785,8 @@ in
   });
 
   metis-prover = callPackage ../applications/science/logic/metis-prover { };
+
+  mcrl2 = callPackage ../applications/science/logic/mcrl2 { };
 
   minisat = callPackage ../applications/science/logic/minisat {};
 
