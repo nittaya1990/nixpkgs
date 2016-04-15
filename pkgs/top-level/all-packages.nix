@@ -639,7 +639,7 @@ in
 
   cabal2nix = self.haskellPackages.cabal2nix;
 
-  caddy = goPackages.caddy.bin // { outputs = [ "bin" ]; };
+  caddy = go16Packages.caddy.bin // { outputs = [ "bin" ]; };
 
   capstone = callPackage ../development/libraries/capstone { };
 
@@ -696,7 +696,7 @@ in
   cpulimit = callPackage ../tools/misc/cpulimit { };
 
   contacts = callPackage ../tools/misc/contacts { };
-  
+
   daemontools = callPackage ../tools/admin/daemontools { };
 
   datamash = callPackage ../tools/misc/datamash { };
@@ -1045,7 +1045,7 @@ in
 
   anthy = callPackage ../tools/inputmethods/anthy { };
 
-  libpinyin = callPackage ../tools/inputmethods/libpinyin { };
+  libpinyin = callPackage ../development/libraries/libpinyin { };
 
   ibus-libpinyin = callPackage ../tools/inputmethods/ibus-engines/ibus-libpinyin { };
 
