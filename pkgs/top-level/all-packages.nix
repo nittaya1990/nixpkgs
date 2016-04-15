@@ -14738,7 +14738,9 @@ in
 
   exult = callPackage ../games/exult { };
 
-  factorio = callPackage ../games/factorio {};
+  factorio = callPackage ../games/factorio { releaseType = "alpha"; };
+
+  factorio-headless = callPackage ../games/factorio { releaseType = "headless"; };
 
   fairymax = callPackage ../games/fairymax {};
 
