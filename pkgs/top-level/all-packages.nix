@@ -16567,7 +16567,6 @@ in
 
   higan = callPackage ../misc/emulators/higan {
     inherit (gnome) gtksourceview;
-    profile = config.higan.profile or "balanced";
   };
 
   misc = callPackage ../misc/misc.nix { };
