@@ -11339,6 +11339,8 @@ in
 
   hack-font = callPackage ../data/fonts/hack { };
 
+  helvetica-neue-lt-std = callPackage ../data/fonts/helvetica-neue-lt-std { };
+
   hicolor_icon_theme = callPackage ../data/icons/hicolor-icon-theme { };
 
   hanazono = callPackage ../data/fonts/hanazono { };
