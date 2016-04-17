@@ -16582,4 +16582,6 @@ in
   togglesg-download = callPackage ../tools/misc/togglesg-download { };
 
   discord = callPackage ../applications/networking/instant-messengers/discord { };
+
+  golden-cheetah = qt5.callPackage ../applications/misc/golden-cheetah {};
 }
