@@ -3235,6 +3235,8 @@ in
 
   snort = callPackage ../applications/networking/ids/snort { };
 
+  softhsm = callPackage ../tools/security/softhsm { };
+
   solr = callPackage ../servers/search/solr { };
 
   solvespace = callPackage ../applications/graphics/solvespace { };
