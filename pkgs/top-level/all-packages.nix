@@ -3681,6 +3681,8 @@ in
 
   xarchiver = callPackage ../tools/archivers/xarchiver { };
 
+  xbanish = callPackage ../tools/X11/xbanish { };
+
   xbrightness = callPackage ../tools/X11/xbrightness { };
 
   xfstests = callPackage ../tools/misc/xfstests { };
