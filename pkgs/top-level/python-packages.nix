@@ -1702,11 +1702,11 @@ in modules // {
   };
 
   betamax = buildPythonPackage rec {
-    name = "betamax-0.5.1";
+    name = "betamax-0.6.0";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/b/betamax/${name}.tar.gz";
-      sha256 = "1glzigrbip9w2jr2gcmwa96rffhi9x9l1455dhbcx2gh3pmcykl6";
+      sha256 = "0vw4d53jbbb2kdl7l891h8iyxklqcd6ldvgcyhw9hl40ljdhv1wz";
     };
 
     propagatedBuildInputs = [ self.requests2 ];
@@ -1721,11 +1721,11 @@ in modules // {
 
   betamax-matchers = buildPythonPackage rec {
     name = "betamax-matchers-${version}";
-    version = "0.2.0";
+    version = "0.3.0";
 
     src = pkgs.fetchurl {
        url = "https://pypi.python.org/packages/source/b/betamax-matchers/${name}.tar.gz";
-      sha256 = "13n2dy8s2jx8x8bbx684bff3444584bnmg0zhkfxhxndpy18p4is";
+      sha256 = "039kvqsdcvvlfxjc3n1x2xvjg6qkqbql0p7rc4z7bnxm9kcm88la";
     };
 
     buildInputs = with self; [ betamax requests_toolbelt ];
