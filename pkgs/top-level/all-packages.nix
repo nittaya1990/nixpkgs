@@ -14704,6 +14704,10 @@ in
 
   bastet = callPackage ../games/bastet {};
 
+  beancount = callPackage ../applications/office/beancount {
+      pythonPackages = python3Packages;
+  };
+
   beret = callPackage ../games/beret { };
 
   bitsnbots = callPackage ../games/bitsnbots {
