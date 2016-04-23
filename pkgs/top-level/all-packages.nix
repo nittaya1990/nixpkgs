@@ -12819,6 +12819,7 @@ in
     librsvg = null;
     libtiff = null;
     libxml2 = null;
+    openjpeg = null;
   };
 
   imagemagick = self.imagemagickBig.override {
