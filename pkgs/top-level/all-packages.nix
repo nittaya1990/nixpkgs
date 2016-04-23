@@ -2949,7 +2949,7 @@ in
 
   pwnat = callPackage ../tools/networking/pwnat { };
 
-  pyatspi = callPackage ../development/python-modules/pyatspi { };
+  pyatspi = python3Packages.pyatspi;
 
   pycangjie = pythonPackages.pycangjie;
 
@@ -9457,7 +9457,7 @@ in
 
   pycups = pythonPackages.pycups;
 
-  pyexiv2 = callPackage ../development/python-modules/pyexiv2 { };
+  pyexiv2 = pythonPackages.pyexiv2;
 
   pygame = pythonPackages.pygame;
 
@@ -9475,7 +9475,7 @@ in
 
   pyopenssl = pythonPackages.pyopenssl;
 
-  rhpl = callPackage ../development/python-modules/rhpl { };
+  rhpl = pythonPackages.rhpl;
 
   pyqt4 = pythonPackages.pyqt4;
 
