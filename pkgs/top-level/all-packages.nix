@@ -5210,13 +5210,9 @@ in
 
   vala_0_28 = callPackage ../development/compilers/vala/0.28.nix { };
 
-  visualcpp = callPackage ../development/compilers/visual-c++ { };
-
   vs90wrapper = callPackage ../development/compilers/vs90wrapper { };
 
   webdsl = callPackage ../development/compilers/webdsl { };
-
-  win32hello = callPackage ../development/compilers/visual-c++/test { };
 
   wla-dx = callPackage ../development/compilers/wla-dx { };
 
@@ -5683,10 +5679,8 @@ in
 
   srecord = callPackage ../development/tools/misc/srecord { };
 
-  windowssdk = (
-    callPackage ../development/misc/windows-sdk {});
-
   xidel = callPackage ../tools/text/xidel { };
+
 
   ### DEVELOPMENT / TOOLS
 
@@ -10284,8 +10278,6 @@ in
 
   dmtcp = callPackage ../os-specific/linux/dmtcp { };
 
-  dietlibc = callPackage ../os-specific/linux/dietlibc { };
-
   directvnc = callPackage ../os-specific/linux/directvnc { };
 
   dmraid = callPackage ../os-specific/linux/dmraid {
@@ -10324,8 +10316,6 @@ in
   light = callPackage ../os-specific/linux/light { };
 
   lightum = callPackage ../os-specific/linux/lightum { };
-
-  e3cfsprogs = callPackage ../os-specific/linux/e3cfsprogs { };
 
   ebtables = callPackage ../os-specific/linux/ebtables { };
 
@@ -10965,8 +10955,6 @@ in
 
   pam_ccreds = callPackage ../os-specific/linux/pam_ccreds { };
 
-  pam_devperm = callPackage ../os-specific/linux/pam_devperm { };
-
   pam_krb5 = callPackage ../os-specific/linux/pam_krb5 { };
 
   pam_ldap = callPackage ../os-specific/linux/pam_ldap { };
@@ -11013,8 +11001,6 @@ in
   prayer = callPackage ../servers/prayer { };
 
   procps = procps-ng;
-
-  procps-old = lowPrio (callPackage ../os-specific/linux/procps { });
 
   procps-ng = callPackage ../os-specific/linux/procps-ng { };
 
