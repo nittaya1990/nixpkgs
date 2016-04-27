@@ -5715,6 +5715,7 @@ in
   autoconf-archive = callPackage ../development/tools/misc/autoconf-archive { };
 
   autoconf213 = callPackage ../development/tools/misc/autoconf/2.13.nix { };
+  autoconf264 = callPackage ../development/tools/misc/autoconf/2.64.nix { };
 
   autocutsel = callPackage ../tools/X11/autocutsel{ };
 
