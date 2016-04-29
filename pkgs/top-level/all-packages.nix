@@ -7739,6 +7739,8 @@ in
 
   libsieve = callPackage ../development/libraries/libsieve { };
 
+  libsolv = callPackage ../development/libraries/libsolv { };
+
   libspectre = callPackage ../development/libraries/libspectre { };
 
   libgsf = callPackage ../development/libraries/libgsf { };
