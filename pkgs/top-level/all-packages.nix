@@ -3179,8 +3179,10 @@ in
   screen-message = callPackage ../tools/X11/screen-message { };
 
   screencloud = callPackage ../applications/graphics/screencloud {
-    quazip = qt5.quazip.override { qt = qt4; qmakeHook = qmake4Hook; };
+    quazip = quazip_qt4;
   };
+
+  quazip_qt4 = self.qt5.quazip.override { qt = qt4; qmakeHook = qmake4Hook; };
 
   scrot = callPackage ../tools/graphics/scrot { };
 
@@ -14136,7 +14138,7 @@ in
     enableXMPP      = config.tomahawk.enableXMPP      or true;
     enableKDE       = config.tomahawk.enableKDE       or false;
     enableTelepathy = config.tomahawk.enableTelepathy or false;
-    quazip = qt5.quazip.override { qt = qt4; };
+    quazip = quazip_qt4;
   };
 
   torchPackages = recurseIntoAttrs ( callPackage ../applications/science/machine-learning/torch {
