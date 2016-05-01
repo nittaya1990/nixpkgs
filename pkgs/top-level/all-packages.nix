@@ -4378,7 +4378,6 @@ in
   hxcpp = callPackage ../development/compilers/haxe/hxcpp.nix { };
 
   hhvm = callPackage ../development/compilers/hhvm { };
-  hiphopvm = self.hhvm; /* Compatibility alias */
 
   hop = callPackage ../development/compilers/hop { };
 
