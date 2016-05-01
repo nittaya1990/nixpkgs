@@ -4033,6 +4033,8 @@ in
 
   ccl = callPackage ../development/compilers/ccl { };
 
+  chez = callPackage ../development/compilers/chez { };
+
   clang = llvmPackages.clang;
 
   clang_38 = llvmPackages_38.clang;
