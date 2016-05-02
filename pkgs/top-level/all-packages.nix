@@ -10008,7 +10008,7 @@ in
   };
 
   rake = callPackage ../development/tools/build-managers/rake { };
-  
+
   redis = callPackage ../servers/nosql/redis { };
 
   redstore = callPackage ../servers/http/redstore { };
@@ -13219,6 +13219,8 @@ in
   mjpg-streamer = callPackage ../applications/video/mjpg-streamer { };
 
   mldonkey = callPackage ../applications/networking/p2p/mldonkey { };
+
+  MMA = callPackage ../applications/audio/MMA { };
 
   mmex = callPackage ../applications/office/mmex { };
 
