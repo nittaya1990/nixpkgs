@@ -10217,6 +10217,8 @@ in
 
   batctl = callPackage ../os-specific/linux/batman-adv/batctl.nix { };
 
+  blktrace = callPackage ../os-specific/linux/blktrace { };
+
   bluez4 = lowPrio (callPackage ../os-specific/linux/bluez {
     pygobject = pygobject3;
   });
