@@ -9859,10 +9859,8 @@ in
     # See https://github.com/NixOS/nixpkgs/pull/10474/files#r42369334
     modules = [ nginxModules.rtmp nginxModules.dav nginxModules.moreheaders ];
   };
-
-  nginxUnstable = callPackage ../servers/http/nginx/unstable.nix {
-    modules = [ nginxModules.rtmp nginxModules.dav nginxModules.moreheaders ];
-  };
+  # nginxUnstable currently points to stable because that's newest:
+  nginxUnstable = nginx;
 
   nginxModules = callPackage ../servers/http/nginx/modules.nix { };
 
@@ -10489,6 +10487,9 @@ in
   iw = callPackage ../os-specific/linux/iw { };
 
   jfbview = callPackage ../os-specific/linux/jfbview { };
+  jfbpdf = callPackage ../os-specific/linux/jfbview {
+    imageSupport = false;
+  };
 
   jool-cli = callPackage ../os-specific/linux/jool/cli.nix { };
 
