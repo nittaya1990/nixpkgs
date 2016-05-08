@@ -3674,6 +3674,8 @@ in
 
   testdisk = callPackage ../tools/misc/testdisk { };
 
+  textql = goPackages.textql.bin // { outputs = [ "bin" ]; };
+
   html2text = callPackage ../tools/text/html2text { };
 
   html-tidy = callPackage ../tools/text/html-tidy { };
