@@ -12867,9 +12867,7 @@ in
     fltk = fltk13;
   };
 
-  hugin = callPackage ../applications/graphics/hugin {
-    boost = boost155;
-  };
+  hugin = callPackage ../applications/graphics/hugin { };
 
   hydrogen = callPackage ../applications/audio/hydrogen { };
 
