@@ -9074,6 +9074,8 @@ in
 
   tinyxml-2 = callPackage ../development/libraries/tinyxml-2 { };
 
+  tivodecode = callPackage ../applications/video/tivodecode { };
+
   tk = tk-8_6;
 
   tk-8_6 = callPackage ../development/libraries/tk/8.6.nix { };
