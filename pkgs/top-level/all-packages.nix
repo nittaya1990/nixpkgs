@@ -4431,8 +4431,10 @@ in
     overrides = config.haskellPackageOverrides or (self: super: {});
   };
 
-  inherit (self.haskellPackages) ghc cabal-install;
+  inherit (self.haskellPackages) ghc;
 
+  cabal-install = haskell.lib.disableSharedExecutables haskellPackages.cabal-install;
+   
   stack = haskell.lib.overrideCabal haskellPackages.stack (drv: {
     enableSharedExecutables = false;
     isLibrary = false;
