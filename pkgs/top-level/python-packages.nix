@@ -267,31 +267,7 @@ in modules // {
     ];
 
     buildInputs = with self; [ nose ];
-
-    sourceRoot = "letsencrypt-v${version}-src/acme";
-  };
-
-  # Maintained for simp_le compatibility
-  acme_0_1 = buildPythonPackage rec {
-    version = "0.1.0";
-
-    name = "acme-${version}";
-
-    src = pkgs.fetchFromGitHub {
-      owner = "letsencrypt";
-      repo = "letsencrypt";
-      rev = "v${version}";
-      sha256 = "1f7406nnybsdbwxf7r9qjf6hzkfd7cg6qp8l9l7hrzwscsq5hicj";
-    };
-
-    propagatedBuildInputs = with self; [
-      cryptography pyasn1 pyopenssl pyRFC3339 pytz requests2 six werkzeug mock
-      ndg-httpsclient
-    ];
-
-    buildInputs = with self; [ nose ];
-
-    sourceRoot = "letsencrypt-v${version}-src/acme";
+    postUnpack = "sourceRoot=\${sourceRoot}/acme";
   };
 
   acme-tiny = buildPythonPackage rec {
@@ -1810,10 +1786,10 @@ in modules // {
   };
 
   buttersink = buildPythonPackage rec {
-    name = "buttersink-0.6.7";
+    name = "buttersink-0.6.8";
 
     src = pkgs.fetchurl {
-      sha256 = "1azd0g0p9qk9wp344jmvqp4wk5f3wpsz3lb750xvnmd7qzf6v377";
+      sha256 = "04gc63kfcqkw4qba5rijqk01xiphf04yk7hky9180ii64v2ip0j3";
       url = "mirror://pypi/b/buttersink/${name}.tar.gz";
     };
 
@@ -11262,6 +11238,22 @@ in modules // {
     };
   };
 
+  kerberos = buildPythonPackage rec {
+    name = "kerberos-1.2.4";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/k/kerberos/${name}.tar.gz";
+      sha256 = "11q9jhzdl88jh8jgn7cycq034m36g2ncxds7mr3vqkngpcirkx6n";
+    };
+
+    buildInputs = [ pkgs.kerberos ];
+
+    meta = {
+      description = "Kerberos high-level interface";
+      homepage = https://pypi.python.org/pypi/kerberos;
+      license = licenses.asl20;
+    };
+  };
 
   keyring = buildPythonPackage rec {
     name = "keyring-8.4.1";
