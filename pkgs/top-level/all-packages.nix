@@ -12345,6 +12345,8 @@ in
 
     org2blog = callPackage ../applications/editors/emacs-modes/org2blog { };
 
+    pcache = callPackage ../applications/editors/emacs-modes/pcache { };
+
     phpMode = callPackage ../applications/editors/emacs-modes/php { };
 
     prologMode = callPackage ../applications/editors/emacs-modes/prolog { };
@@ -12373,6 +12375,8 @@ in
 
     rudel = callPackage ../applications/editors/emacs-modes/rudel { };
 
+    s = callPackage ../applications/editors/emacs-modes/s { };
+
     sbtMode = callPackage ../applications/editors/emacs-modes/sbt-mode { };
 
     scalaMode1 = callPackage ../applications/editors/emacs-modes/scala-mode/v1.nix { };
@@ -12388,6 +12392,8 @@ in
 
     writeGood = callPackage ../applications/editors/emacs-modes/writegood { };
 
+    xmlRpc = callPackage ../applications/editors/emacs-modes/xml-rpc { };
+
     cask = callPackage ../applications/editors/emacs-modes/cask { };
   };
 
@@ -12398,7 +12404,7 @@ in
 
     inherit lib newScope stdenv;
     inherit fetchFromGitHub fetchgit fetchhg fetchurl;
-    inherit emacs texinfo makeWrapper;
+    inherit emacs texinfo makeWrapper runCommand;
     inherit (xorg) lndir;
 
     trivialBuild = callPackage ../build-support/emacs/trivial.nix {
