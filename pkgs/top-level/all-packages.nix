@@ -6312,6 +6312,8 @@ in
 
   racerRust = callPackage ../development/tools/rust/racer { };
 
+  racerdRust = callPackage ../development/tools/rust/racerd { };
+
   radare = callPackage ../development/tools/analysis/radare {
     inherit (gnome) vte;
     lua = lua5;
@@ -16544,7 +16546,7 @@ in
 
   xtrlock-pam = callPackage ../misc/screensavers/xtrlock-pam { };
 
-  sails = callPackage ../misc/sails { };
+  sailsd = callPackage ../misc/sailsd { };
 
   canon-cups-ufr2 = callPackage ../misc/cups/drivers/canon { };
 
