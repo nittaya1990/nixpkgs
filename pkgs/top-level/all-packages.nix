@@ -5612,9 +5612,6 @@ in
     self = python27;
     inherit (darwin) CF configd;
   };
-  python32 = callPackage ../development/interpreters/python/3.2 {
-    self = python32;
-  };
   python33 = callPackage ../development/interpreters/python/3.3 {
     self = python33;
   };
@@ -6735,6 +6732,8 @@ in
   cpp-netlib = callPackage ../development/libraries/cpp-netlib { };
 
   cppunit = callPackage ../development/libraries/cppunit { };
+
+  cpputest = callPackage ../development/libraries/cpputest { };
 
   cracklib = callPackage ../development/libraries/cracklib { };
 
@@ -9585,11 +9584,6 @@ in
     python = python27;
     self = python27Packages;
   }));
-
-  python32Packages = callPackage ./python-packages.nix {
-    python = python32;
-    self = python32Packages;
-  };
 
   python33Packages = callPackage ./python-packages.nix {
     python = python33;
