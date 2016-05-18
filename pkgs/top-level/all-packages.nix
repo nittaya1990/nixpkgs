@@ -6365,9 +6365,7 @@ in
 
   rolespec = callPackage ../development/tools/misc/rolespec { };
 
-  rr = callPackage ../development/tools/analysis/rr {
-    stdenv = stdenv_32bit;
-  };
+  rr = callPackage ../development/tools/analysis/rr { };
 
   saleae-logic = callPackage ../development/tools/misc/saleae-logic { };
 
