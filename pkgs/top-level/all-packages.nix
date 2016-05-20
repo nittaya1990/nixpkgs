@@ -455,7 +455,9 @@ in
 
   atomicparsley = callPackage ../tools/video/atomicparsley { };
 
-  attic = callPackage ../tools/backup/attic { };
+  attic = callPackage ../tools/backup/attic {
+    python3Packages = python34Packages;
+  };
 
   avfs = callPackage ../tools/filesystems/avfs { };
 
@@ -614,7 +616,9 @@ in
 
   bochs = callPackage ../applications/virtualization/bochs { };
 
-  borgbackup = callPackage ../tools/backup/borg { };
+  borgbackup = callPackage ../tools/backup/borg {
+    python3Packages = python34Packages;
+  };
 
   boomerang = callPackage ../development/tools/boomerang { };
 
