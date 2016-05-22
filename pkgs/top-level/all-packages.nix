@@ -12575,7 +12575,7 @@ in
   };
   wireshark-gtk = wireshark-cli.override { withGtk = true; };
   wireshark-qt = wireshark-cli.override { withQt = true; };
-  wireshark = wireshark-gtk;
+  wireshark = wireshark-qt;
 
   wvdial = callPackage ../os-specific/linux/wvdial { };
 
