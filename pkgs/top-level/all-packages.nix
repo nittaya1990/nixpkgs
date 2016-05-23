@@ -12851,6 +12851,8 @@ in
     inherit (gnome) GConf;
   };
 
+  gnome-mpv = callPackage ../applications/video/gnome-mpv { };
+
   gollum = callPackage ../applications/misc/gollum { };
 
   google-chrome = callPackage ../applications/networking/browsers/google-chrome { gconf = gnome.GConf; };
