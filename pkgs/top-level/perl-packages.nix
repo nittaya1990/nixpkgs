@@ -7693,11 +7693,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  MIMETypes = buildPerlPackage {
-    name = "MIME-Types-2.04";
+  MIMETypes = buildPerlPackage rec {
+    name = "MIME-Types-2.13";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MA/MARKOV/MIME-Types-2.04.tar.gz;
-      sha256 = "13yci99n8kl8p4ac5n5f1j968p7va2phlvfc5qgpnn1d6yfhddi2";
+      url = "mirror://cpan/authors/id/M/MA/MARKOV/${name}.tar.gz";
+      sha256 = "1y3vnxk4wv4a00lxcp39hw9650cdl455d3y7nv42rqmvaxikghwr";
     };
     meta = {
       description = "Definition of MIME types";
@@ -13763,11 +13763,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  Want = buildPerlPackage {
-    name = "Want-0.26";
+  Want = buildPerlPackage rec {
+    name = "Want-0.29";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RO/ROBIN/Want-0.26.tar.gz;
-      sha256 = "4951675e13de2b0b9792be2827b8ef46ef25a0b9a2d3e9132143444dac28e17c";
+      url = "mirror://cpan/authors/id/R/RO/ROBIN/${name}.tar.gz";
+      sha256 = "1xsjylbxxcbkjazqms49ipi94j1hd2ykdikk29cq7dscil5p9r5l";
     };
   };
 
