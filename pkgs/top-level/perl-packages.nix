@@ -957,24 +957,27 @@ let self = _self // overrides; _self = with self; {
     name = "Catalyst-Component-InstancePerContext-0.001001";
     src = fetchurl {
       url = "mirror://cpan/authors/id/G/GR/GRODITI/${name}.tar.gz";
-      sha256 = "0wfj4vnn2cvk6jh62amwlg050p37fcwdgrn9amcz24z6w4qgjqvz";
+      sha256 = "7f63f930e1e613f15955c9e6d73873675c50c0a3bc2a61a034733361ed26d271";
     };
-    propagatedBuildInputs = [CatalystRuntime Moose];
+    propagatedBuildInputs = [ CatalystRuntime Moose ];
+    meta = {
+      description = "Moose role to create only one instance of component per context";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
   };
 
   CatalystControllerHTMLFormFu = buildPerlPackage rec {
     name = "Catalyst-Controller-HTML-FormFu-1.00";
     src = fetchurl {
       url = "mirror://cpan/authors/id/C/CF/CFRANKS/${name}.tar.gz";
-      sha256 = "0b7if9sz23i4qv0yl0nrv6myfb6db1a1ivm9qp9wdk8nfwl9ncl4";
+      sha256 = "84329b287716cdc6d3c5a9ee185458cd2ce7abd9d902eac1c6240ef17572f12c";
     };
-    buildInputs = [ CatalystActionRenderView CatalystPluginSession
-      CatalystPluginSessionStateCookie CatalystPluginSessionStoreFile
-      CatalystViewTT TemplateToolkit TestAggregate TestWWWMechanize
-      TestWWWMechanizeCatalyst ];
-    propagatedBuildInputs = [ CatalystComponentInstancePerContext CatalystRuntime
-      CGI ConfigAny HTMLFormFu Moose MooseXAttributeChained RegexpAssemble TaskWeaken
-      namespaceautoclean ];
+    buildInputs = [ CatalystActionRenderView CatalystPluginSession CatalystPluginSessionStateCookie CatalystPluginSessionStoreFile CatalystViewTT TemplateToolkit TestAggregate TestWWWMechanize TestWWWMechanizeCatalyst ];
+    propagatedBuildInputs = [ CatalystComponentInstancePerContext CatalystRuntime ConfigAny HTMLFormFu Moose MooseXAttributeChained RegexpAssemble TaskWeaken namespaceautoclean ];
+    meta = {
+      description = "Catalyst integration for HTML::FormFu";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
   };
 
   CatalystControllerPOD = buildPerlPackage rec {
