@@ -6638,7 +6638,6 @@ in
   botanUnstable = callPackage ../development/libraries/botan/unstable.nix { };
 
   box2d = callPackage ../development/libraries/box2d { };
-  box2d_2_0_1 = callPackage ../development/libraries/box2d/2.0.1.nix { };
 
   breakpad = callPackage ../development/libraries/breakpad { };
 
