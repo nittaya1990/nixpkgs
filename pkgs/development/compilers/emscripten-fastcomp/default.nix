@@ -4,7 +4,7 @@ let
   rev = "1.36.4";
 in
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "emscripten-fastcomp-${rev}";
 
   srcFC = fetchFromGitHub {

@@ -6343,7 +6343,7 @@ in
   premake = premake4;
 
   qtcreator = qt5.callPackage ../development/qtcreator {
-    withDocumentation = true;
+    withDocumentation = false; # 'true' is currently broken with qt>=5.5
   };
 
   racerRust = callPackage ../development/tools/rust/racer { };
@@ -8377,12 +8377,12 @@ in
     # makes it slower, but during runtime we link against just mesa_drivers
     # through /run/opengl-driver*, which is overriden according to config.grsecurity
     grsecEnabled = true;
+    llvmPackages = llvmPackages_38; # various problems with 3.7; see #11367, #11467
   });
   mesa_glu =  mesaDarwinOr (callPackage ../development/libraries/mesa-glu { });
   mesa_drivers = mesaDarwinOr (
     let mo = mesa_noglu.override {
       grsecEnabled = config.grsecurity or false;
-      llvmPackages = llvmPackages_36; # various problems with 3.7; see #11367, #11467
     };
     in mo.drivers
   );
