@@ -3057,6 +3057,8 @@ in
     sip = pythonPackages.sip_4_16;
   };
 
+  qnial = callPackage ../development/interpreters/qnial {};
+
   ocz-ssd-guru = callPackage ../tools/misc/ocz-ssd-guru { };
 
   qalculate-gtk = callPackage ../applications/science/math/qalculate-gtk { };
