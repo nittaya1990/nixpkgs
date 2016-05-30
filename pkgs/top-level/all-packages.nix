@@ -5594,6 +5594,7 @@ in
   octave = callPackage ../development/interpreters/octave {
     qt = null;
     ghostscript = null;
+    graphicsmagick = null;
     llvm = null;
     hdf5 = null;
     glpk = null;
