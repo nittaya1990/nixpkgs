@@ -15444,9 +15444,9 @@ in
 
   warzone2100 = callPackage ../games/warzone2100 { };
 
-  wesnoth = callPackage ../games/wesnoth {
-    lua = lua5;
-  };
+  wesnoth = callPackage ../games/wesnoth { };
+
+  wesnoth-dev = callPackage ../games/wesnoth/dev.nix { };
 
   widelands = callPackage ../games/widelands {
     lua = lua5_1;
