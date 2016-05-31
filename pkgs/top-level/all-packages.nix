@@ -16958,4 +16958,6 @@ in
   tomb = callPackage ../os-specific/linux/tomb {};
 
   imatix_gsl = callPackage ../development/tools/imatix_gsl {};
+
+  iterm2 = callPackage ../applications/misc/iterm2 {};
 }
