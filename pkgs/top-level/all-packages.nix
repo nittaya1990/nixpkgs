@@ -7378,6 +7378,8 @@ in
 
   hwloc = callPackage ../development/libraries/hwloc {};
 
+  hydra = callPackage ../development/tools/misc/hydra {};
+
   hydraAntLogger = callPackage ../development/libraries/java/hydra-ant-logger { };
 
   hyena = callPackage ../development/libraries/hyena { };
