@@ -7,7 +7,8 @@ self: super: {
   # Some packages need a non-core version of Cabal.
   Cabal_1_18_1_7 = dontCheck super.Cabal_1_18_1_7;
   Cabal_1_20_0_4 = dontCheck super.Cabal_1_20_0_4;
-  Cabal_1_22_4_0 = dontCheck super.Cabal_1_22_4_0;
+  Cabal_1_22_4_0 = (dontCheck super.Cabal_1_22_4_0).overrideScope (self: super: { binary = self.binary_0_7_6_1; });
+  cabal-install = (dontCheck super.cabal-install).overrideScope (self: super: { Cabal = self.Cabal_1_24_0_0; });
   cabal-install_1_18_1_0 = (dontCheck super.cabal-install_1_18_1_0).overrideScope (self: super: { Cabal = self.Cabal_1_18_1_7; });
 
   # Link statically to avoid runtime dependency on GHC.
@@ -1011,4 +1012,13 @@ self: super: {
   # Tools that use gtk2hs-buildtools now depend on them in a custom-setup stanza
   cairo = addBuildTool super.cairo self.gtk2hs-buildtools;
   pango = addBuildTool super.pango self.gtk2hs-buildtools;
+
+  # esqueleto requires an older version of the persistent library, and
+  # corresponding versions of -template and -sqlite for for its test
+  # suite.
+  esqueleto = super.esqueleto.overrideScope (self: super: {
+    persistent-template = super.persistent-template_2_1_8_1;
+    persistent-sqlite = super.persistent-sqlite_2_2_1;
+    persistent = super.persistent_2_2_4_1;
+  });
 }
