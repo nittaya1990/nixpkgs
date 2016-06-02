@@ -4921,6 +4921,8 @@ in
 
     erm_xmpp = callPackage ../development/ocaml-modules/erm_xmpp { };
 
+    estring = callPackage ../development/ocaml-modules/estring { };
+
     ezjsonm = callPackage ../development/ocaml-modules/ezjsonm {
       lwt = ocaml_lwt;
     };
@@ -5099,6 +5101,8 @@ in
     result = callPackage ../development/ocaml-modules/ocaml-result { };
 
     sequence = callPackage ../development/ocaml-modules/sequence { };
+
+    sqlexpr = callPackage ../development/ocaml-modules/sqlexpr { };
 
     tuntap = callPackage ../development/ocaml-modules/tuntap { };
 
