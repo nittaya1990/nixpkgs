@@ -2888,6 +2888,8 @@ in
     inherit (perlPackages) pcscperl Glib Gtk2 Pango;
   };
 
+  pcsc-cyberjack = callPackage ../tools/security/pcsc-cyberjack { };
+
   pdf2djvu = callPackage ../tools/typesetting/pdf2djvu { };
 
   pdf2svg = callPackage ../tools/graphics/pdf2svg { };
@@ -7333,7 +7335,7 @@ in
 
   gvfs = callPackage ../development/libraries/gvfs { gconf = gnome.GConf; };
 
-  gwenhywfar = callPackage ../development/libraries/gwenhywfar { gnutls = gnutls33; };
+  gwenhywfar = callPackage ../development/libraries/aqbanking/gwenhywfar.nix { };
 
   hamlib = callPackage ../development/libraries/hamlib { };
 
@@ -7601,6 +7603,8 @@ in
   libchardet = callPackage ../development/libraries/libchardet { };
 
   libchewing = callPackage ../development/libraries/libchewing { };
+
+  libchipcard = callPackage ../development/libraries/aqbanking/libchipcard.nix { };
 
   libcrafter = callPackage ../development/libraries/libcrafter { };
 
