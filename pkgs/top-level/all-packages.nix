@@ -5014,6 +5014,8 @@ in
 
     magick = callPackage ../development/ocaml-modules/magick { };
 
+    markup = callPackage ../development/ocaml-modules/markup { lwt = ocaml_lwt; };
+
     menhir = callPackage ../development/ocaml-modules/menhir { };
 
     merlin = callPackage ../development/tools/ocaml/merlin { };
