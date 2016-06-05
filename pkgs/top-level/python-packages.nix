@@ -2717,12 +2717,12 @@ in modules // {
   };
 
   bottle = buildPythonPackage rec {
-    version = "0.12.8";
+    version = "0.12.9";
     name = "bottle-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/b/bottle/${name}.tar.gz";
-      sha256 = "1b2hq0l4nwh75s2w6wgiqlkj4q1qvyx6a94axl2k4lsym1aifpfd";
+      sha256 = "0l80a1qkg7zbi8s077brfgm5w4ypwxgq9rvsvw16snc5jfsj82py";
     };
 
     propagatedBuildInputs = with self; [ setuptools ];
@@ -9148,11 +9148,11 @@ in modules // {
 
   hg-git = buildPythonPackage rec {
     name = "hg-git-${version}";
-    version = "0.8.2";
+    version = "0.8.5";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/h/hg-git/${name}.tar.gz";
-      sha256 = "0hz0i6qgcn3ic292sny86mdl1psj1bnczcai1b1kzvwcla6z99py";
+      sha256 = "10j7l1p2wx7s5nb6s35z1f3mcz2svz9ilcm26f3la9h9c76b7jpm";
     };
 
     propagatedBuildInputs = with self; [ dulwich ];
