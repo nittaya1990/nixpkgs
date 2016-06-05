@@ -11470,12 +11470,12 @@ in modules // {
   });
 
   jellyfish = buildPythonPackage rec {
-    version = "0.5.0";
+    version = "0.5.2";
     name = "jellyfish-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/j/jellyfish/${name}.tar.gz";
-      sha256 = "04p80gwwlhxjp8zpjf70a62x69l9rlvnz1pwi5ar52gyajn8z6z1";
+      sha256 = "15xk0kbr1gig9r1mp22lk9mk3jyi886h8ywn9diixhnyl4q6dacn";
     };
 
     buildInputs = with self; [ pytest unicodecsv ];
@@ -19536,11 +19536,11 @@ in modules // {
 
   restview = buildPythonPackage rec {
     name = "restview-${version}";
-    version = "2.5.0";
+    version = "2.5.2";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/r/restview/${name}.tar.gz";
-      sha256 = "18diqmh6vwz6imcmvwa7s2v4562y73n072d5d7az2r2ks0g2bzdb";
+      sha256 = "0gmdmnlhiy6lagi17maiz312374hk6g6x90fhjwnbrwxif4r9bd5";
     };
 
     propagatedBuildInputs = with self; [ docutils readme pygments ];
