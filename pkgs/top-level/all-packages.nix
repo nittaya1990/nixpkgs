@@ -9413,6 +9413,8 @@ in
 
   xgboost = callPackage ../development/libraries/xgboost { };
 
+  xgeometry-select = callPackage ../tools/X11/xgeometry-select { };
+
   # Avoid using this. It isn't really a wrapper anymore, but we keep the name.
   xlibsWrapper = callPackage ../development/libraries/xlibs-wrapper {
     packages = [
@@ -15880,7 +15882,7 @@ in
 
   kde5 =
     let
-      frameworks = import ../desktops/kde-5/frameworks-5.21 { inherit pkgs; };
+      frameworks = import ../desktops/kde-5/frameworks-5.22 { inherit pkgs; };
       plasma = import ../desktops/kde-5/plasma-5.6 { inherit pkgs; };
       applications = import ../desktops/kde-5/applications-16.04 { inherit pkgs; };
       merged = self:
