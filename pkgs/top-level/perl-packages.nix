@@ -2682,10 +2682,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   CryptX = buildPerlPackage rec {
-    name = "CryptX-0.034";
+    name = "CryptX-0.035";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MI/MIK/${name}.tar.gz";
-      sha256 = "fad93a560f43ace09de734924f247c4da9d79db7d42fb61954441f5f854225b1";
+      sha256 = "1ec6c000862d60d3d12eda5d0eed3f08e759d4140775b6c76da538a8be3857fe";
     };
     propagatedBuildInputs = [ JSONMaybeXS ];
     meta = {
@@ -2977,11 +2977,12 @@ let self = _self // overrides; _self = with self; {
   };
 
   DataValidateDomain = buildPerlPackage rec {
-    name = "Data-Validate-Domain-0.11";
+    name = "Data-Validate-Domain-0.12";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DR/DROLSKY/${name}.tar.gz";
-      sha256 = "f2ae0830f423a46080b185ffc2428c9a37278167a8d19bfdeec26d977b43822c";
+      sha256 = "6bd39c71d232fa341ad1324158bf1edf5df9add2bcac87996aa4b584445cdec5";
     };
+    buildInputs = [ Test2Suite ];
     propagatedBuildInputs = [ NetDomainTLD ];
     meta = {
       homepage = http://metacpan.org/release/Data-Validate-Domain;
@@ -2992,10 +2993,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   DataValidateIP = buildPerlPackage rec {
-    name = "Data-Validate-IP-0.25";
+    name = "Data-Validate-IP-0.26";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DR/DROLSKY/${name}.tar.gz";
-      sha256 = "b0386bb8aa31ed1b9b58760745eaab4d29edb0c7bdc7dc16dd5479d21f26ee3b";
+      sha256 = "d03190483f3ecec728c8e1b2e24989b7aed78ce3c989bea7dc6be0285d374690";
     };
     buildInputs = [ TestRequires ];
     propagatedBuildInputs = [ NetAddrIP ];
@@ -11967,6 +11968,20 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  Test2Suite = buildPerlPackage rec {
+    name = "Test2-Suite-0.000030";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/E/EX/EXODIST/${name}.tar.gz";
+      sha256 = "03f2411a8b1a85be8560c25d57f465c812174bc1c062ee79aeb194b018e6b751";
+    };
+    propagatedBuildInputs = [ TestSimple13 ];
+    meta = {
+      description = "Distribution with a rich set of tools built upon the Test2 framework";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.rycee ];
+    };
+  };
+
   TestAssert = buildPerlPackage {
     name = "Test-Assert-0.0504";
     src = fetchurl {
@@ -12597,6 +12612,19 @@ let self = _self // overrides; _self = with self; {
   };
 
   TestSimple = null;
+
+  TestSimple13 = buildPerlPackage rec {
+    name = "Test-Simple-1.302022";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/E/EX/EXODIST/${name}.tar.gz";
+      sha256 = "dfaa1bbbb57737de76ebe79ac6ee57b5fa3e901b57e56007ac99ec54d2e24326";
+    };
+    meta = {
+      description = "Basic utilities for writing tests";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.rycee ];
+    };
+  };
 
   TestSpec = buildPerlPackage rec {
     name = "Test-Spec-0.51";
