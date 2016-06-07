@@ -3791,6 +3791,8 @@ in
 
   udunits = callPackage ../development/libraries/udunits { };
 
+  uhttpmock = callPackage ../development/libraries/uhttpmock { };
+
   uim = callPackage ../tools/inputmethods/uim {
     inherit (pkgs.kde4) kdelibs;
   };
@@ -5391,6 +5393,8 @@ in
 
   vala_0_28 = callPackage ../development/compilers/vala/0.28.nix { };
 
+  vala_0_32 = callPackage ../development/compilers/vala/0.32.nix { };
+
   vs90wrapper = callPackage ../development/compilers/vs90wrapper { };
 
   webdsl = callPackage ../development/compilers/webdsl { };
@@ -6772,6 +6776,10 @@ in
     cogl = cogl_1_22;
   };
 
+  clutter_1_26 = callPackage ../development/libraries/clutter/1.26.nix {
+    cogl = cogl_1_22;
+  };
+
   clutter-gst = callPackage ../development/libraries/clutter-gst { };
 
   clutter-gst_3_0 = callPackage ../development/libraries/clutter-gst/3.0.nix {
@@ -6782,6 +6790,9 @@ in
   clutter_gtk_0_10 = callPackage ../development/libraries/clutter-gtk/0.10.8.nix { };
   clutter_gtk_1_6 = callPackage ../development/libraries/clutter-gtk/1.6.nix {
     clutter = clutter_1_22;
+  };
+  clutter_gtk_1_8 = callPackage ../development/libraries/clutter-gtk/1.8.nix {
+    clutter = clutter_1_26;
   };
 
   cminpack = callPackage ../development/libraries/cminpack { };
@@ -12504,7 +12515,7 @@ in
   emacs24WithPackages = emacs24PackagesNg.emacsWithPackages;
   emacsWithPackages = emacsPackagesNg.emacsWithPackages;
 
-  inherit (gnome3) empathy;
+  # inherit (gnome3) empathy;
 
   enhanced-ctorrent = callPackage ../applications/networking/enhanced-ctorrent { };
 
@@ -15549,6 +15560,7 @@ in
   };
 
   gnome3_18 = recurseIntoAttrs (callPackage ../desktops/gnome-3/3.18 { });
+  gnome3_20 = recurseIntoAttrs (callPackage ../desktops/gnome-3/3.20 { });
 
   gnome3 = self.gnome3_18 // {
     shellExtensions = {
