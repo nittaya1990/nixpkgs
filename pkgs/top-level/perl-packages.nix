@@ -376,10 +376,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   ArchiveTar = buildPerlPackage rec {
-    name = "Archive-Tar-2.04";
+    name = "Archive-Tar-2.08";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BI/BINGOS/${name}.tar.gz";
-      sha256 = "c3741bba06a468a5a4db6a79d772c55cf2f6673cf33241a6e6a758707a71d293";
+      sha256 = "62e34feffd51e21b24f2ba5b15adf3ca3bd084163bfec40fe30f8f8e8963066b";
     };
     meta = {
       description = "Manipulates TAR archives";
@@ -415,6 +415,10 @@ let self = _self // overrides; _self = with self; {
     };
     buildInputs = [ ModuleBuild ];
     propagatedBuildInputs = [ ScalarString DataInteger DigestCRC ];
+    meta = {
+      description = "DEC VMS password hashing";
+      license = stdenv.lib.licenses.gpl1Plus;
+    };
   };
 
   AuthenHtpasswd = buildPerlPackage rec {
@@ -424,6 +428,10 @@ let self = _self // overrides; _self = with self; {
       sha256 = "0rw06hwpxg388d26l0jvirczx304f768ijvc20l4b2ll7xzg9ymm";
     };
     propagatedBuildInputs = [ ClassAccessor CryptPasswdMD5 DigestSHA1 IOLockedFile ];
+    meta = {
+      description = "Interface to read and modify Apache .htpasswd files";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
   };
 
   AuthenPassphrase = buildPerlPackage rec {
@@ -435,6 +443,10 @@ let self = _self // overrides; _self = with self; {
     buildInputs = [ ModuleBuild ];
     propagatedBuildInputs = [ModuleRuntime ParamsClassify CryptPasswdMD5 CryptDES
       DataEntropy CryptUnixCryptXS CryptEksblowfish CryptMySQL DigestMD4 AuthenDecHpwd];
+    meta = {
+      description = "Hashed passwords/passphrases as objects";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
   };
 
   AuthenSASL = buildPerlPackage rec {
@@ -444,6 +456,10 @@ let self = _self // overrides; _self = with self; {
       sha256 = "02afhlrdq5hh5g8b32fa79fqq5i76qzwfqqvfi9zi57h31szl536";
     };
     propagatedBuildInputs = [ DigestHMAC ];
+    meta = {
+      description = "SASL Authentication framework";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
   };
 
   autobox = pkgs.perlPackages.Autobox;
@@ -3823,10 +3839,14 @@ let self = _self // overrides; _self = with self; {
   };
 
   DigestCRC = buildPerlPackage rec {
-    name = "Digest-CRC-0.18";
+    name = "Digest-CRC-0.21";
     src = fetchurl {
       url = "mirror://cpan/authors/id/O/OL/OLIMAUL/${name}.tar.gz";
-      sha256 = "5c5329f37c46eb79835169508583da8767d9839350b69bb2b48ac6f594f70374";
+      sha256 = "79a0ef8081767c324edb9da39f80835910ed7c5b0539ed106caf7f2467d1958f";
+    };
+    meta = {
+      description = "Module that calculates CRC sums of all sorts";
+      license = stdenv.lib.licenses.publicDomain;
     };
   };
 
@@ -9453,7 +9473,7 @@ let self = _self // overrides; _self = with self; {
     };
     meta = {
       description = "Sends statistics to the stats daemon over UDP";
-      license = "perl";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
