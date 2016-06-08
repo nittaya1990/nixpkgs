@@ -3106,6 +3106,11 @@ in
 
   qshowdiff = callPackage ../tools/text/qshowdiff { };
 
+  qtikz = callPackage ../applications/graphics/ktikz {
+    withKDE = false;
+    kdelibs = null;
+  };
+
   quicktun = callPackage ../tools/networking/quicktun { };
 
   quilt = callPackage ../development/tools/quilt { };
@@ -14913,6 +14918,8 @@ in
 
   xzgv = callPackage ../applications/graphics/xzgv { };
 
+  yabar = callPackage ../applications/window-managers/yabar { };
+
   yate = callPackage ../applications/misc/yate { };
 
   inherit (gnome3) yelp;
@@ -15664,6 +15671,8 @@ in
 
           konversation = callPackage ../applications/networking/irc/konversation { };
 
+          ktikz = callPackage ../applications/graphics/ktikz { };
+
           kvirc = callPackage ../applications/networking/irc/kvirc { };
 
           krename = callPackage ../applications/misc/krename {
@@ -15949,6 +15958,7 @@ in
 
   samtools = callPackage ../applications/science/biology/samtools/default.nix { };
 
+  bwa = callPackage ../applications/science/biology/bwa/default.nix { };
 
   ### SCIENCE/MATH
 
