@@ -13587,6 +13587,8 @@ in
 
   pcmanfm = callPackage ../applications/misc/pcmanfm { };
 
+  pcmanfm-qt = callPackage ../applications/misc/pcmanfm-qt { };
+
   pcmanx-gtk2 = callPackage ../applications/misc/pcmanx-gtk2 { };
 
   pig = callPackage ../applications/networking/cluster/pig { };
