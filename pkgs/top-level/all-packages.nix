@@ -4201,7 +4201,7 @@ in
     ocamlPackages = ocamlPackages_4_02;
   });
 
-  cryptol = self.haskellPackages.cryptol;
+  cryptol = self.haskell.packages.lts.cryptol;
 
   cython = pythonPackages.cython;
   cython3 = python3Packages.cython;
@@ -12186,7 +12186,7 @@ in
 
   d4x = callPackage ../applications/misc/d4x { };
 
-  darcs = haskell.lib.overrideCabal self.haskellPackages.darcs (drv: {
+  darcs = haskell.lib.overrideCabal self.haskell.packages.lts.darcs (drv: {
     configureFlags = (stdenv.lib.remove "-flibrary" drv.configureFlags or []) ++ ["-f-library"];
     enableSharedExecutables = false;
     enableSharedLibraries = false;
@@ -15841,6 +15841,11 @@ in
     kile = callPackage ../applications/editors/kile/frameworks.nix { };
 
     konversation = callPackage ../applications/networking/irc/konversation/1.6.nix { };
+
+    krita = callPackage ../applications/graphics/krita {
+      vc = vc_0_7;
+      openjpeg = openjpeg_1;
+    };
 
     phonon = callPackage ../development/libraries/phonon { };
 
