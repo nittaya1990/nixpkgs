@@ -9433,6 +9433,8 @@ in
 
   xgboost = callPackage ../development/libraries/xgboost { };
 
+  xgeometry-select = callPackage ../tools/X11/xgeometry-select { };
+
   # Avoid using this. It isn't really a wrapper anymore, but we keep the name.
   xlibsWrapper = callPackage ../development/libraries/xlibs-wrapper {
     packages = [
