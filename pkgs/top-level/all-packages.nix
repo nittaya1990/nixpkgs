@@ -9630,7 +9630,7 @@ in
 
   buildGoPackage = buildGo16Package;
 
-  go2nix = callPackage ../development/tools/go2nix { };
+  go2nix = (callPackage ../development/tools/go2nix { }).bin;
 
   ### DEVELOPMENT / LISP MODULES
 
