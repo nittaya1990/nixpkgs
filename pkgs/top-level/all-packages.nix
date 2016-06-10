@@ -7107,6 +7107,8 @@ in
 
   libgit2_0_21 = callPackage ../development/libraries/git2/0.21.nix { };
 
+  gle = callPackage ../development/libraries/gle { };
+
   glew = callPackage ../development/libraries/glew { };
   glew110 = callPackage ../development/libraries/glew/1.10.nix { };
 
@@ -8624,6 +8626,8 @@ in
   opencascade_oce = callPackage ../development/libraries/opencascade/oce.nix { };
 
   opencl-headers = callPackage ../development/libraries/opencl-headers { };
+
+  opencl-icd = callPackage ../development/libraries/opencl-icd { };
 
   opencollada = callPackage ../development/libraries/opencollada { };
 
@@ -16890,8 +16894,52 @@ in
     wineRelease = config.wine.release or "stable";
     wineBuild = config.wine.build or "wine32";
     pulseaudioSupport = config.pulseaudio or stdenv.isLinux;
+    pngSupport = true;
+    jpegSupport = true;
+    tiffSupport = true;
+    gettextSupport = true;
+    fontconfigSupport = true;
+    alsaSupport = true;
+    openglSupport = true;
+    tlsSupport = true;
+    cursesSupport = true;
   };
-  wineStable = wine.override { wineRelease = "stable"; };
+  wineMinimal = lowPrio (self.wine.override {
+    pulseaudioSupport = false;
+    pngSupport = false;
+    jpegSupport = false;
+    tiffSupport = false;
+    gettextSupport = false;
+    fontconfigSupport = false;
+    alsaSupport = false;
+    openglSupport = false;
+    tlsSupport = false;
+    cursesSupport = false;
+  });
+  wineFull = lowPrio (self.wine.override {
+    gtkSupport = true;
+    gstreamerSupport = true;
+    cupsSupport = true;
+    colorManagementSupport = true;
+    dbusSupport = true;
+    mpg123Support = true;
+    openalSupport = true;
+    openclSupport = true;
+    cairoSupport = true;
+    odbcSupport = true;
+    netapiSupport = true;
+    vaSupport = true;
+    pcapSupport = true;
+    v4lSupport = true;
+    saneSupport = true;
+    gsmSupport = true;
+    gphoto2Support = true;
+    ldapSupport = true;
+    pulseaudioSupport = true;
+    xineramaSupport = true;
+    xmlSupport = true;
+  });
+  wineStable = self.wine.override { wineRelease = "stable"; };
   wineUnstable = lowPrio (self.wine.override { wineRelease = "unstable"; });
   wineStaging = lowPrio (self.wine.override { wineRelease = "staging"; });
 
