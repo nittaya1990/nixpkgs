@@ -4682,7 +4682,6 @@ in
 
   julia-git = lowPrio (callPackage ../development/compilers/julia/git.nix {
     gmp = gmp6;
-    llvm = llvm_37;
     openblas = openblasCompat;
   });
 
@@ -8536,7 +8535,9 @@ in
     texinfo = texinfo4;
   };
 
-  mueval = callPackage ../development/tools/haskell/mueval { };
+  mueval = callPackage ../development/tools/haskell/mueval {
+    haskellPackages = haskell.packages.lts;
+  };
 
   muparser = callPackage ../development/libraries/muparser { };
 
@@ -8943,6 +8944,7 @@ in
 
   lambdabot = callPackage ../development/tools/haskell/lambdabot {
     haskell-lib = haskell.lib;
+    haskellPackages = haskell.packages.lts;
   };
 
   leksah = callPackage ../development/tools/haskell/leksah {
