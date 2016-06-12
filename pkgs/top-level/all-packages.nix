@@ -7957,6 +7957,8 @@ in
 
   libsieve = callPackage ../development/libraries/libsieve { };
 
+  libsixel = callPackage ../development/libraries/libsixel { };
+
   libsolv = callPackage ../development/libraries/libsolv { };
 
   libspectre = callPackage ../development/libraries/libspectre { };
@@ -14880,6 +14882,8 @@ in
   xsynth_dssi = callPackage ../applications/audio/xsynth-dssi { };
 
   xterm = callPackage ../applications/misc/xterm { };
+
+  mlterm = callPackage ../applications/misc/mlterm { };
 
   finalterm = callPackage ../applications/misc/finalterm { };
 
