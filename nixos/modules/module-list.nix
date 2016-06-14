@@ -493,6 +493,7 @@
   ./services/x11/window-managers/xmonad.nix
   ./services/x11/xfs.nix
   ./services/x11/xserver.nix
+  ./services/x11/xspice.nix
   ./system/activation/activation-script.nix
   ./system/activation/top-level.nix
   ./system/boot/coredump.nix

@@ -10349,9 +10349,13 @@ in
     udev = if stdenv.isLinux then udev else null;
     libdrm = if stdenv.isLinux then libdrm else null;
     fglrxCompat = config.xorg.fglrxCompat or false; # `config` because we have no `xorg.override`
-  } // { inherit xlibsWrapper; } );
+  } // { inherit xlibsWrapper; xf86videospiceqxl = xspice; } );
 
   xwayland = callPackage ../servers/x11/xorg/xwayland.nix { };
+
+  xspice = callPackage ../servers/x11/xorg/xspice.nix {
+    sasl = cyrus_sasl;
+  };
 
   yaws = callPackage ../servers/http/yaws { erlang = erlangR17; };
 
