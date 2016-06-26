@@ -147,7 +147,6 @@
       foundationdb = 118;
       newrelic = 119;
       starbound = 120;
-      #grsecurity = 121; # unused
       hydra = 122;
       spiped = 123;
       teamspeak = 124;
@@ -269,6 +268,8 @@
       nzbget = 245;
       mosquitto = 246;
       toxvpn = 247;
+      squeezelite = 248;
+      turnserver = 249;
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
@@ -396,7 +397,6 @@
       foundationdb = 118;
       newrelic = 119;
       starbound = 120;
-      grsecurity = 121;
       hydra = 122;
       spiped = 123;
       teamspeak = 124;
@@ -508,6 +508,8 @@
       nzbget = 245;
       mosquitto = 246;
       #toxvpn = 247; # unused
+      #squeezelite = 248; #unused
+      turnserver = 249;
 
       # When adding a gid, make sure it doesn't match an existing
       # uid. Users and groups with the same name should have equal
