@@ -115,16 +115,16 @@ rec {
             --add-flags "$vms" \
             ${lib.optionalString enableOCR "--prefix PATH : '${ocrProg}/bin'"} \
             --run "testScript=\"\$(cat $out/test-script)\"" \
-            --set testScript '"$testScript"' \
-            --set VLANS '"${toString vlans}"' \
-            --set TAPS  '"${toString taps}"'
+            --set testScript '$testScript' \
+            --set VLANS '${toString vlans}' \
+            --set TAPS  '${toString taps}'
           ln -s ${testDriver}/bin/nixos-test-driver $out/bin/nixos-run-vms
           wrapProgram $out/bin/nixos-run-vms \
             --add-flags "$vms" \
             ${lib.optionalString enableOCR "--prefix PATH : '${ocrProg}/bin'"} \
-            --set tests '"startAll; joinAll;"' \
-            --set VLANS '"${toString vlans}"' \
-            --set TAPS  '"${toString taps}"' \
+            --set tests 'startAll; joinAll;' \
+            --set VLANS '${toString vlans}' \
+            --set TAPS  '${toString taps}' \
             ${lib.optionalString (builtins.length vms == 1) "--set USE_SERIAL 1"}
         ''; # "
 
@@ -135,8 +135,8 @@ rec {
       test = passMeta (runTests driver);
       report = passMeta (releaseTools.gcovReport { coverageRuns = [ test ]; });
 
-    in (if makeCoverageReport then report else test) // { 
-      inherit nodes driver test; 
+    in (if makeCoverageReport then report else test) // {
+      inherit nodes driver test;
     };
 
   runInMachine =
