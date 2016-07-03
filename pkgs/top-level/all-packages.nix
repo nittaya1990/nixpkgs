@@ -15155,6 +15155,13 @@ in
 
   zgrviewer = callPackage ../applications/graphics/zgrviewer {};
 
+  zgv = callPackage ../applications/graphics/zgv {
+   # Enable the below line for terminal display. Note
+   # that it requires sixel graphics compatible terminals like mlterm
+   # or xterm -ti 340
+   SDL = SDL_sixel;
+  };
+
   zim = callPackage ../applications/office/zim {
     pygtk = pyGtkGlade;
   };
@@ -17190,6 +17197,13 @@ in
 
   xsane = callPackage ../applications/graphics/sane/xsane.nix {
     libpng = libpng12;
+  };
+
+  xsw = callPackage ../applications/misc/xsw {
+   # Enable the next line to use this in terminal.
+   # Note that it requires sixel capable terminals such as mlterm
+   # or xterm -ti 340
+   SDL = SDL_sixel;
   };
 
   xwiimote = callPackage ../misc/drivers/xwiimote {
