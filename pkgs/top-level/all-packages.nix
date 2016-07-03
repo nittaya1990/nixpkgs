@@ -9006,6 +9006,7 @@ in
     vlc = lowPrio (callPackage ../applications/video/vlc {
       qt4 = null;
       withQt5 = true;
+      ffmpeg = ffmpeg_2;
     });
 
   };
