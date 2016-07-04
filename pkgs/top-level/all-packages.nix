@@ -2429,7 +2429,7 @@ in
   mailpile = callPackage ../applications/networking/mailreaders/mailpile { };
 
   mailutils = callPackage ../tools/networking/mailutils {
-    guile = guile_1_8;
+    sasl = gsasl;
   };
 
   email = callPackage ../tools/networking/email { };
@@ -8119,6 +8119,8 @@ in
   };
 
   libisofs = callPackage ../development/libraries/libisofs { };
+
+  libisoburn = callPackage ../development/libraries/libisoburn { };
 
   libiptcdata = callPackage ../development/libraries/libiptcdata { };
 
