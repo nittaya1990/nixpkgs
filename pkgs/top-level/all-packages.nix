@@ -11022,6 +11022,8 @@ in
 
     e1000e = callPackage ../os-specific/linux/e1000e {};
 
+    ixgbevf = callPackage ../os-specific/linux/ixgbevf {};
+
     v4l2loopback = callPackage ../os-specific/linux/v4l2loopback { };
 
     frandom = callPackage ../os-specific/linux/frandom { };
