@@ -3239,6 +3239,14 @@ in
 
   recordmydesktop = callPackage ../applications/video/recordmydesktop { };
 
+  gtk-recordmydesktop = callPackage ../applications/video/recordmydesktop/gtk.nix {
+    jack2 = jack2Full;
+  };
+
+  qt-recordmydesktop = callPackage ../applications/video/recordmydesktop/qt.nix {
+    jack2 = jack2Full;
+  };
+
   recutils = callPackage ../tools/misc/recutils { };
 
   recoll = callPackage ../applications/search/recoll { };
