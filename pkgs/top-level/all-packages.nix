@@ -6001,6 +6001,8 @@ in
 
   srecord = callPackage ../development/tools/misc/srecord { };
 
+  srelay = callPackage ../tools/networking/srelay { };
+
   xidel = callPackage ../tools/text/xidel { };
 
 
