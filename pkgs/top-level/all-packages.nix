@@ -1496,7 +1496,9 @@ in
 
   fatsort = callPackage ../tools/filesystems/fatsort { };
 
-  fcitx = callPackage ../tools/inputmethods/fcitx { };
+  fcitx = callPackage ../tools/inputmethods/fcitx {
+    plugins = [];
+  };
 
   fcitx-engines = recurseIntoAttrs {
 
@@ -1519,10 +1521,6 @@ in
   };
 
   fcitx-configtool = callPackage ../tools/inputmethods/fcitx/fcitx-configtool.nix { };
-
-  fcitx-with-plugins = callPackage ../tools/inputmethods/fcitx/wrapper.nix {
-    plugins = [ ];
-  };
 
   fcppt = callPackage ../development/libraries/fcppt/default.nix { };
 
@@ -2367,6 +2365,8 @@ in
 
   libqmi = callPackage ../development/libraries/libqmi { };
 
+  libqrencode = callPackage ../development/libraries/libqrencode { };
+  
   libmbim = callPackage ../development/libraries/libmbim { };
 
   libmongo-client = callPackage ../development/libraries/libmongo-client { };
@@ -15620,7 +15620,7 @@ in
   soi = callPackage ../games/soi {
     lua = lua5_1;
   };
-  
+
   solarus = callPackage ../games/solarus { };
 
   # You still can override by passing more arguments.
