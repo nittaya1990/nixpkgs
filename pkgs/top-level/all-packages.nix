@@ -6714,6 +6714,8 @@ in
 
   grabserial = callPackage ../development/tools/grabserial { };
 
+  mypy-lang = callPackage ../development/tools/mypy-lang { };
+
 
   ### DEVELOPMENT / LIBRARIES
 
