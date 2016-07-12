@@ -2366,7 +2366,7 @@ in
   libqmi = callPackage ../development/libraries/libqmi { };
 
   libqrencode = callPackage ../development/libraries/libqrencode { };
-  
+
   libmbim = callPackage ../development/libraries/libmbim { };
 
   libmongo-client = callPackage ../development/libraries/libmongo-client { };
@@ -5655,6 +5655,8 @@ in
   relxExe = callPackage ../development/tools/erlang/relx-exe {};
 
   elixir = callPackage ../development/interpreters/elixir { debugInfo = true; };
+
+  lfe = callPackage ../development/interpreters/lfe { };
 
   groovy = callPackage ../development/interpreters/groovy { };
 
