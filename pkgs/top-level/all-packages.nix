@@ -6662,6 +6662,8 @@ in
 
   uncrustify = callPackage ../development/tools/misc/uncrustify { };
 
+  universal-ctags = callPackage ../development/tools/misc/universal-ctags { };
+
   vagrant = callPackage ../development/tools/vagrant {
     ruby = ruby_2_2;
   };
