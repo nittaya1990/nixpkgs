@@ -2901,7 +2901,9 @@ in
 
   p7zip = callPackage ../tools/archivers/p7zip { };
 
-  packagekit = callPackage ../tools/package-management/packagekit { };
+  packagekit = callPackage ../tools/package-management/packagekit {
+    nix = nixUnstable;
+  };
 
   pal = callPackage ../tools/misc/pal { };
 
@@ -3397,6 +3399,8 @@ in
 
   seccure = callPackage ../tools/security/seccure { };
 
+  secp256k1 = callPackage ../tools/security/secp256k1 { };
+
   securefs = callPackage ../tools/filesystems/securefs { };
 
   setroot = callPackage  ../tools/X11/setroot { };
@@ -3476,6 +3480,8 @@ in
   solr = callPackage ../servers/search/solr { };
 
   solvespace = callPackage ../applications/graphics/solvespace { };
+
+  sonarr = callPackage ../servers/sonarr { };
 
   sonata = callPackage ../applications/audio/sonata {
     inherit (python3Packages) buildPythonApplication python isPy3k dbus pygobject3 mpd2;
@@ -3924,6 +3930,8 @@ in
 
   udunits = callPackage ../development/libraries/udunits { };
 
+  uemacs = callPackage ../applications/editors/uemacs { };
+
   uhttpmock = callPackage ../development/libraries/uhttpmock { };
 
   uim = callPackage ../tools/inputmethods/uim {
@@ -3937,6 +3945,8 @@ in
   unbound = callPackage ../tools/networking/unbound { };
 
   units = callPackage ../tools/misc/units { };
+
+  unittest-cpp = callPackage ../development/libraries/unittest-cpp { };
 
   unrar = callPackage ../tools/archivers/unrar { };
 
@@ -4719,8 +4729,6 @@ in
 
   hugs = callPackage ../development/interpreters/hugs { };
 
-  path64 = callPackage ../development/compilers/path64 { };
-
   openjdk7 =
     if stdenv.isDarwin then
       callPackage ../development/compilers/openjdk-darwin { }
@@ -4747,6 +4755,8 @@ in
 
   jdk = if stdenv.isDarwin then self.jdk7 else self.jdk8;
   jre = if stdenv.isDarwin then self.jre7 else self.jre8;
+
+  openshot-qt = callPackage ../applications/video/openshot-qt { };
 
   oraclejdk = self.jdkdistro true false;
 
@@ -5433,9 +5443,9 @@ in
 
   cargo = rust.cargo;
   rustc = rust.rustc;
-  rustPlatform = recurseIntoAttrs (makeRustPlatform rust rustPlatform);
+  rustPlatform = recurseIntoAttrs (makeRustPlatform rust);
 
-  makeRustPlatform = rust: self:
+  makeRustPlatform = rust: lib.fix (self:
     let
       callPackage = newScope self;
     in {
@@ -5446,7 +5456,7 @@ in
       buildRustPackage = callPackage ../build-support/rust {
         inherit rust;
       };
-    };
+    });
 
   rustfmt = callPackage ../development/tools/rust/rustfmt { };
   rustracer = callPackage ../development/tools/rust/racer { };
@@ -5768,7 +5778,7 @@ in
     glpk = null;
     suitesparse = null;
     jdk = null;
-    openblas = openblasCompat;
+    openblas = openblas;
   };
   octaveFull = (lowPrio (callPackage ../development/interpreters/octave {
     qt = qt4;
@@ -5862,7 +5872,7 @@ in
 
   pythonDocs = recurseIntoAttrs (callPackage ../development/interpreters/python/docs {});
 
-  pypi2nix = callPackage ../development/tools/pypi2nix { python = python27; };
+  pypi2nix = callPackage ../development/tools/pypi2nix { python = python35; };
 
   svg2tikz = python27Packages.svg2tikz;
 
@@ -6423,6 +6433,7 @@ in
 
   lemon = callPackage ../development/tools/parsing/lemon { };
 
+  lenmus = callPackage ../applications/misc/lenmus { };
 
   libtool = self.libtool_2;
 
@@ -6596,6 +6607,8 @@ in
   simpleBuildTool = sbt;
 
   shellcheck = self.haskellPackages.ShellCheck;
+
+  shncpd = callPackage ../tools/networking/shncpd { };
 
   sigrok-cli = callPackage ../development/tools/sigrok-cli { };
 
@@ -8428,6 +8441,8 @@ in
 
   libu2f-server = callPackage ../development/libraries/libu2f-server { };
 
+  libui = callPackage ../development/libraries/libui { };
+
   libunity = callPackage ../development/libraries/libunity { };
 
   libunistring = callPackage ../development/libraries/libunistring { };
@@ -8714,7 +8729,9 @@ in
 
   notify-sharp = callPackage ../development/libraries/notify-sharp { };
 
-  ncurses = callPackage ../development/libraries/ncurses { };
+  ncurses5 = callPackage ../development/libraries/ncurses { abiVersion = "5"; };
+  ncurses6 = callPackage ../development/libraries/ncurses { abiVersion = "6"; };
+  ncurses = if stdenv.isDarwin then ncurses5 else ncurses6;
 
   neardal = callPackage ../development/libraries/neardal { };
 
@@ -10775,6 +10792,10 @@ in
 
   firejail = callPackage ../os-specific/linux/firejail {};
 
+  fnotifystat = callPackage ../os-specific/linux/fnotifystat { };
+
+  forkstat = callPackage ../os-specific/linux/forkstat { };
+
   freefall = callPackage ../os-specific/linux/freefall {
     inherit (linuxPackages) kernel;
   };
@@ -10875,6 +10896,10 @@ in
   openiscsi = callPackage ../os-specific/linux/open-iscsi { };
 
   openisns = callPackage ../os-specific/linux/open-isns { };
+
+  powerstat = callPackage ../os-specific/linux/powerstat { };
+
+  smemstat = callPackage ../os-specific/linux/smemstat { };
 
   tgt = callPackage ../tools/networking/tgt { };
 
@@ -11196,7 +11221,12 @@ in
   linux_grsec_nixos = callPackage ../build-support/grsecurity {
     inherit (lib) overrideDerivation;
     kernel = callPackage ../os-specific/linux/kernel/linux-grsecurity.nix {
-      inherit (self.linux_4_5) kernelPatches;
+      kernelPatches = with self.kernelPatches; [ bridge_stp_helper qat_common_Makefile ]
+        ++ lib.optionals ((platform.kernelArch or null) == "mips")
+        [ kernelPatches.mips_fpureg_emu
+          kernelPatches.mips_fpu_sigill
+          kernelPatches.mips_ext3_n32
+        ];
     };
     grsecPatch = self.kernelPatches.grsecurity_testing;
     kernelPatches = [ self.kernelPatches.grsecurity_nixos_kmod ];
@@ -12939,7 +12969,7 @@ in
   };
 
   firefox-beta-bin-unwrapped = callPackage ../applications/networking/browsers/firefox-bin {
-    channel = "beta";
+    generated = import ../applications/networking/browsers/firefox-bin/beta_sources.nix;
     gconf = pkgs.gnome.GConf;
     inherit (pkgs.gnome) libgnome libgnomeui;
     inherit (pkgs.gnome3) defaultIconTheme;
@@ -12950,20 +12980,6 @@ in
     name = "firefox-beta-bin-" +
       (builtins.parseDrvName firefox-beta-bin-unwrapped.name).version;
     desktopName = "Firefox Beta";
-  };
-
-  firefox-developer-bin-unwrapped = callPackage ../applications/networking/browsers/firefox-bin {
-    channel = "developer";
-    gconf = pkgs.gnome.GConf;
-    inherit (pkgs.gnome) libgnome libgnomeui;
-    inherit (pkgs.gnome3) defaultIconTheme;
-  };
-
-  firefox-developer-bin = self.wrapFirefox firefox-developer-bin-unwrapped {
-    browserName = "firefox";
-    name = "firefox-developer-bin-" +
-      (builtins.parseDrvName firefox-developer-bin-unwrapped.name).version;
-    desktopName = "Firefox Developer Edition";
   };
 
   firestr = qt5.callPackage ../applications/networking/p2p/firestr
@@ -14034,6 +14050,8 @@ in
 
   pcsx2 = callPackage_i686 ../misc/emulators/pcsx2 { };
 
+  pekwm = callPackage ../applications/window-managers/pekwm { };
+
   pencil = callPackage ../applications/graphics/pencil {
     xulrunner = firefox-unwrapped;
   };
@@ -14169,7 +14187,7 @@ in
 
   qbittorrent = qt5.callPackage ../applications/networking/p2p/qbittorrent {
     boost = boost;
-    libtorrentRasterbar = libtorrentRasterbar;
+    libtorrentRasterbar = libtorrentRasterbar_1_09;
   };
 
   eiskaltdcpp = callPackage ../applications/networking/p2p/eiskaltdcpp { lua5 = lua5_1; };
@@ -14878,7 +14896,9 @@ in
 
   vym = callPackage ../applications/misc/vym { };
 
-  w3m = callPackage ../applications/networking/browsers/w3m { };
+  w3m = callPackage ../applications/networking/browsers/w3m {
+    graphicsSupport = !stdenv.isDarwin;
+  };
 
   # Should always be the version with the most features
   w3m-full = w3m;
@@ -15902,6 +15922,7 @@ in
           pythonBindings = true;
         };
         ruby = ruby_2_2; # see https://github.com/NixOS/nixpkgs/pull/12610#issuecomment-188666473
+        ffmpeg = ffmpeg_2; # ffmpegthumb doesn't build otherwise
       }
       ../desktops/kde-4.14;
 

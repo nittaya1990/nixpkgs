@@ -319,7 +319,7 @@ rec {
     origArgs = args;
     origBuilder = builder;
     QEMU_OPTS = "${QEMU_OPTS} -m ${toString memSize}";
-    passAsFile = [];
+    passAsFile = []; # HACK fix - see https://github.com/NixOS/nixpkgs/issues/16742
   });
 
 
