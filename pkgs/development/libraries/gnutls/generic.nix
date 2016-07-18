@@ -7,7 +7,11 @@
 , ...}:
 
 assert guileBindings -> guile != null;
-
+let
+  # XXX: Gnulib's `test-select' fails on FreeBSD:
+  # http://hydra.nixos.org/build/2962084/nixlog/1/raw .
+  doCheck = (!stdenv.isFreeBSD && !stdenv.isDarwin);
+in
 stdenv.mkDerivation {
   name = "gnutls-${version}";
 
@@ -35,7 +39,8 @@ stdenv.mkDerivation {
   # for the actual fix.
   enableParallelBuilding = !guileBindings;
 
-  buildInputs = [ lzo lzip nettle libtasn1 libidn p11_kit zlib gmp autogen nettools ]
+  buildInputs = [ lzo lzip nettle libtasn1 libidn p11_kit zlib gmp autogen ]
+    ++ lib.optional doCheck nettools
     ++ lib.optional (stdenv.isFreeBSD || stdenv.isDarwin) libiconv
     ++ lib.optional (tpmSupport && stdenv.isLinux) trousers
     ++ [ unbound ]
@@ -43,9 +48,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ perl pkgconfig ] ++ nativeBuildInputs;
 
-  # XXX: Gnulib's `test-select' fails on FreeBSD:
-  # http://hydra.nixos.org/build/2962084/nixlog/1/raw .
-  doCheck = (!stdenv.isFreeBSD && !stdenv.isDarwin);
+  inherit doCheck;
 
   # Fixup broken libtool and pkgconfig files
   preFixup = lib.optionalString (!stdenv.isDarwin) ''

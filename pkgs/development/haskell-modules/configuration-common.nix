@@ -237,6 +237,15 @@ self: super: {
         '';
       })) pkgs.libcxx;
 
+  inline-c-cpp = if !pkgs.stdenv.isDarwin
+    then super.inline-c-cpp
+    else addExtraLibrary (overrideCabal super.inline-c-cpp (drv:
+      {
+        postPatch = ''
+          substituteInPlace inline-c-cpp.cabal --replace stdc++ c++
+        '';
+      })) pkgs.libcxx;
+
   # tests don't compile for some odd reason
   jwt = dontCheck super.jwt;
 
@@ -652,9 +661,6 @@ self: super: {
 
   # Test suite won't compile against tasty-hunit 0.9.x.
   zlib = dontCheck super.zlib;
-
-  # Override the obsolete version from Hackage with our more up-to-date copy.
-  cabal2nix = self.callPackage ../tools/haskell/cabal2nix {};
 
   # https://github.com/ndmitchell/shake/issues/206
   # https://github.com/ndmitchell/shake/issues/267

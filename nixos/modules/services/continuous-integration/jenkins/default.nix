@@ -159,7 +159,7 @@ in {
       '';
 
       script = ''
-        ${pkgs.jdk}/bin/java -jar ${pkgs.jenkins}/jenkins.war \
+        ${pkgs.jdk}/bin/java -jar ${pkgs.jenkins}/webapps/jenkins.war \
                                                   --httpListenAddress=${cfg.listenAddress} \
                                                   --httpPort=${toString cfg.port} \
                                                   --prefix=${cfg.prefix} \

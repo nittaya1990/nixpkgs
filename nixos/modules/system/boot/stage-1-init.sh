@@ -3,6 +3,7 @@
 targetRoot=/mnt-root
 console=tty1
 
+extraUtils="@extraUtils@"
 export LD_LIBRARY_PATH=@extraUtils@/lib
 export PATH=@extraUtils@/bin
 ln -s @extraUtils@/bin /bin
@@ -70,6 +71,8 @@ mount -t sysfs sysfs /sys
 mount -t devtmpfs -o "size=@devSize@" devtmpfs /dev
 mkdir -p /run
 mount -t tmpfs -o "mode=0755,size=@runSize@" tmpfs /run
+mkdir /dev/pts
+mount -t devpts devpts /dev/pts
 
 # Log the script output to /dev/kmsg or /run/log/stage-1-init.log.
 mkdir -p /tmp

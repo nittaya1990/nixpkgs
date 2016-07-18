@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   name = "diff-so-fancy-${version}";
-  version = "0.9.3";
+  version = "0.10.1";
 
   # perl is needed here so patchShebangs can do its job
   buildInputs = [perl makeWrapper];
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     owner = "so-fancy";
     repo = "diff-so-fancy";
     rev = "v${version}";
-    sha256 = "0b5k54h3l4z81p6f7n14g2r5vz7qdyyrbql0z7rwhb7sw7s7zrgx";
+    sha256 = "0wp5civn70jzil1gbygx6ccrxfrmc8xx90v7zgf36rqi2yhvv64m";
   };
 
   buildPhase = null;

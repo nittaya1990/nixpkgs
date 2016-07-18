@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig
+{ stdenv, fetchurl, makeWrapper, pkgconfig
 , glib
 , gtk2
 , gst_all_1
@@ -7,6 +7,8 @@
 , libxml2
 , libunique
 , intltool
+, gst_plugins ? with gst_all_1; [ gst-plugins-base gst-plugins-good gst-plugins-ugly ]
+, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
@@ -18,18 +20,28 @@ stdenv.mkDerivation rec {
     sha256 = "1mrrw5cgv0izdmhdg83vprvbj6062yzk77b2nr1nx6hhmk00946r";
   };
 
-  buildInputs = [
+  nativeBuildInputs = [
+    makeWrapper
     pkgconfig
+  ];
+
+  buildInputs = [
     glib
     gtk2
     gst_all_1.gstreamer
+    gst_plugins
     gnome.GConf
     gnome.gnome_icon_theme
     libnotify
     libxml2
     libunique
     intltool
+    wrapGAppsHook
   ];
+
+  propagatedUserEnvPkgs = [ gnome.GConf.out ];
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     homepage = http://alarm-clock.pseudoberries.com/;
