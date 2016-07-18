@@ -15379,6 +15379,8 @@ in
 
   cockatrice = qt5.callPackage ../games/cockatrice {  };
 
+  commandergenius = callPackage ../games/commandergenius { };
+
   confd = callPackage ../tools/system/confd { };
 
   construoBase = lowPrio (callPackage ../games/construo {
