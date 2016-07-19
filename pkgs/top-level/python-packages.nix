@@ -3879,6 +3879,18 @@ in modules // {
     };
   };
 
+  credstash = buildPythonPackage rec {
+    name    = "credstash-${version}";
+    version = "1.11.0";
+
+    src = pkgs.fetchurl {
+      url    = "https://pypi.python.org/packages/e2/64/6abae87b8da07c262d50b51eed540096ed1f6e01539bf2f2d4c3f718c8c6/credstash-1.11.0.tar.gz";
+      sha256 = "03qm8bjfskzkkmgcy5dr70x9pxabjb3fi0v0nxicg1kryy64k0dz";
+    };
+
+    propagatedBuildInputs = with self; [ pycrypto boto3 docutils ];
+  };
+
   cython = buildPythonPackage rec {
     name = "Cython-${version}";
     version = "0.24";
@@ -11148,6 +11160,18 @@ in modules // {
       license = licenses.mit;
       maintainers = with maintainers; [ garbas ];
     };
+  };
+
+  hvac = buildPythonPackage rec {
+    name    = "hvac-${version}";
+    version = "0.2.15";
+
+    src = pkgs.fetchurl {
+      url    = "https://pypi.python.org/packages/11/ba/6101780891b9d55f6174fa78b47d462c8c1f0cde34072b45fc39f7f8a77c/hvac-0.2.15.tar.gz";
+      sha256 = "0qxa4g1ij1bj27mbp8l54lcr7d5krkb2rayisc6shkpf2b51ip4c";
+    };
+
+    propagatedBuildInputs = with self; [ requests2 ];
   };
 
   hypothesis1 = buildPythonPackage rec {
@@ -21563,6 +21587,16 @@ in modules // {
     };
   };
 
+  timeout-decorator = buildPythonPackage rec {
+    name    = "timeout-decorator-${version}";
+    version = "0.3.2";
+
+    src = pkgs.fetchurl {
+      url    = "http://pypi.python.org/packages/source/t/timeout-decorator/${name}.tar.gz";
+      sha256 = "1x9l8bwdk72if2d5h5mi4lcaidbsmyh0iz114cfyyj1rzz5rxqaf";
+    };
+  };
+
   pid = buildPythonPackage rec {
     name = "pid-${version}";
     version = "2.0.1";
@@ -21582,6 +21616,21 @@ in modules // {
       homepage = https://github.com/trbs/pid/;
       license = licenses.asl20;
     };
+  };
+
+  pychef = buildPythonPackage rec {
+    name    = "PyChef-${version}";
+    version = "0.3.0";
+
+    src = pkgs.fetchurl {
+      url    = "https://pypi.python.org/packages/f9/31/17cde137e3b8ada4d7c80fd4504264f2abed329a9a8100c3622a044c485e/PyChef-0.3.0.tar.gz";
+      sha256 = "0zdz8lw545cd3a34cpib7mdwnad83gr2mrrxyj3v74h4zhwabhmg";
+    };
+
+    propagatedBuildInputs = with self; [ six requests2 mock unittest2 ];
+
+    # FIXME
+    doCheck = false;
   };
 
   pydns = buildPythonPackage rec {
