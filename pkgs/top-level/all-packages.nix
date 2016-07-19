@@ -5855,6 +5855,10 @@ in
     inherit (darwin) CF configd;
     self = python35;
   });
+  python36 = callPackage ../development/interpreters/python/3.6 {
+    inherit (darwin) CF configd;
+    self = python36;
+  };
   pypy = callPackage ../development/interpreters/pypy {
     self = pypy;
   };
@@ -9906,6 +9910,11 @@ in
   python35Packages = recurseIntoAttrs (callPackage ./python-packages.nix {
     python = python35;
     self = python35Packages;
+  });
+
+  python36Packages = (callPackage ./python-packages.nix {
+    python = python36;
+    self = python36Packages;
   });
 
   pypyPackages = callPackage ./python-packages.nix {
