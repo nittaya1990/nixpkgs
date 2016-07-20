@@ -9391,6 +9391,8 @@ in
 
   tcltls = callPackage ../development/libraries/tcltls { };
 
+  tclx = callPackage ../development/libraries/tclx { };
+
   ntdb = callPackage ../development/libraries/ntdb {
     python = python2;
   };
