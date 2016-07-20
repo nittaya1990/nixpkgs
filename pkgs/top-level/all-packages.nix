@@ -924,7 +924,7 @@ in
       ExtUtilsLibBuilder FileSlurp IPCRun3 Log4Perl LWPProtocolHttps ListAllUtils
       ListMoreUtils ModuleBuild MozillaCA ReadonlyXS RegexpCommon TextBibTeX
       UnicodeCollate UnicodeLineBreak URI XMLLibXMLSimple XMLLibXSLT XMLWriter
-      ClassAccessor TextRoman DataUniqid;
+      ClassAccessor TextRoman DataUniqid LinguaTranslit UnicodeNormalize;
   };
 
   bibtextools = callPackage ../tools/typesetting/bibtex-tools {
@@ -9194,6 +9194,8 @@ in
 
   rote = callPackage ../development/libraries/rote { };
 
+  ronn = callPackage ../development/tools/ronn { };
+
   rubberband = callPackage ../development/libraries/rubberband {
     inherit (vamp) vampSDK;
   };
@@ -12217,6 +12219,8 @@ in
   } );
   bitcoin = self.altcoins.bitcoin;
   bitcoin-xt = self.altcoins.bitcoin-xt;
+
+  go-ethereum = self.altcoins.go-ethereum;
 
   aumix = callPackage ../applications/audio/aumix {
     gtkGUI = false;
