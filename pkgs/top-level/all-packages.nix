@@ -1411,6 +1411,8 @@ in
 
   ecryptfs = callPackage ../tools/security/ecryptfs { };
 
+  ecryptfs-helper = callPackage ../tools/security/ecryptfs/helper.nix { python = python2; };
+
   editres = callPackage ../tools/graphics/editres { };
 
   edit = callPackage ../applications/editors/edit { };
@@ -5667,6 +5669,21 @@ in
     javacSupport = true;
   };
   erlangR18_odbc_javac = callPackage ../development/interpreters/erlang/R18.nix {
+    inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
+    javacSupport = true; odbcSupport = true;
+  };
+  erlangR19 = callPackage ../development/interpreters/erlang/R19.nix {
+    inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
+  };
+  erlangR19_odbc = callPackage ../development/interpreters/erlang/R19.nix {
+    inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
+    odbcSupport = true;
+  };
+  erlangR19_javac = callPackage ../development/interpreters/erlang/R19.nix {
+    inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
+      javacSupport = true;
+  };
+  erlangR19_odbc_javac = callPackage ../development/interpreters/erlang/R19.nix {
     inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
     javacSupport = true; odbcSupport = true;
   };
@@ -10363,7 +10380,7 @@ in
 
   riak = callPackage ../servers/nosql/riak/2.1.1.nix { };
 
-  influxdb = (callPackage ../servers/nosql/influxdb { }).bin // { outputs = [ "bin" ]; };
+  influxdb = (callPackage ../servers/nosql/influxdb/v0.nix { }).bin // { outputs = [ "bin" ]; };
 
   hyperdex = callPackage ../servers/nosql/hyperdex { };
 
