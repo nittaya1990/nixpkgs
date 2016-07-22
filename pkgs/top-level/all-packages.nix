@@ -10565,6 +10565,8 @@ in
 
   torque = callPackage ../servers/computing/torque { };
 
+  tt-rss = callPackage ../servers/tt-rss { };
+
   axis2 = callPackage ../servers/http/tomcat/axis2 { };
 
   unifi = callPackage ../servers/unifi { };
@@ -12898,6 +12900,8 @@ in
   keepass-keefox = callPackage ../applications/misc/keepass-plugins/keefox { };
 
   exrdisplay = callPackage ../applications/graphics/exrdisplay { };
+
+  exrtools = callPackage ../applications/graphics/exrtools { };
 
   fbpanel = callPackage ../applications/window-managers/fbpanel { };
 
