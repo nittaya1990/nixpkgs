@@ -12,7 +12,7 @@ let
     (fs: (fs.neededForBoot
           || elem fs.mountPoint [ "/" "/nix" "/nix/store" "/var" "/var/log" "/var/lib" "/etc" ])
           && fs.fsType == "zfs")
-    (attrValues config.fileSystems) != [];
+    config.system.build.fileSystems != [];
 
   # Ascertain whether NixOS container support is required
   containerSupportRequired =
@@ -20,6 +20,11 @@ let
 in
 
 {
+  meta = {
+    maintainers = with maintainers; [ joachifm ];
+    doc = ./grsecurity.xml;
+  };
+
   options.security.grsecurity = {
 
     enable = mkEnableOption "grsecurity/PaX";
@@ -37,6 +42,18 @@ in
       '';
     };
 
+    disableEfiRuntimeServices = mkOption {
+      type = types.bool;
+      example = false;
+      default = true;
+      description = ''
+        Whether to disable access to EFI runtime services.  Enabling EFI runtime
+        services creates a venue for code injection attacks on the kernel and
+        should be disabled if at all possible.  Changing this option enters into
+        effect upon reboot.
+      '';
+    };
+
   };
 
   config = mkIf cfg.enable {
@@ -45,6 +62,8 @@ in
     # required kernel config
     boot.kernelPackages = mkDefault pkgs.linuxPackages_grsec_nixos;
 
+    boot.kernelParams = optional cfg.disableEfiRuntimeServices "noefi";
+
     system.requiredKernelConfig = with config.lib.kernelConfig;
       [ (isEnabled "GRKERNSEC")
         (isEnabled "PAX")
@@ -52,6 +71,8 @@ in
         (isYES "GRKERNSEC_SYSCTL_DISTRO")
         (isNO "GRKERNSEC_NO_RBAC")
       ];
+
+    nixpkgs.config.grsecurity = true;
 
     # Install PaX related utillities into the system profile.
     environment.systemPackages = with pkgs; [ gradm paxctl pax-utils ];
@@ -97,7 +118,7 @@ in
 
     # Configure system tunables
     boot.kernel.sysctl = {
-      # Removed under grsecurity
+      # Read-only under grsecurity
       "kernel.kptr_restrict" = mkForce null;
     } // optionalAttrs config.nix.useSandbox {
       # chroot(2) restrictions that conflict with sandboxed Nix builds
@@ -105,11 +126,13 @@ in
       "kernel.grsecurity.chroot_deny_chroot" = mkForce 0;
       "kernel.grsecurity.chroot_deny_mount" = mkForce 0;
       "kernel.grsecurity.chroot_deny_pivot" = mkForce 0;
+      "kernel.grsecurity.chroot_deny_chmod" = mkForce 0;
     } // optionalAttrs containerSupportRequired {
       # chroot(2) restrictions that conflict with NixOS lightweight containers
       "kernel.grsecurity.chroot_deny_chmod" = mkForce 0;
       "kernel.grsecurity.chroot_deny_mount" = mkForce 0;
       "kernel.grsecurity.chroot_restrict_nice" = mkForce 0;
+      "kernel.grsecurity.chroot_caps" = mkForce 0;
     };
 
     assertions = [

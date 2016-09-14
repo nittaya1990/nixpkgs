@@ -24,12 +24,13 @@ stdenv.mkDerivation rec {
 
   configureFlags = "--enable-shared";
 
-  outputs = [ "dev" "out" "man" "bin" ];
+  outputs = [ "bin" "dev" "out" "man" ];
 
   enableParallelBuilding = true;
 
   meta = {
     homepage = https://www.ece.uvic.ca/~frodo/jasper/;
     description = "JPEG2000 Library";
+    platforms = stdenv.lib.platforms.unix;
   };
 }

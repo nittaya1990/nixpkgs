@@ -55,13 +55,8 @@ let
       else abort "Unrecognized package fetch type";
     };
 
-  importGodeps = { depsFile, filterPackages ? [] }:
-  let
-    deps = lib.importJSON depsFile;
-    external = filter (d: d ? include) deps;
-    direct = filter (d: d ? goPackagePath && (length filterPackages == 0 || elem d.goPackagePath filterPackages)) deps;
-  in
-    concatLists (map importGodeps (map (d: { depsFile = ./. + d.include; filterPackages = d.packages; }) external)) ++ (map dep2src direct);
+  importGodeps = { depsFile }:
+    map dep2src (lib.importJSON depsFile);
 
   goPath = if goDeps != null then importGodeps { depsFile = goDeps; } ++ extraSrcs
                              else extraSrcs;
@@ -195,7 +190,7 @@ go.stdenv.mkDerivation (
   enableParallelBuilding = enableParallelBuilding;
 
   # I prefer to call this dev but propagatedBuildInputs expects $out to exist
-  outputs = args.outputs or [ "out" "bin" ];
+  outputs = args.outputs or [ "bin" "out" ];
 
   meta = {
     # Add default meta information

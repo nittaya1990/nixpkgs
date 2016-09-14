@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1mzbqr6sqisppz88mh73bbh5sw57g8l87qvhcjdx5pmbd183idni";
   };
 
-  outputs = [ "dev" "out" "docdev" ];
+  outputs = [ "out" "dev" "devdoc" "info" ];
   buildInputs = [ libgcrypt curl gnutls pkgconfig ];
 
   preCheck = ''
@@ -32,5 +32,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.gnu.org/software/libmicrohttpd/;
 
     maintainers = [ maintainers.eelco maintainers.vrthra ];
+    platforms = platforms.linux;
   };
 }

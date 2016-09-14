@@ -163,8 +163,8 @@ stdenv.mkDerivation rec {
   postInstall = ''
     for prog in "$out/bin/julia" "$out/bin/julia-debug"; do
         wrapProgram "$prog" \
-            --prefix LD_LIBRARY_PATH : "$out/lib/julia:$LD_LIBRARY_PATH" \
-            --prefix PATH : "${curl}/bin"
+            --prefix LD_LIBRARY_PATH : "$LD_LIBRARY_PATH" \
+            --prefix PATH : "${stdenv.lib.makeBinPath [ curl ]}"
     done
   '';
 
@@ -174,5 +174,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.mit;
     maintainers = with stdenv.lib.maintainers; [ raskin ];
     platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" ];
+    broken = stdenv.isi686;
   };
 }

@@ -148,7 +148,7 @@ in
         kde5.kde-gtk-config
 
         pkgs.phonon-backend-gstreamer
-        pkgs.kde5.phonon-backend-gstreamer
+        pkgs.qt5.phonon-backend-gstreamer
       ]
 
       # Plasma 5.5 and later has a Breeze GTK theme.
@@ -169,7 +169,7 @@ in
       ++ lib.optional config.networking.networkmanager.enable kde5.plasma-nm
       ++ lib.optional config.hardware.pulseaudio.enable kde5.plasma-pa
       ++ lib.optional config.powerManagement.enable kde5.powerdevil
-      ++ lib.optional config.services.colord.enable kde5.colord-kde
+      ++ lib.optional config.services.colord.enable pkgs.colord-kde
       ++ lib.optionals config.services.samba.enable [ kde5.kdenetwork-filesharing pkgs.samba ];
 
     environment.pathsToLink = [ "/share" ];
@@ -214,7 +214,7 @@ in
     services.xserver.displayManager.sddm = {
       theme = "breeze";
       themes = [
-        kde5.extra-cmake-modules # for the setup-hook
+        kde5.ecm # for the setup-hook
         kde5.plasma-workspace
         kde5.breeze-icons
         (kde5.oxygen-icons or kde5.oxygen-icons5)

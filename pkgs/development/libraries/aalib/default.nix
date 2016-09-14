@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     sha256 = "1vkh19gb76agvh4h87ysbrgy82hrw88lnsvhynjf4vng629dmpgv";
   };
 
-  outputs = [ "dev" "out" "bin" "doc" ];
+  outputs = [ "bin" "dev" "out" "doc" ];
   setOutputFlags = false; # Doesn't support all the flags
 
   patches = stdenv.lib.optionals stdenv.isDarwin [ ./darwin.patch ];
@@ -35,5 +35,6 @@ stdenv.mkDerivation {
 
   meta = {
     description = "ASCII art graphics library";
+    platforms = stdenv.lib.platforms.unix;
   };
 }

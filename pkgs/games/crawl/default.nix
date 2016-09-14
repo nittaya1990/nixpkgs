@@ -1,22 +1,22 @@
 { stdenv, fetchFromGitHub, which, sqlite, lua5_1, perl, zlib, pkgconfig, ncurses
-, dejavu_fonts, libpng, SDL2, SDL2_image, mesa, freetype
+, dejavu_fonts, libpng, SDL2, SDL2_image, mesa, freetype, pngcrush
 , tileMode ? false
 }:
 
-let version = "0.18.0";
-in
 stdenv.mkDerivation rec {
   name = "crawl-${version}" + (if tileMode then "-tiles" else "");
+  version = "0.18.1";
+
   src = fetchFromGitHub {
     owner = "crawl-ref";
     repo = "crawl-ref";
     rev = version;
-    sha256 = "0mgg9lzy7lp5bhp8340a6c6qyz7yiz80wb39gknls8hvv0f6i0si";
+    sha256 = "1cg5mxhx0lfhadls6n8avcpkjx08nqf1y085li97zqxl3gjaj64j";
   };
 
   patches = [ ./crawl_purify.patch ];
 
-  nativeBuildInputs = [ pkgconfig which perl ];
+  nativeBuildInputs = [ pkgconfig which perl pngcrush ];
 
   # Still unstable with luajit
   buildInputs = [ lua5_1 zlib sqlite ncurses ]
@@ -30,6 +30,7 @@ stdenv.mkDerivation rec {
       patchShebangs $i
     done
     patchShebangs util/gen-mi-enum
+    rm -rf contrib
   '';
 
   makeFlags = [ "prefix=$(out)" "FORCE_CC=gcc" "FORCE_CXX=g++" "HOSTCXX=g++"

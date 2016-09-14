@@ -16,7 +16,7 @@
 , cloog ? null, isl ? null # optional, for the Graphite optimization framework.
 , zlib ? null, boehmgc ? null
 , zip ? null, unzip ? null, pkgconfig ? null
-, gtk ? null, libart_lgpl ? null
+, gtk2 ? null, libart_lgpl ? null
 , libX11 ? null, libXt ? null, libSM ? null, libICE ? null, libXtst ? null
 , libXrender ? null, xproto ? null, renderproto ? null, xextproto ? null
 , libXrandr ? null, libXi ? null, inputproto ? null, randrproto ? null
@@ -56,7 +56,7 @@ assert langGo -> langCC;
 with stdenv.lib;
 with builtins;
 
-let version = "4.9.3";
+let version = "4.9.4";
 
     # Whether building a cross-compiler for GNU/Hurd.
     crossGNU = cross != null && cross.config == "i586-pc-gnu";
@@ -189,6 +189,9 @@ let version = "4.9.3";
             # To keep ABI compatibility with upstream mingw-w64
             " --enable-fully-dynamic-string"
             else (if cross.libc == "uclibc" then
+              # libsanitizer requires netrom/netrom.h which is not
+              # available in uclibc.
+              " --disable-libsanitizer" +
               # In uclibc cases, libgomp needs an additional '-ldl'
               # and as I don't know how to pass it, I disable libgomp.
               " --disable-libgomp" else "") +
@@ -204,7 +207,7 @@ let version = "4.9.3";
 in
 
 # We need all these X libraries when building AWT with GTK+.
-assert x11Support -> (filter (x: x == null) ([ gtk libart_lgpl ] ++ xlibs)) == [];
+assert x11Support -> (filter (x: x == null) ([ gtk2 libart_lgpl ] ++ xlibs)) == [];
 
 stdenv.mkDerivation ({
   name = "${name}${if stripped then "" else "-debug"}-${version}" + crossNameAddon;
@@ -213,10 +216,12 @@ stdenv.mkDerivation ({
 
   src = fetchurl {
     url = "mirror://gnu/gcc/gcc-${version}/gcc-${version}.tar.bz2";
-    sha256 = "0zmnm00d2a1hsd41g34bhvxzvxisa2l584q3p447bd91lfjv4ci3";
+    sha256 = "14l06m7nvcvb0igkbip58x59w3nq6315k6jcz3wr9ch1rn9d44bc";
   };
 
   inherit patches;
+
+  hardeningDisable = [ "format" ];
 
   outputs = if langJava || langGo then ["out" "man" "info"]
     else [ "out" "lib" "man" "info" ];
@@ -291,7 +296,7 @@ stdenv.mkDerivation ({
     ++ (optional (isl != null) isl)
     ++ (optional (zlib != null) zlib)
     ++ (optionals langJava [ boehmgc zip unzip ])
-    ++ (optionals javaAwtGtk ([ gtk libart_lgpl ] ++ xlibs))
+    ++ (optionals javaAwtGtk ([ gtk2 libart_lgpl ] ++ xlibs))
     ++ (optionals (cross != null) [binutilsCross])
     ++ (optionals langAda [gnatboot])
     ++ (optionals langVhdl [gnat])

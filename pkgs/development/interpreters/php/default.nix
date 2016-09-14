@@ -107,13 +107,13 @@ let
         };
 
         mysql = {
-          configureFlags = ["--with-mysql=${mysql.lib}"];
-          buildInputs = [ mysql.lib ];
+          configureFlags = ["--with-mysql"];
+          buildInputs = [ mysql.lib.dev ];
         };
 
         mysqli = {
-          configureFlags = ["--with-mysqli=${mysql.lib}/bin/mysql_config"];
-          buildInputs = [ mysql.lib ];
+          configureFlags = ["--with-mysqli=${mysql.lib.dev}/bin/mysql_config"];
+          buildInputs = [ mysql.lib.dev ];
         };
 
         mysqli_embedded = {
@@ -123,8 +123,8 @@ let
         };
 
         pdo_mysql = {
-          configureFlags = ["--with-pdo-mysql=${mysql.lib}"];
-          buildInputs = [ mysql.lib ];
+          configureFlags = ["--with-pdo-mysql=${mysql.lib.dev}"];
+          buildInputs = [ mysql.lib.dev ];
         };
 
         bcmath = {
@@ -257,6 +257,8 @@ let
         calendarSupport = config.php.calendar or true;
       };
 
+      hardeningDisable = [ "bindnow" ];
+
       configurePhase = ''
         # Don't record the configure flags since this causes unnecessary
         # runtime dependencies.
@@ -297,20 +299,13 @@ let
     });
 
 in {
-
-  php55 = generic {
-    version = "5.5.37";
-    sha256 = "122xj115fjl6rqlxqqjzvh16fbm801yqcmfh9hn7zwfa8sz0wf6j";
-  };
-
   php56 = generic {
-    version = "5.6.23";
-    sha256 = "1isq6pym20nwsf2j1jdz321vck9xd6g86q2b13vycxyjjq42ikgs";
+    version = "5.6.25";
+    sha256 = "1pldn4z7pzcjm8li9xryrniz5cz542cbv4nlrr13wzzdmhr61kjq";
   };
 
   php70 = generic {
-    version = "7.0.9";
-    sha256 = "0yrv5ijw6bgc0ahplczwhl5nm6l5mnd1i2n5023z7wkmb25rdrif";
+    version = "7.0.10";
+    sha256 = "1ppn17n5klhs1b2mcbbxxiqq4xvdbmv8p866q0qnk61nlzjvnmc0";
   };
-
 }

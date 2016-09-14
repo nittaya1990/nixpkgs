@@ -27,7 +27,7 @@ self: super: {
   transformers = null;
   unix = null;
 
-  # lts-6.7 packages
+  # lts-6.9 packages
   "3d-graphics-examples" = dontDistribute super."3d-graphics-examples";
   "3dmodels" = dontDistribute super."3dmodels";
   "4Blocks" = dontDistribute super."4Blocks";
@@ -75,6 +75,7 @@ self: super: {
   "Agda" = doDistribute super."Agda_2_5_1";
   "Agda-executable" = dontDistribute super."Agda-executable";
   "AhoCorasick" = dontDistribute super."AhoCorasick";
+  "AlanDeniseEricLauren" = dontDistribute super."AlanDeniseEricLauren";
   "AlgorithmW" = dontDistribute super."AlgorithmW";
   "AlignmentAlgorithms" = dontDistribute super."AlignmentAlgorithms";
   "Allure" = dontDistribute super."Allure";
@@ -126,7 +127,6 @@ self: super: {
   "BitSyntax" = dontDistribute super."BitSyntax";
   "Bitly" = dontDistribute super."Bitly";
   "Blobs" = dontDistribute super."Blobs";
-  "BlogLiterately" = doDistribute super."BlogLiterately_0_8_3_1";
   "BluePrintCSS" = dontDistribute super."BluePrintCSS";
   "Blueprint" = dontDistribute super."Blueprint";
   "Bookshelf" = dontDistribute super."Bookshelf";
@@ -170,6 +170,7 @@ self: super: {
   "Chart-diagrams" = doDistribute super."Chart-diagrams_1_6";
   "Chart-gtk" = dontDistribute super."Chart-gtk";
   "Chart-simple" = dontDistribute super."Chart-simple";
+  "ChasingBottoms" = doDistribute super."ChasingBottoms_1_3_1";
   "CheatSheet" = dontDistribute super."CheatSheet";
   "Checked" = dontDistribute super."Checked";
   "Chitra" = dontDistribute super."Chitra";
@@ -220,6 +221,7 @@ self: super: {
   "DOM" = dontDistribute super."DOM";
   "DP" = dontDistribute super."DP";
   "DPM" = dontDistribute super."DPM";
+  "DPutils" = dontDistribute super."DPutils";
   "DSA" = dontDistribute super."DSA";
   "DSH" = dontDistribute super."DSH";
   "DSTM" = dontDistribute super."DSTM";
@@ -322,6 +324,7 @@ self: super: {
   "FpMLv53" = dontDistribute super."FpMLv53";
   "FractalArt" = dontDistribute super."FractalArt";
   "Fractaler" = dontDistribute super."Fractaler";
+  "Frames" = doDistribute super."Frames_0_1_4";
   "Frank" = dontDistribute super."Frank";
   "FreeTypeGL" = dontDistribute super."FreeTypeGL";
   "FunGEn" = dontDistribute super."FunGEn";
@@ -358,7 +361,7 @@ self: super: {
   "GiST" = dontDistribute super."GiST";
   "Gifcurry" = dontDistribute super."Gifcurry";
   "GiveYouAHead" = dontDistribute super."GiveYouAHead";
-  "Glob" = doDistribute super."Glob_0_7_9";
+  "Glob" = doDistribute super."Glob_0_7_10";
   "GlomeTrace" = dontDistribute super."GlomeTrace";
   "GlomeVec" = dontDistribute super."GlomeVec";
   "GlomeView" = dontDistribute super."GlomeView";
@@ -395,6 +398,7 @@ self: super: {
   "HDBC-mysql" = dontDistribute super."HDBC-mysql";
   "HDBC-odbc" = dontDistribute super."HDBC-odbc";
   "HDBC-postgresql-hstore" = dontDistribute super."HDBC-postgresql-hstore";
+  "HDBC-session" = doDistribute super."HDBC-session_0_1_0_1";
   "HDRUtils" = dontDistribute super."HDRUtils";
   "HERA" = dontDistribute super."HERA";
   "HFrequencyQueue" = dontDistribute super."HFrequencyQueue";
@@ -461,6 +465,7 @@ self: super: {
   "HTTP-Simple" = dontDistribute super."HTTP-Simple";
   "HTab" = dontDistribute super."HTab";
   "HTicTacToe" = dontDistribute super."HTicTacToe";
+  "HUnit" = doDistribute super."HUnit_1_3_1_1";
   "HUnit-Diff" = dontDistribute super."HUnit-Diff";
   "HUnit-Plus" = dontDistribute super."HUnit-Plus";
   "HUnit-approx" = dontDistribute super."HUnit-approx";
@@ -469,6 +474,7 @@ self: super: {
   "HaLeX" = dontDistribute super."HaLeX";
   "HaMinitel" = dontDistribute super."HaMinitel";
   "HaPy" = dontDistribute super."HaPy";
+  "HaRe" = doDistribute super."HaRe_0_8_2_3";
   "HaTeX-meta" = dontDistribute super."HaTeX-meta";
   "HaTeX-qq" = dontDistribute super."HaTeX-qq";
   "HaVSA" = dontDistribute super."HaVSA";
@@ -553,8 +559,10 @@ self: super: {
   "Javav" = dontDistribute super."Javav";
   "JsContracts" = dontDistribute super."JsContracts";
   "JsonGrammar" = dontDistribute super."JsonGrammar";
+  "JuicyPixels" = doDistribute super."JuicyPixels_3_2_7_2";
   "JuicyPixels-canvas" = dontDistribute super."JuicyPixels-canvas";
   "JuicyPixels-extra" = dontDistribute super."JuicyPixels-extra";
+  "JuicyPixels-scale-dct" = doDistribute super."JuicyPixels-scale-dct_0_1_1_0";
   "JunkDB" = dontDistribute super."JunkDB";
   "JunkDB-driver-gdbm" = dontDistribute super."JunkDB-driver-gdbm";
   "JunkDB-driver-hashtables" = dontDistribute super."JunkDB-driver-hashtables";
@@ -620,6 +628,8 @@ self: super: {
   "MazesOfMonad" = dontDistribute super."MazesOfMonad";
   "MeanShift" = dontDistribute super."MeanShift";
   "Measure" = dontDistribute super."Measure";
+  "Mecha" = dontDistribute super."Mecha";
+  "Mechs" = dontDistribute super."Mechs";
   "MetaHDBC" = dontDistribute super."MetaHDBC";
   "MetaObject" = dontDistribute super."MetaObject";
   "Metrics" = dontDistribute super."Metrics";
@@ -668,6 +678,7 @@ self: super: {
   "NestedFunctor" = dontDistribute super."NestedFunctor";
   "NestedSampling" = dontDistribute super."NestedSampling";
   "NetSNMP" = dontDistribute super."NetSNMP";
+  "Network-NineP" = doDistribute super."Network-NineP_0_4_0";
   "NewBinary" = dontDistribute super."NewBinary";
   "Ninjas" = dontDistribute super."Ninjas";
   "NoSlow" = dontDistribute super."NoSlow";
@@ -700,7 +711,7 @@ self: super: {
   "OpenCLRaw" = dontDistribute super."OpenCLRaw";
   "OpenCLWrappers" = dontDistribute super."OpenCLWrappers";
   "OpenGLCheck" = dontDistribute super."OpenGLCheck";
-  "OpenGLRaw" = doDistribute super."OpenGLRaw_3_2_0_0";
+  "OpenGLRaw" = doDistribute super."OpenGLRaw_3_2_1_0";
   "OpenGLRaw21" = dontDistribute super."OpenGLRaw21";
   "OpenSCAD" = dontDistribute super."OpenSCAD";
   "OpenVG" = dontDistribute super."OpenVG";
@@ -716,6 +727,7 @@ self: super: {
   "PCLT" = dontDistribute super."PCLT";
   "PCLT-DB" = dontDistribute super."PCLT-DB";
   "PDBtools" = dontDistribute super."PDBtools";
+  "PPrinter" = dontDistribute super."PPrinter";
   "PTQ" = dontDistribute super."PTQ";
   "PUH-Project" = dontDistribute super."PUH-Project";
   "PageIO" = dontDistribute super."PageIO";
@@ -802,6 +814,7 @@ self: super: {
   "RoyalMonad" = dontDistribute super."RoyalMonad";
   "RxHaskell" = dontDistribute super."RxHaskell";
   "SBench" = dontDistribute super."SBench";
+  "SCalendar" = dontDistribute super."SCalendar";
   "SConfig" = dontDistribute super."SConfig";
   "SDL" = dontDistribute super."SDL";
   "SDL-gfx" = dontDistribute super."SDL-gfx";
@@ -815,6 +828,7 @@ self: super: {
   "SFont" = dontDistribute super."SFont";
   "SG" = dontDistribute super."SG";
   "SGdemo" = dontDistribute super."SGdemo";
+  "SGplus" = dontDistribute super."SGplus";
   "SHA2" = dontDistribute super."SHA2";
   "SMTPClient" = dontDistribute super."SMTPClient";
   "SNet" = dontDistribute super."SNet";
@@ -863,7 +877,14 @@ self: super: {
   "SpaceInvaders" = dontDistribute super."SpaceInvaders";
   "SpacePrivateers" = dontDistribute super."SpacePrivateers";
   "SpinCounter" = dontDistribute super."SpinCounter";
+  "Spock" = doDistribute super."Spock_0_10_0_1";
+  "Spock-api" = dontDistribute super."Spock-api";
+  "Spock-api-ghcjs" = dontDistribute super."Spock-api-ghcjs";
+  "Spock-api-server" = dontDistribute super."Spock-api-server";
   "Spock-auth" = dontDistribute super."Spock-auth";
+  "Spock-core" = dontDistribute super."Spock-core";
+  "Spock-digestive" = doDistribute super."Spock-digestive_0_2_0_0";
+  "Spock-worker" = doDistribute super."Spock-worker_0_3_0_0";
   "SpreadsheetML" = dontDistribute super."SpreadsheetML";
   "Sprig" = dontDistribute super."Sprig";
   "Stasis" = dontDistribute super."Stasis";
@@ -872,11 +893,11 @@ self: super: {
   "Stomp" = dontDistribute super."Stomp";
   "Strafunski-ATermLib" = dontDistribute super."Strafunski-ATermLib";
   "Strafunski-Sdf2Haskell" = dontDistribute super."Strafunski-Sdf2Haskell";
-  "Strafunski-StrategyLib" = doDistribute super."Strafunski-StrategyLib_5_0_0_8";
   "StrappedTemplates" = dontDistribute super."StrappedTemplates";
   "StrategyLib" = dontDistribute super."StrategyLib";
   "Stream" = dontDistribute super."Stream";
   "StrictBench" = dontDistribute super."StrictBench";
+  "StringUtils" = dontDistribute super."StringUtils";
   "SuffixStructures" = dontDistribute super."SuffixStructures";
   "SybWidget" = dontDistribute super."SybWidget";
   "SyntaxMacros" = dontDistribute super."SyntaxMacros";
@@ -912,6 +933,7 @@ self: super: {
   "Top" = dontDistribute super."Top";
   "Tournament" = dontDistribute super."Tournament";
   "TraceUtils" = dontDistribute super."TraceUtils";
+  "TransformeR" = dontDistribute super."TransformeR";
   "TransformersStepByStep" = dontDistribute super."TransformersStepByStep";
   "Transhare" = dontDistribute super."Transhare";
   "TreeCounter" = dontDistribute super."TreeCounter";
@@ -965,6 +987,7 @@ self: super: {
   "Wheb" = dontDistribute super."Wheb";
   "WikimediaParser" = dontDistribute super."WikimediaParser";
   "Win32" = doDistribute super."Win32_2_3_1_0";
+  "Win32-console" = dontDistribute super."Win32-console";
   "Win32-dhcp-server" = dontDistribute super."Win32-dhcp-server";
   "Win32-errors" = dontDistribute super."Win32-errors";
   "Win32-junction-point" = dontDistribute super."Win32-junction-point";
@@ -985,6 +1008,7 @@ self: super: {
   "X11-xshape" = dontDistribute super."X11-xshape";
   "XAttr" = dontDistribute super."XAttr";
   "XInput" = dontDistribute super."XInput";
+  "XMLParser" = dontDistribute super."XMLParser";
   "XMMS" = dontDistribute super."XMMS";
   "XMPP" = dontDistribute super."XMPP";
   "XSaiga" = dontDistribute super."XSaiga";
@@ -1034,6 +1058,7 @@ self: super: {
   "accentuateus" = dontDistribute super."accentuateus";
   "access-time" = dontDistribute super."access-time";
   "accuerr" = dontDistribute super."accuerr";
+  "acid-state" = doDistribute super."acid-state_0_14_1";
   "acid-state-dist" = dontDistribute super."acid-state-dist";
   "acid-state-tls" = dontDistribute super."acid-state-tls";
   "acl2" = dontDistribute super."acl2";
@@ -1044,6 +1069,7 @@ self: super: {
   "acme-colosson" = dontDistribute super."acme-colosson";
   "acme-comonad" = dontDistribute super."acme-comonad";
   "acme-cutegirl" = dontDistribute super."acme-cutegirl";
+  "acme-default" = dontDistribute super."acme-default";
   "acme-dont" = dontDistribute super."acme-dont";
   "acme-flipping-tables" = dontDistribute super."acme-flipping-tables";
   "acme-grawlix" = dontDistribute super."acme-grawlix";
@@ -1051,6 +1077,7 @@ self: super: {
   "acme-http" = dontDistribute super."acme-http";
   "acme-inator" = dontDistribute super."acme-inator";
   "acme-io" = dontDistribute super."acme-io";
+  "acme-iot" = dontDistribute super."acme-iot";
   "acme-left-pad" = dontDistribute super."acme-left-pad";
   "acme-lolcat" = dontDistribute super."acme-lolcat";
   "acme-lookofdisapproval" = dontDistribute super."acme-lookofdisapproval";
@@ -1089,17 +1116,21 @@ self: super: {
   "adobe-swatch-exchange" = dontDistribute super."adobe-swatch-exchange";
   "adp-multi" = dontDistribute super."adp-multi";
   "adp-multi-monadiccp" = dontDistribute super."adp-multi-monadiccp";
+  "aeson" = doDistribute super."aeson_0_11_2_0";
   "aeson-applicative" = dontDistribute super."aeson-applicative";
   "aeson-bson" = dontDistribute super."aeson-bson";
   "aeson-coerce" = dontDistribute super."aeson-coerce";
+  "aeson-compat" = doDistribute super."aeson-compat_0_3_5_1";
   "aeson-diff" = dontDistribute super."aeson-diff";
   "aeson-filthy" = dontDistribute super."aeson-filthy";
   "aeson-flatten" = dontDistribute super."aeson-flatten";
+  "aeson-injector" = dontDistribute super."aeson-injector";
   "aeson-iproute" = dontDistribute super."aeson-iproute";
   "aeson-json-ast" = dontDistribute super."aeson-json-ast";
   "aeson-native" = dontDistribute super."aeson-native";
   "aeson-parsec-picky" = dontDistribute super."aeson-parsec-picky";
   "aeson-prefix" = dontDistribute super."aeson-prefix";
+  "aeson-pretty" = doDistribute super."aeson-pretty_0_7_2";
   "aeson-schema" = dontDistribute super."aeson-schema";
   "aeson-serialize" = dontDistribute super."aeson-serialize";
   "aeson-smart" = dontDistribute super."aeson-smart";
@@ -1135,6 +1166,7 @@ self: super: {
   "alarmclock" = doDistribute super."alarmclock_0_2_0_9";
   "alea" = dontDistribute super."alea";
   "alex-meta" = dontDistribute super."alex-meta";
+  "alex-tools" = dontDistribute super."alex-tools";
   "alfred" = dontDistribute super."alfred";
   "alga" = dontDistribute super."alga";
   "algebra" = dontDistribute super."algebra";
@@ -1142,6 +1174,7 @@ self: super: {
   "algebra-sql" = dontDistribute super."algebra-sql";
   "algebraic" = dontDistribute super."algebraic";
   "algebraic-classes" = dontDistribute super."algebraic-classes";
+  "algo-s" = dontDistribute super."algo-s";
   "align" = dontDistribute super."align";
   "align-text" = dontDistribute super."align-text";
   "aligned-foreignptr" = dontDistribute super."aligned-foreignptr";
@@ -1181,6 +1214,7 @@ self: super: {
   "anatomy" = dontDistribute super."anatomy";
   "android" = dontDistribute super."android";
   "android-lint-summary" = dontDistribute super."android-lint-summary";
+  "angle" = dontDistribute super."angle";
   "animalcase" = dontDistribute super."animalcase";
   "annah" = dontDistribute super."annah";
   "annihilator" = dontDistribute super."annihilator";
@@ -1192,6 +1226,7 @@ self: super: {
   "anticiv" = dontDistribute super."anticiv";
   "antigate" = dontDistribute super."antigate";
   "antimirov" = dontDistribute super."antimirov";
+  "antiprimes" = dontDistribute super."antiprimes";
   "antiquoter" = dontDistribute super."antiquoter";
   "antisplice" = dontDistribute super."antisplice";
   "antlrc" = dontDistribute super."antlrc";
@@ -1216,12 +1251,14 @@ self: super: {
   "applicative-parsec" = dontDistribute super."applicative-parsec";
   "applicative-quoters" = dontDistribute super."applicative-quoters";
   "applicative-splice" = dontDistribute super."applicative-splice";
+  "apply-refact" = doDistribute super."apply-refact_0_2_0_0";
   "apportionment" = dontDistribute super."apportionment";
   "approx-rand-test" = dontDistribute super."approx-rand-test";
   "approximate-equality" = dontDistribute super."approximate-equality";
   "ar-timestamp-wiper" = dontDistribute super."ar-timestamp-wiper";
   "arb-fft" = dontDistribute super."arb-fft";
   "arbb-vm" = dontDistribute super."arbb-vm";
+  "arbtt" = doDistribute super."arbtt_0_9_0_9";
   "archive" = dontDistribute super."archive";
   "archiver" = dontDistribute super."archiver";
   "archlinux" = dontDistribute super."archlinux";
@@ -1254,10 +1291,12 @@ self: super: {
   "arxiv" = dontDistribute super."arxiv";
   "ascetic" = dontDistribute super."ascetic";
   "ascii" = dontDistribute super."ascii";
+  "ascii-cows" = dontDistribute super."ascii-cows";
   "ascii-flatten" = dontDistribute super."ascii-flatten";
   "ascii-table" = dontDistribute super."ascii-table";
   "ascii-vector-avc" = dontDistribute super."ascii-vector-avc";
   "ascii85-conduit" = dontDistribute super."ascii85-conduit";
+  "asciidiagram" = doDistribute super."asciidiagram_1_3_1_1";
   "asic" = dontDistribute super."asic";
   "asil" = dontDistribute super."asil";
   "asn1-data" = dontDistribute super."asn1-data";
@@ -1271,6 +1310,8 @@ self: super: {
   "astrds" = dontDistribute super."astrds";
   "astview" = dontDistribute super."astview";
   "astview-utils" = dontDistribute super."astview-utils";
+  "async-ajax" = dontDistribute super."async-ajax";
+  "async-dejafu" = doDistribute super."async-dejafu_0_1_2_2";
   "async-extras" = dontDistribute super."async-extras";
   "async-manager" = dontDistribute super."async-manager";
   "async-pool" = dontDistribute super."async-pool";
@@ -1386,6 +1427,7 @@ self: super: {
   "basex-client" = dontDistribute super."basex-client";
   "bash" = dontDistribute super."bash";
   "basic-lens" = dontDistribute super."basic-lens";
+  "basic-prelude" = doDistribute super."basic-prelude_0_5_2";
   "basic-sop" = dontDistribute super."basic-sop";
   "baskell" = dontDistribute super."baskell";
   "battlenet" = dontDistribute super."battlenet";
@@ -1441,7 +1483,6 @@ self: super: {
   "binary-generic" = dontDistribute super."binary-generic";
   "binary-indexed-tree" = dontDistribute super."binary-indexed-tree";
   "binary-literal-qq" = dontDistribute super."binary-literal-qq";
-  "binary-orphans" = doDistribute super."binary-orphans_0_1_5_0";
   "binary-protocol" = dontDistribute super."binary-protocol";
   "binary-protocol-zmq" = dontDistribute super."binary-protocol-zmq";
   "binary-state" = dontDistribute super."binary-state";
@@ -1455,7 +1496,6 @@ self: super: {
   "binding-wx" = dontDistribute super."binding-wx";
   "bindings" = dontDistribute super."bindings";
   "bindings-EsounD" = dontDistribute super."bindings-EsounD";
-  "bindings-GLFW" = doDistribute super."bindings-GLFW_3_1_2_0";
   "bindings-K8055" = dontDistribute super."bindings-K8055";
   "bindings-apr" = dontDistribute super."bindings-apr";
   "bindings-apr-util" = dontDistribute super."bindings-apr-util";
@@ -1528,6 +1568,7 @@ self: super: {
   "bits" = doDistribute super."bits_0_4";
   "bits-atomic" = dontDistribute super."bits-atomic";
   "bits-bytestring" = dontDistribute super."bits-bytestring";
+  "bits-bytestring-lazy" = dontDistribute super."bits-bytestring-lazy";
   "bits-conduit" = dontDistribute super."bits-conduit";
   "bits-extras" = dontDistribute super."bits-extras";
   "bitset" = dontDistribute super."bitset";
@@ -1543,6 +1584,7 @@ self: super: {
   "bla" = dontDistribute super."bla";
   "black-jewel" = dontDistribute super."black-jewel";
   "blacktip" = dontDistribute super."blacktip";
+  "blake2" = doDistribute super."blake2_0_1_0";
   "blakesum" = dontDistribute super."blakesum";
   "blakesum-demo" = dontDistribute super."blakesum-demo";
   "blas" = dontDistribute super."blas";
@@ -1551,10 +1593,12 @@ self: super: {
   "blaze" = dontDistribute super."blaze";
   "blaze-builder-conduit" = dontDistribute super."blaze-builder-conduit";
   "blaze-from-html" = dontDistribute super."blaze-from-html";
+  "blaze-html" = doDistribute super."blaze-html_0_8_1_1";
   "blaze-html-contrib" = dontDistribute super."blaze-html-contrib";
   "blaze-html-hexpat" = dontDistribute super."blaze-html-hexpat";
   "blaze-html-truncate" = dontDistribute super."blaze-html-truncate";
   "blaze-json" = dontDistribute super."blaze-json";
+  "blaze-markup" = doDistribute super."blaze-markup_0_7_0_3";
   "blaze-shields" = dontDistribute super."blaze-shields";
   "blaze-textual-native" = dontDistribute super."blaze-textual-native";
   "blazeMarker" = dontDistribute super."blazeMarker";
@@ -1579,6 +1623,8 @@ self: super: {
   "bond" = dontDistribute super."bond";
   "bond-haskell" = dontDistribute super."bond-haskell";
   "bond-haskell-compiler" = dontDistribute super."bond-haskell-compiler";
+  "bookkeeper" = dontDistribute super."bookkeeper";
+  "bookkeeper-permissions" = dontDistribute super."bookkeeper-permissions";
   "boolean-list" = dontDistribute super."boolean-list";
   "boolean-normal-forms" = dontDistribute super."boolean-normal-forms";
   "boolexpr" = dontDistribute super."boolexpr";
@@ -1595,6 +1641,7 @@ self: super: {
   "bounded-tchan" = dontDistribute super."bounded-tchan";
   "boundingboxes" = dontDistribute super."boundingboxes";
   "bowntz" = dontDistribute super."bowntz";
+  "box-tuples" = dontDistribute super."box-tuples";
   "bpann" = dontDistribute super."bpann";
   "braid" = dontDistribute super."braid";
   "brainfuck" = dontDistribute super."brainfuck";
@@ -1609,7 +1656,6 @@ self: super: {
   "broccoli" = dontDistribute super."broccoli";
   "broker-haskell" = dontDistribute super."broker-haskell";
   "bsd-sysctl" = dontDistribute super."bsd-sysctl";
-  "bson" = doDistribute super."bson_0_3_2_2";
   "bson-generic" = dontDistribute super."bson-generic";
   "bson-generics" = dontDistribute super."bson-generics";
   "bson-mapping" = dontDistribute super."bson-mapping";
@@ -1645,6 +1691,7 @@ self: super: {
   "bytestring-rematch" = dontDistribute super."bytestring-rematch";
   "bytestring-short" = dontDistribute super."bytestring-short";
   "bytestring-show" = dontDistribute super."bytestring-show";
+  "bytestring-tree-builder" = doDistribute super."bytestring-tree-builder_0_2_7";
   "bytestringparser" = dontDistribute super."bytestringparser";
   "bytestringparser-temporary" = dontDistribute super."bytestringparser-temporary";
   "bytestringreadp" = dontDistribute super."bytestringreadp";
@@ -1656,6 +1703,7 @@ self: super: {
   "c10k" = dontDistribute super."c10k";
   "c2hsc" = dontDistribute super."c2hsc";
   "cab" = dontDistribute super."cab";
+  "cabal" = dontDistribute super."cabal";
   "cabal-audit" = dontDistribute super."cabal-audit";
   "cabal-bounds" = dontDistribute super."cabal-bounds";
   "cabal-cargs" = dontDistribute super."cabal-cargs";
@@ -1679,6 +1727,7 @@ self: super: {
   "cabal-nirvana" = dontDistribute super."cabal-nirvana";
   "cabal-progdeps" = dontDistribute super."cabal-progdeps";
   "cabal-query" = dontDistribute super."cabal-query";
+  "cabal-rpm" = doDistribute super."cabal-rpm_0_9_11";
   "cabal-scripts" = dontDistribute super."cabal-scripts";
   "cabal-setup" = dontDistribute super."cabal-setup";
   "cabal-sign" = dontDistribute super."cabal-sign";
@@ -1728,8 +1777,10 @@ self: super: {
   "campfire" = dontDistribute super."campfire";
   "canonical-filepath" = dontDistribute super."canonical-filepath";
   "canteven-config" = dontDistribute super."canteven-config";
+  "canteven-http" = dontDistribute super."canteven-http";
   "canteven-listen-http" = dontDistribute super."canteven-listen-http";
   "canteven-log" = dontDistribute super."canteven-log";
+  "canteven-parsedate" = dontDistribute super."canteven-parsedate";
   "canteven-template" = dontDistribute super."canteven-template";
   "cantor" = dontDistribute super."cantor";
   "cao" = dontDistribute super."cao";
@@ -1740,6 +1791,7 @@ self: super: {
   "caramia" = dontDistribute super."caramia";
   "carboncopy" = dontDistribute super."carboncopy";
   "carettah" = dontDistribute super."carettah";
+  "carray" = doDistribute super."carray_0_1_6_4";
   "cartel" = doDistribute super."cartel_0_16_0_0";
   "casa-abbreviations-and-acronyms" = dontDistribute super."casa-abbreviations-and-acronyms";
   "casadi-bindings" = dontDistribute super."casadi-bindings";
@@ -1750,9 +1802,18 @@ self: super: {
   "casadi-bindings-snopt-interface" = dontDistribute super."casadi-bindings-snopt-interface";
   "cascading" = dontDistribute super."cascading";
   "case-conversion" = dontDistribute super."case-conversion";
+  "case-insensitive-match" = dontDistribute super."case-insensitive-match";
   "cash" = dontDistribute super."cash";
   "casing" = dontDistribute super."casing";
   "casr-logbook" = dontDistribute super."casr-logbook";
+  "casr-logbook-html" = dontDistribute super."casr-logbook-html";
+  "casr-logbook-meta" = dontDistribute super."casr-logbook-meta";
+  "casr-logbook-meta-html" = dontDistribute super."casr-logbook-meta-html";
+  "casr-logbook-reports" = dontDistribute super."casr-logbook-reports";
+  "casr-logbook-reports-html" = dontDistribute super."casr-logbook-reports-html";
+  "casr-logbook-reports-meta" = dontDistribute super."casr-logbook-reports-meta";
+  "casr-logbook-reports-meta-html" = dontDistribute super."casr-logbook-reports-meta-html";
+  "casr-logbook-types" = dontDistribute super."casr-logbook-types";
   "cassandra-cql" = dontDistribute super."cassandra-cql";
   "cassandra-thrift" = dontDistribute super."cassandra-thrift";
   "cassava-conduit" = dontDistribute super."cassava-conduit";
@@ -1779,6 +1840,7 @@ self: super: {
   "ceilometer-common" = dontDistribute super."ceilometer-common";
   "cellrenderer-cairo" = dontDistribute super."cellrenderer-cairo";
   "cerberus" = dontDistribute super."cerberus";
+  "cereal" = doDistribute super."cereal_0_5_2_0";
   "cereal-derive" = dontDistribute super."cereal-derive";
   "cereal-enumerator" = dontDistribute super."cereal-enumerator";
   "cereal-ieee754" = dontDistribute super."cereal-ieee754";
@@ -1814,7 +1876,6 @@ self: super: {
   "cheapskate-terminal" = dontDistribute super."cheapskate-terminal";
   "check-pvp" = dontDistribute super."check-pvp";
   "checked" = dontDistribute super."checked";
-  "checkers" = doDistribute super."checkers_0_4_4";
   "chell-hunit" = dontDistribute super."chell-hunit";
   "chesshs" = dontDistribute super."chesshs";
   "chevalier-common" = dontDistribute super."chevalier-common";
@@ -1826,6 +1887,7 @@ self: super: {
   "chp-spec" = dontDistribute super."chp-spec";
   "chp-transformers" = dontDistribute super."chp-transformers";
   "chronograph" = dontDistribute super."chronograph";
+  "chronos" = dontDistribute super."chronos";
   "chu2" = dontDistribute super."chu2";
   "chuchu" = dontDistribute super."chuchu";
   "chunked-data" = doDistribute super."chunked-data_0_2_0";
@@ -1835,6 +1897,7 @@ self: super: {
   "cil" = dontDistribute super."cil";
   "cinvoke" = dontDistribute super."cinvoke";
   "cio" = dontDistribute super."cio";
+  "cipher-aes128" = doDistribute super."cipher-aes128_0_7_0_1";
   "cipher-rc5" = dontDistribute super."cipher-rc5";
   "ciphersaber2" = dontDistribute super."ciphersaber2";
   "circ" = dontDistribute super."circ";
@@ -1853,23 +1916,23 @@ self: super: {
   "clanki" = dontDistribute super."clanki";
   "clarifai" = dontDistribute super."clarifai";
   "clash" = dontDistribute super."clash";
-  "clash-ghc" = doDistribute super."clash-ghc_0_6_19";
-  "clash-lib" = doDistribute super."clash-lib_0_6_17";
-  "clash-prelude" = doDistribute super."clash-prelude_0_10_9";
+  "clash-ghc" = doDistribute super."clash-ghc_0_6_21";
+  "clash-lib" = doDistribute super."clash-lib_0_6_19";
+  "clash-prelude" = doDistribute super."clash-prelude_0_10_10";
   "clash-prelude-quickcheck" = dontDistribute super."clash-prelude-quickcheck";
-  "clash-systemverilog" = doDistribute super."clash-systemverilog_0_6_6";
-  "clash-verilog" = doDistribute super."clash-verilog_0_6_6";
-  "clash-vhdl" = doDistribute super."clash-vhdl_0_6_13";
+  "clash-systemverilog" = doDistribute super."clash-systemverilog_0_6_7";
+  "clash-verilog" = doDistribute super."clash-verilog_0_6_7";
+  "clash-vhdl" = doDistribute super."clash-vhdl_0_6_15";
   "classify" = dontDistribute super."classify";
   "classy-parallel" = dontDistribute super."classy-parallel";
   "classy-prelude" = doDistribute super."classy-prelude_0_12_8";
   "classy-prelude-conduit" = doDistribute super."classy-prelude-conduit_0_12_8";
   "classy-prelude-yesod" = doDistribute super."classy-prelude-yesod_0_12_8";
   "clay" = doDistribute super."clay_0_10_1";
-  "clckwrks" = doDistribute super."clckwrks_0_23_16";
   "clckwrks-dot-com" = dontDistribute super."clckwrks-dot-com";
   "clckwrks-plugin-bugs" = dontDistribute super."clckwrks-plugin-bugs";
   "clckwrks-plugin-ircbot" = dontDistribute super."clckwrks-plugin-ircbot";
+  "clckwrks-plugin-page" = doDistribute super."clckwrks-plugin-page_0_4_3_3";
   "clckwrks-theme-clckwrks" = dontDistribute super."clckwrks-theme-clckwrks";
   "clckwrks-theme-geo-bootstrap" = dontDistribute super."clckwrks-theme-geo-bootstrap";
   "cld2" = dontDistribute super."cld2";
@@ -1898,8 +1961,9 @@ self: super: {
   "clustertools" = dontDistribute super."clustertools";
   "clutterhs" = dontDistribute super."clutterhs";
   "cmaes" = dontDistribute super."cmaes";
-  "cmark" = doDistribute super."cmark_0_5_2_1";
   "cmark-highlight" = dontDistribute super."cmark-highlight";
+  "cmark-lucid" = dontDistribute super."cmark-lucid";
+  "cmark-sections" = dontDistribute super."cmark-sections";
   "cmath" = dontDistribute super."cmath";
   "cmathml3" = dontDistribute super."cmathml3";
   "cmd-item" = dontDistribute super."cmd-item";
@@ -1918,6 +1982,7 @@ self: super: {
   "codecov-haskell" = dontDistribute super."codecov-haskell";
   "codemonitor" = dontDistribute super."codemonitor";
   "codepad" = dontDistribute super."codepad";
+  "codeworld-api" = dontDistribute super."codeworld-api";
   "codex" = doDistribute super."codex_0_4_0_10";
   "codo-notation" = dontDistribute super."codo-notation";
   "cofunctor" = dontDistribute super."cofunctor";
@@ -1972,6 +2037,7 @@ self: super: {
   "complexity" = dontDistribute super."complexity";
   "compose-ltr" = dontDistribute super."compose-ltr";
   "compose-trans" = dontDistribute super."compose-trans";
+  "compound-types" = dontDistribute super."compound-types";
   "compression" = dontDistribute super."compression";
   "compstrat" = dontDistribute super."compstrat";
   "comptrans" = dontDistribute super."comptrans";
@@ -1983,9 +2049,11 @@ self: super: {
   "concraft-pl" = dontDistribute super."concraft-pl";
   "concrete-relaxng-parser" = dontDistribute super."concrete-relaxng-parser";
   "concrete-typerep" = dontDistribute super."concrete-typerep";
+  "concurrency" = dontDistribute super."concurrency";
   "concurrent-barrier" = dontDistribute super."concurrent-barrier";
   "concurrent-dns-cache" = dontDistribute super."concurrent-dns-cache";
   "concurrent-machines" = dontDistribute super."concurrent-machines";
+  "concurrent-output" = doDistribute super."concurrent-output_1_7_6";
   "concurrent-rpc" = dontDistribute super."concurrent-rpc";
   "concurrent-sa" = dontDistribute super."concurrent-sa";
   "concurrent-split" = dontDistribute super."concurrent-split";
@@ -1999,15 +2067,20 @@ self: super: {
   "conductive-clock" = dontDistribute super."conductive-clock";
   "conductive-hsc3" = dontDistribute super."conductive-hsc3";
   "conductive-song" = dontDistribute super."conductive-song";
+  "conduit" = doDistribute super."conduit_1_2_6_6";
   "conduit-audio" = dontDistribute super."conduit-audio";
   "conduit-audio-lame" = dontDistribute super."conduit-audio-lame";
   "conduit-audio-samplerate" = dontDistribute super."conduit-audio-samplerate";
   "conduit-audio-sndfile" = dontDistribute super."conduit-audio-sndfile";
+  "conduit-combinators" = doDistribute super."conduit-combinators_1_0_4";
+  "conduit-find" = dontDistribute super."conduit-find";
   "conduit-merge" = dontDistribute super."conduit-merge";
   "conduit-network-stream" = dontDistribute super."conduit-network-stream";
+  "conduit-parse" = doDistribute super."conduit-parse_0_1_1_1";
   "conduit-resumablesink" = dontDistribute super."conduit-resumablesink";
   "conduit-tokenize-attoparsec" = dontDistribute super."conduit-tokenize-attoparsec";
   "conf" = dontDistribute super."conf";
+  "conffmt" = dontDistribute super."conffmt";
   "config-manager" = dontDistribute super."config-manager";
   "config-select" = dontDistribute super."config-select";
   "config-value" = dontDistribute super."config-value";
@@ -2019,11 +2092,13 @@ self: super: {
   "conjugateGradient" = dontDistribute super."conjugateGradient";
   "conjure" = dontDistribute super."conjure";
   "conlogger" = dontDistribute super."conlogger";
+  "connection" = doDistribute super."connection_0_2_5";
   "connection-pool" = dontDistribute super."connection-pool";
   "consistent" = dontDistribute super."consistent";
   "console-program" = dontDistribute super."console-program";
   "const-math-ghc-plugin" = dontDistribute super."const-math-ghc-plugin";
   "constrained-categories" = dontDistribute super."constrained-categories";
+  "constrained-dynamic" = dontDistribute super."constrained-dynamic";
   "constrained-normal" = dontDistribute super."constrained-normal";
   "constraint-classes" = dontDistribute super."constraint-classes";
   "constructible" = dontDistribute super."constructible";
@@ -2039,6 +2114,7 @@ self: super: {
   "continue" = dontDistribute super."continue";
   "continuum" = dontDistribute super."continuum";
   "continuum-client" = dontDistribute super."continuum-client";
+  "contravariant-extras" = doDistribute super."contravariant-extras_0_3_2";
   "control-event" = dontDistribute super."control-event";
   "control-monad-attempt" = dontDistribute super."control-monad-attempt";
   "control-monad-exception" = dontDistribute super."control-monad-exception";
@@ -2071,6 +2147,7 @@ self: super: {
   "copilot-theorem" = dontDistribute super."copilot-theorem";
   "copr" = dontDistribute super."copr";
   "core" = dontDistribute super."core";
+  "core-compiler" = dontDistribute super."core-compiler";
   "core-haskell" = dontDistribute super."core-haskell";
   "corebot-bliki" = dontDistribute super."corebot-bliki";
   "coroutine-enumerator" = dontDistribute super."coroutine-enumerator";
@@ -2083,15 +2160,17 @@ self: super: {
   "count" = dontDistribute super."count";
   "countable" = dontDistribute super."countable";
   "counter" = dontDistribute super."counter";
-  "courier" = doDistribute super."courier_0_1_1_2";
+  "courier" = doDistribute super."courier_0_1_1_3";
   "court" = dontDistribute super."court";
   "coverage" = dontDistribute super."coverage";
   "cpio-conduit" = dontDistribute super."cpio-conduit";
   "cplex-hs" = dontDistribute super."cplex-hs";
   "cplusplus-th" = dontDistribute super."cplusplus-th";
+  "cpphs" = doDistribute super."cpphs_1_20_1";
   "cprng-aes-effect" = dontDistribute super."cprng-aes-effect";
   "cpsa" = dontDistribute super."cpsa";
   "cpuid" = dontDistribute super."cpuid";
+  "cpuinfo" = dontDistribute super."cpuinfo";
   "cpuperf" = dontDistribute super."cpuperf";
   "cpython" = dontDistribute super."cpython";
   "cql" = doDistribute super."cql_3_0_7";
@@ -2110,11 +2189,14 @@ self: super: {
   "craftwerk" = dontDistribute super."craftwerk";
   "craftwerk-cairo" = dontDistribute super."craftwerk-cairo";
   "craftwerk-gtk" = dontDistribute super."craftwerk-gtk";
+  "crawlchain" = dontDistribute super."crawlchain";
   "craze" = dontDistribute super."craze";
   "crc" = dontDistribute super."crc";
   "crc16" = dontDistribute super."crc16";
   "crc16-table" = dontDistribute super."crc16-table";
   "creatur" = dontDistribute super."creatur";
+  "credentials" = dontDistribute super."credentials";
+  "credentials-cli" = dontDistribute super."credentials-cli";
   "crf-chain1" = dontDistribute super."crf-chain1";
   "crf-chain1-constrained" = dontDistribute super."crf-chain1-constrained";
   "crf-chain2-generic" = dontDistribute super."crf-chain2-generic";
@@ -2172,6 +2254,7 @@ self: super: {
   "curl-aeson" = dontDistribute super."curl-aeson";
   "curlhs" = dontDistribute super."curlhs";
   "currency" = dontDistribute super."currency";
+  "currency-convert" = dontDistribute super."currency-convert";
   "current-locale" = dontDistribute super."current-locale";
   "curry-base" = dontDistribute super."curry-base";
   "curry-frontend" = dontDistribute super."curry-frontend";
@@ -2192,6 +2275,7 @@ self: super: {
   "danibot" = dontDistribute super."danibot";
   "dao" = dontDistribute super."dao";
   "dapi" = dontDistribute super."dapi";
+  "darcs" = doDistribute super."darcs_2_12_0";
   "darcs-benchmark" = dontDistribute super."darcs-benchmark";
   "darcs-beta" = dontDistribute super."darcs-beta";
   "darcs-buildpackage" = dontDistribute super."darcs-buildpackage";
@@ -2219,6 +2303,7 @@ self: super: {
   "data-carousel" = dontDistribute super."data-carousel";
   "data-category" = dontDistribute super."data-category";
   "data-cell" = dontDistribute super."data-cell";
+  "data-check" = dontDistribute super."data-check";
   "data-checked" = dontDistribute super."data-checked";
   "data-clist" = dontDistribute super."data-clist";
   "data-concurrent-queue" = dontDistribute super."data-concurrent-queue";
@@ -2244,6 +2329,7 @@ self: super: {
   "data-extend-generic" = dontDistribute super."data-extend-generic";
   "data-extra" = dontDistribute super."data-extra";
   "data-filepath" = dontDistribute super."data-filepath";
+  "data-files-gen" = dontDistribute super."data-files-gen";
   "data-fin" = dontDistribute super."data-fin";
   "data-fin-simple" = dontDistribute super."data-fin-simple";
   "data-fix" = dontDistribute super."data-fix";
@@ -2265,6 +2351,7 @@ self: super: {
   "data-lens-template" = dontDistribute super."data-lens-template";
   "data-list-sequences" = dontDistribute super."data-list-sequences";
   "data-map-multikey" = dontDistribute super."data-map-multikey";
+  "data-msgpack" = dontDistribute super."data-msgpack";
   "data-named" = dontDistribute super."data-named";
   "data-nat" = dontDistribute super."data-nat";
   "data-object" = dontDistribute super."data-object";
@@ -2281,6 +2368,7 @@ self: super: {
   "data-rev" = dontDistribute super."data-rev";
   "data-rope" = dontDistribute super."data-rope";
   "data-rtuple" = dontDistribute super."data-rtuple";
+  "data-serializer" = dontDistribute super."data-serializer";
   "data-size" = dontDistribute super."data-size";
   "data-spacepart" = dontDistribute super."data-spacepart";
   "data-store" = dontDistribute super."data-store";
@@ -2308,9 +2396,11 @@ self: super: {
   "datetime-sb" = dontDistribute super."datetime-sb";
   "dawdle" = dontDistribute super."dawdle";
   "dawg" = dontDistribute super."dawg";
+  "dawg-ord" = doDistribute super."dawg-ord_0_5_0_1";
   "dbcleaner" = dontDistribute super."dbcleaner";
   "dbf" = dontDistribute super."dbf";
   "dbjava" = dontDistribute super."dbjava";
+  "dbm" = dontDistribute super."dbm";
   "dbus-client" = dontDistribute super."dbus-client";
   "dbus-core" = dontDistribute super."dbus-core";
   "dbus-qq" = dontDistribute super."dbus-qq";
@@ -2362,6 +2452,7 @@ self: super: {
   "definitive-reactive" = dontDistribute super."definitive-reactive";
   "definitive-sound" = dontDistribute super."definitive-sound";
   "deiko-config" = dontDistribute super."deiko-config";
+  "dejafu" = doDistribute super."dejafu_0_3_2_1";
   "deka" = dontDistribute super."deka";
   "deka-tests" = dontDistribute super."deka-tests";
   "delaunay" = dontDistribute super."delaunay";
@@ -2375,9 +2466,11 @@ self: super: {
   "demarcate" = dontDistribute super."demarcate";
   "denominate" = dontDistribute super."denominate";
   "dense" = dontDistribute super."dense";
+  "dependent-map" = doDistribute super."dependent-map_0_2_2_0";
   "dependent-state" = dontDistribute super."dependent-state";
   "depends" = dontDistribute super."depends";
   "dephd" = dontDistribute super."dephd";
+  "deque" = dontDistribute super."deque";
   "dequeue" = dontDistribute super."dequeue";
   "derangement" = dontDistribute super."derangement";
   "derivation-trees" = dontDistribute super."derivation-trees";
@@ -2385,12 +2478,15 @@ self: super: {
   "derive-enumerable" = dontDistribute super."derive-enumerable";
   "derive-gadt" = dontDistribute super."derive-gadt";
   "derive-monoid" = dontDistribute super."derive-monoid";
+  "derive-storable" = dontDistribute super."derive-storable";
+  "derive-storable-plugin" = dontDistribute super."derive-storable-plugin";
   "derive-topdown" = dontDistribute super."derive-topdown";
   "derive-trie" = dontDistribute super."derive-trie";
   "deriving-compat" = doDistribute super."deriving-compat_0_2";
   "derp" = dontDistribute super."derp";
   "derp-lib" = dontDistribute super."derp-lib";
   "descrilo" = dontDistribute super."descrilo";
+  "desert" = dontDistribute super."desert";
   "despair" = dontDistribute super."despair";
   "deterministic-game-engine" = dontDistribute super."deterministic-game-engine";
   "detrospector" = dontDistribute super."detrospector";
@@ -2403,13 +2499,20 @@ self: super: {
   "dgs" = dontDistribute super."dgs";
   "dia-base" = dontDistribute super."dia-base";
   "dia-functions" = dontDistribute super."dia-functions";
+  "diagrams-boolean" = dontDistribute super."diagrams-boolean";
+  "diagrams-builder" = doDistribute super."diagrams-builder_0_7_2_3";
+  "diagrams-cairo" = doDistribute super."diagrams-cairo_1_3_1";
+  "diagrams-canvas" = doDistribute super."diagrams-canvas_1_3_0_5";
+  "diagrams-contrib" = doDistribute super."diagrams-contrib_1_3_0_11";
   "diagrams-graphviz" = dontDistribute super."diagrams-graphviz";
   "diagrams-hsqml" = dontDistribute super."diagrams-hsqml";
+  "diagrams-html5" = doDistribute super."diagrams-html5_1_3_0_6";
+  "diagrams-lib" = doDistribute super."diagrams-lib_1_3_1_3";
   "diagrams-pandoc" = dontDistribute super."diagrams-pandoc";
   "diagrams-pdf" = dontDistribute super."diagrams-pdf";
   "diagrams-pgf" = dontDistribute super."diagrams-pgf";
-  "diagrams-postscript" = doDistribute super."diagrams-postscript_1_3_0_6";
   "diagrams-qrcode" = dontDistribute super."diagrams-qrcode";
+  "diagrams-rasterific" = doDistribute super."diagrams-rasterific_1_3_1_7";
   "diagrams-reflex" = dontDistribute super."diagrams-reflex";
   "diagrams-rubiks-cube" = dontDistribute super."diagrams-rubiks-cube";
   "diagrams-svg" = doDistribute super."diagrams-svg_1_3_1_10";
@@ -2426,12 +2529,15 @@ self: super: {
   "diffarray" = dontDistribute super."diffarray";
   "diffcabal" = dontDistribute super."diffcabal";
   "diffdump" = dontDistribute super."diffdump";
+  "difftodo" = dontDistribute super."difftodo";
   "digamma" = dontDistribute super."digamma";
   "digest-pure" = dontDistribute super."digest-pure";
   "digestive-foundation-lucid" = dontDistribute super."digestive-foundation-lucid";
+  "digestive-functors" = doDistribute super."digestive-functors_0_8_0_1";
   "digestive-functors-happstack" = dontDistribute super."digestive-functors-happstack";
   "digestive-functors-heist" = dontDistribute super."digestive-functors-heist";
   "digestive-functors-hsp" = dontDistribute super."digestive-functors-hsp";
+  "digestive-functors-lucid" = doDistribute super."digestive-functors-lucid_0_0_0_3";
   "digestive-functors-scotty" = dontDistribute super."digestive-functors-scotty";
   "digestive-functors-snap" = dontDistribute super."digestive-functors-snap";
   "digit" = dontDistribute super."digit";
@@ -2454,6 +2560,7 @@ self: super: {
   "directed-cubical" = dontDistribute super."directed-cubical";
   "directory-layout" = dontDistribute super."directory-layout";
   "directory-listing-webpage-parser" = dontDistribute super."directory-listing-webpage-parser";
+  "directory-tree" = doDistribute super."directory-tree_0_12_0";
   "dirfiles" = dontDistribute super."dirfiles";
   "dirstream" = dontDistribute super."dirstream";
   "disassembler" = dontDistribute super."disassembler";
@@ -2477,9 +2584,12 @@ self: super: {
   "djembe" = dontDistribute super."djembe";
   "djinn" = dontDistribute super."djinn";
   "djinn-th" = dontDistribute super."djinn-th";
+  "dlist" = doDistribute super."dlist_0_7_1_2";
+  "dns" = doDistribute super."dns_2_0_4";
   "dnscache" = dontDistribute super."dnscache";
   "dnsrbl" = dontDistribute super."dnsrbl";
   "dnssd" = dontDistribute super."dnssd";
+  "do-list" = dontDistribute super."do-list";
   "doc-review" = dontDistribute super."doc-review";
   "doccheck" = dontDistribute super."doccheck";
   "docidx" = dontDistribute super."docidx";
@@ -2494,6 +2604,7 @@ self: super: {
   "domain-auth" = dontDistribute super."domain-auth";
   "dominion" = dontDistribute super."dominion";
   "domplate" = dontDistribute super."domplate";
+  "dot" = dontDistribute super."dot";
   "dot-linker" = dontDistribute super."dot-linker";
   "dot2graphml" = dontDistribute super."dot2graphml";
   "dotenv" = doDistribute super."dotenv_0_3_0_1";
@@ -2580,6 +2691,7 @@ self: super: {
   "ed25519" = dontDistribute super."ed25519";
   "ed25519-donna" = dontDistribute super."ed25519-donna";
   "eddie" = dontDistribute super."eddie";
+  "ede" = doDistribute super."ede_0_2_8_4";
   "edenmodules" = dontDistribute super."edenmodules";
   "edenskel" = dontDistribute super."edenskel";
   "edentv" = dontDistribute super."edentv";
@@ -2609,6 +2721,7 @@ self: super: {
   "ekg-log" = dontDistribute super."ekg-log";
   "ekg-push" = dontDistribute super."ekg-push";
   "ekg-rrd" = dontDistribute super."ekg-rrd";
+  "ekg-statsd" = doDistribute super."ekg-statsd_0_2_0_4";
   "electrum-mnemonic" = dontDistribute super."electrum-mnemonic";
   "elerea" = dontDistribute super."elerea";
   "elerea-examples" = dontDistribute super."elerea-examples";
@@ -2636,6 +2749,7 @@ self: super: {
   "email-postmark" = dontDistribute super."email-postmark";
   "email-validate-json" = dontDistribute super."email-validate-json";
   "email-validator" = dontDistribute super."email-validator";
+  "emailaddress" = dontDistribute super."emailaddress";
   "emailparse" = dontDistribute super."emailparse";
   "embeddock" = dontDistribute super."embeddock";
   "embeddock-example" = dontDistribute super."embeddock-example";
@@ -2644,6 +2758,7 @@ self: super: {
   "empty" = dontDistribute super."empty";
   "enchant" = dontDistribute super."enchant";
   "encoding" = dontDistribute super."encoding";
+  "encoding-io" = dontDistribute super."encoding-io";
   "endo" = dontDistribute super."endo";
   "engine-io-growler" = dontDistribute super."engine-io-growler";
   "engine-io-snap" = dontDistribute super."engine-io-snap";
@@ -2661,6 +2776,7 @@ self: super: {
   "env-locale" = dontDistribute super."env-locale";
   "env-parser" = dontDistribute super."env-parser";
   "envparse" = dontDistribute super."envparse";
+  "envy" = doDistribute super."envy_1_1_0_0";
   "epanet-haskell" = dontDistribute super."epanet-haskell";
   "epass" = dontDistribute super."epass";
   "epic" = dontDistribute super."epic";
@@ -2717,6 +2833,7 @@ self: super: {
   "exception-mailer" = dontDistribute super."exception-mailer";
   "exception-monads-fd" = dontDistribute super."exception-monads-fd";
   "exception-monads-tf" = dontDistribute super."exception-monads-tf";
+  "execs" = dontDistribute super."execs";
   "exherbo-cabal" = dontDistribute super."exherbo-cabal";
   "exif" = dontDistribute super."exif";
   "exinst" = dontDistribute super."exinst";
@@ -2731,6 +2848,7 @@ self: super: {
   "exp-pairs" = dontDistribute super."exp-pairs";
   "expand" = dontDistribute super."expand";
   "expat-enumerator" = dontDistribute super."expat-enumerator";
+  "expiring-cache-map" = doDistribute super."expiring-cache-map_0_0_5_4";
   "expiring-mvar" = dontDistribute super."expiring-mvar";
   "explain" = dontDistribute super."explain";
   "explicit-determinant" = dontDistribute super."explicit-determinant";
@@ -2773,6 +2891,7 @@ self: super: {
   "fastcgi" = dontDistribute super."fastcgi";
   "fastedit" = dontDistribute super."fastedit";
   "fastirc" = dontDistribute super."fastirc";
+  "fathead-util" = dontDistribute super."fathead-util";
   "fault-tree" = dontDistribute super."fault-tree";
   "fay-geoposition" = dontDistribute super."fay-geoposition";
   "fay-hsx" = dontDistribute super."fay-hsx";
@@ -2805,9 +2924,8 @@ self: super: {
   "fficxx-runtime" = dontDistribute super."fficxx-runtime";
   "ffmpeg-light" = dontDistribute super."ffmpeg-light";
   "ffmpeg-tutorials" = dontDistribute super."ffmpeg-tutorials";
+  "fft" = doDistribute super."fft_0_1_8_3";
   "fftwRaw" = dontDistribute super."fftwRaw";
-  "fgl" = doDistribute super."fgl_5_5_2_3";
-  "fgl-arbitrary" = doDistribute super."fgl-arbitrary_0_2_0_1";
   "fgl-extras-decompositions" = dontDistribute super."fgl-extras-decompositions";
   "fgl-visualize" = dontDistribute super."fgl-visualize";
   "fibon" = dontDistribute super."fibon";
@@ -2818,6 +2936,8 @@ self: super: {
   "fig" = dontDistribute super."fig";
   "file-collection" = dontDistribute super."file-collection";
   "file-command-qq" = dontDistribute super."file-command-qq";
+  "file-embed-poly" = dontDistribute super."file-embed-poly";
+  "file-modules" = doDistribute super."file-modules_0_1_2_3";
   "filediff" = dontDistribute super."filediff";
   "filepath-io-access" = dontDistribute super."filepath-io-access";
   "filepather" = dontDistribute super."filepather";
@@ -2892,6 +3012,7 @@ self: super: {
   "fluidsynth" = dontDistribute super."fluidsynth";
   "fmark" = dontDistribute super."fmark";
   "foldl-incremental" = dontDistribute super."foldl-incremental";
+  "foldl-statistics" = dontDistribute super."foldl-statistics";
   "foldl-transduce" = dontDistribute super."foldl-transduce";
   "foldl-transduce-attoparsec" = dontDistribute super."foldl-transduce-attoparsec";
   "folds" = dontDistribute super."folds";
@@ -2921,6 +3042,8 @@ self: super: {
   "foscam-directory" = dontDistribute super."foscam-directory";
   "foscam-filename" = dontDistribute super."foscam-filename";
   "foscam-sort" = dontDistribute super."foscam-sort";
+  "foundation" = dontDistribute super."foundation";
+  "foundation-edge" = dontDistribute super."foundation-edge";
   "fountain" = dontDistribute super."fountain";
   "fpco-api" = dontDistribute super."fpco-api";
   "fpipe" = dontDistribute super."fpipe";
@@ -2947,6 +3070,7 @@ self: super: {
   "free-theorems-seq" = dontDistribute super."free-theorems-seq";
   "free-theorems-seq-webui" = dontDistribute super."free-theorems-seq-webui";
   "free-theorems-webui" = dontDistribute super."free-theorems-webui";
+  "free-vector-spaces" = dontDistribute super."free-vector-spaces";
   "freekick2" = dontDistribute super."freekick2";
   "freer" = dontDistribute super."freer";
   "freesect" = dontDistribute super."freesect";
@@ -2969,6 +3093,7 @@ self: super: {
   "fs-events" = dontDistribute super."fs-events";
   "fsharp" = dontDistribute super."fsharp";
   "fsmActions" = dontDistribute super."fsmActions";
+  "fsnotify-conduit" = dontDistribute super."fsnotify-conduit";
   "fst" = dontDistribute super."fst";
   "fsutils" = dontDistribute super."fsutils";
   "fswatcher" = dontDistribute super."fswatcher";
@@ -3020,9 +3145,11 @@ self: super: {
   "gang-of-threads" = dontDistribute super."gang-of-threads";
   "garepinoh" = dontDistribute super."garepinoh";
   "garsia-wachs" = dontDistribute super."garsia-wachs";
+  "gasp" = dontDistribute super."gasp";
   "gbu" = dontDistribute super."gbu";
   "gc" = dontDistribute super."gc";
   "gc-monitoring-wai" = dontDistribute super."gc-monitoring-wai";
+  "gcodehs" = dontDistribute super."gcodehs";
   "gconf" = dontDistribute super."gconf";
   "gdiff" = dontDistribute super."gdiff";
   "gdiff-ig" = dontDistribute super."gdiff-ig";
@@ -3048,11 +3175,11 @@ self: super: {
   "generic-maybe" = dontDistribute super."generic-maybe";
   "generic-pretty" = dontDistribute super."generic-pretty";
   "generic-random" = dontDistribute super."generic-random";
+  "generic-records" = dontDistribute super."generic-records";
   "generic-server" = dontDistribute super."generic-server";
   "generic-storable" = dontDistribute super."generic-storable";
   "generic-tree" = dontDistribute super."generic-tree";
   "generic-xml" = dontDistribute super."generic-xml";
-  "generics-sop" = doDistribute super."generics-sop_0_2_1_0";
   "generics-sop-lens" = dontDistribute super."generics-sop-lens";
   "genericserialize" = dontDistribute super."genericserialize";
   "genetics" = dontDistribute super."genetics";
@@ -3092,21 +3219,27 @@ self: super: {
   "ghc-dup" = dontDistribute super."ghc-dup";
   "ghc-events-analyze" = dontDistribute super."ghc-events-analyze";
   "ghc-events-parallel" = dontDistribute super."ghc-events-parallel";
+  "ghc-exactprint" = doDistribute super."ghc-exactprint_0_5_1_1";
   "ghc-gc-tune" = dontDistribute super."ghc-gc-tune";
   "ghc-generic-instances" = dontDistribute super."ghc-generic-instances";
   "ghc-make" = dontDistribute super."ghc-make";
   "ghc-man-completion" = dontDistribute super."ghc-man-completion";
+  "ghc-mod" = doDistribute super."ghc-mod_5_5_0_0";
   "ghc-options" = dontDistribute super."ghc-options";
   "ghc-parmake" = dontDistribute super."ghc-parmake";
   "ghc-pkg-autofix" = dontDistribute super."ghc-pkg-autofix";
   "ghc-pkg-lib" = dontDistribute super."ghc-pkg-lib";
+  "ghc-prof" = dontDistribute super."ghc-prof";
   "ghc-prof-flamegraph" = dontDistribute super."ghc-prof-flamegraph";
   "ghc-server" = dontDistribute super."ghc-server";
   "ghc-simple" = dontDistribute super."ghc-simple";
   "ghc-srcspan-plugin" = dontDistribute super."ghc-srcspan-plugin";
   "ghc-syb" = dontDistribute super."ghc-syb";
   "ghc-time-alloc-prof" = dontDistribute super."ghc-time-alloc-prof";
-  "ghc-typelits-natnormalise" = doDistribute super."ghc-typelits-natnormalise_0_4_2";
+  "ghc-typelits-extra" = doDistribute super."ghc-typelits-extra_0_1_3";
+  "ghc-typelits-knownnat" = dontDistribute super."ghc-typelits-knownnat";
+  "ghc-typelits-natnormalise" = doDistribute super."ghc-typelits-natnormalise_0_4_6";
+  "ghc-typelits-presburger" = dontDistribute super."ghc-typelits-presburger";
   "ghc-vis" = dontDistribute super."ghc-vis";
   "ghci-diagrams" = dontDistribute super."ghci-diagrams";
   "ghci-haskeline" = dontDistribute super."ghci-haskeline";
@@ -3114,6 +3247,7 @@ self: super: {
   "ghci-lib" = dontDistribute super."ghci-lib";
   "ghci-ng" = dontDistribute super."ghci-ng";
   "ghci-pretty" = dontDistribute super."ghci-pretty";
+  "ghcid" = doDistribute super."ghcid_0_6_4";
   "ghcjs-ajax" = dontDistribute super."ghcjs-ajax";
   "ghcjs-dom" = doDistribute super."ghcjs-dom_0_2_4_0";
   "ghcjs-dom-hello" = dontDistribute super."ghcjs-dom-hello";
@@ -3167,6 +3301,7 @@ self: super: {
   "gitHUD" = dontDistribute super."gitHUD";
   "gitcache" = dontDistribute super."gitcache";
   "gitdo" = dontDistribute super."gitdo";
+  "github-backup" = doDistribute super."github-backup_1_20160522";
   "github-post-receive" = dontDistribute super."github-post-receive";
   "github-utils" = dontDistribute super."github-utils";
   "gitignore" = dontDistribute super."gitignore";
@@ -3176,9 +3311,11 @@ self: super: {
   "gitlib-s3" = dontDistribute super."gitlib-s3";
   "gitlib-sample" = dontDistribute super."gitlib-sample";
   "gitlib-utils" = dontDistribute super."gitlib-utils";
+  "gitson" = doDistribute super."gitson_0_5_1";
   "gitter" = dontDistribute super."gitter";
   "givegif" = dontDistribute super."givegif";
   "gl-capture" = dontDistribute super."gl-capture";
+  "glabrous" = dontDistribute super."glabrous";
   "glade" = dontDistribute super."glade";
   "gladexml-accessor" = dontDistribute super."gladexml-accessor";
   "glambda" = dontDistribute super."glambda";
@@ -3188,6 +3325,7 @@ self: super: {
   "glicko" = dontDistribute super."glicko";
   "glider-nlp" = dontDistribute super."glider-nlp";
   "glintcollider" = dontDistribute super."glintcollider";
+  "glirc" = dontDistribute super."glirc";
   "gll" = dontDistribute super."gll";
   "global" = dontDistribute super."global";
   "global-config" = dontDistribute super."global-config";
@@ -3331,6 +3469,7 @@ self: super: {
   "google-html5-slide" = dontDistribute super."google-html5-slide";
   "google-mail-filters" = dontDistribute super."google-mail-filters";
   "google-oauth2" = dontDistribute super."google-oauth2";
+  "google-oauth2-jwt" = dontDistribute super."google-oauth2-jwt";
   "google-search" = dontDistribute super."google-search";
   "google-translate" = dontDistribute super."google-translate";
   "googleplus" = dontDistribute super."googleplus";
@@ -3381,7 +3520,6 @@ self: super: {
   "graphmod" = dontDistribute super."graphmod";
   "graphql" = dontDistribute super."graphql";
   "graphtype" = dontDistribute super."graphtype";
-  "graphviz" = doDistribute super."graphviz_2999_18_1_0";
   "grasp" = dontDistribute super."grasp";
   "gray-code" = dontDistribute super."gray-code";
   "gray-extended" = dontDistribute super."gray-extended";
@@ -3515,6 +3653,7 @@ self: super: {
   "haddock-leksah" = dontDistribute super."haddock-leksah";
   "haddock-library" = doDistribute super."haddock-library_1_2_1";
   "haddock-test" = dontDistribute super."haddock-test";
+  "haddocset" = doDistribute super."haddocset_0_4_1";
   "hadoop-formats" = dontDistribute super."hadoop-formats";
   "hadoop-rpc" = dontDistribute super."hadoop-rpc";
   "hadoop-tools" = dontDistribute super."hadoop-tools";
@@ -3543,6 +3682,8 @@ self: super: {
   "hakyll-convert" = dontDistribute super."hakyll-convert";
   "hakyll-elm" = dontDistribute super."hakyll-elm";
   "hakyll-filestore" = dontDistribute super."hakyll-filestore";
+  "hakyll-ogmarkup" = dontDistribute super."hakyll-ogmarkup";
+  "hakyll-shakespeare" = dontDistribute super."hakyll-shakespeare";
   "halberd" = dontDistribute super."halberd";
   "halfs" = dontDistribute super."halfs";
   "halipeto" = dontDistribute super."halipeto";
@@ -3553,6 +3694,7 @@ self: super: {
   "hampp" = dontDistribute super."hampp";
   "hamtmap" = dontDistribute super."hamtmap";
   "hamusic" = dontDistribute super."hamusic";
+  "handa-data" = dontDistribute super."handa-data";
   "handa-gdata" = dontDistribute super."handa-gdata";
   "handa-geodata" = dontDistribute super."handa-geodata";
   "handa-opengl" = dontDistribute super."handa-opengl";
@@ -3572,7 +3714,7 @@ self: super: {
   "happs-tutorial" = dontDistribute super."happs-tutorial";
   "happstack" = dontDistribute super."happstack";
   "happstack-auth" = dontDistribute super."happstack-auth";
-  "happstack-authenticate" = doDistribute super."happstack-authenticate_2_3_4_2";
+  "happstack-authenticate" = doDistribute super."happstack-authenticate_2_3_4_3";
   "happstack-contrib" = dontDistribute super."happstack-contrib";
   "happstack-data" = dontDistribute super."happstack-data";
   "happstack-dlg" = dontDistribute super."happstack-dlg";
@@ -3612,6 +3754,7 @@ self: super: {
   "has-th" = dontDistribute super."has-th";
   "hascal" = dontDistribute super."hascal";
   "hascar" = dontDistribute super."hascar";
+  "hascas" = dontDistribute super."hascas";
   "hascat" = dontDistribute super."hascat";
   "hascat-lib" = dontDistribute super."hascat-lib";
   "hascat-setup" = dontDistribute super."hascat-setup";
@@ -3647,6 +3790,7 @@ self: super: {
   "haskell-compression" = dontDistribute super."haskell-compression";
   "haskell-course-preludes" = dontDistribute super."haskell-course-preludes";
   "haskell-docs" = dontDistribute super."haskell-docs";
+  "haskell-eigen-util" = dontDistribute super."haskell-eigen-util";
   "haskell-exp-parser" = dontDistribute super."haskell-exp-parser";
   "haskell-fake-user-agent" = dontDistribute super."haskell-fake-user-agent";
   "haskell-formatter" = dontDistribute super."haskell-formatter";
@@ -3655,9 +3799,11 @@ self: super: {
   "haskell-gi" = doDistribute super."haskell-gi_0_17_4";
   "haskell-gi-base" = doDistribute super."haskell-gi-base_0_17";
   "haskell-google-trends" = dontDistribute super."haskell-google-trends";
+  "haskell-igraph" = dontDistribute super."haskell-igraph";
   "haskell-import-graph" = dontDistribute super."haskell-import-graph";
   "haskell-in-space" = dontDistribute super."haskell-in-space";
   "haskell-kubernetes" = dontDistribute super."haskell-kubernetes";
+  "haskell-lexer" = doDistribute super."haskell-lexer_1_0";
   "haskell-modbus" = dontDistribute super."haskell-modbus";
   "haskell-mpfr" = dontDistribute super."haskell-mpfr";
   "haskell-mpi" = dontDistribute super."haskell-mpi";
@@ -3673,7 +3819,9 @@ self: super: {
   "haskell-read-editor" = dontDistribute super."haskell-read-editor";
   "haskell-reflect" = dontDistribute super."haskell-reflect";
   "haskell-rules" = dontDistribute super."haskell-rules";
+  "haskell-src-exts-prisms" = dontDistribute super."haskell-src-exts-prisms";
   "haskell-src-exts-qq" = dontDistribute super."haskell-src-exts-qq";
+  "haskell-src-exts-simple" = dontDistribute super."haskell-src-exts-simple";
   "haskell-src-meta-mwotton" = dontDistribute super."haskell-src-meta-mwotton";
   "haskell-token-utils" = dontDistribute super."haskell-token-utils";
   "haskell-tools-ast" = dontDistribute super."haskell-tools-ast";
@@ -3742,8 +3890,11 @@ self: super: {
   "hasloGUI" = dontDistribute super."hasloGUI";
   "hasparql-client" = dontDistribute super."hasparql-client";
   "haspell" = dontDistribute super."haspell";
-  "hasql" = doDistribute super."hasql_0_19_12";
+  "hasql" = doDistribute super."hasql_0_19_14";
   "hasql-backend" = dontDistribute super."hasql-backend";
+  "hasql-class" = dontDistribute super."hasql-class";
+  "hasql-cursor-query" = dontDistribute super."hasql-cursor-query";
+  "hasql-cursor-transaction" = dontDistribute super."hasql-cursor-transaction";
   "hasql-optparse-applicative" = dontDistribute super."hasql-optparse-applicative";
   "hasql-pool" = dontDistribute super."hasql-pool";
   "hasql-postgres" = dontDistribute super."hasql-postgres";
@@ -3760,11 +3911,13 @@ self: super: {
   "hat" = dontDistribute super."hat";
   "hatex-guide" = dontDistribute super."hatex-guide";
   "hath" = dontDistribute super."hath";
+  "hats" = dontDistribute super."hats";
   "hatt" = dontDistribute super."hatt";
   "haverer" = dontDistribute super."haverer";
   "hawitter" = dontDistribute super."hawitter";
   "haxl-facebook" = dontDistribute super."haxl-facebook";
   "haxparse" = dontDistribute super."haxparse";
+  "haxr" = doDistribute super."haxr_3000_11_1_6";
   "haxr-th" = dontDistribute super."haxr-th";
   "haxy" = dontDistribute super."haxy";
   "hayland" = dontDistribute super."hayland";
@@ -3788,6 +3941,7 @@ self: super: {
   "hcron" = dontDistribute super."hcron";
   "hcube" = dontDistribute super."hcube";
   "hcwiid" = dontDistribute super."hcwiid";
+  "hdaemonize" = doDistribute super."hdaemonize_0_5_0_2";
   "hdaemonize-buildfix" = dontDistribute super."hdaemonize-buildfix";
   "hdbc-aeson" = dontDistribute super."hdbc-aeson";
   "hdbc-postgresql-hstore" = dontDistribute super."hdbc-postgresql-hstore";
@@ -3797,6 +3951,7 @@ self: super: {
   "hdbi-postgresql" = dontDistribute super."hdbi-postgresql";
   "hdbi-sqlite" = dontDistribute super."hdbi-sqlite";
   "hdbi-tests" = dontDistribute super."hdbi-tests";
+  "hdevtools" = doDistribute super."hdevtools_0_1_3_2";
   "hdf" = dontDistribute super."hdf";
   "hdigest" = dontDistribute super."hdigest";
   "hdirect" = dontDistribute super."hdirect";
@@ -3820,12 +3975,14 @@ self: super: {
   "hedis-tags" = dontDistribute super."hedis-tags";
   "hedn" = dontDistribute super."hedn";
   "hein" = dontDistribute super."hein";
+  "heist" = doDistribute super."heist_0_14_1_4";
   "heist-aeson" = dontDistribute super."heist-aeson";
   "heist-async" = dontDistribute super."heist-async";
   "helics" = dontDistribute super."helics";
   "helics-wai" = dontDistribute super."helics-wai";
   "helisp" = dontDistribute super."helisp";
   "helium" = dontDistribute super."helium";
+  "helium-overture" = dontDistribute super."helium-overture";
   "helix" = dontDistribute super."helix";
   "hell" = dontDistribute super."hell";
   "hellage" = dontDistribute super."hellage";
@@ -3869,6 +4026,7 @@ self: super: {
   "hexpat-tagsoup" = dontDistribute super."hexpat-tagsoup";
   "hexpr" = dontDistribute super."hexpr";
   "hexquote" = dontDistribute super."hexquote";
+  "hext" = dontDistribute super."hext";
   "heyefi" = dontDistribute super."heyefi";
   "hfann" = dontDistribute super."hfann";
   "hfd" = dontDistribute super."hfd";
@@ -3889,6 +4047,7 @@ self: super: {
   "hgeos" = dontDistribute super."hgeos";
   "hgithub" = dontDistribute super."hgithub";
   "hgl-example" = dontDistribute super."hgl-example";
+  "hgmp" = dontDistribute super."hgmp";
   "hgom" = dontDistribute super."hgom";
   "hgopher" = dontDistribute super."hgopher";
   "hgrev" = dontDistribute super."hgrev";
@@ -3913,7 +4072,6 @@ self: super: {
   "himerge" = dontDistribute super."himerge";
   "himg" = dontDistribute super."himg";
   "himpy" = dontDistribute super."himpy";
-  "hindent" = doDistribute super."hindent_4_6_3";
   "hindley-milner" = dontDistribute super."hindley-milner";
   "hinduce-associations-apriori" = dontDistribute super."hinduce-associations-apriori";
   "hinduce-classifier" = dontDistribute super."hinduce-classifier";
@@ -3948,6 +4106,7 @@ self: super: {
   "hit-graph" = dontDistribute super."hit-graph";
   "hjcase" = dontDistribute super."hjcase";
   "hjs" = dontDistribute super."hjs";
+  "hjsmin" = doDistribute super."hjsmin_0_2_0_1";
   "hjson-query" = dontDistribute super."hjson-query";
   "hjsonpointer" = dontDistribute super."hjsonpointer";
   "hjsonschema" = dontDistribute super."hjsonschema";
@@ -4006,6 +4165,7 @@ self: super: {
   "hob" = dontDistribute super."hob";
   "hobbes" = dontDistribute super."hobbes";
   "hobbits" = dontDistribute super."hobbits";
+  "hocilib" = dontDistribute super."hocilib";
   "hoe" = dontDistribute super."hoe";
   "hofix-mtl" = dontDistribute super."hofix-mtl";
   "hog" = dontDistribute super."hog";
@@ -4066,6 +4226,7 @@ self: super: {
   "hp2any-manager" = dontDistribute super."hp2any-manager";
   "hp2html" = dontDistribute super."hp2html";
   "hp2pretty" = dontDistribute super."hp2pretty";
+  "hpack-convert" = dontDistribute super."hpack-convert";
   "hpaco" = dontDistribute super."hpaco";
   "hpaco-lib" = dontDistribute super."hpaco-lib";
   "hpage" = dontDistribute super."hpage";
@@ -4073,6 +4234,7 @@ self: super: {
   "hpaste" = dontDistribute super."hpaste";
   "hpasteit" = dontDistribute super."hpasteit";
   "hpath" = dontDistribute super."hpath";
+  "hpc-coveralls" = doDistribute super."hpc-coveralls_1_0_4";
   "hpc-strobe" = dontDistribute super."hpc-strobe";
   "hpc-tracer" = dontDistribute super."hpc-tracer";
   "hpdft" = dontDistribute super."hpdft";
@@ -4082,6 +4244,7 @@ self: super: {
   "hpodder" = dontDistribute super."hpodder";
   "hpp" = dontDistribute super."hpp";
   "hpqtypes" = dontDistribute super."hpqtypes";
+  "hpqtypes-extras" = dontDistribute super."hpqtypes-extras";
   "hprotoc" = doDistribute super."hprotoc_2_2_0";
   "hprotoc-fork" = dontDistribute super."hprotoc-fork";
   "hps" = dontDistribute super."hps";
@@ -4102,6 +4265,7 @@ self: super: {
   "hs-carbon" = dontDistribute super."hs-carbon";
   "hs-carbon-examples" = dontDistribute super."hs-carbon-examples";
   "hs-cdb" = dontDistribute super."hs-cdb";
+  "hs-di" = dontDistribute super."hs-di";
   "hs-dotnet" = dontDistribute super."hs-dotnet";
   "hs-duktape" = dontDistribute super."hs-duktape";
   "hs-excelx" = dontDistribute super."hs-excelx";
@@ -4126,6 +4290,7 @@ self: super: {
   "hs-twitter" = dontDistribute super."hs-twitter";
   "hs-twitterarchiver" = dontDistribute super."hs-twitterarchiver";
   "hs-vcard" = dontDistribute super."hs-vcard";
+  "hs-watchman" = dontDistribute super."hs-watchman";
   "hs2048" = dontDistribute super."hs2048";
   "hs2bf" = dontDistribute super."hs2bf";
   "hs2dot" = dontDistribute super."hs2dot";
@@ -4157,6 +4322,7 @@ self: super: {
   "hsc3-sf-hsndfile" = dontDistribute super."hsc3-sf-hsndfile";
   "hsc3-unsafe" = dontDistribute super."hsc3-unsafe";
   "hsc3-utils" = dontDistribute super."hsc3-utils";
+  "hscaffold" = dontDistribute super."hscaffold";
   "hscamwire" = dontDistribute super."hscamwire";
   "hscassandra" = dontDistribute super."hscassandra";
   "hscd" = dontDistribute super."hscd";
@@ -4212,18 +4378,23 @@ self: super: {
   "hspec-expectations-lifted" = dontDistribute super."hspec-expectations-lifted";
   "hspec-expectations-pretty" = dontDistribute super."hspec-expectations-pretty";
   "hspec-experimental" = dontDistribute super."hspec-experimental";
+  "hspec-golden-aeson" = dontDistribute super."hspec-golden-aeson";
+  "hspec-hashable" = dontDistribute super."hspec-hashable";
   "hspec-laws" = dontDistribute super."hspec-laws";
   "hspec-megaparsec" = doDistribute super."hspec-megaparsec_0_1_1";
   "hspec-monad-control" = dontDistribute super."hspec-monad-control";
   "hspec-server" = dontDistribute super."hspec-server";
   "hspec-shouldbe" = dontDistribute super."hspec-shouldbe";
   "hspec-slow" = dontDistribute super."hspec-slow";
+  "hspec-snap" = doDistribute super."hspec-snap_0_4_0_1";
   "hspec-stack-rerun" = dontDistribute super."hspec-stack-rerun";
   "hspec-structured-formatter" = dontDistribute super."hspec-structured-formatter";
   "hspec-test-framework" = dontDistribute super."hspec-test-framework";
   "hspec-test-framework-th" = dontDistribute super."hspec-test-framework-th";
   "hspec-test-sandbox" = dontDistribute super."hspec-test-sandbox";
+  "hspec-webdriver" = doDistribute super."hspec-webdriver_1_1_0";
   "hspec2" = dontDistribute super."hspec2";
+  "hspecVariant" = dontDistribute super."hspecVariant";
   "hspr-sh" = dontDistribute super."hspr-sh";
   "hspread" = dontDistribute super."hspread";
   "hspresent" = dontDistribute super."hspresent";
@@ -4241,6 +4412,7 @@ self: super: {
   "hsqml-demo-samples" = dontDistribute super."hsqml-demo-samples";
   "hsqml-morris" = dontDistribute super."hsqml-morris";
   "hsreadability" = dontDistribute super."hsreadability";
+  "hsrelp" = dontDistribute super."hsrelp";
   "hsseccomp" = dontDistribute super."hsseccomp";
   "hsshellscript" = dontDistribute super."hsshellscript";
   "hssourceinfo" = dontDistribute super."hssourceinfo";
@@ -4262,8 +4434,10 @@ self: super: {
   "hsyslog" = doDistribute super."hsyslog_2_0";
   "hsyslog-udp" = dontDistribute super."hsyslog-udp";
   "hszephyr" = dontDistribute super."hszephyr";
+  "htaglib" = doDistribute super."htaglib_1_0_3";
   "htags" = dontDistribute super."htags";
   "htar" = dontDistribute super."htar";
+  "htestu" = dontDistribute super."htestu";
   "htiled" = dontDistribute super."htiled";
   "htime" = dontDistribute super."htime";
   "html-email-validate" = dontDistribute super."html-email-validate";
@@ -4283,6 +4457,7 @@ self: super: {
   "htsn-common" = dontDistribute super."htsn-common";
   "htsn-import" = dontDistribute super."htsn-import";
   "http-attoparsec" = dontDistribute super."http-attoparsec";
+  "http-client" = doDistribute super."http-client_0_4_31";
   "http-client-auth" = dontDistribute super."http-client-auth";
   "http-client-conduit" = dontDistribute super."http-client-conduit";
   "http-client-lens" = dontDistribute super."http-client-lens";
@@ -4297,17 +4472,20 @@ self: super: {
   "http-enumerator" = dontDistribute super."http-enumerator";
   "http-kinder" = dontDistribute super."http-kinder";
   "http-kit" = dontDistribute super."http-kit";
+  "http-link-header" = doDistribute super."http-link-header_1_0_1";
   "http-listen" = dontDistribute super."http-listen";
-  "http-media" = doDistribute super."http-media_0_6_3";
   "http-monad" = dontDistribute super."http-monad";
   "http-proxy" = dontDistribute super."http-proxy";
   "http-querystring" = dontDistribute super."http-querystring";
   "http-response-decoder" = dontDistribute super."http-response-decoder";
+  "http-reverse-proxy" = doDistribute super."http-reverse-proxy_0_4_3";
   "http-server" = dontDistribute super."http-server";
   "http-shed" = dontDistribute super."http-shed";
+  "http-streams" = doDistribute super."http-streams_0_8_3_3";
   "http-test" = dontDistribute super."http-test";
   "http-trace" = dontDistribute super."http-trace";
   "http-wget" = dontDistribute super."http-wget";
+  "http2" = doDistribute super."http2_1_6_1";
   "https-everywhere-rules" = dontDistribute super."https-everywhere-rules";
   "https-everywhere-rules-raw" = dontDistribute super."https-everywhere-rules-raw";
   "httpspec" = dontDistribute super."httpspec";
@@ -4317,12 +4495,13 @@ self: super: {
   "hubigraph" = dontDistribute super."hubigraph";
   "hubris" = dontDistribute super."hubris";
   "huckleberry" = dontDistribute super."huckleberry";
+  "huff" = dontDistribute super."huff";
   "huffman" = dontDistribute super."huffman";
   "hugs2yc" = dontDistribute super."hugs2yc";
   "hulk" = dontDistribute super."hulk";
-  "human-readable-duration" = doDistribute super."human-readable-duration_0_2_0_1";
   "hums" = dontDistribute super."hums";
   "hunch" = dontDistribute super."hunch";
+  "hunit-dejafu" = doDistribute super."hunit-dejafu_0_3_0_1";
   "hunit-gui" = dontDistribute super."hunit-gui";
   "hunit-parsec" = dontDistribute super."hunit-parsec";
   "hunit-rematch" = dontDistribute super."hunit-rematch";
@@ -4338,6 +4517,7 @@ self: super: {
   "huttons-razor" = dontDistribute super."huttons-razor";
   "huzzy" = dontDistribute super."huzzy";
   "hw-bits" = doDistribute super."hw-bits_0_0_0_6";
+  "hw-diagnostics" = doDistribute super."hw-diagnostics_0_0_0_2";
   "hw-json" = doDistribute super."hw-json_0_0_0_2";
   "hw-mquery" = dontDistribute super."hw-mquery";
   "hw-prim" = doDistribute super."hw-prim_0_0_0_10";
@@ -4352,6 +4532,7 @@ self: super: {
   "hxournal" = dontDistribute super."hxournal";
   "hxt-binary" = dontDistribute super."hxt-binary";
   "hxt-cache" = dontDistribute super."hxt-cache";
+  "hxt-css" = doDistribute super."hxt-css_0_1_0_2";
   "hxt-extras" = dontDistribute super."hxt-extras";
   "hxt-filter" = dontDistribute super."hxt-filter";
   "hxt-xpath" = dontDistribute super."hxt-xpath";
@@ -4403,6 +4584,7 @@ self: super: {
   "idiii" = dontDistribute super."idiii";
   "idna" = dontDistribute super."idna";
   "idna2008" = dontDistribute super."idna2008";
+  "idringen" = dontDistribute super."idringen";
   "idris" = doDistribute super."idris_0_11_2";
   "ieee" = dontDistribute super."ieee";
   "ieee-utils" = dontDistribute super."ieee-utils";
@@ -4440,8 +4622,10 @@ self: super: {
   "imports" = dontDistribute super."imports";
   "impossible" = dontDistribute super."impossible";
   "improve" = dontDistribute super."improve";
+  "impure-containers" = dontDistribute super."impure-containers";
   "inc-ref" = dontDistribute super."inc-ref";
   "inch" = dontDistribute super."inch";
+  "inchworm" = dontDistribute super."inchworm";
   "incremental-computing" = dontDistribute super."incremental-computing";
   "incremental-maps" = dontDistribute super."incremental-maps";
   "incremental-sat-solver" = dontDistribute super."incremental-sat-solver";
@@ -4472,6 +4656,7 @@ self: super: {
   "inilist" = dontDistribute super."inilist";
   "inject" = dontDistribute super."inject";
   "inject-function" = dontDistribute super."inject-function";
+  "inline-c" = doDistribute super."inline-c_0_5_5_5";
   "inline-c-win32" = dontDistribute super."inline-c-win32";
   "inline-java" = dontDistribute super."inline-java";
   "inline-r" = doDistribute super."inline-r_0_8_0_1";
@@ -4506,6 +4691,7 @@ self: super: {
   "interpolation" = dontDistribute super."interpolation";
   "interruptible" = dontDistribute super."interruptible";
   "interspersed" = dontDistribute super."interspersed";
+  "interval" = dontDistribute super."interval";
   "intricacy" = dontDistribute super."intricacy";
   "intset" = dontDistribute super."intset";
   "invariant" = doDistribute super."invariant_0_3_1";
@@ -4513,6 +4699,7 @@ self: super: {
   "invertible-syntax" = dontDistribute super."invertible-syntax";
   "io-capture" = dontDistribute super."io-capture";
   "io-reactive" = dontDistribute super."io-reactive";
+  "io-streams-haproxy" = dontDistribute super."io-streams-haproxy";
   "io-streams-http" = dontDistribute super."io-streams-http";
   "io-throttle" = dontDistribute super."io-throttle";
   "ioctl" = dontDistribute super."ioctl";
@@ -4533,6 +4720,7 @@ self: super: {
   "irc-colors" = dontDistribute super."irc-colors";
   "irc-conduit" = doDistribute super."irc-conduit_0_1_2_0";
   "irc-core" = dontDistribute super."irc-core";
+  "irc-dcc" = doDistribute super."irc-dcc_1_2_1";
   "irc-fun-bot" = dontDistribute super."irc-fun-bot";
   "irc-fun-client" = dontDistribute super."irc-fun-client";
   "irc-fun-color" = dontDistribute super."irc-fun-color";
@@ -4552,6 +4740,7 @@ self: super: {
   "iso8583-bitmaps" = dontDistribute super."iso8583-bitmaps";
   "isobmff-builder" = dontDistribute super."isobmff-builder";
   "isohunt" = dontDistribute super."isohunt";
+  "isotope" = dontDistribute super."isotope";
   "ispositive" = dontDistribute super."ispositive";
   "itanium-abi" = dontDistribute super."itanium-abi";
   "iter-stats" = dontDistribute super."iter-stats";
@@ -4657,9 +4846,11 @@ self: super: {
   "jukebox" = dontDistribute super."jukebox";
   "jump" = dontDistribute super."jump";
   "jumpthefive" = dontDistribute super."jumpthefive";
+  "jupyter" = dontDistribute super."jupyter";
   "jvm-parser" = dontDistribute super."jvm-parser";
   "kademlia" = dontDistribute super."kademlia";
   "kafka-client" = dontDistribute super."kafka-client";
+  "kaleidoscope" = dontDistribute super."kaleidoscope";
   "kan-extensions" = doDistribute super."kan-extensions_4_2_3";
   "kangaroo" = dontDistribute super."kangaroo";
   "kansas-lava" = dontDistribute super."kansas-lava";
@@ -4668,7 +4859,10 @@ self: super: {
   "kansas-lava-shake" = dontDistribute super."kansas-lava-shake";
   "karakuri" = dontDistribute super."karakuri";
   "karver" = dontDistribute super."karver";
+  "katip" = doDistribute super."katip_0_2_0_0";
+  "katip-elasticsearch" = doDistribute super."katip-elasticsearch_0_2_1_0";
   "katt" = dontDistribute super."katt";
+  "kawaii" = dontDistribute super."kawaii";
   "kawhi" = dontDistribute super."kawhi";
   "kazura-queue" = dontDistribute super."kazura-queue";
   "kbq-gu" = dontDistribute super."kbq-gu";
@@ -4695,9 +4889,12 @@ self: super: {
   "keera-hails-reactivevalues" = dontDistribute super."keera-hails-reactivevalues";
   "keera-posture" = dontDistribute super."keera-posture";
   "keiretsu" = dontDistribute super."keiretsu";
+  "keter" = doDistribute super."keter_1_4_3_1";
   "kevin" = dontDistribute super."kevin";
+  "keycode" = doDistribute super."keycode_0_2";
   "keyed" = dontDistribute super."keyed";
   "keyring" = dontDistribute super."keyring";
+  "keysafe" = dontDistribute super."keysafe";
   "keystore" = dontDistribute super."keystore";
   "keyvaluehash" = dontDistribute super."keyvaluehash";
   "keyword-args" = dontDistribute super."keyword-args";
@@ -4711,6 +4908,8 @@ self: super: {
   "kit" = dontDistribute super."kit";
   "kmeans-par" = dontDistribute super."kmeans-par";
   "kmeans-vector" = dontDistribute super."kmeans-vector";
+  "knead" = dontDistribute super."knead";
+  "knead-arithmetic" = dontDistribute super."knead-arithmetic";
   "knots" = dontDistribute super."knots";
   "koellner-phonetic" = dontDistribute super."koellner-phonetic";
   "kontrakcja-templates" = dontDistribute super."kontrakcja-templates";
@@ -4724,6 +4923,7 @@ self: super: {
   "l-bfgs-b" = dontDistribute super."l-bfgs-b";
   "labeled-graph" = dontDistribute super."labeled-graph";
   "labeled-tree" = dontDistribute super."labeled-tree";
+  "labels" = dontDistribute super."labels";
   "laborantin-hs" = dontDistribute super."laborantin-hs";
   "labyrinth" = dontDistribute super."labyrinth";
   "labyrinth-server" = dontDistribute super."labyrinth-server";
@@ -4759,7 +4959,6 @@ self: super: {
   "lambdacube-edsl" = dontDistribute super."lambdacube-edsl";
   "lambdacube-engine" = dontDistribute super."lambdacube-engine";
   "lambdacube-examples" = dontDistribute super."lambdacube-examples";
-  "lambdacube-gl" = doDistribute super."lambdacube-gl_0_5_0_5";
   "lambdacube-samples" = dontDistribute super."lambdacube-samples";
   "lambdatex" = dontDistribute super."lambdatex";
   "lambdatwit" = dontDistribute super."lambdatwit";
@@ -4771,9 +4970,12 @@ self: super: {
   "language-boogie" = dontDistribute super."language-boogie";
   "language-c-comments" = dontDistribute super."language-c-comments";
   "language-c-inline" = dontDistribute super."language-c-inline";
+  "language-c-quote" = doDistribute super."language-c-quote_0_11_6_2";
   "language-cil" = dontDistribute super."language-cil";
+  "language-conf" = dontDistribute super."language-conf";
   "language-css" = dontDistribute super."language-css";
   "language-dart" = dontDistribute super."language-dart";
+  "language-dockerfile" = dontDistribute super."language-dockerfile";
   "language-dot" = dontDistribute super."language-dot";
   "language-ecmascript-analysis" = dontDistribute super."language-ecmascript-analysis";
   "language-eiffel" = dontDistribute super."language-eiffel";
@@ -4781,6 +4983,7 @@ self: super: {
   "language-gcl" = dontDistribute super."language-gcl";
   "language-go" = dontDistribute super."language-go";
   "language-guess" = dontDistribute super."language-guess";
+  "language-hcl" = dontDistribute super."language-hcl";
   "language-java-classfile" = dontDistribute super."language-java-classfile";
   "language-kort" = dontDistribute super."language-kort";
   "language-lua" = dontDistribute super."language-lua";
@@ -4802,6 +5005,7 @@ self: super: {
   "language-typescript" = dontDistribute super."language-typescript";
   "language-vhdl" = dontDistribute super."language-vhdl";
   "language-webidl" = dontDistribute super."language-webidl";
+  "large-hashable" = dontDistribute super."large-hashable";
   "lat" = dontDistribute super."lat";
   "latest-npm-version" = dontDistribute super."latest-npm-version";
   "latex" = dontDistribute super."latex";
@@ -4812,6 +5016,7 @@ self: super: {
   "layout" = dontDistribute super."layout";
   "layout-bootstrap" = dontDistribute super."layout-bootstrap";
   "lazy-io" = dontDistribute super."lazy-io";
+  "lazy-io-streams" = dontDistribute super."lazy-io-streams";
   "lazy-search" = dontDistribute super."lazy-search";
   "lazyarray" = dontDistribute super."lazyarray";
   "lazyio" = dontDistribute super."lazyio";
@@ -4847,6 +5052,7 @@ self: super: {
   "lens-utils" = dontDistribute super."lens-utils";
   "lenses" = dontDistribute super."lenses";
   "lensref" = dontDistribute super."lensref";
+  "lentil" = doDistribute super."lentil_0_1_12_0";
   "lenz" = dontDistribute super."lenz";
   "lenz-template" = dontDistribute super."lenz-template";
   "level-monad" = dontDistribute super."level-monad";
@@ -4875,6 +5081,7 @@ self: super: {
   "liblinear-enumerator" = dontDistribute super."liblinear-enumerator";
   "libltdl" = dontDistribute super."libltdl";
   "libmpd" = dontDistribute super."libmpd";
+  "libnotify" = doDistribute super."libnotify_0_1_1_0";
   "libnvvm" = dontDistribute super."libnvvm";
   "liboleg" = dontDistribute super."liboleg";
   "libpafe" = dontDistribute super."libpafe";
@@ -4893,6 +5100,8 @@ self: super: {
   "libxml" = dontDistribute super."libxml";
   "libxml-enumerator" = dontDistribute super."libxml-enumerator";
   "libxslt" = dontDistribute super."libxslt";
+  "libzfs" = dontDistribute super."libzfs";
+  "licensor" = dontDistribute super."licensor";
   "life" = dontDistribute super."life";
   "lifted-protolude" = dontDistribute super."lifted-protolude";
   "lifted-threads" = dontDistribute super."lifted-threads";
@@ -4926,6 +5135,7 @@ self: super: {
   "linkedhashmap" = dontDistribute super."linkedhashmap";
   "linklater" = dontDistribute super."linklater";
   "linode" = dontDistribute super."linode";
+  "linode-v4" = dontDistribute super."linode-v4";
   "linux-blkid" = dontDistribute super."linux-blkid";
   "linux-cgroup" = dontDistribute super."linux-cgroup";
   "linux-evdev" = dontDistribute super."linux-evdev";
@@ -4941,6 +5151,7 @@ self: super: {
   "lio-fs" = dontDistribute super."lio-fs";
   "lio-simple" = dontDistribute super."lio-simple";
   "lipsum-gen" = dontDistribute super."lipsum-gen";
+  "liquid" = dontDistribute super."liquid";
   "liquid-fixpoint" = dontDistribute super."liquid-fixpoint";
   "liquidhaskell" = dontDistribute super."liquidhaskell";
   "liquidhaskell-cabal" = dontDistribute super."liquidhaskell-cabal";
@@ -4950,6 +5161,7 @@ self: super: {
   "list-grouping" = dontDistribute super."list-grouping";
   "list-mux" = dontDistribute super."list-mux";
   "list-remote-forwards" = dontDistribute super."list-remote-forwards";
+  "list-t" = doDistribute super."list-t_0_4_7";
   "list-t-attoparsec" = dontDistribute super."list-t-attoparsec";
   "list-t-html-parser" = dontDistribute super."list-t-html-parser";
   "list-t-http-client" = dontDistribute super."list-t-http-client";
@@ -4975,6 +5187,7 @@ self: super: {
   "llvm-data-interop" = dontDistribute super."llvm-data-interop";
   "llvm-extra" = dontDistribute super."llvm-extra";
   "llvm-ffi" = dontDistribute super."llvm-ffi";
+  "llvm-ffi-tools" = dontDistribute super."llvm-ffi-tools";
   "llvm-general" = dontDistribute super."llvm-general";
   "llvm-general-pure" = dontDistribute super."llvm-general-pure";
   "llvm-general-quote" = dontDistribute super."llvm-general-quote";
@@ -5018,6 +5231,8 @@ self: super: {
   "lojysamban" = dontDistribute super."lojysamban";
   "lol" = dontDistribute super."lol";
   "lol-apps" = dontDistribute super."lol-apps";
+  "lol-calculus" = dontDistribute super."lol-calculus";
+  "lol-typing" = dontDistribute super."lol-typing";
   "loli" = dontDistribute super."loli";
   "lookup-tables" = dontDistribute super."lookup-tables";
   "loop-effin" = dontDistribute super."loop-effin";
@@ -5032,6 +5247,7 @@ self: super: {
   "lowgl" = dontDistribute super."lowgl";
   "lp-diagrams" = dontDistribute super."lp-diagrams";
   "lp-diagrams-svg" = dontDistribute super."lp-diagrams-svg";
+  "lrucaching" = dontDistribute super."lrucaching";
   "ls-usb" = dontDistribute super."ls-usb";
   "lscabal" = dontDistribute super."lscabal";
   "lss" = dontDistribute super."lss";
@@ -5044,6 +5260,7 @@ self: super: {
   "luachunk" = dontDistribute super."luachunk";
   "luautils" = dontDistribute super."luautils";
   "lub" = dontDistribute super."lub";
+  "lucid" = doDistribute super."lucid_2_9_5";
   "lucid-foundation" = dontDistribute super."lucid-foundation";
   "lucid-svg" = doDistribute super."lucid-svg_0_6_0_1";
   "lucienne" = dontDistribute super."lucienne";
@@ -5051,7 +5268,7 @@ self: super: {
   "lui" = dontDistribute super."lui";
   "luis-client" = dontDistribute super."luis-client";
   "luka" = dontDistribute super."luka";
-  "luminance" = doDistribute super."luminance_0_11_0_1";
+  "luminance" = doDistribute super."luminance_0_11_0_2";
   "lushtags" = dontDistribute super."lushtags";
   "luthor" = dontDistribute super."luthor";
   "lvish" = dontDistribute super."lvish";
@@ -5070,6 +5287,8 @@ self: super: {
   "maccatcher" = dontDistribute super."maccatcher";
   "machinecell" = dontDistribute super."machinecell";
   "machines" = doDistribute super."machines_0_5_1";
+  "machines-directory" = doDistribute super."machines-directory_0_2_0_8";
+  "machines-io" = doDistribute super."machines-io_0_2_0_12";
   "machines-zlib" = dontDistribute super."machines-zlib";
   "macho" = dontDistribute super."macho";
   "maclight" = dontDistribute super."maclight";
@@ -5080,6 +5299,7 @@ self: super: {
   "mahoro" = dontDistribute super."mahoro";
   "maid" = dontDistribute super."maid";
   "mailbox-count" = dontDistribute super."mailbox-count";
+  "mailchimp" = dontDistribute super."mailchimp";
   "mailchimp-subscribe" = dontDistribute super."mailchimp-subscribe";
   "mailgun" = dontDistribute super."mailgun";
   "majordomo" = dontDistribute super."majordomo";
@@ -5106,12 +5326,13 @@ self: super: {
   "manatee-terminal" = dontDistribute super."manatee-terminal";
   "manatee-welcome" = dontDistribute super."manatee-welcome";
   "mancala" = dontDistribute super."mancala";
-  "mandrill" = doDistribute super."mandrill_0_5_2_1";
+  "mandrill" = doDistribute super."mandrill_0_5_2_2";
   "mandulia" = dontDistribute super."mandulia";
   "mangopay" = dontDistribute super."mangopay";
   "manifold-random" = dontDistribute super."manifold-random";
   "manifolds" = dontDistribute super."manifolds";
   "map-exts" = dontDistribute super."map-exts";
+  "map-syntax" = doDistribute super."map-syntax_0_2";
   "mappy" = dontDistribute super."mappy";
   "marionetta" = dontDistribute super."marionetta";
   "markdown-kate" = dontDistribute super."markdown-kate";
@@ -5124,6 +5345,7 @@ self: super: {
   "markup-preview" = dontDistribute super."markup-preview";
   "marmalade-upload" = dontDistribute super."marmalade-upload";
   "marquise" = dontDistribute super."marquise";
+  "mars" = dontDistribute super."mars";
   "marxup" = dontDistribute super."marxup";
   "masakazu-bot" = dontDistribute super."masakazu-bot";
   "mastermind" = dontDistribute super."mastermind";
@@ -5155,7 +5377,9 @@ self: super: {
   "mdp" = dontDistribute super."mdp";
   "means" = dontDistribute super."means";
   "mecab" = dontDistribute super."mecab";
+  "mech" = dontDistribute super."mech";
   "mecha" = dontDistribute super."mecha";
+  "mechs" = dontDistribute super."mechs";
   "mediawiki" = dontDistribute super."mediawiki";
   "mediawiki2latex" = dontDistribute super."mediawiki2latex";
   "medium-sdk-haskell" = dontDistribute super."medium-sdk-haskell";
@@ -5174,9 +5398,12 @@ self: super: {
   "memexml" = dontDistribute super."memexml";
   "memo-ptr" = dontDistribute super."memo-ptr";
   "memo-sqlite" = dontDistribute super."memo-sqlite";
+  "memoize" = doDistribute super."memoize_0_7";
+  "memorypool" = dontDistribute super."memorypool";
   "memscript" = dontDistribute super."memscript";
   "merge-bash-history" = dontDistribute super."merge-bash-history";
   "mersenne-random" = dontDistribute super."mersenne-random";
+  "messagepack" = doDistribute super."messagepack_0_5_1";
   "messente" = dontDistribute super."messente";
   "meta-misc" = dontDistribute super."meta-misc";
   "meta-par" = dontDistribute super."meta-par";
@@ -5193,26 +5420,34 @@ self: super: {
   "mi" = dontDistribute super."mi";
   "microbench" = dontDistribute super."microbench";
   "microformats2-types" = dontDistribute super."microformats2-types";
+  "microlens" = doDistribute super."microlens_0_4_5_0";
+  "microlens-aeson" = doDistribute super."microlens-aeson_2_1_1";
   "microlens-each" = dontDistribute super."microlens-each";
-  "microlens-mtl" = doDistribute super."microlens-mtl_0_1_8_0";
-  "microlens-platform" = doDistribute super."microlens-platform_0_3_2_0";
+  "microlens-ghc" = doDistribute super."microlens-ghc_0_4_5_0";
+  "microlens-mtl" = doDistribute super."microlens-mtl_0_1_9_0";
+  "microlens-platform" = doDistribute super."microlens-platform_0_3_3_0";
+  "microlens-th" = doDistribute super."microlens-th_0_4_0_0";
   "micrologger" = dontDistribute super."micrologger";
+  "microspec" = dontDistribute super."microspec";
   "microtimer" = dontDistribute super."microtimer";
   "mida" = dontDistribute super."mida";
   "midi" = dontDistribute super."midi";
   "midi-alsa" = dontDistribute super."midi-alsa";
   "midi-music-box" = dontDistribute super."midi-music-box";
   "midi-util" = dontDistribute super."midi-util";
+  "midi-utils" = dontDistribute super."midi-utils";
   "midimory" = dontDistribute super."midimory";
   "midisurface" = dontDistribute super."midisurface";
   "mighttpd" = dontDistribute super."mighttpd";
   "mighttpd2" = dontDistribute super."mighttpd2";
   "mikmod" = dontDistribute super."mikmod";
+  "mikrokosmos" = dontDistribute super."mikrokosmos";
   "miku" = dontDistribute super."miku";
   "milena" = dontDistribute super."milena";
   "mime" = dontDistribute super."mime";
   "mime-directory" = dontDistribute super."mime-directory";
   "mime-string" = dontDistribute super."mime-string";
+  "minecraft-data" = dontDistribute super."minecraft-data";
   "mines" = dontDistribute super."mines";
   "minesweeper" = dontDistribute super."minesweeper";
   "miniball" = dontDistribute super."miniball";
@@ -5254,6 +5489,7 @@ self: super: {
   "modulo" = dontDistribute super."modulo";
   "moe" = dontDistribute super."moe";
   "mohws" = dontDistribute super."mohws";
+  "mollie-api-haskell" = dontDistribute super."mollie-api-haskell";
   "monad-abort-fd" = dontDistribute super."monad-abort-fd";
   "monad-atom" = dontDistribute super."monad-atom";
   "monad-atom-simple" = dontDistribute super."monad-atom-simple";
@@ -5271,7 +5507,6 @@ self: super: {
   "monad-lgbt" = dontDistribute super."monad-lgbt";
   "monad-log" = dontDistribute super."monad-log";
   "monad-logger-prefix" = dontDistribute super."monad-logger-prefix";
-  "monad-logger-syslog" = doDistribute super."monad-logger-syslog_0_1_1_1";
   "monad-loops-stm" = dontDistribute super."monad-loops-stm";
   "monad-lrs" = dontDistribute super."monad-lrs";
   "monad-memo" = dontDistribute super."monad-memo";
@@ -5312,11 +5547,11 @@ self: super: {
   "mongodb-queue" = dontDistribute super."mongodb-queue";
   "mongrel2-handler" = dontDistribute super."mongrel2-handler";
   "monitor" = dontDistribute super."monitor";
+  "monky" = dontDistribute super."monky";
   "mono-foldable" = dontDistribute super."mono-foldable";
   "mono-traversable" = doDistribute super."mono-traversable_0_10_2";
   "mono-traversable-instances" = dontDistribute super."mono-traversable-instances";
   "monoid-absorbing" = dontDistribute super."monoid-absorbing";
-  "monoid-extras" = doDistribute super."monoid-extras_0_4_1_2";
   "monoid-owns" = dontDistribute super."monoid-owns";
   "monoid-record" = dontDistribute super."monoid-record";
   "monoid-statistics" = dontDistribute super."monoid-statistics";
@@ -5329,11 +5564,13 @@ self: super: {
   "montage" = dontDistribute super."montage";
   "montage-client" = dontDistribute super."montage-client";
   "monte-carlo" = dontDistribute super."monte-carlo";
+  "monzo" = dontDistribute super."monzo";
   "moo" = dontDistribute super."moo";
   "moonshine" = dontDistribute super."moonshine";
   "morfette" = dontDistribute super."morfette";
   "morfeusz" = dontDistribute super."morfeusz";
   "morph" = dontDistribute super."morph";
+  "morte" = doDistribute super."morte_1_6_1";
   "mosaico-lib" = dontDistribute super."mosaico-lib";
   "mount" = dontDistribute super."mount";
   "mp" = dontDistribute super."mp";
@@ -5357,6 +5594,7 @@ self: super: {
   "mtgoxapi" = dontDistribute super."mtgoxapi";
   "mtl-c" = dontDistribute super."mtl-c";
   "mtl-evil-instances" = dontDistribute super."mtl-evil-instances";
+  "mtl-extras" = dontDistribute super."mtl-extras";
   "mtl-tf" = dontDistribute super."mtl-tf";
   "mtl-unleashed" = dontDistribute super."mtl-unleashed";
   "mtlparse" = dontDistribute super."mtlparse";
@@ -5371,6 +5609,7 @@ self: super: {
   "multext-east-msd" = dontDistribute super."multext-east-msd";
   "multi-cabal" = dontDistribute super."multi-cabal";
   "multiaddr" = dontDistribute super."multiaddr";
+  "multifile" = dontDistribute super."multifile";
   "multifocal" = dontDistribute super."multifocal";
   "multihash" = dontDistribute super."multihash";
   "multipart-names" = dontDistribute super."multipart-names";
@@ -5403,6 +5642,7 @@ self: super: {
   "musicbrainz-email" = dontDistribute super."musicbrainz-email";
   "musicxml" = dontDistribute super."musicxml";
   "musicxml2" = dontDistribute super."musicxml2";
+  "mustache" = doDistribute super."mustache_1_0_2";
   "mustache-haskell" = dontDistribute super."mustache-haskell";
   "mustache2hs" = dontDistribute super."mustache2hs";
   "mutable-iter" = dontDistribute super."mutable-iter";
@@ -5417,8 +5657,10 @@ self: super: {
   "mysnapsession" = dontDistribute super."mysnapsession";
   "mysnapsession-example" = dontDistribute super."mysnapsession-example";
   "mysql-effect" = dontDistribute super."mysql-effect";
+  "mysql-haskell" = dontDistribute super."mysql-haskell";
   "mysql-simple-quasi" = dontDistribute super."mysql-simple-quasi";
   "mysql-simple-typed" = dontDistribute super."mysql-simple-typed";
+  "mystem" = dontDistribute super."mystem";
   "mywatch" = dontDistribute super."mywatch";
   "mzv" = dontDistribute super."mzv";
   "n-m" = dontDistribute super."n-m";
@@ -5453,7 +5695,6 @@ self: super: {
   "nc-indicators" = dontDistribute super."nc-indicators";
   "ncurses" = dontDistribute super."ncurses";
   "neat" = dontDistribute super."neat";
-  "neat-interpolation" = doDistribute super."neat-interpolation_0_3_2";
   "needle" = dontDistribute super."needle";
   "neet" = dontDistribute super."neet";
   "nehe-tuts" = dontDistribute super."nehe-tuts";
@@ -5486,6 +5727,7 @@ self: super: {
   "netwire" = dontDistribute super."netwire";
   "netwire-input" = dontDistribute super."netwire-input";
   "netwire-input-glfw" = dontDistribute super."netwire-input-glfw";
+  "network" = doDistribute super."network_2_6_2_1";
   "network-address" = dontDistribute super."network-address";
   "network-api-support" = dontDistribute super."network-api-support";
   "network-bitcoin" = dontDistribute super."network-bitcoin";
@@ -5504,6 +5746,7 @@ self: super: {
   "network-metrics" = dontDistribute super."network-metrics";
   "network-minihttp" = dontDistribute super."network-minihttp";
   "network-msg" = dontDistribute super."network-msg";
+  "network-msgpack-rpc" = dontDistribute super."network-msgpack-rpc";
   "network-netpacket" = dontDistribute super."network-netpacket";
   "network-pgi" = dontDistribute super."network-pgi";
   "network-rpca" = dontDistribute super."network-rpca";
@@ -5515,6 +5758,7 @@ self: super: {
   "network-stream" = dontDistribute super."network-stream";
   "network-topic-models" = dontDistribute super."network-topic-models";
   "network-transport-amqp" = dontDistribute super."network-transport-amqp";
+  "network-uri-flag" = dontDistribute super."network-uri-flag";
   "network-uri-static" = dontDistribute super."network-uri-static";
   "network-wai-router" = dontDistribute super."network-wai-router";
   "network-websocket" = dontDistribute super."network-websocket";
@@ -5553,6 +5797,7 @@ self: super: {
   "nofib-analyze" = dontDistribute super."nofib-analyze";
   "noise" = dontDistribute super."noise";
   "non-empty" = dontDistribute super."non-empty";
+  "non-empty-sequence" = dontDistribute super."non-empty-sequence";
   "non-negative" = dontDistribute super."non-negative";
   "nondeterminism" = dontDistribute super."nondeterminism";
   "nonempty-alternative" = dontDistribute super."nonempty-alternative";
@@ -5561,6 +5806,7 @@ self: super: {
   "nonlinear-optimization-ad" = dontDistribute super."nonlinear-optimization-ad";
   "noodle" = dontDistribute super."noodle";
   "normaldistribution" = dontDistribute super."normaldistribution";
+  "normalization-insensitive" = dontDistribute super."normalization-insensitive";
   "not-gloss" = dontDistribute super."not-gloss";
   "not-gloss-examples" = dontDistribute super."not-gloss-examples";
   "not-in-base" = dontDistribute super."not-in-base";
@@ -5572,6 +5818,7 @@ self: super: {
   "np-linear" = dontDistribute super."np-linear";
   "nptools" = dontDistribute super."nptools";
   "nth-prime" = dontDistribute super."nth-prime";
+  "ntha" = dontDistribute super."ntha";
   "nthable" = dontDistribute super."nthable";
   "ntp-control" = dontDistribute super."ntp-control";
   "null-canvas" = dontDistribute super."null-canvas";
@@ -5612,7 +5859,7 @@ self: super: {
   "oden-go-packages" = dontDistribute super."oden-go-packages";
   "oeis" = dontDistribute super."oeis";
   "off-simple" = dontDistribute super."off-simple";
-  "ofx" = doDistribute super."ofx_0_4_0_4";
+  "ogmarkup" = dontDistribute super."ogmarkup";
   "ohloh-hs" = dontDistribute super."ohloh-hs";
   "oi" = dontDistribute super."oi";
   "oidc-client" = dontDistribute super."oidc-client";
@@ -5620,6 +5867,7 @@ self: super: {
   "old-version" = dontDistribute super."old-version";
   "olwrapper" = dontDistribute super."olwrapper";
   "omaketex" = dontDistribute super."omaketex";
+  "ombra" = dontDistribute super."ombra";
   "omega" = dontDistribute super."omega";
   "omnicodec" = dontDistribute super."omnicodec";
   "on-a-horse" = dontDistribute super."on-a-horse";
@@ -5668,6 +5916,7 @@ self: super: {
   "opentheory-probability" = dontDistribute super."opentheory-probability";
   "opentheory-stream" = dontDistribute super."opentheory-stream";
   "opentheory-unicode" = dontDistribute super."opentheory-unicode";
+  "operational" = doDistribute super."operational_0_2_3_2";
   "operational-alacarte" = dontDistribute super."operational-alacarte";
   "operational-extra" = dontDistribute super."operational-extra";
   "opml" = dontDistribute super."opml";
@@ -5719,6 +5968,7 @@ self: super: {
   "pagarme" = dontDistribute super."pagarme";
   "pagination" = dontDistribute super."pagination";
   "pagure-hook-receiver" = dontDistribute super."pagure-hook-receiver";
+  "palette" = doDistribute super."palette_0_1_0_3";
   "palindromes" = dontDistribute super."palindromes";
   "pam" = dontDistribute super."pam";
   "panda" = dontDistribute super."panda";
@@ -5731,10 +5981,21 @@ self: super: {
   "pandoc-lens" = dontDistribute super."pandoc-lens";
   "pandoc-placetable" = dontDistribute super."pandoc-placetable";
   "pandoc-plantuml-diagrams" = dontDistribute super."pandoc-plantuml-diagrams";
+  "pandoc-types" = doDistribute super."pandoc-types_1_16_1";
   "pandoc-unlit" = dontDistribute super."pandoc-unlit";
   "pango" = doDistribute super."pango_0_13_1_1";
+  "papa" = dontDistribute super."papa";
+  "papa-base" = dontDistribute super."papa-base";
+  "papa-include" = dontDistribute super."papa-include";
+  "papa-lens" = dontDistribute super."papa-lens";
+  "papa-prelude" = dontDistribute super."papa-prelude";
+  "papa-prelude-core" = dontDistribute super."papa-prelude-core";
+  "papa-prelude-lens" = dontDistribute super."papa-prelude-lens";
+  "papa-prelude-semigroupoids" = dontDistribute super."papa-prelude-semigroupoids";
+  "papa-prelude-semigroups" = dontDistribute super."papa-prelude-semigroups";
   "papillon" = dontDistribute super."papillon";
   "pappy" = dontDistribute super."pappy";
+  "paprika" = dontDistribute super."paprika";
   "para" = dontDistribute super."para";
   "paragon" = dontDistribute super."paragon";
   "parallel-tasks" = dontDistribute super."parallel-tasks";
@@ -5753,6 +6014,7 @@ self: super: {
   "parsec-numbers" = dontDistribute super."parsec-numbers";
   "parsec-parsers" = dontDistribute super."parsec-parsers";
   "parsec-permutation" = dontDistribute super."parsec-permutation";
+  "parsec-pratt" = dontDistribute super."parsec-pratt";
   "parsec-tagsoup" = dontDistribute super."parsec-tagsoup";
   "parsec-trace" = dontDistribute super."parsec-trace";
   "parsec-utils" = dontDistribute super."parsec-utils";
@@ -5776,10 +6038,12 @@ self: super: {
   "partly" = dontDistribute super."partly";
   "passage" = dontDistribute super."passage";
   "passwords" = dontDistribute super."passwords";
+  "pasta" = dontDistribute super."pasta";
   "pastis" = dontDistribute super."pastis";
   "pasty" = dontDistribute super."pasty";
   "patch-combinators" = dontDistribute super."patch-combinators";
   "patch-image" = dontDistribute super."patch-image";
+  "path" = doDistribute super."path_0_5_8";
   "path-io" = doDistribute super."path-io_1_1_0";
   "pathfinding" = dontDistribute super."pathfinding";
   "pathfindingcore" = dontDistribute super."pathfindingcore";
@@ -5836,6 +6100,7 @@ self: super: {
   "persistent-mongoDB" = doDistribute super."persistent-mongoDB_2_1_4";
   "persistent-mysql" = doDistribute super."persistent-mysql_2_3_0_2";
   "persistent-odbc" = dontDistribute super."persistent-odbc";
+  "persistent-parser" = dontDistribute super."persistent-parser";
   "persistent-postgresql" = doDistribute super."persistent-postgresql_2_2_2";
   "persistent-protobuf" = dontDistribute super."persistent-protobuf";
   "persistent-ratelimit" = dontDistribute super."persistent-ratelimit";
@@ -5872,6 +6137,7 @@ self: super: {
   "phraskell" = dontDistribute super."phraskell";
   "phybin" = dontDistribute super."phybin";
   "pi-calculus" = dontDistribute super."pi-calculus";
+  "pi-forall" = dontDistribute super."pi-forall";
   "pia-forward" = dontDistribute super."pia-forward";
   "pianola" = dontDistribute super."pianola";
   "picologic" = dontDistribute super."picologic";
@@ -5879,7 +6145,8 @@ self: super: {
   "piet" = dontDistribute super."piet";
   "piki" = dontDistribute super."piki";
   "pinboard" = dontDistribute super."pinboard";
-  "pinch" = doDistribute super."pinch_0_2_0_1";
+  "pinch" = doDistribute super."pinch_0_2_0_2";
+  "pinchot" = doDistribute super."pinchot_0_18_2_0";
   "pipe-enumerator" = dontDistribute super."pipe-enumerator";
   "pipeclip" = dontDistribute super."pipeclip";
   "pipes-async" = dontDistribute super."pipes-async";
@@ -5897,14 +6164,16 @@ self: super: {
   "pipes-errors" = dontDistribute super."pipes-errors";
   "pipes-extra" = dontDistribute super."pipes-extra";
   "pipes-files" = dontDistribute super."pipes-files";
+  "pipes-http" = doDistribute super."pipes-http_1_0_3";
   "pipes-interleave" = dontDistribute super."pipes-interleave";
+  "pipes-io" = dontDistribute super."pipes-io";
   "pipes-key-value-csv" = dontDistribute super."pipes-key-value-csv";
   "pipes-lzma" = dontDistribute super."pipes-lzma";
-  "pipes-network" = doDistribute super."pipes-network_0_6_4";
   "pipes-network-tls" = dontDistribute super."pipes-network-tls";
   "pipes-p2p" = dontDistribute super."pipes-p2p";
   "pipes-p2p-examples" = dontDistribute super."pipes-p2p-examples";
   "pipes-postgresql-simple" = dontDistribute super."pipes-postgresql-simple";
+  "pipes-protolude" = dontDistribute super."pipes-protolude";
   "pipes-random" = dontDistribute super."pipes-random";
   "pipes-rt" = dontDistribute super."pipes-rt";
   "pipes-s3" = dontDistribute super."pipes-s3";
@@ -5943,12 +6212,13 @@ self: super: {
   "pngload-fixed" = dontDistribute super."pngload-fixed";
   "pnm" = dontDistribute super."pnm";
   "pocket-dns" = dontDistribute super."pocket-dns";
-  "point-octree" = dontDistribute super."point-octree";
   "pointed" = doDistribute super."pointed_4_2_0_2";
+  "pointedalternative" = dontDistribute super."pointedalternative";
   "pointfree" = dontDistribute super."pointfree";
   "pointless-haskell" = dontDistribute super."pointless-haskell";
   "pointless-lenses" = dontDistribute super."pointless-lenses";
   "pointless-rewrite" = dontDistribute super."pointless-rewrite";
+  "pokemon-go-protobuf-types" = dontDistribute super."pokemon-go-protobuf-types";
   "poker-eval" = dontDistribute super."poker-eval";
   "pokitdok" = dontDistribute super."pokitdok";
   "polar" = dontDistribute super."polar";
@@ -5988,6 +6258,7 @@ self: super: {
   "ports-tools" = dontDistribute super."ports-tools";
   "positive" = dontDistribute super."positive";
   "posix-acl" = dontDistribute super."posix-acl";
+  "posix-error-codes" = dontDistribute super."posix-error-codes";
   "posix-escape" = dontDistribute super."posix-escape";
   "posix-filelock" = dontDistribute super."posix-filelock";
   "posix-paths" = dontDistribute super."posix-paths";
@@ -5996,11 +6267,14 @@ self: super: {
   "posix-waitpid" = dontDistribute super."posix-waitpid";
   "possible" = dontDistribute super."possible";
   "postcodes" = dontDistribute super."postcodes";
+  "postgres-tmp" = dontDistribute super."postgres-tmp";
+  "postgresql-binary" = doDistribute super."postgresql-binary_0_9_0_1";
   "postgresql-config" = dontDistribute super."postgresql-config";
   "postgresql-connector" = dontDistribute super."postgresql-connector";
   "postgresql-copy-escape" = dontDistribute super."postgresql-copy-escape";
   "postgresql-cube" = dontDistribute super."postgresql-cube";
   "postgresql-error-codes" = dontDistribute super."postgresql-error-codes";
+  "postgresql-libpq" = doDistribute super."postgresql-libpq_0_9_1_1";
   "postgresql-query" = dontDistribute super."postgresql-query";
   "postgresql-simple-bind" = dontDistribute super."postgresql-simple-bind";
   "postgresql-simple-migration" = dontDistribute super."postgresql-simple-migration";
@@ -6008,6 +6282,7 @@ self: super: {
   "postgresql-simple-typed" = dontDistribute super."postgresql-simple-typed";
   "postgresql-typed" = dontDistribute super."postgresql-typed";
   "postgrest" = dontDistribute super."postgrest";
+  "postgrest-ws" = dontDistribute super."postgrest-ws";
   "postie" = dontDistribute super."postie";
   "postmark" = dontDistribute super."postmark";
   "postmaster" = dontDistribute super."postmaster";
@@ -6023,9 +6298,11 @@ self: super: {
   "practice-room" = dontDistribute super."practice-room";
   "precis" = dontDistribute super."precis";
   "predicates" = dontDistribute super."predicates";
+  "predictive" = dontDistribute super."predictive";
   "prednote-test" = dontDistribute super."prednote-test";
   "prefork" = dontDistribute super."prefork";
   "pregame" = dontDistribute super."pregame";
+  "preliminaries" = dontDistribute super."preliminaries";
   "prelude-compat" = dontDistribute super."prelude-compat";
   "prelude-edsl" = dontDistribute super."prelude-edsl";
   "prelude-generalize" = dontDistribute super."prelude-generalize";
@@ -6033,6 +6310,7 @@ self: super: {
   "prelude-prime" = dontDistribute super."prelude-prime";
   "prelude2010" = dontDistribute super."prelude2010";
   "preprocess-haskell" = dontDistribute super."preprocess-haskell";
+  "preprocessor" = dontDistribute super."preprocessor";
   "present" = dontDistribute super."present";
   "press" = dontDistribute super."press";
   "presto-hdbc" = dontDistribute super."presto-hdbc";
@@ -6042,6 +6320,7 @@ self: super: {
   "pretty-ncols" = dontDistribute super."pretty-ncols";
   "pretty-sop" = dontDistribute super."pretty-sop";
   "pretty-tree" = dontDistribute super."pretty-tree";
+  "pretty-types" = dontDistribute super."pretty-types";
   "prettyFunctionComposing" = dontDistribute super."prettyFunctionComposing";
   "prim-spoon" = dontDistribute super."prim-spoon";
   "prim-uniq" = dontDistribute super."prim-uniq";
@@ -6060,6 +6339,7 @@ self: super: {
   "probability" = dontDistribute super."probability";
   "probable" = dontDistribute super."probable";
   "proc" = dontDistribute super."proc";
+  "proc-net" = dontDistribute super."proc-net";
   "process-conduit" = dontDistribute super."process-conduit";
   "process-extras" = doDistribute super."process-extras_0_3_3_8";
   "process-iterio" = dontDistribute super."process-iterio";
@@ -6107,6 +6387,7 @@ self: super: {
   "protocol-buffers-descriptor" = doDistribute super."protocol-buffers-descriptor_2_2_0";
   "protocol-buffers-descriptor-fork" = dontDistribute super."protocol-buffers-descriptor-fork";
   "protocol-buffers-fork" = dontDistribute super."protocol-buffers-fork";
+  "protolude" = doDistribute super."protolude_0_1_6";
   "proton-haskell" = dontDistribute super."proton-haskell";
   "prototype" = dontDistribute super."prototype";
   "prove-everywhere-server" = dontDistribute super."prove-everywhere-server";
@@ -6115,6 +6396,9 @@ self: super: {
   "pseudo-boolean" = dontDistribute super."pseudo-boolean";
   "pseudo-trie" = dontDistribute super."pseudo-trie";
   "pseudomacros" = dontDistribute super."pseudomacros";
+  "psi" = dontDistribute super."psi";
+  "psqueues" = doDistribute super."psqueues_0_2_2_1";
+  "pstemmer" = dontDistribute super."pstemmer";
   "pub" = dontDistribute super."pub";
   "publicsuffix" = doDistribute super."publicsuffix_0_20160522";
   "publicsuffixlist" = dontDistribute super."publicsuffixlist";
@@ -6129,6 +6413,7 @@ self: super: {
   "pugs-hsregex" = dontDistribute super."pugs-hsregex";
   "pulse" = dontDistribute super."pulse";
   "pulse-simple" = dontDistribute super."pulse-simple";
+  "pulseaudio" = dontDistribute super."pulseaudio";
   "punkt" = dontDistribute super."punkt";
   "punycode" = dontDistribute super."punycode";
   "puppetresources" = dontDistribute super."puppetresources";
@@ -6167,6 +6452,7 @@ self: super: {
   "qtah-examples" = dontDistribute super."qtah-examples";
   "qtah-generator" = dontDistribute super."qtah-generator";
   "qtah-qt5" = dontDistribute super."qtah-qt5";
+  "quack" = dontDistribute super."quack";
   "quadratic-irrational" = dontDistribute super."quadratic-irrational";
   "quantfin" = dontDistribute super."quantfin";
   "quantities" = dontDistribute super."quantities";
@@ -6180,8 +6466,8 @@ self: super: {
   "quick-generator" = dontDistribute super."quick-generator";
   "quick-schema" = dontDistribute super."quick-schema";
   "quickbooks" = dontDistribute super."quickbooks";
+  "quickcheck-arbitrary-adt" = dontDistribute super."quickcheck-arbitrary-adt";
   "quickcheck-combinators" = dontDistribute super."quickcheck-combinators";
-  "quickcheck-io" = doDistribute super."quickcheck-io_0_1_2";
   "quickcheck-poly" = dontDistribute super."quickcheck-poly";
   "quickcheck-properties" = dontDistribute super."quickcheck-properties";
   "quickcheck-property-comb" = dontDistribute super."quickcheck-property-comb";
@@ -6220,10 +6506,9 @@ self: super: {
   "radium-formula-parser" = dontDistribute super."radium-formula-parser";
   "radix" = dontDistribute super."radix";
   "rados-haskell" = dontDistribute super."rados-haskell";
+  "raft" = dontDistribute super."raft";
   "rail-compiler-editor" = dontDistribute super."rail-compiler-editor";
-  "rainbow" = doDistribute super."rainbow_0_28_0_2";
   "rainbow-tests" = dontDistribute super."rainbow-tests";
-  "rainbox" = doDistribute super."rainbox_0_18_0_8";
   "rake" = dontDistribute super."rake";
   "rakhana" = dontDistribute super."rakhana";
   "ralist" = dontDistribute super."ralist";
@@ -6236,8 +6521,10 @@ self: super: {
   "random-eff" = dontDistribute super."random-eff";
   "random-effin" = dontDistribute super."random-effin";
   "random-extras" = dontDistribute super."random-extras";
+  "random-fu-multivariate" = dontDistribute super."random-fu-multivariate";
   "random-hypergeometric" = dontDistribute super."random-hypergeometric";
   "random-stream" = dontDistribute super."random-stream";
+  "random-strings" = dontDistribute super."random-strings";
   "random-variates" = dontDistribute super."random-variates";
   "randomgen" = dontDistribute super."randomgen";
   "randproc" = dontDistribute super."randproc";
@@ -6253,17 +6540,21 @@ self: super: {
   "ratio-int" = dontDistribute super."ratio-int";
   "raven-haskell" = dontDistribute super."raven-haskell";
   "raven-haskell-scotty" = dontDistribute super."raven-haskell-scotty";
+  "raw-feldspar" = dontDistribute super."raw-feldspar";
+  "rawr" = dontDistribute super."rawr";
   "rawstring-qm" = dontDistribute super."rawstring-qm";
   "razom-text-util" = dontDistribute super."razom-text-util";
   "rbr" = dontDistribute super."rbr";
   "rclient" = dontDistribute super."rclient";
   "rcu" = dontDistribute super."rcu";
+  "rdf" = dontDistribute super."rdf";
   "rdf4h" = dontDistribute super."rdf4h";
   "rdioh" = dontDistribute super."rdioh";
   "rdtsc" = dontDistribute super."rdtsc";
   "rdtsc-enolan" = dontDistribute super."rdtsc-enolan";
   "re2" = dontDistribute super."re2";
   "react-flux" = dontDistribute super."react-flux";
+  "react-flux-servant" = dontDistribute super."react-flux-servant";
   "react-haskell" = dontDistribute super."react-haskell";
   "react-tutorial-haskell-server" = dontDistribute super."react-tutorial-haskell-server";
   "reaction-logic" = dontDistribute super."reaction-logic";
@@ -6283,6 +6574,7 @@ self: super: {
   "reactivity" = dontDistribute super."reactivity";
   "reactor" = dontDistribute super."reactor";
   "read-bounded" = dontDistribute super."read-bounded";
+  "read-env-var" = doDistribute super."read-env-var_0_1_0_0";
   "readline-statevar" = dontDistribute super."readline-statevar";
   "readpyc" = dontDistribute super."readpyc";
   "readshp" = dontDistribute super."readshp";
@@ -6368,10 +6660,12 @@ self: super: {
   "relacion" = dontDistribute super."relacion";
   "relation" = dontDistribute super."relation";
   "relational-postgresql8" = dontDistribute super."relational-postgresql8";
-  "relational-query" = doDistribute super."relational-query_0_8_2_3";
+  "relational-query" = doDistribute super."relational-query_0_8_3_0";
+  "relational-record" = doDistribute super."relational-record_0_1_5_0";
   "relational-record-examples" = dontDistribute super."relational-record-examples";
   "relative-date" = dontDistribute super."relative-date";
   "relit" = dontDistribute super."relit";
+  "reload" = dontDistribute super."reload";
   "rematch-text" = dontDistribute super."rematch-text";
   "remote" = dontDistribute super."remote";
   "remote-debugger" = dontDistribute super."remote-debugger";
@@ -6409,6 +6703,7 @@ self: super: {
   "representable-tries" = dontDistribute super."representable-tries";
   "reqcatcher" = dontDistribute super."reqcatcher";
   "request-monad" = dontDistribute super."request-monad";
+  "reroute" = doDistribute super."reroute_0_3_1_0";
   "reserve" = dontDistribute super."reserve";
   "resistor-cube" = dontDistribute super."resistor-cube";
   "resource-effect" = dontDistribute super."resource-effect";
@@ -6416,17 +6711,17 @@ self: super: {
   "resource-pool-catchio" = dontDistribute super."resource-pool-catchio";
   "resource-pool-monad" = dontDistribute super."resource-pool-monad";
   "resource-simple" = dontDistribute super."resource-simple";
+  "resourcet" = doDistribute super."resourcet_1_1_7_4";
   "respond" = dontDistribute super."respond";
   "rest-example" = dontDistribute super."rest-example";
   "restful-snap" = dontDistribute super."restful-snap";
   "restricted-workers" = dontDistribute super."restricted-workers";
   "restyle" = dontDistribute super."restyle";
+  "result" = dontDistribute super."result";
   "resumable-exceptions" = dontDistribute super."resumable-exceptions";
-  "rethinkdb" = doDistribute super."rethinkdb_2_2_0_5";
   "rethinkdb-client-driver" = doDistribute super."rethinkdb-client-driver_0_0_22";
   "rethinkdb-model" = dontDistribute super."rethinkdb-model";
   "rethinkdb-wereHamster" = dontDistribute super."rethinkdb-wereHamster";
-  "retry" = doDistribute super."retry_0_7_4";
   "retryer" = dontDistribute super."retryer";
   "revdectime" = dontDistribute super."revdectime";
   "reverse-apply" = dontDistribute super."reverse-apply";
@@ -6439,6 +6734,8 @@ self: super: {
   "rezoom" = dontDistribute super."rezoom";
   "rfc3339" = dontDistribute super."rfc3339";
   "rhythm-game-tutorial" = dontDistribute super."rhythm-game-tutorial";
+  "riak" = doDistribute super."riak_1_0_1_1";
+  "riak-protobuf" = doDistribute super."riak-protobuf_0_21_0_0";
   "richreports" = dontDistribute super."richreports";
   "riemann" = dontDistribute super."riemann";
   "riff" = dontDistribute super."riff";
@@ -6450,11 +6747,14 @@ self: super: {
   "rison" = dontDistribute super."rison";
   "rivers" = dontDistribute super."rivers";
   "rivet" = dontDistribute super."rivet";
+  "rivet-adaptor-postgresql" = dontDistribute super."rivet-adaptor-postgresql";
+  "rivet-autoimporter" = dontDistribute super."rivet-autoimporter";
   "rivet-core" = dontDistribute super."rivet-core";
   "rivet-migration" = dontDistribute super."rivet-migration";
   "rivet-simple-deploy" = dontDistribute super."rivet-simple-deploy";
   "rlglue" = dontDistribute super."rlglue";
   "rlist" = dontDistribute super."rlist";
+  "rlwe-challenges" = dontDistribute super."rlwe-challenges";
   "rmonad" = dontDistribute super."rmonad";
   "rncryptor" = dontDistribute super."rncryptor";
   "robin" = dontDistribute super."robin";
@@ -6475,6 +6775,8 @@ self: super: {
   "rosa" = dontDistribute super."rosa";
   "rose-trie" = dontDistribute super."rose-trie";
   "roshask" = dontDistribute super."roshask";
+  "rosmsg" = dontDistribute super."rosmsg";
+  "rospkg" = dontDistribute super."rospkg";
   "rosso" = dontDistribute super."rosso";
   "rot13" = dontDistribute super."rot13";
   "roundRobin" = dontDistribute super."roundRobin";
@@ -6506,6 +6808,7 @@ self: super: {
   "ruby-marshal" = dontDistribute super."ruby-marshal";
   "ruby-qq" = dontDistribute super."ruby-qq";
   "ruff" = dontDistribute super."ruff";
+  "ruin" = dontDistribute super."ruin";
   "ruler" = dontDistribute super."ruler";
   "ruler-core" = dontDistribute super."ruler-core";
   "rungekutta" = dontDistribute super."rungekutta";
@@ -6524,6 +6827,7 @@ self: super: {
   "safe-plugins" = dontDistribute super."safe-plugins";
   "safe-printf" = dontDistribute super."safe-printf";
   "safeint" = dontDistribute super."safeint";
+  "safepath" = dontDistribute super."safepath";
   "safer-file-handles" = dontDistribute super."safer-file-handles";
   "safer-file-handles-bytestring" = dontDistribute super."safer-file-handles-bytestring";
   "safer-file-handles-text" = dontDistribute super."safer-file-handles-text";
@@ -6582,7 +6886,6 @@ self: super: {
   "sci-ratio" = dontDistribute super."sci-ratio";
   "science-constants" = dontDistribute super."science-constants";
   "science-constants-dimensional" = dontDistribute super."science-constants-dimensional";
-  "scientific" = doDistribute super."scientific_0_3_4_8";
   "scion" = dontDistribute super."scion";
   "scion-browser" = dontDistribute super."scion-browser";
   "scons2dot" = dontDistribute super."scons2dot";
@@ -6609,7 +6912,7 @@ self: super: {
   "scyther-proof" = dontDistribute super."scyther-proof";
   "sde-solver" = dontDistribute super."sde-solver";
   "sdf2p1-parser" = dontDistribute super."sdf2p1-parser";
-  "sdl2" = doDistribute super."sdl2_2_1_1";
+  "sdl2" = doDistribute super."sdl2_2_1_2_1";
   "sdl2-cairo" = dontDistribute super."sdl2-cairo";
   "sdl2-cairo-image" = dontDistribute super."sdl2-cairo-image";
   "sdl2-compositor" = dontDistribute super."sdl2-compositor";
@@ -6668,13 +6971,19 @@ self: super: {
   "serv-wai" = dontDistribute super."serv-wai";
   "servant-aeson-specs" = dontDistribute super."servant-aeson-specs";
   "servant-auth-cookie" = dontDistribute super."servant-auth-cookie";
+  "servant-auth-hmac" = dontDistribute super."servant-auth-hmac";
+  "servant-auth-token" = dontDistribute super."servant-auth-token";
+  "servant-auth-token-api" = dontDistribute super."servant-auth-token-api";
+  "servant-cassava" = doDistribute super."servant-cassava_0_7_1";
   "servant-csharp" = dontDistribute super."servant-csharp";
   "servant-ede" = dontDistribute super."servant-ede";
   "servant-elm" = dontDistribute super."servant-elm";
   "servant-examples" = dontDistribute super."servant-examples";
   "servant-github" = dontDistribute super."servant-github";
+  "servant-github-webhook" = dontDistribute super."servant-github-webhook";
   "servant-haxl-client" = dontDistribute super."servant-haxl-client";
   "servant-jquery" = dontDistribute super."servant-jquery";
+  "servant-matrix-param" = dontDistribute super."servant-matrix-param";
   "servant-pandoc" = dontDistribute super."servant-pandoc";
   "servant-pool" = dontDistribute super."servant-pool";
   "servant-postgresql" = dontDistribute super."servant-postgresql";
@@ -6683,6 +6992,7 @@ self: super: {
   "servant-response" = dontDistribute super."servant-response";
   "servant-router" = dontDistribute super."servant-router";
   "servant-scotty" = dontDistribute super."servant-scotty";
+  "servant-smsc-ru" = dontDistribute super."servant-smsc-ru";
   "servant-subscriber" = dontDistribute super."servant-subscriber";
   "servant-swagger" = doDistribute super."servant-swagger_1_0_3";
   "servant-swagger-ui" = dontDistribute super."servant-swagger-ui";
@@ -6719,6 +7029,7 @@ self: super: {
   "shake-pack" = dontDistribute super."shake-pack";
   "shake-persist" = dontDistribute super."shake-persist";
   "shaker" = dontDistribute super."shaker";
+  "shakespeare" = doDistribute super."shakespeare_2_0_9";
   "shakespeare-babel" = dontDistribute super."shakespeare-babel";
   "shakespeare-css" = dontDistribute super."shakespeare-css";
   "shakespeare-i18n" = dontDistribute super."shakespeare-i18n";
@@ -6770,6 +7081,8 @@ self: super: {
   "simple-conduit" = dontDistribute super."simple-conduit";
   "simple-config" = dontDistribute super."simple-config";
   "simple-css" = dontDistribute super."simple-css";
+  "simple-download" = dontDistribute super."simple-download";
+  "simple-effects" = dontDistribute super."simple-effects";
   "simple-eval" = dontDistribute super."simple-eval";
   "simple-firewire" = dontDistribute super."simple-firewire";
   "simple-form" = dontDistribute super."simple-form";
@@ -6778,6 +7091,7 @@ self: super: {
   "simple-get-opt" = dontDistribute super."simple-get-opt";
   "simple-index" = dontDistribute super."simple-index";
   "simple-log-syslog" = dontDistribute super."simple-log-syslog";
+  "simple-logger" = dontDistribute super."simple-logger";
   "simple-neural-networks" = dontDistribute super."simple-neural-networks";
   "simple-nix" = dontDistribute super."simple-nix";
   "simple-observer" = dontDistribute super."simple-observer";
@@ -6791,6 +7105,7 @@ self: super: {
   "simple-tabular" = dontDistribute super."simple-tabular";
   "simple-tar" = dontDistribute super."simple-tar";
   "simple-vec3" = dontDistribute super."simple-vec3";
+  "simple-zipper" = dontDistribute super."simple-zipper";
   "simpleargs" = dontDistribute super."simpleargs";
   "simpleirc-lens" = dontDistribute super."simpleirc-lens";
   "simplenote" = dontDistribute super."simplenote";
@@ -6803,6 +7118,7 @@ self: super: {
   "simseq" = dontDistribute super."simseq";
   "simtreelo" = dontDistribute super."simtreelo";
   "sindre" = dontDistribute super."sindre";
+  "singleton-bool" = dontDistribute super."singleton-bool";
   "singleton-nats" = dontDistribute super."singleton-nats";
   "singletons" = doDistribute super."singletons_2_0_1";
   "sink" = dontDistribute super."sink";
@@ -6824,12 +7140,15 @@ self: super: {
   "slack" = dontDistribute super."slack";
   "slack-api" = dontDistribute super."slack-api";
   "slack-notify-haskell" = dontDistribute super."slack-notify-haskell";
+  "slave-thread" = doDistribute super."slave-thread_1_0_1_1";
   "sleep" = dontDistribute super."sleep";
   "slice-cpp-gen" = dontDistribute super."slice-cpp-gen";
   "slidemews" = dontDistribute super."slidemews";
+  "slim" = dontDistribute super."slim";
   "sloane" = dontDistribute super."sloane";
   "slot-lambda" = dontDistribute super."slot-lambda";
   "sloth" = dontDistribute super."sloth";
+  "slug" = doDistribute super."slug_0_1_4";
   "smallarray" = dontDistribute super."smallarray";
   "smallcheck-laws" = dontDistribute super."smallcheck-laws";
   "smallcheck-lens" = dontDistribute super."smallcheck-lens";
@@ -6843,6 +7162,7 @@ self: super: {
   "smartword" = dontDistribute super."smartword";
   "sme" = dontDistribute super."sme";
   "smerdyakov" = dontDistribute super."smerdyakov";
+  "smoothie" = doDistribute super."smoothie_0_4_2_2";
   "smsaero" = dontDistribute super."smsaero";
   "smt-lib" = dontDistribute super."smt-lib";
   "smtlib2" = dontDistribute super."smtlib2";
@@ -6851,12 +7171,14 @@ self: super: {
   "smtps-gmail" = dontDistribute super."smtps-gmail";
   "snake" = dontDistribute super."snake";
   "snake-game" = dontDistribute super."snake-game";
+  "snap" = doDistribute super."snap_0_14_0_7";
   "snap-accept" = dontDistribute super."snap-accept";
   "snap-app" = dontDistribute super."snap-app";
   "snap-auth-cli" = dontDistribute super."snap-auth-cli";
   "snap-blaze" = dontDistribute super."snap-blaze";
   "snap-blaze-clay" = dontDistribute super."snap-blaze-clay";
   "snap-configuration-utilities" = dontDistribute super."snap-configuration-utilities";
+  "snap-core" = doDistribute super."snap-core_0_9_8_0";
   "snap-cors" = dontDistribute super."snap-cors";
   "snap-elm" = dontDistribute super."snap-elm";
   "snap-error-collector" = dontDistribute super."snap-error-collector";
@@ -6866,6 +7188,8 @@ self: super: {
   "snap-loader-static" = dontDistribute super."snap-loader-static";
   "snap-predicates" = dontDistribute super."snap-predicates";
   "snap-routes" = dontDistribute super."snap-routes";
+  "snap-server" = doDistribute super."snap-server_0_9_5_1";
+  "snap-templates" = dontDistribute super."snap-templates";
   "snap-testing" = dontDistribute super."snap-testing";
   "snap-utils" = dontDistribute super."snap-utils";
   "snap-web-routes" = dontDistribute super."snap-web-routes";
@@ -6899,6 +7223,7 @@ self: super: {
   "snaplet-rest" = dontDistribute super."snaplet-rest";
   "snaplet-riak" = dontDistribute super."snaplet-riak";
   "snaplet-sass" = dontDistribute super."snaplet-sass";
+  "snaplet-scoped-session" = dontDistribute super."snaplet-scoped-session";
   "snaplet-sedna" = dontDistribute super."snaplet-sedna";
   "snaplet-ses-html" = dontDistribute super."snaplet-ses-html";
   "snaplet-sqlite-simple" = dontDistribute super."snaplet-sqlite-simple";
@@ -6917,9 +7242,13 @@ self: super: {
   "snm" = dontDistribute super."snm";
   "snow-white" = dontDistribute super."snow-white";
   "snowball" = dontDistribute super."snowball";
+  "snowflake-core" = dontDistribute super."snowflake-core";
+  "snowflake-server" = dontDistribute super."snowflake-server";
   "snowglobe" = dontDistribute super."snowglobe";
+  "soap" = doDistribute super."soap_0_2_3_0";
   "sock2stream" = dontDistribute super."sock2stream";
   "sockaddr" = dontDistribute super."sockaddr";
+  "socket" = doDistribute super."socket_0_6_0_1";
   "socket-activation" = dontDistribute super."socket-activation";
   "socket-sctp" = dontDistribute super."socket-sctp";
   "socketio" = dontDistribute super."socketio";
@@ -7015,7 +7344,7 @@ self: super: {
   "stack-prism" = dontDistribute super."stack-prism";
   "stack-run" = dontDistribute super."stack-run";
   "stackage-curator" = doDistribute super."stackage-curator_0_14_0";
-  "stackage-install" = doDistribute super."stackage-install_0_1_1_1";
+  "stackage-upload" = doDistribute super."stackage-upload_0_1_0_5";
   "standalone-derive-topdown" = dontDistribute super."standalone-derive-topdown";
   "standalone-haddock" = dontDistribute super."standalone-haddock";
   "star-to-star" = dontDistribute super."star-to-star";
@@ -7024,6 +7353,7 @@ self: super: {
   "starrover2" = dontDistribute super."starrover2";
   "stash" = dontDistribute super."stash";
   "state" = dontDistribute super."state";
+  "state-bag" = dontDistribute super."state-bag";
   "state-record" = dontDistribute super."state-record";
   "statechart" = dontDistribute super."statechart";
   "stateful-mtl" = dontDistribute super."stateful-mtl";
@@ -7055,6 +7385,7 @@ self: super: {
   "stm-channelize" = dontDistribute super."stm-channelize";
   "stm-chunked-queues" = dontDistribute super."stm-chunked-queues";
   "stm-conduit" = doDistribute super."stm-conduit_2_8_0";
+  "stm-containers" = doDistribute super."stm-containers_0_2_14";
   "stm-firehose" = dontDistribute super."stm-firehose";
   "stm-io-hooks" = dontDistribute super."stm-io-hooks";
   "stm-lifted" = dontDistribute super."stm-lifted";
@@ -7066,6 +7397,7 @@ self: super: {
   "stm-split" = dontDistribute super."stm-split";
   "stm-tlist" = dontDistribute super."stm-tlist";
   "stmcontrol" = dontDistribute super."stmcontrol";
+  "stochastic" = dontDistribute super."stochastic";
   "stomp-conduit" = dontDistribute super."stomp-conduit";
   "stomp-patterns" = dontDistribute super."stomp-patterns";
   "stomp-queue" = dontDistribute super."stomp-queue";
@@ -7080,6 +7412,7 @@ self: super: {
   "store" = dontDistribute super."store";
   "store-core" = dontDistribute super."store-core";
   "str" = dontDistribute super."str";
+  "stratosphere" = doDistribute super."stratosphere_0_1_2_1";
   "stratum-tool" = dontDistribute super."stratum-tool";
   "stratux" = dontDistribute super."stratux";
   "stratux-http" = dontDistribute super."stratux-http";
@@ -7126,6 +7459,7 @@ self: super: {
   "structures" = dontDistribute super."structures";
   "stunclient" = dontDistribute super."stunclient";
   "stunts" = dontDistribute super."stunts";
+  "stylish-haskell" = doDistribute super."stylish-haskell_0_5_17_0";
   "stylized" = dontDistribute super."stylized";
   "sub-state" = dontDistribute super."sub-state";
   "subhask" = dontDistribute super."subhask";
@@ -7172,8 +7506,8 @@ self: super: {
   "sym-plot" = dontDistribute super."sym-plot";
   "symengine" = dontDistribute super."symengine";
   "symengine-hs" = dontDistribute super."symengine-hs";
+  "symon" = dontDistribute super."symon";
   "sync" = dontDistribute super."sync";
-  "sync-mht" = doDistribute super."sync-mht_0_3_8_4";
   "synchronous-channels" = dontDistribute super."synchronous-channels";
   "syncthing-hs" = dontDistribute super."syncthing-hs";
   "synt" = dontDistribute super."synt";
@@ -7227,6 +7561,7 @@ self: super: {
   "tag-bits" = dontDistribute super."tag-bits";
   "tag-stream" = dontDistribute super."tag-stream";
   "tagchup" = dontDistribute super."tagchup";
+  "tagged" = doDistribute super."tagged_0_8_4";
   "tagged-exception-core" = dontDistribute super."tagged-exception-core";
   "tagged-list" = dontDistribute super."tagged-list";
   "tagged-th" = dontDistribute super."tagged-th";
@@ -7245,6 +7580,7 @@ self: super: {
   "tak-ai" = dontDistribute super."tak-ai";
   "takahashi" = dontDistribute super."takahashi";
   "takusen-oracle" = dontDistribute super."takusen-oracle";
+  "tal" = dontDistribute super."tal";
   "tamarin-prover" = dontDistribute super."tamarin-prover";
   "tamarin-prover-term" = dontDistribute super."tamarin-prover-term";
   "tamarin-prover-theory" = dontDistribute super."tamarin-prover-theory";
@@ -7254,13 +7590,16 @@ self: super: {
   "task" = dontDistribute super."task";
   "task-distribution" = dontDistribute super."task-distribution";
   "taskpool" = dontDistribute super."taskpool";
+  "tasty" = doDistribute super."tasty_0_11_0_3";
+  "tasty-dejafu" = doDistribute super."tasty-dejafu_0_3_0_1";
+  "tasty-golden" = doDistribute super."tasty-golden_2_3_1";
   "tasty-groundhog-converters" = dontDistribute super."tasty-groundhog-converters";
   "tasty-hunit-adapter" = dontDistribute super."tasty-hunit-adapter";
   "tasty-integrate" = dontDistribute super."tasty-integrate";
   "tasty-laws" = dontDistribute super."tasty-laws";
   "tasty-lens" = dontDistribute super."tasty-lens";
   "tasty-program" = dontDistribute super."tasty-program";
-  "tasty-rerun" = doDistribute super."tasty-rerun_1_1_5";
+  "tasty-silver" = doDistribute super."tasty-silver_3_1_8_1";
   "tateti-tateti" = dontDistribute super."tateti-tateti";
   "tau" = dontDistribute super."tau";
   "tbox" = dontDistribute super."tbox";
@@ -7275,11 +7614,13 @@ self: super: {
   "teams" = dontDistribute super."teams";
   "teeth" = dontDistribute super."teeth";
   "telegram" = dontDistribute super."telegram";
+  "telegram-api" = doDistribute super."telegram-api_0_4_3_1";
   "teleport" = dontDistribute super."teleport";
   "template-default" = dontDistribute super."template-default";
   "template-haskell-util" = dontDistribute super."template-haskell-util";
   "template-hsml" = dontDistribute super."template-hsml";
   "template-yj" = dontDistribute super."template-yj";
+  "templateify" = dontDistribute super."templateify";
   "templatepg" = dontDistribute super."templatepg";
   "templater" = dontDistribute super."templater";
   "tempo" = dontDistribute super."tempo";
@@ -7326,6 +7667,7 @@ self: super: {
   "testrunner" = dontDistribute super."testrunner";
   "tetris" = dontDistribute super."tetris";
   "tex2txt" = dontDistribute super."tex2txt";
+  "texmath" = doDistribute super."texmath_0_8_6_4";
   "texrunner" = dontDistribute super."texrunner";
   "text-all" = dontDistribute super."text-all";
   "text-and-plots" = dontDistribute super."text-and-plots";
@@ -7338,6 +7680,8 @@ self: super: {
   "text-lips" = dontDistribute super."text-lips";
   "text-loc" = dontDistribute super."text-loc";
   "text-locale-encoding" = dontDistribute super."text-locale-encoding";
+  "text-markup" = dontDistribute super."text-markup";
+  "text-metrics" = dontDistribute super."text-metrics";
   "text-normal" = dontDistribute super."text-normal";
   "text-position" = dontDistribute super."text-position";
   "text-printer" = dontDistribute super."text-printer";
@@ -7350,6 +7694,7 @@ self: super: {
   "text-utf7" = dontDistribute super."text-utf7";
   "text-xml-generic" = dontDistribute super."text-xml-generic";
   "text-xml-qq" = dontDistribute super."text-xml-qq";
+  "text-zipper" = doDistribute super."text-zipper_0_4";
   "text-zipper-monad" = dontDistribute super."text-zipper-monad";
   "text1" = dontDistribute super."text1";
   "textPlot" = dontDistribute super."textPlot";
@@ -7372,7 +7717,6 @@ self: super: {
   "th-instances" = dontDistribute super."th-instances";
   "th-kinds" = dontDistribute super."th-kinds";
   "th-kinds-fork" = dontDistribute super."th-kinds-fork";
-  "th-lift-instances" = doDistribute super."th-lift-instances_0_1_9";
   "th-orphans" = doDistribute super."th-orphans_0_13_0";
   "th-printf" = dontDistribute super."th-printf";
   "th-sccs" = dontDistribute super."th-sccs";
@@ -7446,9 +7790,11 @@ self: super: {
   "timeprint" = dontDistribute super."timeprint";
   "timers" = dontDistribute super."timers";
   "timers-updatable" = dontDistribute super."timers-updatable";
+  "timespan" = dontDistribute super."timespan";
   "timestamp-subprocess-lines" = dontDistribute super."timestamp-subprocess-lines";
   "timestamper" = dontDistribute super."timestamper";
   "timezone-olson-th" = dontDistribute super."timezone-olson-th";
+  "timezone-series" = doDistribute super."timezone-series_0_1_5_1";
   "timing-convenience" = dontDistribute super."timing-convenience";
   "tinyMesh" = dontDistribute super."tinyMesh";
   "tip-haskell-frontend" = dontDistribute super."tip-haskell-frontend";
@@ -7484,6 +7830,7 @@ self: super: {
   "total-maps" = dontDistribute super."total-maps";
   "touched" = dontDistribute super."touched";
   "toysolver" = dontDistribute super."toysolver";
+  "tpar" = dontDistribute super."tpar";
   "tpdb" = dontDistribute super."tpdb";
   "trace" = dontDistribute super."trace";
   "trace-call" = dontDistribute super."trace-call";
@@ -7514,6 +7861,7 @@ self: super: {
   "trawl" = dontDistribute super."trawl";
   "traypoweroff" = dontDistribute super."traypoweroff";
   "tree-monad" = dontDistribute super."tree-monad";
+  "treemap" = dontDistribute super."treemap";
   "treemap-html" = dontDistribute super."treemap-html";
   "treemap-html-tools" = dontDistribute super."treemap-html-tools";
   "treersec" = dontDistribute super."treersec";
@@ -7540,6 +7888,7 @@ self: super: {
   "tst" = dontDistribute super."tst";
   "tsvsql" = dontDistribute super."tsvsql";
   "ttask" = dontDistribute super."ttask";
+  "tttool" = doDistribute super."tttool_1_6_1_1";
   "tubes" = dontDistribute super."tubes";
   "tuntap" = dontDistribute super."tuntap";
   "tup-functor" = dontDistribute super."tup-functor";
@@ -7550,6 +7899,7 @@ self: super: {
   "tuple-morph" = dontDistribute super."tuple-morph";
   "tupleinstances" = dontDistribute super."tupleinstances";
   "turing" = dontDistribute super."turing";
+  "turing-machines" = dontDistribute super."turing-machines";
   "turing-music" = dontDistribute super."turing-music";
   "turingMachine" = dontDistribute super."turingMachine";
   "turkish-deasciifier" = dontDistribute super."turkish-deasciifier";
@@ -7576,6 +7926,7 @@ self: super: {
   "twitch" = dontDistribute super."twitch";
   "twitter" = dontDistribute super."twitter";
   "twitter-enumerator" = dontDistribute super."twitter-enumerator";
+  "twitter-feed" = doDistribute super."twitter-feed_0_2_0_7";
   "tx" = dontDistribute super."tx";
   "txt-sushi" = dontDistribute super."txt-sushi";
   "txt2rtf" = dontDistribute super."txt2rtf";
@@ -7609,6 +7960,7 @@ self: super: {
   "type-ord-spine-cereal" = dontDistribute super."type-ord-spine-cereal";
   "type-prelude" = dontDistribute super."type-prelude";
   "type-settheory" = dontDistribute super."type-settheory";
+  "type-spec" = dontDistribute super."type-spec";
   "type-spine" = dontDistribute super."type-spine";
   "type-structure" = dontDistribute super."type-structure";
   "type-sub-th" = dontDistribute super."type-sub-th";
@@ -7626,6 +7978,7 @@ self: super: {
   "typesafe-endian" = dontDistribute super."typesafe-endian";
   "typescript-docs" = dontDistribute super."typescript-docs";
   "typical" = dontDistribute super."typical";
+  "tz" = doDistribute super."tz_0_1_1_1";
   "uAgda" = dontDistribute super."uAgda";
   "uacpid" = dontDistribute super."uacpid";
   "uber" = dontDistribute super."uber";
@@ -7642,6 +7995,7 @@ self: super: {
   "ui-command" = dontDistribute super."ui-command";
   "uid" = dontDistribute super."uid";
   "una" = dontDistribute super."una";
+  "unagi-bloomfilter" = dontDistribute super."unagi-bloomfilter";
   "unagi-chan" = dontDistribute super."unagi-chan";
   "unagi-streams" = dontDistribute super."unagi-streams";
   "unamb" = dontDistribute super."unamb";
@@ -7694,6 +8048,7 @@ self: super: {
   "unix-memory" = dontDistribute super."unix-memory";
   "unix-process-conduit" = dontDistribute super."unix-process-conduit";
   "unix-pty-light" = dontDistribute super."unix-pty-light";
+  "unix-time" = doDistribute super."unix-time_0_3_6";
   "unlambda" = dontDistribute super."unlambda";
   "unlit" = dontDistribute super."unlit";
   "unm-hip" = dontDistribute super."unm-hip";
@@ -7717,7 +8072,9 @@ self: super: {
   "ureader" = dontDistribute super."ureader";
   "urembed" = dontDistribute super."urembed";
   "uri" = dontDistribute super."uri";
+  "uri-bytestring" = doDistribute super."uri-bytestring_0_2_1_2";
   "uri-conduit" = dontDistribute super."uri-conduit";
+  "uri-encode" = doDistribute super."uri-encode_1_5_0_4";
   "uri-enumerator" = dontDistribute super."uri-enumerator";
   "uri-enumerator-file" = dontDistribute super."uri-enumerator-file";
   "uri-template" = dontDistribute super."uri-template";
@@ -7734,9 +8091,11 @@ self: super: {
   "usb-id-database" = dontDistribute super."usb-id-database";
   "usb-iteratee" = dontDistribute super."usb-iteratee";
   "usb-safe" = dontDistribute super."usb-safe";
+  "userid" = doDistribute super."userid_0_1_2_6";
   "utc" = dontDistribute super."utc";
   "utf8-env" = dontDistribute super."utf8-env";
   "utf8-prelude" = dontDistribute super."utf8-prelude";
+  "utility-ht" = doDistribute super."utility-ht_0_0_11";
   "uu-cco" = dontDistribute super."uu-cco";
   "uu-cco-examples" = dontDistribute super."uu-cco-examples";
   "uu-cco-hut-parsing" = dontDistribute super."uu-cco-hut-parsing";
@@ -7767,9 +8126,9 @@ self: super: {
   "valid-names" = dontDistribute super."valid-names";
   "validate" = dontDistribute super."validate";
   "validated-literals" = dontDistribute super."validated-literals";
-  "validation" = doDistribute super."validation_0_5_2";
   "validations" = dontDistribute super."validations";
   "validity" = dontDistribute super."validity";
+  "validity-containers" = dontDistribute super."validity-containers";
   "value-supply" = dontDistribute super."value-supply";
   "vampire" = dontDistribute super."vampire";
   "var" = dontDistribute super."var";
@@ -7789,9 +8148,11 @@ self: super: {
   "vect-floating-accelerate" = dontDistribute super."vect-floating-accelerate";
   "vect-opengl" = dontDistribute super."vect-opengl";
   "vector-binary" = dontDistribute super."vector-binary";
+  "vector-bytes-instances" = dontDistribute super."vector-bytes-instances";
   "vector-bytestring" = dontDistribute super."vector-bytestring";
   "vector-clock" = dontDistribute super."vector-clock";
   "vector-conduit" = dontDistribute super."vector-conduit";
+  "vector-fftw" = doDistribute super."vector-fftw_0_1_3_6";
   "vector-functorlazy" = dontDistribute super."vector-functorlazy";
   "vector-heterogenous" = dontDistribute super."vector-heterogenous";
   "vector-instances-collections" = dontDistribute super."vector-instances-collections";
@@ -7799,6 +8160,7 @@ self: super: {
   "vector-random" = dontDistribute super."vector-random";
   "vector-read-instances" = dontDistribute super."vector-read-instances";
   "vector-sized" = dontDistribute super."vector-sized";
+  "vector-space" = doDistribute super."vector-space_0_10_3";
   "vector-space-map" = dontDistribute super."vector-space-map";
   "vector-space-opengl" = dontDistribute super."vector-space-opengl";
   "vector-space-points" = dontDistribute super."vector-space-points";
@@ -7846,9 +8208,11 @@ self: super: {
   "waddle" = dontDistribute super."waddle";
   "wai-accept-language" = dontDistribute super."wai-accept-language";
   "wai-app-file-cgi" = dontDistribute super."wai-app-file-cgi";
+  "wai-app-static" = doDistribute super."wai-app-static_3_1_5";
   "wai-devel" = dontDistribute super."wai-devel";
   "wai-digestive-functors" = dontDistribute super."wai-digestive-functors";
   "wai-dispatch" = dontDistribute super."wai-dispatch";
+  "wai-extra" = doDistribute super."wai-extra_3_0_16_1";
   "wai-frontend-monadcgi" = dontDistribute super."wai-frontend-monadcgi";
   "wai-graceful" = dontDistribute super."wai-graceful";
   "wai-handler-devel" = dontDistribute super."wai-handler-devel";
@@ -7867,7 +8231,8 @@ self: super: {
   "wai-middleware-cache" = dontDistribute super."wai-middleware-cache";
   "wai-middleware-cache-redis" = dontDistribute super."wai-middleware-cache-redis";
   "wai-middleware-catch" = dontDistribute super."wai-middleware-catch";
-  "wai-middleware-crowd" = doDistribute super."wai-middleware-crowd_0_1_4";
+  "wai-middleware-content-type" = doDistribute super."wai-middleware-content-type_0_4_0";
+  "wai-middleware-crowd" = doDistribute super."wai-middleware-crowd_0_1_4_1";
   "wai-middleware-etag" = dontDistribute super."wai-middleware-etag";
   "wai-middleware-gunzip" = dontDistribute super."wai-middleware-gunzip";
   "wai-middleware-headers" = dontDistribute super."wai-middleware-headers";
@@ -7877,9 +8242,12 @@ self: super: {
   "wai-middleware-route" = dontDistribute super."wai-middleware-route";
   "wai-middleware-static-caching" = dontDistribute super."wai-middleware-static-caching";
   "wai-middleware-verbs" = doDistribute super."wai-middleware-verbs_0_2_0";
+  "wai-predicates" = doDistribute super."wai-predicates_0_8_6";
   "wai-request-spec" = dontDistribute super."wai-request-spec";
   "wai-responsible" = dontDistribute super."wai-responsible";
+  "wai-route" = doDistribute super."wai-route_0_3_1";
   "wai-router" = dontDistribute super."wai-router";
+  "wai-routing" = doDistribute super."wai-routing_0_12_3";
   "wai-session-alt" = dontDistribute super."wai-session-alt";
   "wai-session-clientsession" = dontDistribute super."wai-session-clientsession";
   "wai-session-mysql" = dontDistribute super."wai-session-mysql";
@@ -7889,9 +8257,11 @@ self: super: {
   "wai-test" = dontDistribute super."wai-test";
   "wai-thrift" = dontDistribute super."wai-thrift";
   "wai-throttler" = dontDistribute super."wai-throttler";
+  "wai-websockets" = doDistribute super."wai-websockets_3_0_0_9";
   "wait-handle" = dontDistribute super."wait-handle";
   "waitfree" = dontDistribute super."waitfree";
   "warc" = dontDistribute super."warc";
+  "warp" = doDistribute super."warp_3_2_7";
   "warp-dynamic" = dontDistribute super."warp-dynamic";
   "warp-static" = dontDistribute super."warp-static";
   "warp-tls-uid" = dontDistribute super."warp-tls-uid";
@@ -7899,7 +8269,6 @@ self: super: {
   "watcher" = dontDistribute super."watcher";
   "watchit" = dontDistribute super."watchit";
   "wavconvert" = dontDistribute super."wavconvert";
-  "wavefront" = doDistribute super."wavefront_0_7";
   "wavesurfer" = dontDistribute super."wavesurfer";
   "wavy" = dontDistribute super."wavy";
   "wcwidth" = dontDistribute super."wcwidth";
@@ -7910,6 +8279,7 @@ self: super: {
   "web-inv-route" = dontDistribute super."web-inv-route";
   "web-mongrel2" = dontDistribute super."web-mongrel2";
   "web-page" = dontDistribute super."web-page";
+  "web-routes" = doDistribute super."web-routes_0_27_10";
   "web-routes-mtl" = dontDistribute super."web-routes-mtl";
   "web-routes-quasi" = dontDistribute super."web-routes-quasi";
   "web-routes-regular" = dontDistribute super."web-routes-regular";
@@ -7920,6 +8290,7 @@ self: super: {
   "webcrank" = dontDistribute super."webcrank";
   "webcrank-dispatch" = dontDistribute super."webcrank-dispatch";
   "webcrank-wai" = dontDistribute super."webcrank-wai";
+  "webdriver-angular" = doDistribute super."webdriver-angular_0_1_10";
   "webdriver-snoy" = dontDistribute super."webdriver-snoy";
   "webfinger-client" = dontDistribute super."webfinger-client";
   "webidl" = dontDistribute super."webidl";
@@ -7931,6 +8302,8 @@ self: super: {
   "webrtc-vad" = dontDistribute super."webrtc-vad";
   "webserver" = dontDistribute super."webserver";
   "websnap" = dontDistribute super."websnap";
+  "websockets" = doDistribute super."websockets_0_9_6_2";
+  "websockets-snap" = doDistribute super."websockets-snap_0_9_2_0";
   "webwire" = dontDistribute super."webwire";
   "wedding-announcement" = dontDistribute super."wedding-announcement";
   "wedged" = dontDistribute super."wedged";
@@ -7938,6 +8311,7 @@ self: super: {
   "weighted-search" = dontDistribute super."weighted-search";
   "welshy" = dontDistribute super."welshy";
   "werewolf" = doDistribute super."werewolf_1_0_2_2";
+  "werewolf-slack" = doDistribute super."werewolf-slack_1_0_1_4";
   "wheb-mongo" = dontDistribute super."wheb-mongo";
   "wheb-redis" = dontDistribute super."wheb-redis";
   "wheb-strapped" = dontDistribute super."wheb-strapped";
@@ -7955,6 +8329,7 @@ self: super: {
   "winerror" = dontDistribute super."winerror";
   "winio" = dontDistribute super."winio";
   "wire-streams" = dontDistribute super."wire-streams";
+  "wires" = dontDistribute super."wires";
   "wiring" = dontDistribute super."wiring";
   "witness" = dontDistribute super."witness";
   "witty" = dontDistribute super."witty";
@@ -7973,12 +8348,18 @@ self: super: {
   "words" = dontDistribute super."words";
   "wordsearch" = dontDistribute super."wordsearch";
   "wordsetdiff" = dontDistribute super."wordsetdiff";
+  "workdays" = dontDistribute super."workdays";
   "workflow-osx" = dontDistribute super."workflow-osx";
+  "workflow-types" = dontDistribute super."workflow-types";
+  "workflow-windows" = dontDistribute super."workflow-windows";
   "wp-archivebot" = dontDistribute super."wp-archivebot";
   "wraparound" = dontDistribute super."wraparound";
   "wraxml" = dontDistribute super."wraxml";
   "wreq-sb" = dontDistribute super."wreq-sb";
   "wright" = dontDistribute super."wright";
+  "writer-cps-monads-tf" = dontDistribute super."writer-cps-monads-tf";
+  "writer-cps-mtl" = dontDistribute super."writer-cps-mtl";
+  "writer-cps-transformers" = dontDistribute super."writer-cps-transformers";
   "wsdl" = dontDistribute super."wsdl";
   "wsedit" = dontDistribute super."wsedit";
   "wtk" = dontDistribute super."wtk";
@@ -8003,12 +8384,14 @@ self: super: {
   "x11-xim" = dontDistribute super."x11-xim";
   "x11-xinput" = dontDistribute super."x11-xinput";
   "x509-util" = dontDistribute super."x509-util";
+  "x86-64bit" = dontDistribute super."x86-64bit";
   "xattr" = dontDistribute super."xattr";
   "xbattbar" = dontDistribute super."xbattbar";
   "xcb-types" = dontDistribute super."xcb-types";
   "xcffib" = dontDistribute super."xcffib";
   "xchat-plugin" = dontDistribute super."xchat-plugin";
   "xcp" = dontDistribute super."xcp";
+  "xdcc" = doDistribute super."xdcc_1_0_4";
   "xdg-userdirs" = dontDistribute super."xdg-userdirs";
   "xdot" = dontDistribute super."xdot";
   "xfconf" = dontDistribute super."xfconf";
@@ -8024,7 +8407,7 @@ self: super: {
   "xinput-conduit" = dontDistribute super."xinput-conduit";
   "xkbcommon" = dontDistribute super."xkbcommon";
   "xkcd" = dontDistribute super."xkcd";
-  "xlsx" = doDistribute super."xlsx_0_2_2_2";
+  "xlsx" = doDistribute super."xlsx_0_2_3";
   "xlsx-templater" = dontDistribute super."xlsx-templater";
   "xml-basic" = dontDistribute super."xml-basic";
   "xml-catalog" = dontDistribute super."xml-catalog";
@@ -8046,6 +8429,7 @@ self: super: {
   "xml2html" = dontDistribute super."xml2html";
   "xml2json" = dontDistribute super."xml2json";
   "xml2x" = dontDistribute super."xml2x";
+  "xmlhtml" = doDistribute super."xmlhtml_0_2_3_4";
   "xmltv" = dontDistribute super."xmltv";
   "xmms2-client" = dontDistribute super."xmms2-client";
   "xmms2-client-glib" = dontDistribute super."xmms2-client-glib";
@@ -8088,6 +8472,7 @@ self: super: {
   "yajl-enumerator" = dontDistribute super."yajl-enumerator";
   "yall" = dontDistribute super."yall";
   "yamemo" = dontDistribute super."yamemo";
+  "yaml" = doDistribute super."yaml_0_8_18_1";
   "yaml-config" = dontDistribute super."yaml-config";
   "yaml-light-lens" = dontDistribute super."yaml-light-lens";
   "yaml-rpc" = dontDistribute super."yaml-rpc";
@@ -8113,7 +8498,10 @@ self: super: {
   "yeshql" = dontDistribute super."yeshql";
   "yesod-angular" = dontDistribute super."yesod-angular";
   "yesod-angular-ui" = dontDistribute super."yesod-angular-ui";
+  "yesod-auth" = doDistribute super."yesod-auth_1_4_13_3";
+  "yesod-auth-account" = doDistribute super."yesod-auth-account_1_4_2";
   "yesod-auth-bcrypt" = dontDistribute super."yesod-auth-bcrypt";
+  "yesod-auth-hashdb" = doDistribute super."yesod-auth-hashdb_1_5_1_1";
   "yesod-auth-kerberos" = dontDistribute super."yesod-auth-kerberos";
   "yesod-auth-ldap" = dontDistribute super."yesod-auth-ldap";
   "yesod-auth-ldap-mediocre" = dontDistribute super."yesod-auth-ldap-mediocre";
@@ -8123,10 +8511,12 @@ self: super: {
   "yesod-auth-pam" = dontDistribute super."yesod-auth-pam";
   "yesod-auth-smbclient" = dontDistribute super."yesod-auth-smbclient";
   "yesod-auth-zendesk" = dontDistribute super."yesod-auth-zendesk";
+  "yesod-bin" = doDistribute super."yesod-bin_1_4_18_2";
   "yesod-bootstrap" = dontDistribute super."yesod-bootstrap";
   "yesod-comments" = dontDistribute super."yesod-comments";
   "yesod-content-pdf" = dontDistribute super."yesod-content-pdf";
   "yesod-continuations" = dontDistribute super."yesod-continuations";
+  "yesod-core" = doDistribute super."yesod-core_1_4_22";
   "yesod-crud" = dontDistribute super."yesod-crud";
   "yesod-crud-persist" = dontDistribute super."yesod-crud-persist";
   "yesod-csp" = dontDistribute super."yesod-csp";
@@ -8145,6 +8535,7 @@ self: super: {
   "yesod-paginate" = dontDistribute super."yesod-paginate";
   "yesod-pagination" = dontDistribute super."yesod-pagination";
   "yesod-paginator" = dontDistribute super."yesod-paginator";
+  "yesod-persistent" = doDistribute super."yesod-persistent_1_4_0_5";
   "yesod-platform" = dontDistribute super."yesod-platform";
   "yesod-pnotify" = dontDistribute super."yesod-pnotify";
   "yesod-pure" = dontDistribute super."yesod-pure";
@@ -8161,7 +8552,9 @@ self: super: {
   "yesod-s3" = dontDistribute super."yesod-s3";
   "yesod-sass" = dontDistribute super."yesod-sass";
   "yesod-session-redis" = dontDistribute super."yesod-session-redis";
+  "yesod-static" = doDistribute super."yesod-static_1_5_0_3";
   "yesod-tableview" = dontDistribute super."yesod-tableview";
+  "yesod-test" = doDistribute super."yesod-test_1_5_1_1";
   "yesod-test-json" = dontDistribute super."yesod-test-json";
   "yesod-tls" = dontDistribute super."yesod-tls";
   "yesod-transloadit" = dontDistribute super."yesod-transloadit";
@@ -8174,6 +8567,7 @@ self: super: {
   "yi-emacs-colours" = dontDistribute super."yi-emacs-colours";
   "yi-gtk" = dontDistribute super."yi-gtk";
   "yi-monokai" = dontDistribute super."yi-monokai";
+  "yi-rope" = doDistribute super."yi-rope_0_7_0_1";
   "yi-snippet" = dontDistribute super."yi-snippet";
   "yi-solarized" = dontDistribute super."yi-solarized";
   "yi-spolsky" = dontDistribute super."yi-spolsky";
@@ -8196,6 +8590,7 @@ self: super: {
   "yxdb-utils" = dontDistribute super."yxdb-utils";
   "z3" = dontDistribute super."z3";
   "z3-encoding" = dontDistribute super."z3-encoding";
+  "zabt" = dontDistribute super."zabt";
   "zalgo" = dontDistribute super."zalgo";
   "zampolit" = dontDistribute super."zampolit";
   "zasni-gerna" = dontDistribute super."zasni-gerna";
@@ -8228,5 +8623,6 @@ self: super: {
   "zoom-refs" = dontDistribute super."zoom-refs";
   "zsh-battery" = dontDistribute super."zsh-battery";
   "ztail" = dontDistribute super."ztail";
+  "zxcvbn-c" = dontDistribute super."zxcvbn-c";
 
 }

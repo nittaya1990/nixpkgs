@@ -2,16 +2,16 @@
 
 stdenv.mkDerivation rec {
   name = "libgpg-error-${version}";
-  version = "1.23";
+  version = "1.24";
 
   src = fetchurl {
     url = "mirror://gnupg/libgpg-error/${name}.tar.bz2";
-    sha256 = "1alyjd6671drj92m0qi9943rfmf1sjjbzvmz97v4hh4cp5jpy33z";
+    sha256 = "0h75sf1ngr750c3fjfn4583q7wz40qm63jhg8vjfdrbx936f2s4j";
   };
 
   postPatch = "sed '/BUILD_TIMESTAMP=/s/=.*/=1970-01-01T00:01+0000/' -i ./configure";
 
-  outputs = [ "dev" "out" "info" ];
+  outputs = [ "out" "dev" "info" ];
   outputBin = "dev"; # deps want just the lib, most likely
 
   # If architecture-dependent MO files aren't available, they're generated

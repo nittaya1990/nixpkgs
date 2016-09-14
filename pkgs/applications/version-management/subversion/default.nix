@@ -27,7 +27,7 @@ let
     };
 
   # Can't do separate $lib and $bin, as libs reference bins
-  outputs = [ "dev" "out" "man" ];
+  outputs = [ "out" "dev" "man" ];
 
     buildInputs = [ zlib apr aprutil sqlite ]
       ++ stdenv.lib.optional httpSupport serf
@@ -90,7 +90,7 @@ let
       description = "A version control system intended to be a compelling replacement for CVS in the open source community";
       homepage = http://subversion.apache.org/;
       maintainers = with stdenv.lib.maintainers; [ eelco lovek323 ];
-      hydraPlatforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
+      platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
     };
 
   } // stdenv.lib.optionalAttrs stdenv.isDarwin {

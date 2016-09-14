@@ -12,10 +12,10 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "nano-${version}";
-  version = "2.6.1";
+  version = "2.7.0";
   src = fetchurl {
-    url = "https://nano-editor.org/dist/v2.6/${name}.tar.gz";
-    sha256 = "56f2ba1c532647bee36abd5f87a714400af0be084cf857a65bc8f41a0dc28fe5";
+    url = "mirror://gnu/nano/${name}.tar.xz";
+    sha256 = "08cmnca3s377z74yjw1afz59l2h9s40wsa9wxw5y4x5f2jaz6spq";
   };
   nativeBuildInputs = [ texinfo ] ++ optional enableNls gettext;
   buildInputs = [ ncurses ];

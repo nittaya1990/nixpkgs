@@ -2,14 +2,14 @@
 , cyrus_sasl, gdbm, gpgme, kerberos, libidn, notmuch, openssl }:
 
 stdenv.mkDerivation rec {
-  version = "20160611";
+  version = "20160910";
   name = "neomutt-${version}";
 
   src = fetchFromGitHub {
     owner = "neomutt";
     repo = "neomutt";
     rev = "neomutt-${version}";
-    sha256 = "12487hydn9x1yyxzc0x7hssgjwji3i64glmbi7synjc8arfqc5zs";
+    sha256 = "1i1idqk9l3njqsiw8n8jgjawcz9n9h5180qvpxfwg7sg9zx2sjhj";
   };
 
   buildInputs =

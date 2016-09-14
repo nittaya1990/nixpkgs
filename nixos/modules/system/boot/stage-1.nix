@@ -3,7 +3,7 @@
 # the modules necessary to mount the root file system, then calls the
 # init in the root file system to start the second boot stage.
 
-{ config, lib, pkgs, ... }:
+{ config, lib, utils, pkgs, ... }:
 
 with lib;
 
@@ -21,6 +21,12 @@ let
     kernel = modulesTree;
     allowMissing = true;
   };
+
+
+  # The initrd only has to mount `/` or any FS marked as necessary for
+  # booting (such as the FS containing `/nix/store`, or an FS needed for
+  # mounting `/`, like `/` on a loopback).
+  fileSystems = filter utils.fsNeededForBoot config.system.build.fileSystems;
 
 
   # Some additional utilities needed in stage 1, like mount, lvm, fsck
@@ -71,7 +77,7 @@ let
       ln -sf kmod $out/bin/modprobe
 
       # Copy resize2fs if needed.
-      ${optionalString (any (fs: fs.autoResize) (attrValues config.fileSystems)) ''
+      ${optionalString (any (fs: fs.autoResize) fileSystems) ''
         # We need mke2fs in the initrd.
         copy_bin_and_libs ${pkgs.e2fsprogs}/sbin/resize2fs
       ''}
@@ -87,15 +93,11 @@ let
         LDD="$(ldd $BIN)" || continue
         LIBS="$(echo "$LDD" | awk '{print $3}' | sed '/^$/d')"
         for LIB in $LIBS; do
-          [ ! -f "$out/lib/$(basename $LIB)" ] && cp -pdv $LIB $out/lib
-          while [ "$(readlink $LIB)" != "" ]; do
-            LINK="$(readlink $LIB)"
-            if [ "${LINK:0:1}" != "/" ]; then
-              LINK="$(dirname $LIB)/$LINK"
-            fi
-            LIB="$LINK"
-            [ ! -f "$out/lib/$(basename $LIB)" ] && cp -pdv $LIB $out/lib
-          done
+          TGT="$out/lib/$(basename $LIB)"
+          if [ ! -f "$TGT" ]; then
+            SRC="$(readlink -e $LIB)"
+            cp -pdv "$SRC" "$TGT"
+          fi
         done
       done
 
@@ -130,14 +132,6 @@ let
 
       ${config.boot.initrd.extraUtilsCommandsTest}
     ''; # */
-
-
-  # The initrd only has to mount / or any FS marked as necessary for
-  # booting (such as the FS containing /nix/store, or an FS needed for
-  # mounting /, like / on a loopback).
-  fileSystems = filter
-    (fs: fs.neededForBoot || elem fs.mountPoint [ "/" "/nix" "/nix/store" "/var" "/var/log" "/var/lib" "/etc" ])
-    (attrValues config.fileSystems);
 
 
   udevRules = pkgs.stdenv.mkDerivation {
@@ -196,13 +190,17 @@ let
 
     inherit udevRules extraUtils modulesClosure;
 
-    inherit (config.boot) resumeDevice devSize runSize;
+    inherit (config.boot) resumeDevice;
+
+    inherit (config.system.build) earlyMountScript;
 
     inherit (config.boot.initrd) checkJournalingFS
       preLVMCommands preDeviceCommands postDeviceCommands postMountCommands preFailCommands kernelModules;
 
     resumeDevices = map (sd: if sd ? device then sd.device else "/dev/disk/by-label/${sd.label}")
-                    (filter (sd: (sd ? label || hasPrefix "/dev/" sd.device) && !sd.randomEncryption) config.swapDevices);
+                    (filter (sd: (sd ? label || hasPrefix "/dev/" sd.device) && !sd.randomEncryption 
+                    # Don't include zram devices
+                    && !(hasPrefix "/dev/zram" sd.device)) config.swapDevices);
 
     fsInfo =
       let f = fs: [ fs.mountPoint (if fs.device != null then fs.device else "/dev/disk/by-label/${fs.label}") fs.fsType (builtins.concatStringsSep "," fs.options) ];
@@ -400,9 +398,8 @@ in
   };
 
   config = mkIf (!config.boot.isContainer) {
-
     assertions = [
-      { assertion = any (fs: fs.mountPoint == "/") (attrValues config.fileSystems);
+      { assertion = any (fs: fs.mountPoint == "/") fileSystems;
         message = "The ‘fileSystems’ option does not specify your root file system.";
       }
       { assertion = let inherit (config.boot) resumeDevice; in

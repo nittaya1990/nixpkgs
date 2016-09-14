@@ -471,6 +471,30 @@ let
     };
   };
 
+  emacs-source-directory = stdenv.mkDerivation {
+    name = "emacs-source-directory-1.0.0";
+    src = emacs.src;
+
+    # We don't want accidentally start bulding emacs one more time
+    phases = "unpackPhase buildPhase";
+
+    buildPhase = ''
+     mkdir -p $out/share/emacs/site-lisp/elpa/emacs-source-directory
+     cp -a src $out/src
+     (cd $out/src && ${emacs}/bin/etags *.c *.h)
+     cat <<EOF > $out/share/emacs/site-lisp/elpa/emacs-source-directory/emacs-source-directory-autoloads.el
+     (setq source-directory "$out")
+     (setq find-function-C-source-directory (expand-file-name "src" source-directory))
+     EOF
+     cat <<EOF > $out/share/emacs/site-lisp/elpa/emacs-source-directory/emacs-source-directory-pkg.el
+     (define-package "emacs-source-directory" "1.0.0" "Make emacs C source code available inside emacs. To use with emacsWithPackages in NixOS" '())
+     EOF
+    '';
+    meta = {
+      description = "Make emacs C source code available inside emacs. To use with emacsWithPackages in NixOS";
+    };
+  };
+
   engine-mode = melpaBuild rec {
     pname = "engine-mode";
     version = "1.0.0";
@@ -658,23 +682,6 @@ let
     };
     meta = {
       description = "Increases the selected region by semantic units in Emacs";
-      license = gpl3Plus;
-    };
-  };
-
-  f = melpaBuild rec {
-    pname = "f";
-    version = "20151113";
-    src = fetchFromGitHub {
-      owner = "rejeep";
-      repo = "f.el";
-      rev = "e0259ee060ff9a3f12204adcc8630869080acd68";
-      sha256 = "0lzqfr5xgc3qvpbs6vf63yiw7pc2mybfvsrhczf9ghlmlawqa6k1";
-    };
-    fileSpecs = [ "f.el" ];
-    packageRequires = [ dash s ];
-    meta = {
-      description = "Emacs library for working with files and directories";
       license = gpl3Plus;
     };
   };
@@ -1441,21 +1448,6 @@ let
     packageRequires = [ apel flim ];
     meta = {
       description = "MIME library for Emacs";
-      license = gpl3Plus; # probably
-    };
-  };
-
-  seq = melpaBuild rec {
-    pname = "seq";
-    version = "1.11";
-    src = fetchFromGitHub {
-      owner  = "NicolasPetton";
-      repo   = "${pname}.el";
-      rev    = version;
-      sha256 = "18ydaz2y5n7h4wr0dx2k9qbxl0mc50qfwk52ma4amk8nmm1bjwgc";
-    };
-    meta = {
-      description = "Sequence manipulation library for Emacs";
       license = gpl3Plus; # probably
     };
   };

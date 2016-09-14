@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   NIX_LDFLAGS = if stdenv.isDarwin then "-lintl" else null;
 
-  outputs = [ "dev" "out" ];
+  outputs = [ "out" "dev" ];
 
   buildInputs = [ libxml2 libgsf bzip2 libcroco pango libintlOrEmpty ]
     ++ stdenv.lib.optional enableIntrospection [ gobjectIntrospection ];
@@ -52,4 +52,8 @@ stdenv.mkDerivation rec {
     cat ${gdk_pixbuf.out}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache $GDK_PIXBUF/loaders.cache.tmp > $GDK_PIXBUF/loaders.cache
     rm $GDK_PIXBUF/loaders.cache.tmp
   '';
+
+  meta = {
+    platforms = stdenv.lib.platforms.unix;
+  };
 }

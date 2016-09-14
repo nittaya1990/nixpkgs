@@ -10,17 +10,17 @@ assert guileBindings -> guile != null;
 let
   # XXX: Gnulib's `test-select' fails on FreeBSD:
   # http://hydra.nixos.org/build/2962084/nixlog/1/raw .
-  doCheck = (!stdenv.isFreeBSD && !stdenv.isDarwin);
+  doCheck = !stdenv.isFreeBSD && !stdenv.isDarwin && lib.versionAtLeast version "3.4";
 in
 stdenv.mkDerivation {
   name = "gnutls-${version}";
 
   inherit src patches;
 
-  outputs = [ "dev" "out" "bin" "man" "docdev" ];
-  outputInfo = "docdev";
+  outputs = [ "bin" "dev" "out" "man" "devdoc" ];
+  outputInfo = "devdoc";
 
-  postPatch = ''
+  postPatch = lib.optionalString (lib.versionAtLeast version "3.4") ''
     sed '2iecho "name constraints tests skipped due to datefudge problems"\nexit 0' \
       -i tests/cert-tests/name-constraints
   '' + postPatch;

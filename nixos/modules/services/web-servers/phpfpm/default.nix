@@ -23,6 +23,8 @@ let
     ${cfg.extraConfig}
 
     ${concatStringsSep "\n" (mapAttrsToList mkPool cfg.pools)}
+
+    ${concatStringsSep "\n" (mapAttrsToList (n: v: "[${n}]\n${v}") cfg.poolConfigs)}
   '';
 
   phpIni = pkgs.writeText "php.ini" ''
@@ -67,6 +69,30 @@ in {
           "Options appended to the PHP configuration file <filename>php.ini</filename>.";
       };
 
+      poolConfigs = mkOption {
+        default = {};
+        type = types.attrsOf types.lines;
+        example = literalExample ''
+          { mypool = '''
+              listen = /run/phpfpm/mypool
+              user = nobody
+              pm = dynamic
+              pm.max_children = 75
+              pm.start_servers = 10
+              pm.min_spare_servers = 5
+              pm.max_spare_servers = 20
+              pm.max_requests = 500
+            ''';
+          }
+        '';
+        description = ''
+          A mapping between PHP FPM pool names and their configurations.
+          See the documentation on <literal>php-fpm.conf</literal> for
+          details on configuration directives. If no pools are defined,
+          the phpfpm service is disabled.
+        '';
+      };
+
       pools = mkOption {
         type = types.attrsOf (types.submodule (import ./pool-options.nix {
           inherit lib;
@@ -79,7 +105,7 @@ in {
     };
   };
 
-  config = mkIf (cfg.pools != {}) {
+  config = mkIf (cfg.pools != {} || cfg.poolConfigs != {}) {
 
     systemd.services.phpfpm = {
       wantedBy = [ "multi-user.target" ];

@@ -36,13 +36,11 @@ let
 
   fsToPool = fs: datasetToPool fs.device;
 
-  zfsFilesystems = filter (x: x.fsType == "zfs") (attrValues config.fileSystems);
-
-  isRoot = fs: fs.neededForBoot || elem fs.mountPoint [ "/" "/nix" "/nix/store" "/var" "/var/log" "/var/lib" "/etc" ];
+  zfsFilesystems = filter (x: x.fsType == "zfs") config.system.build.fileSystems;
 
   allPools = unique ((map fsToPool zfsFilesystems) ++ cfgZfs.extraPools);
 
-  rootPools = unique (map fsToPool (filter isRoot zfsFilesystems));
+  rootPools = unique (map fsToPool (filter fsNeededForBoot zfsFilesystems));
 
   dataPools = unique (filter (pool: !(elem pool rootPools)) allPools);
 
@@ -247,8 +245,18 @@ in
               esac
             done
             ''] ++ (map (pool: ''
-            echo "importing root ZFS pool \"${pool}\"..."
-            zpool import -d ${cfgZfs.devNodes} -N $ZFS_FORCE "${pool}"
+            echo -n "importing root ZFS pool \"${pool}\"..."
+            trial=0
+            until msg="$(zpool import -d ${cfgZfs.devNodes} -N $ZFS_FORCE '${pool}' 2>&1)"; do
+              sleep 0.25
+              echo -n .
+              trial=$(($trial + 1))
+              if [[ $trial -eq 60 ]]; then
+                break
+              fi
+            done
+            echo
+            if [[ -n "$msg" ]]; then echo "$msg"; fi
         '') rootPools));
       };
 
@@ -267,7 +275,7 @@ in
 
       systemd.services = let
         getPoolFilesystems = pool:
-          filter (x: x.fsType == "zfs" && (fsToPool x) == pool) (attrValues config.fileSystems);
+          filter (x: x.fsType == "zfs" && (fsToPool x) == pool) config.system.build.fileSystems;
 
         getPoolMounts = pool:
           let

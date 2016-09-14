@@ -2,7 +2,7 @@
 , pkgconfig, which, gettext, gobjectIntrospection
 , gtk2, gtk3, wayland, libwebp, enchant, sqlite
 , libxml2, libsoup, libsecret, libxslt, harfbuzz, xorg
-, gst-plugins-base
+, gst-plugins-base, libobjc
 , withGtk2 ? false
 , enableIntrospection ? !stdenv.isDarwin
 , enableCredentialStorage ? !stdenv.isDarwin
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     description = "Web content rendering engine, GTK+ port";
     homepage = "http://webkitgtk.org/";
     license = licenses.bsd2;
-    platforms = platforms.linux;
+    platforms = with platforms; linux ++ darwin;
     maintainers = [];
   };
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   patches = [
     ./webcore-svg-libxml-cflags.patch
   ] ++ optionals stdenv.isDarwin [
-    ./impure-icucore.patch
+    ./configure.patch
     ./quartz-webcore.patch
     ./libc++.patch
     ./plugin-none.patch
@@ -47,6 +47,8 @@ stdenv.mkDerivation rec {
   configureFlags = with stdenv.lib; [
     "--disable-geolocation"
     "--disable-jit"
+    # needed for parallel building
+    "--enable-dependency-tracking"
     (optionalString enableIntrospection "--enable-introspection")
   ] ++ optional withGtk2 [
     "--with-gtk=2.0"
@@ -76,7 +78,7 @@ stdenv.mkDerivation rec {
   ] ++ optionals enableCredentialStorage [
     libsecret
   ] ++ (if stdenv.isDarwin then [
-    readline libedit
+    readline libedit libobjc
   ] else [
     wayland
   ]);
@@ -86,7 +88,6 @@ stdenv.mkDerivation rec {
     (if withGtk2 then gtk2 else gtk3)
   ];
 
-  # Still fails with transient errors in version 2.4.9.
-  enableParallelBuilding = false;
+  enableParallelBuilding = true;
 
 }

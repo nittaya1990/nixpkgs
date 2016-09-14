@@ -17,6 +17,7 @@
 , gtk3
 , libX11
 , libXScrnSaver
+, libxcb
 , libXcomposite
 , libXdamage
 , libXext
@@ -24,7 +25,7 @@
 , libXinerama
 , libXrender
 , libXt
-, libcanberra
+, libcanberra_gtk2
 , libgnome
 , libgnomeui
 , defaultIconTheme
@@ -90,13 +91,14 @@ stdenv.mkDerivation {
       libX11
       libXScrnSaver
       libXcomposite
+      libxcb
       libXdamage
       libXext
       libXfixes
       libXinerama
       libXrender
       libXt
-      libcanberra
+      libcanberra_gtk2
       libgnome
       libgnomeui
       mesa
@@ -104,6 +106,7 @@ stdenv.mkDerivation {
       nss
       pango
       libheimdal
+      libpulseaudio
       libpulseaudio.dev
       systemd
     ] + ":" + stdenv.lib.makeSearchPathOutput "lib" "lib64" [

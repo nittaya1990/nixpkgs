@@ -21,11 +21,15 @@ let
   packages = self: with self; {
 
     kdeApp = import ./kde-app.nix {
-      inherit stdenv lib;
+      inherit lib;
       inherit debug srcs;
+      inherit kdeDerivation;
     };
 
-    kdelibs = callPackage ./kdelibs { inherit (pkgs) attica phonon; };
+    kdelibs = callPackage ./kdelibs {
+      inherit (srcs.kdelibs) src version;
+      inherit (pkgs) attica phonon;
+    };
 
     ark = callPackage ./ark/default.nix {};
     baloo-widgets = callPackage ./baloo-widgets.nix {};
@@ -38,10 +42,12 @@ let
     gpgmepp = callPackage ./gpgmepp.nix {};
     gwenview = callPackage ./gwenview.nix {};
     kate = callPackage ./kate.nix {};
+    kdenlive = callPackage ./kdenlive.nix {};
     kcalc = callPackage ./kcalc.nix {};
     kcolorchooser = callPackage ./kcolorchooser.nix {};
     kdegraphics-thumbnailers = callPackage ./kdegraphics-thumbnailers.nix {};
     kdenetwork-filesharing = callPackage ./kdenetwork-filesharing.nix {};
+    kdf = callPackage ./kdf.nix {};
     kgpg = callPackage ./kgpg.nix { inherit (pkgs.kde4) kdepimlibs; };
     khelpcenter = callPackage ./khelpcenter.nix {};
     kio-extras = callPackage ./kio-extras.nix {};

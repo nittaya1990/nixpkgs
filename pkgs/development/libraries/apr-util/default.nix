@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   patches = optional stdenv.isFreeBSD ./include-static-dependencies.patch;
 
-  outputs = [ "dev" "out" ];
+  outputs = [ "out" "dev" ];
   outputBin = "dev";
 
   buildInputs = optional stdenv.isFreeBSD autoreconfHook;
@@ -61,5 +61,6 @@ stdenv.mkDerivation rec {
     homepage = http://apr.apache.org/;
     description = "A companion library to APR, the Apache Portable Runtime";
     maintainers = [ stdenv.lib.maintainers.eelco ];
+    platforms = stdenv.lib.platforms.unix;
   };
 }

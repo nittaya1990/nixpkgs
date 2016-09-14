@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libudev ? null, libobjc, IOKit }:
+{ stdenv, fetchurl, pkgconfig, systemd ? null, libobjc, IOKit }:
 
 stdenv.mkDerivation rec {
   name = "libusb-1.0.20";
@@ -8,17 +8,17 @@ stdenv.mkDerivation rec {
     sha256 = "1zzp6hc7r7m3gl6zjbmzn92zkih4664cckaf49l1g5hapa8721fb";
   };
 
-  outputs = [ "dev" "out" ]; # get rid of propagating systemd closure
+  outputs = [ "out" "dev" ]; # get rid of propagating systemd closure
 
   buildInputs = [ pkgconfig ];
   propagatedBuildInputs =
-    stdenv.lib.optional stdenv.isLinux libudev ++
+    stdenv.lib.optional stdenv.isLinux systemd ++
     stdenv.lib.optionals stdenv.isDarwin [ libobjc IOKit ];
 
   NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isLinux "-lgcc_s";
 
   preFixup = stdenv.lib.optionalString stdenv.isLinux ''
-    sed 's,-ludev,-L${libudev.out}/lib -ludev,' -i $out/lib/libusb-1.0.la
+    sed 's,-ludev,-L${systemd.lib}/lib -ludev,' -i $out/lib/libusb-1.0.la
   '';
 
   meta = {
