@@ -8264,6 +8264,8 @@ in
 
   libltc = callPackage ../development/libraries/libltc { };
 
+  libmaxminddb = callPackage ../development/libraries/libmaxminddb { };
+
   libmcrypt = callPackage ../development/libraries/libmcrypt {};
 
   libmediainfo = callPackage ../development/libraries/libmediainfo { };
