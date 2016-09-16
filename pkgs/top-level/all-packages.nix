@@ -4707,7 +4707,7 @@ in
     profiledCompiler = false;
   });
 
-  ghdl_mcode = callPackage ../development/compilers/ghdl { };
+  ghdl_mcode = callPackage_i686 ../development/compilers/ghdl { };
 
   gcl = callPackage ../development/compilers/gcl {
     gmp = gmp4;
