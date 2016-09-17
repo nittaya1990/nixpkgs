@@ -2569,6 +2569,8 @@ in
 
   man-db = callPackage ../tools/misc/man-db { };
 
+  mandoc = callPackage ../tools/misc/mandoc { };
+
   mawk = callPackage ../tools/text/mawk { };
 
   mbox = callPackage ../tools/security/mbox { };
@@ -10696,6 +10698,10 @@ in
     inherit (perlPackages) HTMLParser NetDNS NetAddrIP DBFile
       HTTPDate MailDKIM LWP IOSocketSSL;
   };
+
+  deadpixi-sam-unstable = callPackage ../applications/editors/deadpixi-sam { };
+  deadpixi-sam = deadpixi-sam-unstable;
+  sam = deadpixi-sam;
 
   samba3 = callPackage ../servers/samba/3.x.nix { };
 
