@@ -17,7 +17,7 @@ stdenv.mkDerivation {
     sha256 = "09lh8x6qj0cd950whgaqqi3c4pqbl6z7aw9ddm73i14bw056185v";
   };
 
-  outputs = [ "dev" "out" ];
+  outputs = [ "out" "dev" ];
   outputBin = "dev";
 
   configureFlags = [
@@ -38,6 +38,10 @@ stdenv.mkDerivation {
     rm "$out"/lib/libharfbuzz.* "$dev/lib/pkgconfig/harfbuzz.pc"
     ln -s {'${harfbuzz.out}',"$out"}/lib/libharfbuzz.la
     ln -s {'${harfbuzz.dev}',"$dev"}/lib/pkgconfig/harfbuzz.pc
+    ${optionalString stdenv.isDarwin ''
+      ln -s {'${harfbuzz.out}',"$out"}/lib/libharfbuzz.dylib
+      ln -s {'${harfbuzz.out}',"$out"}/lib/libharfbuzz.0.dylib
+    ''}
   '';
 
   meta = with stdenv.lib; {

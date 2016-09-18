@@ -35,9 +35,7 @@ with stdenv.lib;
   DEBUG_DEVRES n
   DEBUG_NX_TEST n
   DEBUG_STACK_USAGE n
-  ${optionalString (!(features.grsecurity or false)) ''
-    DEBUG_STACKOVERFLOW n
-  ''}
+  DEBUG_STACKOVERFLOW n
   RCU_TORTURE_TEST n
   SCHEDSTATS n
   DETECT_HUNG_TASK y
@@ -107,16 +105,27 @@ with stdenv.lib;
   WAN y
 
   # Networking options.
+  NET y
   IP_PNP n
   ${optionalString (versionOlder version "3.13") ''
     IPV6_PRIVACY y
   ''}
   NETFILTER_ADVANCED y
+  IP_ROUTE_VERBOSE y
+  IP_MROUTE_MULTIPLE_TABLES y
   IP_VS_PROTO_TCP y
   IP_VS_PROTO_UDP y
   IP_VS_PROTO_ESP y
   IP_VS_PROTO_AH y
   IP_DCCP_CCID3 n # experimental
+  IPV6_ROUTER_PREF y
+  IPV6_ROUTE_INFO y
+  IPV6_OPTIMISTIC_DAD y
+  IPV6_MULTIPLE_TABLES y
+  IPV6_SUBTREES y
+  IPV6_MROUTE y
+  IPV6_MROUTE_MULTIPLE_TABLES y
+  IPV6_PIMSM_V2 y
   CLS_U32_PERF y
   CLS_U32_MARK y
   ${optionalString (stdenv.system == "x86_64-linux") ''
@@ -126,6 +135,10 @@ with stdenv.lib;
     NET_CLS_BPF m
     NET_ACT_BPF m
   ''}
+  L2TP_V3 y
+  L2TP_IP m
+  L2TP_ETH m
+  BRIDGE_VLAN_FILTERING y
 
   # Wireless networking.
   CFG80211_WEXT? y # Without it, ipw2200 drivers don't build
@@ -165,6 +178,11 @@ with stdenv.lib;
   # Allow specifying custom EDID on the kernel command line
   DRM_LOAD_EDID_FIRMWARE y
   VGA_SWITCHEROO y # Hybrid graphics support
+  DRM_GMA600 y
+  DRM_GMA3600 y
+  ${optionalString (versionAtLeast version "4.5") ''
+    DRM_AMD_POWERPLAY y # necessary for amdgpu polaris support
+  ''}
 
   # Sound.
   SND_DYNAMIC_MINORS y
@@ -191,6 +209,7 @@ with stdenv.lib;
   # Filesystem options - in particular, enable extended attributes and
   # ACLs for all filesystems that support them.
   FANOTIFY y
+  TMPFS y
   EXT2_FS_XATTR y
   EXT2_FS_POSIX_ACL y
   EXT2_FS_SECURITY y
@@ -251,11 +270,18 @@ with stdenv.lib;
     SQUASHFS_LZ4 y
   ''}
 
+  # Native Language Support modules, needed by some filesystems
+  NLS y
+  NLS_DEFAULT utf8
+  NLS_UTF8 m
+  NLS_CODEPAGE_437 m # VFAT default for the codepage= mount option
+  NLS_ISO8859_1 m    # VFAT default for the iocharset= mount option
+
   # Runtime security tests
   DEBUG_SET_MODULE_RONX? y # Detect writes to read-only module pages
 
   # Security related features.
-  RANDOMIZE_BASE y
+  RANDOMIZE_BASE? y
   STRICT_DEVMEM y # Filter access to /dev/mem
   SECURITY_SELINUX_BOOTPARAM_VALUE 0 # Disable SELinux by default
   DEVKMEM n # Disable /dev/kmem
@@ -294,6 +320,7 @@ with stdenv.lib;
   ${optionalString (versionOlder version "4.4") ''
     B43_PCMCIA? y
   ''}
+  BLK_DEV_INITRD y
   BLK_DEV_INTEGRITY y
   BSD_PROCESS_ACCT_V3 y
   BT_HCIUART_BCSP? y
@@ -304,7 +331,10 @@ with stdenv.lib;
   CRASH_DUMP? n
   DVB_DYNAMIC_MINORS? y # we use udev
   EFI_STUB y # EFI bootloader in the bzImage itself
+  CGROUPS y # used by systemd
   FHANDLE y # used by systemd
+  SECCOMP y # used by systemd >= 231
+  POSIX_MQUEUE y
   FRONTSWAP y
   FUSION y # Fusion MPT device support
   IDE n # deprecated IDE support
@@ -323,7 +353,7 @@ with stdenv.lib;
   LOGO n # not needed
   MEDIA_ATTACH y
   MEGARAID_NEWGEN y
-  ${optionalString (versionAtLeast version "3.15") ''
+  ${optionalString (versionAtLeast version "3.15" && versionOlder version "4.8") ''
     MLX4_EN_VXLAN y
   ''}
   MODVERSIONS y
@@ -410,7 +440,9 @@ with stdenv.lib;
   PARAVIRT? y
   HYPERVISOR_GUEST y
   PARAVIRT_SPINLOCKS? y
-  KVM_APIC_ARCHITECTURE y
+  ${optionalString (versionOlder version "4.8") ''
+    KVM_APIC_ARCHITECTURE y
+  ''}
   KVM_ASYNC_PF y
   ${optionalString (versionAtLeast version "4.0") ''
     KVM_COMPAT? y
@@ -482,7 +514,7 @@ with stdenv.lib;
   # zram support (e.g for in-memory compressed swap).
   ZSMALLOC y
   ZRAM m
-  ZSWAP y
+  ZSWAP? y
 
   # Enable PCIe and USB for the brcmfmac driver
   BRCMFMAC_USB? y

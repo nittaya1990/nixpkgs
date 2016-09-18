@@ -99,14 +99,12 @@ in
         groupdel = { rootOK = true; };
         login = { startSession = true; allowNullPassword = true; showMotd = true; updateWtmp = true; };
         chpasswd = { rootOK = true; };
-        chgpasswd = { rootOK = true; };
       };
 
     security.setuidPrograms = [ "su" "chfn" ]
+      ++ [ "newuidmap" "newgidmap" ] # new in shadow 4.2.x
       ++ lib.optionals config.users.mutableUsers
-      [ "passwd" "sg" "newgrp"
-        "newuidmap" "newgidmap" # new in shadow 4.2.x
-      ];
+      [ "passwd" "sg" "newgrp" ];
 
   };
 

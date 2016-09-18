@@ -1,5 +1,5 @@
 { stdenv, fetchurl, libnice, pkgconfig, python, gstreamer, gst-plugins-base
-, pygobject, gst-python, gupnp_igd
+, pygobject2, gst-python, gupnp_igd
 , gst-plugins-good, gst-plugins-bad, gst-libav
 }:
 
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "0c5vlyiwb799wpby4g9vffiy0nf09gy2cr84ksfy3jwzsxf5n38j";
   };
 
-  buildInputs = [ libnice python pygobject gupnp_igd libnice ];
+  buildInputs = [ libnice python pygobject2 gupnp_igd libnice ];
 
   nativeBuildInputs = [ pkgconfig ];
 
@@ -22,5 +22,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.freedesktop.org/wiki/Software/Farstream;
     description = "Audio/Video Communications Framework formely known as farsight";
     maintainers = [ stdenv.lib.maintainers.urkud ];
+    platforms = stdenv.lib.platforms.linux;
   };
 }

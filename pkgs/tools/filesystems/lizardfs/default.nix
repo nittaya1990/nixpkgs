@@ -4,8 +4,11 @@
 , makeWrapper
 , python
 , fuse
-# The following are required for manpages
-#, asciidoc, libxml2
+, asciidoc
+, libxml2
+, libxslt
+, docbook_xml_dtd_412
+, docbook_xsl
 , boost
 , pkgconfig
 , judy
@@ -15,27 +18,26 @@
 
 stdenv.mkDerivation rec {
   name = "lizardfs-${version}";
-  version = "3.9.4";
+  version = "3.10.2";
 
   src = fetchFromGitHub {
     owner = "lizardfs";
     repo = "lizardfs";
-    rev = "v.${version}";
-    sha256 = "1vg33jy280apm4lp5dn3x51pkf7035ijqjm8wbmyha2g35gfjrlx";
+    rev = "v${version}";
+    sha256 = "0xw6skprxw0wcbqh4yx8f8a4q00x0sfz42llqgd047bcbga1k5zg";
   };
 
-  # Manpages don't build in the current release
-  buildInputs = [ cmake fuse /* asciidoc libxml2.bin */ zlib boost pkgconfig judy pam makeWrapper ];
-
-  # Fixed in upcoming 3.10.0
-  patches = [ ./check-includes.patch ];
+  buildInputs = 
+    [ cmake fuse asciidoc libxml2 libxslt docbook_xml_dtd_412 docbook_xsl
+      zlib boost pkgconfig judy pam makeWrapper
+    ];
 
   postInstall = ''
     wrapProgram $out/sbin/lizardfs-cgiserver \
         --prefix PATH ":" "${python}/bin"
 
     # mfssnapshot and mfscgiserv are deprecated
-    rm -f $out/bin/mfssnapshot $out/sbin/mfscgiserv
+    rm $out/bin/mfssnapshot $out/sbin/mfscgiserv
   '';
 
   meta = with stdenv.lib; {

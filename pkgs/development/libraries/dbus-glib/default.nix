@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "0in0i6v68ixcy0ip28i84hdczf10ykq9x682qgcvls6gdmq552dk";
   };
 
-  outputs = [ "dev" "out" "docdev" ];
+  outputs = [ "out" "dev" "devdoc" ];
   outputBin = "dev";
 
   nativeBuildInputs = [ pkgconfig gettext ];
@@ -30,5 +30,6 @@ stdenv.mkDerivation rec {
     license = with stdenv.lib.licenses; [ afl21 gpl2 ];
     description = "Obsolete glib bindings for D-Bus lightweight IPC mechanism";
     maintainers = [ stdenv.lib.maintainers.urkud ];
+    platforms = stdenv.lib.platforms.unix;
   };
 }

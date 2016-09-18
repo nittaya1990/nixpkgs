@@ -32,12 +32,12 @@
 , net_snmp ? null
 }:
 stdenv.mkDerivation rec {
-  version = "5.5.1";
+  version = "5.5.2";
   name = "collectd-${version}";
 
   src = fetchurl {
     url = "http://collectd.org/files/${name}.tar.bz2";
-    sha256 = "0gxwq3jl20wgvb7qawivshpkm4i3kvghpnfcn5yrlhphw4kdbigr";
+    sha256 = "03w2pawbshl2wrl4cmyw8alsi0pvamb6ibxni96mjzhqc903lzq1";
   };
 
   buildInputs = [
@@ -52,7 +52,8 @@ stdenv.mkDerivation rec {
     stdenv.lib.optional (libsigrok != null) "--with-libsigrok" ++
     stdenv.lib.optional (python != null) "--with-python=${python}/bin/python";
 
-  NIX_CFLAGS_COMPILE = "-Wno-error=cpp";
+  # Fix build on Glibc 2.24.
+  NIX_CFLAGS_COMPILE = "-Wno-error=cpp -Wno-error=deprecated-declarations";
 
   meta = with stdenv.lib; {
     description = "Daemon which collects system performance statistics periodically";

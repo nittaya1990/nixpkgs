@@ -28,14 +28,14 @@ let
   imagick31 = assert !isPhp7; buildPecl {
     name = "imagick-3.1.2";
     sha256 = "14vclf2pqcgf3w8nzqbdw0b9v30q898344c84jdbw2sa62n6k1sj";
-    configureFlags = "--with-imagick=${pkgs.imagemagick}";
+    configureFlags = "--with-imagick=${pkgs.imagemagick.dev}";
     buildInputs = [ pkgs.pkgconfig ];
   };
 
   imagick34 = buildPecl {
     name = "imagick-3.4.0RC4";
     sha256 = "0fdkzdv3r8sm6y1x11kp3rxsimq6zf15xvi0mhn57svmnan4zh0i";
-    configureFlags = "--with-imagick=${pkgs.imagemagick}";
+    configureFlags = "--with-imagick=${pkgs.imagemagick.dev}";
     buildInputs = [ pkgs.pkgconfig ];
   };
 
@@ -79,6 +79,19 @@ let
     ];
 
     buildInputs = with pkgs; [ pkgconfig cyrus_sasl ];
+  };
+
+  # No support for PHP 7 yet (and probably never will be)
+  spidermonkey = assert !isPhp7; buildPecl rec {
+    name = "spidermonkey-1.0.0";
+
+    sha256 = "1ywrsp90w6rlgq3v2vmvp2zvvykkgqqasab7h9bf3vgvgv3qasbg";
+
+    configureFlags = [
+      "--with-spidermonkey=${pkgs.spidermonkey_185}"
+    ];
+
+    buildInputs = [ pkgs.spidermonkey_185 ];
   };
 
   xdebug = if isPhp7 then xdebug24 else xdebug23;
@@ -207,13 +220,54 @@ let
     };
   };
 
+  v8 = assert isPhp7; buildPecl rec {
+    version = "0.1.0";
+    name = "v8-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://github.com/pinepain/php-v8/archive/v${version}.tar.gz";
+      sha256 = "18smnxd34b486f5n8j0wk9z7r5x1w84v89mgf76z0bn7gxdxl0xj";
+    };
+
+    buildInputs = [ pkgs.v8 ];
+    configureFlags = [ "--with-v8=${pkgs.v8}" ];
+
+    patches = [
+      (builtins.toFile "link-libv8_libbase.patch" ''
+        Index: php-v8/config.m4
+        ===================================================================
+        --- php-v8.orig/config.m4
+        +++ php-v8/config.m4
+        @@ -69,7 +69,7 @@ if test "$PHP_V8" != "no"; then
+               #static_link_extra="libv8_base.a libv8_libbase.a libv8_libplatform.a libv8_snapshot.a"
+               ;;
+             * )
+        -      static_link_extra="libv8_libplatform.a"
+        +      static_link_extra="libv8_libplatform.a libv8_libbase.a"
+               #static_link_extra="libv8_base.a libv8_libbase.a libv8_libplatform.a libv8_snapshot.a"
+               ;;
+           esac
+	''
+      )];
+  };
+
+  v8js = assert isPhp7; buildPecl rec {
+    version = "1.3.2";
+    name = "v8js-${version}";
+
+    sha256 = "1x7gxi70zgj3vaxs89nfbnwlqcxrps1inlyfzz66pbzdbfwvc8z8";
+
+    buildInputs = [ pkgs.v8 ];
+    configureFlags = [ "--with-v8js=${pkgs.v8}" ];
+  };
+
   composer = pkgs.stdenv.mkDerivation rec {
     name = "composer-${version}";
-    version = "1.0.0-alpha11";
+    version = "1.2.0";
 
     src = pkgs.fetchurl {
       url = "https://getcomposer.org/download/${version}/composer.phar";
-      sha256 = "1b41ad352p4296c2j7cdq27wp06w28080bjxnjpmw536scb7yd27";
+      sha256 = "15chwfsqmwmhry3bv13a5y4ih1vzb0j8h1dfd49pnzzd8lai706w";
     };
 
     phases = [ "installPhase" ];
@@ -236,11 +290,11 @@ let
 
   phpcs = pkgs.stdenv.mkDerivation rec {
     name = "phpcs-${version}";
-    version = "2.3.4";
+    version = "2.6.0";
 
     src = pkgs.fetchurl {
       url = "https://github.com/squizlabs/PHP_CodeSniffer/releases/download/${version}/phpcs.phar";
-      sha256 = "ce11e02fba30a35a80b691b05be20415eb8b5dea585a4e6646803342b86abb8c";
+      sha256 = "02mlv44x508rnkzkwiyh7lg2ah7aqyxcq65q9ycj06czm0xdzs41";
     };
 
     phases = [ "installPhase" ];

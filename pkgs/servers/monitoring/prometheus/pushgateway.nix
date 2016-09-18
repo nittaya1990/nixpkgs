@@ -2,19 +2,19 @@
 
 buildGoPackage rec {
   name = "pushgateway-${version}";
-  version = "0.1.1";
+  version = "0.3.0";
   rev = version;
-  
+
   goPackagePath = "github.com/prometheus/pushgateway";
 
   src = fetchFromGitHub {
     inherit rev;
     owner = "prometheus";
     repo = "pushgateway";
-    sha256 = "17q5z9msip46wh3vxcsq9lvvhbxg75akjjcr2b29zrky8bp2m230";
+    sha256 = "1bj0s4s3gbcnlp2z2yx7jf3jx14cdg2v4pr0yciai0g6jwwg63hd";
   };
 
-  goDeps = ./pushgateway_deps.json;
+  goDeps = ./pushgateway_deps.nix;
 
   buildInputs = [ go-bindata ];
 

@@ -1,5 +1,5 @@
 { stdenv, fetchurl, python3Packages, gst_all_1, makeWrapper, gobjectIntrospection
-, gtk3, libwnck3, keybinder, intltool, libcanberra }:
+, gtk3, libwnck3, keybinder, intltool, libcanberra_gtk2 }:
 
 
 python3Packages.buildPythonApplication rec {
@@ -16,16 +16,16 @@ python3Packages.buildPythonApplication rec {
   buildInputs = with python3Packages;
     [ pygobject3 pyxdg pycairo gst_all_1.gstreamer gst_all_1.gst-plugins-base
       gst_all_1.gst-plugins-good gobjectIntrospection gtk3 libwnck3 distutils_extra
-      intltool dbus ];
+      intltool dbus-python ];
 
   # TODO: figure out why PYTHONPATH is not passed automatically for those programs
   pythonPath = with python3Packages;
-    [ pygobject3 pyxdg pycairo dbus ];
+    [ pygobject3 pyxdg pycairo dbus-python ];
 
   patches = [ ./datadir.patch ./bug_1190693.patch ];
   prePatch = ''
     rm setup.cfg
-    substituteInPlace kazam/backend/grabber.py --replace "/usr/bin/canberra-gtk-play" "${libcanberra}/bin/canberra-gtk-play"
+    substituteInPlace kazam/backend/grabber.py --replace "/usr/bin/canberra-gtk-play" "${libcanberra_gtk2}/bin/canberra-gtk-play"
   '';
 
   # no tests

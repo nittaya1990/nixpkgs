@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   };
 
   cmakeFlags = with stdenv.lib; []
-    ++ optional stdenv.isDarwin "-DICONV_LIBRARY=${libiconv}/lib/libiconv.dylib"
+    ++ optionals stdenv.isDarwin ["-DICONV_LIBRARY=${libiconv}/lib/libiconv.dylib" "-DCMAKE_FIND_FRAMEWORK=LAST"]
     ++ optional (!guileSupport) "-DENABLE_GUILE=OFF"
     ++ optional (!luaSupport)   "-DENABLE_LUA=OFF"
     ++ optional (!perlSupport)  "-DENABLE_PERL=OFF"
@@ -52,9 +52,11 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = "-I${python}/include/${python.libPrefix} -DCA_FILE=/etc/ssl/certs/ca-certificates.crt";
 
-  postInstall = ''
+  postInstall = with stdenv.lib; ''
     NIX_PYTHONPATH="$out/lib/${python.libPrefix}/site-packages"
     wrapProgram "$out/bin/weechat" \
+      ${optionalString perlSupport "--prefix PATH : ${perl}/bin"} \
+      --prefix PATH : ${pythonPackages.python}/bin \
       --prefix PYTHONPATH : "$PYTHONPATH" \
       --prefix PYTHONPATH : "$NIX_PYTHONPATH"
   '';

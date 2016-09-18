@@ -47,7 +47,7 @@ let
 
       NIX_QT_SUBMODULE = args.NIX_QT_SUBMODULE or true;
 
-      outputs = args.outputs or [ "dev" "out" ];
+      outputs = args.outputs or [ "out" "dev" ];
       setOutputFlags = args.setOutputFlags or false;
 
       setupHook = ./setup-hook.sh;
@@ -66,8 +66,6 @@ let
         mesa = pkgs.mesa_noglu;
         harfbuzz = pkgs.harfbuzz-icu;
         cups = if stdenv.isLinux then pkgs.cups else null;
-        # GNOME dependencies are not used unless gtkStyle == true
-        inherit (pkgs.gnome) libgnomeui GConf gnome_vfs;
         bison = pkgs.bison2; # error: too few arguments to function 'int yylex(...
         inherit developerBuild decryptSslTraffic;
       };
@@ -92,11 +90,12 @@ let
       qtsensors = callPackage ./qtsensors.nix {};
       qtserialport = callPackage ./qtserialport {};
       qtsvg = callPackage ./qtsvg.nix {};
-      qttools = callPackage ./qttools.nix {};
+      qttools = callPackage ./qttools {};
       qttranslations = callPackage ./qttranslations.nix {};
-      /* qtwayland = not packaged */
+      qtwayland = callPackage ./qtwayland.nix {};
       qtwebchannel = callPackage ./qtwebchannel.nix {};
       qtwebengine = callPackage ./qtwebengine.nix {};
+      qtwebkit = callPackage ./qtwebkit {};
       qtwebsockets = callPackage ./qtwebsockets.nix {};
       /* qtwinextras = not packaged */
       qtx11extras = callPackage ./qtx11extras.nix {};
@@ -106,12 +105,12 @@ let
       full = env "qt-${qtbase.version}" [
         qtconnectivity qtdeclarative qtdoc qtenginio qtgraphicaleffects
         qtimageformats qtlocation qtmultimedia qtquickcontrols qtscript
-        qtsensors qtserialport qtsvg qttools qttranslations qtwebsockets
-        qtx11extras qtxmlpatterns
+        qtsensors qtserialport qtsvg qttools qttranslations qtwayland
+        qtwebsockets qtx11extras qtxmlpatterns
       ];
 
       makeQtWrapper = makeSetupHook { deps = [ makeWrapper ]; } ./make-qt-wrapper.sh;
-      qmakeHook = makeSetupHook { deps = [ self.qtbase ]; } ./qmake-hook.sh;
+      qmakeHook = makeSetupHook { deps = [ self.qtbase.dev ]; } ./qmake-hook.sh;
 
     };
 

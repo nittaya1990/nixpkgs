@@ -31,6 +31,8 @@ let
       url = "https://raw.githubusercontent.com/slashbeast/grsecurity-scrape/master/${grbranch}/${name}.patch";
       inherit sha256;
     };
+
+    features.grsecurity = true;
   };
 in
 
@@ -72,6 +74,11 @@ rec {
       patch = ./mips-ext3-n32.patch;
     };
 
+  modinst_arg_list_too_long =
+    { name = "modinst-arglist-too-long";
+      patch = ./modinst-arg-list-too-long.patch;
+    };
+
   ubuntu_fan_4_4 =
     { name = "ubuntu-fan";
       patch = ./ubuntu-fan-4.4.patch;
@@ -93,9 +100,9 @@ rec {
   grsecurity_4_4 = throw "grsecurity stable is no longer supported";
 
   grsecurity_testing = grsecPatch
-    { kver   = "4.6.4";
-      grrev  = "201607112205";
-      sha256 = "16j01qqa7yi5yvli1lkl8ffybhy4697nyi18lbl5329zd09xq2ww";
+    { kver   = "4.7.4";
+      grrev  = "201609152234";
+      sha256 = "0314lb1dp5bnq3wibxc63a8z75q0b7w6zsgd6ccmhl9vwv7sm253";
     };
 
   # This patch relaxes grsec constraints on the location of usermode helpers,
@@ -136,10 +143,6 @@ rec {
     { name = "mfd_fix_dependency";
       patch = ./chromiumos-patches/mfd-fix-dependency.patch;
     };
-  qat_common_Makefile =
-    { name = "qat_common_Makefile";
-      patch = ./qat_common_Makefile.patch;
-    };
 
   hiddev_CVE_2016_5829 =
     { name = "hiddev_CVE_2016_5829";
@@ -148,8 +151,6 @@ rec {
         sha256 = "14rm1qr87p7a5prz8g5fwbpxzdp3ighj095x8rvhm8csm20wspyy";
       };
     };
-  ecryptfs_fix_mmap_bug =
-    { name = "ecryptfs_fix_mmap_bug";
-      patch = ./ecryptfs-fix-mmap-bug.patch;
-    };
+
+  cpu-cgroup-v2 = import ./cpu-cgroup-v2-patches;
 }

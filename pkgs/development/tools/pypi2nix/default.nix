@@ -3,26 +3,29 @@
 
 let
   deps = import ./deps.nix { inherit fetchurl; };
-  version = "1.2.0";
+  version = "1.4.0";
   src = fetchurl {
     url = "https://github.com/garbas/pypi2nix/archive/v${version}.tar.gz";
-    sha256 = "13ffr2iabl5lyqqdcrs8z37lfqw1n102bkxwfx0540hj6brvkm2v";
-    
+    sha256 = "0w5f10p4d4ppwg2plbbrmqwmi1ycgpaidyajza11c9svka014zrb";
   };
 in stdenv.mkDerivation rec {
   name = "pypi2nix-${version}";
-  srcs = with deps; [ src pip click setuptools zcbuildout zcrecipeegg ];
+  srcs = with deps; [
+    src
+    click
+    requests
+  ];  # six attrs effect ];
   buildInputs = [ python zip makeWrapper ];
   sourceRoot = ".";
 
   postUnpack = ''
     mkdir -p $out/pkgs
 
-    mv pip-*/pip                        $out/pkgs/pip
     mv click-*/click                    $out/pkgs/click
-    mv setuptools-*/setuptools          $out/pkgs/setuptools
-    mv zc.buildout-*/src/zc             $out/pkgs/zc
-    mv zc.recipe.egg-*/src/zc/recipe    $out/pkgs/zc/recipe
+    # mv six-*/six.py                    $out/pkgs/
+    # mv attrs-*/src/attr                $out/pkgs/attrs
+    # mv effect-*/effect                 $out/pkgs/effect
+    mv requests-*/requests              $out/pkgs/
 
     if [ "$IN_NIX_SHELL" != "1" ]; then
       if [ -e git-export ]; then
@@ -36,9 +39,9 @@ in stdenv.mkDerivation rec {
   commonPhase = ''
     mkdir -p $out/bin
 
-    echo "#!${python}/bin/python3"       >  $out/bin/pypi2nix
-    echo "import pypi2nix.cli"          >> $out/bin/pypi2nix
-    echo "pypi2nix.cli.main()"          >> $out/bin/pypi2nix
+    echo "#!${python.interpreter}" >  $out/bin/pypi2nix
+    echo "import pypi2nix.cli" >> $out/bin/pypi2nix
+    echo "pypi2nix.cli.main()" >> $out/bin/pypi2nix
 
     chmod +x $out/bin/pypi2nix
 

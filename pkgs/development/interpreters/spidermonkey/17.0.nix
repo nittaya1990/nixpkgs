@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1fig2wf4f10v43mqx67y68z6h77sy900d1w0pz9qarrqx57rc7ij";
   };
 
-  outputs = [ "dev" "out" "lib" ];
+  outputs = [ "out" "dev" "lib" ];
 
   propagatedBuildInputs = [ nspr ];
 
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  doCheck = !stdenv.isArm; # fails on v7 with "Alignment trap: not handling instruction" in kernel log
+  doCheck = true;
   preCheck = ''
     rm jit-test/tests/sunspider/check-date-format-tofte.js    # https://bugzil.la/600522
 
@@ -64,6 +64,7 @@ stdenv.mkDerivation rec {
     homepage = https://developer.mozilla.org/en/SpiderMonkey;
     # TODO: MPL/GPL/LGPL tri-license.
     maintainers = [ maintainers.goibhniu ];
+    platforms = platforms.linux;
   };
 }
 

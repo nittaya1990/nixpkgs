@@ -20,8 +20,6 @@ stdenv.mkDerivation rec {
       --replace /usr/local $out
   '';
 
-  NIX_CFLAGS_COMPILE = "-fPIC";
-
   buildPhase = ''scons'';
 
   installPhase = ''scons install'';
@@ -31,5 +29,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.codenix.com/~tolua/;
     license = licenses.mit;
     maintainers = with maintainers; [ vrthra ];
+    platforms = with platforms; unix;
   };
 }

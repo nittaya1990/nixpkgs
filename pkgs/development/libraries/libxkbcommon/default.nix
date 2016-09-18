@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "0q47xa1szlxwgvwmhv4b7xwawnykz1hnc431d84nj8dlh2q8f22v";
   };
 
-  outputs = [ "dev" "out" ];
+  outputs = [ "out" "dev" ];
 
   buildInputs = [ pkgconfig yacc flex xkeyboard_config libxcb ];
 
@@ -26,5 +26,6 @@ stdenv.mkDerivation rec {
     homepage = http://xkbcommon.org;
     license = licenses.mit;
     maintainers = with maintainers; [ garbas ];
+    platforms = with platforms; unix;
   };
 }

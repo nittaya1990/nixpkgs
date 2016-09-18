@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram "$out/bin/xmlto" \
-       --prefix PATH : "${libxslt.bin}/bin:${libxml2.bin}/bin:${getopt}/bin"
+       --prefix PATH : "${stdenv.lib.makeBinPath [ libxslt libxml2 getopt ]}"
 
     # `w3m' is needed for HTML to text conversions.
     substituteInPlace "$out/share/xmlto/format/docbook/txt" \
@@ -44,5 +44,6 @@ stdenv.mkDerivation rec {
 
     license = stdenv.lib.licenses.gpl2Plus;
     homepage = https://fedorahosted.org/xmlto/;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

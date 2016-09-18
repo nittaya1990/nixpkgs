@@ -1,12 +1,12 @@
 { stdenv, fetchurl, perl, unzip }:
 stdenv.mkDerivation rec {
   name = "zpaq-${version}";
-  version = "7.13";
+  version = "7.14";
 
   src = let
     mungedVersion = with stdenv.lib; concatStrings (splitString "." version);
   in fetchurl {
-    sha256 = "06fry12c92nxds2m5cd69h0cpxvp0mxhssagmjiwxpmgn57wy84i";
+    sha256 = "1xmmn5sy19yip8cbr3plhd7nh7x7k1b09lq2kqfcp6bndg7jxgby";
     url = "http://mattmahoney.net/dc/zpaq${mungedVersion}.zip";
   };
 
@@ -20,9 +20,9 @@ stdenv.mkDerivation rec {
       + (lib.optionalString (!isi686 && !isx86_64) "-DNOJIT ")
       + "-Dunix";
     CXXFLAGS = with stdenv; ""
-      + (lib.optionalString (isi686) "-march=i686 ")
-      + (lib.optionalString (isx86_64) "-march=nocona ")
-      + "-O3 -mtune=generic -DNDEBUG";
+      + (lib.optionalString isi686   "-march=i686   -mtune=generic ")
+      + (lib.optionalString isx86_64 "-march=nocona -mtune=generic ")
+      + "-O3 -DNDEBUG";
   in ''
     buildFlagsArray=( "CPPFLAGS=${CPPFLAGS}" "CXXFLAGS=${CXXFLAGS}" )
   '';

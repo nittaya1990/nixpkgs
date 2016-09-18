@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, buildPythonPackage, libsexy, pkgconfig, libxml2, pygtk, pango, gtk, glib, }:
+{ stdenv, fetchurl, buildPythonPackage, libsexy, pkgconfig, libxml2, pygtk, pango, gtk2, glib, }:
 
 stdenv.mkDerivation rec {
   name = "python-libsexy-${version}";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   ];
 
   propagatedBuildInputs = [
-    libsexy gtk glib pango libxml2
+    libsexy gtk2 glib pango libxml2
   ];
 
   postInstall = ''
@@ -23,5 +23,6 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Python libsexy bindings";
+    platforms = stdenv.lib.platforms.linux;
   };
 }

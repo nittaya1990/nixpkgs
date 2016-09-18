@@ -1,6 +1,5 @@
 { stdenv
 , fetchurl
-, zlib
 , hdf5
 , m4
 , curl # for DAP
@@ -16,7 +15,7 @@ in stdenv.mkDerivation rec {
         sha256 = "06ds8zm4qvjlqvv4qb637cqr0xgvbhnghrddisad5vj81s5kvpmx";
     };
 
-    buildInputs = [ hdf5 zlib m4 curl mpi];
+    buildInputs = [ hdf5 m4 curl mpi];
 
     passthru = {
       mpiSupport = mpiSupport;
@@ -28,5 +27,9 @@ in stdenv.mkDerivation rec {
         "--enable-dap"
         "--enable-shared"
     ]
-    ++ (stdenv.lib.optionals mpiSupport [ "--enable-parallel-tests" ]);
+    ++ (stdenv.lib.optionals mpiSupport [ "--enable-parallel-tests" "CC=${mpi}/bin/mpicc" ]);
+
+    meta = {
+        platforms = stdenv.lib.platforms.unix;
+    };
 }

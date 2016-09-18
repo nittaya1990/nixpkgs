@@ -188,11 +188,22 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
 
   fdl13 = spdx {
     spdxId = "GFDL-1.3";
-    fullName = "GNU Free Documentation License v1.2";
+    fullName = "GNU Free Documentation License v1.3";
   };
 
   free = {
     fullName = "Unspecified free software license";
+  };
+
+  g4sl = {
+    fullName = "Geant4 Software License";
+    url = https://geant4.web.cern.ch/geant4/license/LICENSE.html;
+  };
+
+  geogebra = {
+    fullName = "GeoGebra Non-Commercial License Agreement";
+    url = https://www.geogebra.org/license;
+    free = false;
   };
 
   gpl1 = spdx {
@@ -457,6 +468,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
   unlicense = spdx {
     spdxId = "Unlicense";
     fullName = "The Unlicense";
+  };
+
+  upl = {
+    fullName = "Universal Permissive License";
+    url = "https://oss.oracle.com/licenses/upl/";
   };
 
   vim = spdx {

@@ -17,6 +17,9 @@ rec {
   zcrecipeeggVersion = "2.0.3";
   zcrecipeeggHash = "69a8ce276029390a36008150444aa0b4";
 
+  buildoutrequirementsVersion = "0.2.2";
+  buildoutrequirementsHash = "0b4e53d871b167eaac0846942221af00";
+
   wheelVersion = "0.29.0";
   wheelHash = "555a67e4507cedee23a0deb9651e452f";
 
@@ -32,11 +35,8 @@ rec {
   effectVersion = "0.10.1";
   effectHash = "6a6fd28fb44179ce01a148d4e8bdbede";
 
-  chardetVersion = "2.3.0";
-  chardetHash = "25274d664ccb5130adae08047416e1a8";
-
-  aiohttpVersion = "0.21.6";
-  aiodnsHash = "d7f63e51bc86a61d9bccca13986c3855";
+  requestsVersion = "2.10.0";
+  requestsHash = "a36f7a64600f1bfec4d55ae021d232ae";
 
 
   # --- wheels used to bootstrap python environment ---------------------------
@@ -74,6 +74,11 @@ rec {
     md5 = zcrecipeeggHash;
   };
 
+  buildoutrequirements = fetchurl {
+    url = "https://github.com/garbas/buildout.requirements/archive/1e2977e2d254184399401746736d2b17c912b350.tar.gz";
+    md5 = buildoutrequirementsHash;
+  };
+
   wheel = fetchurl {
     url = "https://pypi.python.org/packages/c9/1d/bd19e691fd4cfe908c76c429fe6e4436c9e83583c4414b54f6c85471954a/wheel-${wheelVersion}.tar.gz";
     md5 = wheelHash;
@@ -99,14 +104,9 @@ rec {
   #   md5 = effectHash;
   # };
 
-  chardet = fetchurl {
-    url = "https://pypi.python.org/packages/7d/87/4e3a3f38b2f5c578ce44f8dc2aa053217de9f0b6d737739b0ddac38ed237/chardet-${chardetVersion}.tar.gz";
-    md5 = chardetHash;
-  };
-
-  aiohttp = fetchurl {
-    url = "https://pypi.python.org/packages/04/78/9faeb8b5b1d53e8c81c99764412c2225d982943e4261bba2c6f725e15fce/aiohttp-${aiohttpVersion}.tar.gz";
-    md5 = aiodnsHash;
+  requests = fetchurl {
+    url = "https://pypi.python.org/packages/49/6f/183063f01aae1e025cf0130772b55848750a2f3a89bfa11b385b35d7329d/requests-${requestsVersion}.tar.gz";
+    md5 = requestsHash;
   };
 
 }

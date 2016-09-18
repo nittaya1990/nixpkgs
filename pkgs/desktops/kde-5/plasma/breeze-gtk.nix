@@ -1,8 +1,9 @@
 { plasmaPackage
-, extra-cmake-modules
+, ecm
 }:
 
 plasmaPackage {
   name = "breeze-gtk";
-  nativeBuildInputs = [ extra-cmake-modules ];
+  nativeBuildInputs = [ ecm ];
+  cmakeFlags = [ "-DWITH_GTK3_VERSION=3.20" ];
 }

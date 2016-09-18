@@ -14,6 +14,7 @@ let
   upstreamSystemUnits =
     [ # Targets.
       "basic.target"
+      "busnames.target"
       "sysinit.target"
       "sockets.target"
       "graphical.target"
@@ -120,7 +121,6 @@ let
       "systemd-poweroff.service"
       "halt.target"
       "systemd-halt.service"
-      "ctrl-alt-del.target"
       "shutdown.target"
       "umount.target"
       "final.target"
@@ -141,6 +141,7 @@ let
       "user.slice"
       "machine.slice"
       "systemd-machined.service"
+      "systemd-nspawn@.service"
 
       # Temporary file creation / cleanup.
       "systemd-tmpfiles-clean.service"
@@ -162,7 +163,6 @@ let
       "systemd-hostnamed.service"
       "systemd-binfmt.service"
     ]
-
     ++ cfg.additionalUpstreamSystemUnits;
 
   upstreamSystemWants =
@@ -485,6 +485,15 @@ in
       description = "Default unit started when the system boots.";
     };
 
+    systemd.ctrlAltDelUnit = mkOption {
+      default = "reboot.target";
+      type = types.str;
+      example = "poweroff.target";
+      description = ''
+        Target that should be started when Ctrl-Alt-Delete is pressed.
+      '';
+    };
+
     systemd.globalEnvironment = mkOption {
       type = types.attrs;
       default = {};
@@ -558,6 +567,16 @@ in
       example = "HandleLidSwitch=ignore";
       description = ''
         Extra config options for systemd-logind. See man logind.conf for
+        available options.
+      '';
+    };
+
+    systemd.user.extraConfig = mkOption {
+      default = "";
+      type = types.lines;
+      example = "DefaultCPUAccounting=yes";
+      description = ''
+        Extra config options for systemd user instances. See man systemd-user.conf for
         available options.
       '';
     };
@@ -656,6 +675,11 @@ in
         ${config.systemd.extraConfig}
       '';
 
+      "systemd/user.conf".text = ''
+        [Manager]
+        ${config.systemd.user.extraConfig}
+      '';
+
       "systemd/journald.conf".text = ''
         [Journal]
         RateLimitInterval=${config.services.journald.rateLimitInterval}
@@ -717,18 +741,6 @@ in
       { description = "Security Keys";
         unitConfig.X-StopOnReconfiguration = true;
       };
-
-    systemd.targets.network-online.after = [ "ip-up.target" ];
-
-    systemd.targets.network-pre = {
-      wantedBy = [ "network.target" ];
-      before = [ "network.target" ];
-    };
-
-    systemd.targets.remote-fs-pre = {
-      wantedBy = [ "remote-fs.target" ];
-      before = [ "remote-fs.target" ];
-    };
 
     systemd.units =
       mapAttrs' (n: v: nameValuePair "${n}.target" (targetToUnit n v)) cfg.targets

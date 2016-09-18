@@ -2,20 +2,20 @@
 
 stdenv.mkDerivation rec {
   name = "timewarrior-${version}";
-  version = "0.9.5.alpha";
+  version = "1.0.0";
 
   enableParallelBuilding = true;
 
   src = fetchurl {
     url = "https://taskwarrior.org/download/timew-${version}.tar.gz";
-    sha256 = "154d5sgxcmz1b7g401c7s6sf7pkk0hh74dx6rss3vkamsjc4wgl8";
+    sha256 = "1d8b9sjdbdld81n535iwip9igl16kcw452wa47fmndp8w487j0mc";
   };
 
   nativeBuildInputs = [ cmake ];
 
   installPhase = ''
-    mkdir -p $out/{bin,share}
-    cp -rv doc/man $out/share/
+    mkdir -p $out/{bin,share/man/man1}
+    cp -rv doc/man/*.1 $out/share/man/man1
     cp src/timew $out/bin/
   '';
 

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gtk, gnome3, libgksu,
+{ stdenv, fetchurl, pkgconfig, gtk2, gnome3, libgksu,
   intltool, libstartup_notification, gtk_doc, wrapGAppsHook
 }:
 
@@ -17,12 +17,14 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    gtk gnome3.gconf libstartup_notification gnome3.libgnome_keyring
+    gtk2 gnome3.gconf libstartup_notification gnome3.libgnome_keyring
   ];
 
   propagatedBuildInputs = [
     libgksu
   ];
+
+  hardeningDisable = [ "format" ];
 
   patches = [
     # https://savannah.nongnu.org/bugs/index.php?36127
@@ -47,5 +49,6 @@ stdenv.mkDerivation rec {
     homepage = "http://www.nongnu.org/gksu/";
     license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.romildo ];
+    platforms = stdenv.lib.platforms.linux;
   };
 }
