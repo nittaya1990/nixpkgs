@@ -10780,6 +10780,8 @@ in
     tomcat85
     tomcatUnstable;
 
+  systemd-journal2gelf = (callPackage ../servers/monitoring/systemd-journal2gelf { }).bin // { outputs = ["bin"]; };
+
   tomcat_mysql_jdbc = callPackage ../servers/http/tomcat/jdbc/mysql { };
 
   torque = callPackage ../servers/computing/torque { };
