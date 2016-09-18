@@ -604,9 +604,7 @@ in
 
   bitbucket-cli = pythonPackages.bitbucket-cli;
 
-  blink = callPackage ../applications/networking/instant-messengers/blink {
-    gnutls = gnutls33;
-  };
+  blink = callPackage ../applications/networking/instant-messengers/blink { };
 
   blink1-tool = callPackage ../tools/misc/blink1-tool { };
 
@@ -2446,6 +2444,8 @@ in
   libevhtp = callPackage ../development/libraries/libevhtp { };
 
   libircclient = callPackage ../development/libraries/libircclient { };
+
+  libite = callPackage ../development/libraries/libite { };
 
   liboauth = callPackage ../development/libraries/liboauth { };
 
