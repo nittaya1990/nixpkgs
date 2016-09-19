@@ -3198,18 +3198,26 @@ in modules // {
       sha256 = "1aqmy3psn12lxgp659d0zsxkirxzy5lnbnzxf9xjq1a93s3qm704";
     };
 
-    propagatedBuildInputs = with self; [
-      futures
-      nose
-      six
-      sure
-      pytz
-      pyyaml
-    ];
+    buildInputs = with self; [ pkgs.libev cython ] ++ optionals doCheck [ scales eventlet twisted mock gevent nose pytz pyyaml sure ];
+
+    propagatedBuildInputs = with self; [ futures six ];
+
+    postPatch = ''
+      sed -i "s/<=1.0.1//" setup.py
+    '';
+
+    checkPhase = ''
+      ${python.interpreter} setup.py gevent_nosetests
+      ${python.interpreter} setup.py eventlet_nosetests
+    '';
+
+    # Could not get tests running
+    doCheck = false;
 
     meta = {
       homepage = http://datastax.github.io/python-driver/;
       description = "A Python client driver for Apache Cassandra";
+      license = licenses.asl20;
     };
   };
 
@@ -11016,7 +11024,7 @@ in modules // {
     };
   };
 
-  futures = buildPythonPackage rec {
+  futures = if !(isPy3k) then (buildPythonPackage rec {
     name = "futures-${version}";
     version = "3.0.5";
 
@@ -11041,7 +11049,7 @@ in modules // {
       license = licenses.bsd2;
       maintainers = with maintainers; [ garbas ];
     };
-  };
+  }) else null;
 
   futures_2_2 = self.futures.override rec {
     version = "2.2.0";
@@ -11138,22 +11146,30 @@ in modules // {
   };
 
   gevent = buildPythonPackage rec {
-    name = "gevent-1.0.2";
-    disabled = isPy3k || isPyPy;  # see https://github.com/surfly/gevent/issues/248
+    name = "gevent-1.1.2";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/g/gevent/${name}.tar.gz";
-      sha256 = "0cds7yvwdlqmd590i59vzxaviwxk4js6dkhnmdxb3p1xac7wmq9s";
+      sha256 = "cb15cf73d69a2eeefed330858f09634e2c50bf46da9f9e7635730fcfb872c02c";
     };
 
-    patchPhase = ''
+    # Why do we have this patch?
+    postPatch = ''
       substituteInPlace libev/ev.c --replace \
         "ecb_inline void ecb_unreachable (void) ecb_noreturn" \
         "ecb_inline ecb_noreturn void ecb_unreachable (void)"
     '';
 
     buildInputs = with self; [ pkgs.libev ];
-    propagatedBuildInputs = optionals (!isPyPy) [ self.greenlet ];
+    propagatedBuildInputs = with self; optionals (!isPyPy) [ greenlet ];
+
+    checkPhase = ''
+      cd greentest
+      ${python.interpreter} testrunner.py
+    '';
+
+    # Bunch of failures.
+    doCheck = false;
 
     meta = {
       description = "Coroutine-based networking library";
@@ -11421,13 +11437,15 @@ in modules // {
 
   greenlet = buildPythonPackage rec {
     name = "greenlet-${version}";
-    version = "0.4.7";
+    version = "0.4.10";
     disabled = isPyPy;  # builtin for pypy
 
     src = pkgs.fetchurl {
-      url = "mirror://pypi/g/greenlet/${name}.zip";
-      sha256 = "1zlmsygjw69xlq56vz1z5ivzy9bwc7knjaykn2yy2hv4w2j4yb7k";
+      url = "mirror://pypi/g/greenlet/${name}.tar.gz";
+      sha256 = "c4417624aa88380cdf0fe110a8a6e0dbcc26f80887197fe5df0427dfa348ae62";
     };
+
+    propagatedBuildInputs = with self; [ six ];
 
     # see https://github.com/python-greenlet/greenlet/issues/85
     preCheck = ''
@@ -17060,7 +17078,7 @@ in modules // {
       sha256 = "9c12c370feda864c2f541cecce9bfb3a2a682c6c59c097a852e7b040dc6b8431";
     };
 
-    buildInputs = with self; [ pytest ];
+    buildInputs = with self; [ pytest pytestrunner ];
     propagatedBuildInputs = with self; [ six w3lib lxml cssselect ];
 
     checkPhase = ''
@@ -22753,6 +22771,28 @@ in modules // {
     };
   };
 
+  scales = buildPythonPackage rec {
+    name = "scales-${version}";
+    version = "1.0.9";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/s/scales/${name}.tar.gz";
+      sha256 = "8b6930f7d4bf115192290b44c757af5e254e3fcfcb75ff9a51f5c96a404e2753";
+    };
+
+    buildInputs = with self; optionals doCheck [ nose ];
+    # No tests included
+    doCheck = false;
+
+    propagatedBuildInputs = with self; [ six ];
+
+    meta = {
+      description = "Stats for Python processes";
+      homepage = https://www.github.com/Cue/scales;
+      license = licenses.asl20;
+    };
+  };
+
   secp256k1 = buildPythonPackage rec {
     name = "secp256k1-${version}";
     version = "0.12.1";
@@ -23004,10 +23044,10 @@ in modules // {
   sphinx = buildPythonPackage (rec {
     name = "${pname}-${version}";
     pname = "Sphinx";
-    version = "1.3.6";
+    version = "1.4.6";
     src = pkgs.fetchurl {
       url = "mirror://pypi/S/${pname}/${name}.tar.gz";
-      sha256 = "12pzlfkjjlwgvsj56k0y809jpx5mgcs9548k1l4kdbr028ifjfqb";
+      sha256 = "1lvr39ab5sjp894jshk39xidlxw9vc735882cgcfr4dlm4546hwy";
     };
     LC_ALL = "en_US.UTF-8";
     buildInputs = with self; [ nose simplejson mock pkgs.glibcLocales ];
@@ -26154,7 +26194,7 @@ in modules // {
     name = "tornado-${version}";
     version = "4.4.1";
 
-    propagatedBuildInputs = with self; [ backports_abc backports_ssl_match_hostname_3_4_0_2 certifi singledispatch ];
+    propagatedBuildInputs = with self; [ backports_abc backports_ssl_match_hostname certifi singledispatch ];
 
     # We specify the name of the test files to prevent
     # https://github.com/NixOS/nixpkgs/issues/14634
