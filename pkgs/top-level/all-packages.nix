@@ -10561,8 +10561,6 @@ in
 
   rpcbind = callPackage ../servers/rpcbind { };
 
-  #monetdb = callPackage ../servers/sql/monetdb { };
-
   mariadb = callPackage ../servers/sql/mariadb {
     inherit (darwin) cctools;
     inherit (pkgs.darwin.apple_sdk.frameworks) CoreServices;
