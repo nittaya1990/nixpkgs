@@ -8291,6 +8291,10 @@ in
   libmsgpack_0_5 = callPackage ../development/libraries/libmsgpack/0.5.nix { };
   libmsgpack_1_4 = callPackage ../development/libraries/libmsgpack/1.4.nix { };
 
+  libmysqlconnectorcpp = callPackage ../development/libraries/libmysqlconnectorcpp {
+    mysql = mysql57;
+  };
+
   libnatspec = callPackage ../development/libraries/libnatspec (
     stdenv.lib.optionalAttrs stdenv.isDarwin {
       inherit (darwin) libiconv;
@@ -9777,6 +9781,8 @@ in
 
   vrpn = callPackage ../development/libraries/vrpn { };
 
+  vsqlite = callPackage ../development/libraries/vsqlite { };
+
   vtk = callPackage ../development/libraries/vtk { };
 
   vtkWithQt4 = vtk.override { qtLib = qt4; };
@@ -10578,6 +10584,12 @@ in
   mysql55 = callPackage ../servers/sql/mysql/5.5.x.nix {
     inherit (darwin) cctools;
     inherit (darwin.apple_sdk.frameworks) CoreServices;
+  };
+
+  mysql57 = callPackage ../servers/sql/mysql/5.7.x.nix {
+    inherit (darwin) cctools;
+    inherit (darwin.apple_sdk.frameworks) CoreServices;
+    boost = boost159;
   };
 
   mysql = mariadb;
@@ -17380,10 +17392,12 @@ in
 
   mnemonicode = callPackage ../misc/mnemonicode { };
 
-  mysqlWorkbench = newScope gnome2 ../applications/misc/mysql-workbench {
-    lua = lua5_1;
-    libctemplate = libctemplate_2_2;
-  };
+  mysqlWorkbench = newScope gnome2 ../applications/misc/mysql-workbench (let mysql = mysql57; in {
+    automake = automake113x;
+    gdal = gdal.override {mysql = mysql // {lib = {dev = mysql;};};};
+    mysql = mysql;
+    pcre = pcre-cpp;
+  });
 
   redis-desktop-manager = qt55.callPackage ../applications/misc/redis-desktop-manager { };
 
