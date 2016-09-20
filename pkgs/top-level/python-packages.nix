@@ -4401,14 +4401,22 @@ in modules // {
 
 
   detox = self.buildPythonPackage rec {
-    name = "detox-0.9.3";
+    name = "detox-0.10.0";
 
+    buildInputs = with self; [ pytest ];
     propagatedBuildInputs = with self; [ tox py eventlet ];
 
     src = pkgs.fetchurl {
-      url = "mirror://pypi/d/detox/detox-0.9.3.tar.gz";
-      sha256 = "39d48b6758c43ba579f694507d54da96931195eb1b72ad79b46f50af9520b2f3";
+      url = "mirror://pypi/d/detox/${name}.tar.gz";
+      sha256 = "33b704c2a5657366850072fb2aa839df14dd2e692c0c1c2642c3ac30d5c0baec";
     };
+
+    checkPhase = ''
+      py.test
+    '';
+
+    # eventlet timeout, and broken invokation 3.5
+    doCheck = false;
 
     meta = {
       description = "What is detox?";
@@ -16361,12 +16369,11 @@ in modules // {
       sha256 = "1rp4xxy7qp0s0wnq3ig4ji8xsl31g901qkdp339ndxn466cqal2s";
     };
 
-    propagatedBuildInputs = with self; [
-      kazoo six
-    ];
-    buildInputs = with self; [
-
-    ];
+    propagatedBuildInputs = with self; [ kazoo six ];
+    buildInputs = with self; [ testtools ];
+    checkPhase = ''
+      ${python.interpreter} -m unittest discover zake/tests
+    '';
 
     meta = with stdenv.lib; {
       homepage = "https://github.com/yahoo/Zake";
@@ -20335,8 +20342,8 @@ in modules // {
 
     preConfigure = ''
       cd Source
-      python setup.py backport
-      python setup.py configure \
+      ${python.interpreter} setup.py backport
+      ${python.interpreter} setup.py configure \
         --apr-inc-dir=${pkgs.apr.dev}/include \
         --apu-inc-dir=${pkgs.aprutil.dev}/include \
         --apr-lib-dir=${pkgs.apr.out}/lib \
@@ -20348,6 +20355,8 @@ in modules // {
     '');
 
     checkPhase = "make -C ../Tests";
+
+    disabled = isPy3k;
 
     installPhase = ''
       dest=$(toPythonPath $out)/pysvn
@@ -25240,14 +25249,19 @@ in modules // {
   };
 
   willie = buildPythonPackage rec {
-    name = "willie-5.2.0";
+    name = "willie-${version}";
+    version = "5.5.1";
 
     src = pkgs.fetchurl {
-      url = "mirror://pypi/w/willie/willie-5.2.0.tar.gz";
-      sha256 = "2da2e91b65c471b4c8e5e5e11471b25887635258d24aaf76b5354147b3ab577d";
+      url = "mirror://pypi/w/willie/${name}.tar.gz";
+      sha256 = "e03dd26ea694b877a2b3b7b4dcca8e79420e7f346abab34292bff43d992a8cc5";
     };
 
-    propagatedBuildInputs = with self; [ feedparser pytz lxml praw pyenchant pygeoip backports_ssl_match_hostname_3_4_0_2 ];
+    buildInputs = with self; [ pytest modules.sqlite3 ];
+    propagatedBuildInputs = with self; [ feedparser pytz lxml praw pyenchant pygeoip backports_ssl_match_hostname ];
+    checkPhase = ''
+      py.test test
+    '';
 
     meta = {
       description = "A simple, lightweight, open source, easy-to-use IRC utility bot, written in Python";
@@ -26304,7 +26318,8 @@ in modules // {
   };
 
 
-  libarchive = buildPythonPackage rec {
+  libarchive = self.python-libarchive; # The latter is the name upstream uses
+  python-libarchive = buildPythonPackage rec {
     version = "3.1.2-1";
     name = "libarchive-${version}";
     disabled = isPy3k;
@@ -26314,23 +26329,30 @@ in modules // {
       sha256 = "0j4ibc4mvq64ljya9max8832jafi04jciff9ia9qy0xhhlwkcx8x";
     };
 
-    propagatedBuildInputs = with self; [ pkgs.libarchive ];
+    propagatedBuildInputs = with self; [ pkgs.libarchive.lib ];
+    meta.broken = true;
   };
 
   libarchive-c = buildPythonPackage rec {
-    name = "libarchive-c-2.1";
+    name = "libarchive-c-${version}";
+    version = "2.5";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/l/libarchive-c/${name}.tar.gz";
-      sha256 = "089lrz6xyrfnk55v35vis6jyqyyl77w093057djyspnd2744wi2n";
+      sha256 = "98660daa2501d2da51ab6f39893dc24e88916e72b2d80c205641faa5bce66859";
     };
 
-    patchPhase = ''
+    LC_ALL="en_US.UTF-8";
+
+    postPatch = ''
       substituteInPlace libarchive/ffi.py --replace \
-        "find_library('archive')" "'${pkgs.libarchive}/lib/libarchive.so'"
+        "find_library('archive')" "'${pkgs.libarchive.lib}/lib/libarchive.so'"
+    '';
+    checkPhase = ''
+      py.test tests -k 'not test_check_archiveentry_with_unicode_entries_and_name_zip'
     '';
 
-    buildInputs = [ pkgs.libarchive ];
+    buildInputs = with self; [ pytest pkgs.glibcLocales ];
   };
 
   pybrowserid = buildPythonPackage rec {
@@ -29208,13 +29230,15 @@ in modules // {
     name = "Scrapy-${version}";
     version = "1.1.2";
 
-    buildInputs = with self; [ pytest botocore testfixtures pillow ];
+    buildInputs = with self; [ pkgs.glibcLocales mock pytest botocore testfixtures pillow ];
     propagatedBuildInputs = with self; [
       six twisted w3lib lxml cssselect queuelib pyopenssl service-identity parsel pydispatcher
     ];
 
+    LC_ALL="en_US.UTF-8";
+
     checkPhase = ''
-      env LC_ALL=en_US.UTF-8 py.test --ignore=tests/test_linkextractors_deprecated.py --ignore=tests/test_proxy_connect.py
+      py.test --ignore=tests/test_linkextractors_deprecated.py --ignore=tests/test_proxy_connect.py
       # The ignored tests require mitmproxy, which depends on protobuf, but it's disabled on Python3
     '';
 
