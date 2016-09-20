@@ -5,8 +5,8 @@ with stdenv.lib;
 overrideDerivation xf86videoqxl (oldAttrs: {
   name = "xf86-video-spiceqxl-" + (builtins.parseDrvName oldAttrs.name).version;
   configureFlags = "--enable-xspice";
-  propagatedNativeBuildInputs =  oldAttrs.propagatedNativeBuildInputs ++ [
-    spice libjpeg sasl
+  nativeBuildInputs =  oldAttrs.nativeBuildInputs ++ [
+    spice libjpeg.dev sasl.dev
   ];
 }) // {
   meta = {
