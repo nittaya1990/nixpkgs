@@ -1393,6 +1393,8 @@ in
     inherit (perlPackages) XMLSAX XMLParser XMLNamespaceSupport;
   };
 
+  docbook2mdoc = callPackage ../tools/misc/docbook2mdoc { };
+
   dog = callPackage ../tools/system/dog { };
 
   dosfstools = callPackage ../tools/filesystems/dosfstools { };
@@ -3202,6 +3204,8 @@ in
   pngquant = callPackage ../tools/graphics/pngquant { };
 
   podiff = callPackage ../tools/text/podiff { };
+
+  pod2mdoc = callPackage ../tools/misc/pod2mdoc { };
 
   poedit = callPackage ../tools/text/poedit { };
 
@@ -6827,6 +6831,8 @@ in
   );
 
   texi2html = callPackage ../development/tools/misc/texi2html { };
+
+  texi2mdoc = callPackage ../tools/misc/texi2mdoc { };
 
   travis = callPackage ../development/tools/misc/travis { };
 
