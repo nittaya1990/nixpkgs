@@ -9136,6 +9136,8 @@ in
 
   pdf2xml = callPackage ../development/libraries/pdf2xml {} ;
 
+  pg_repack = callPackage ../servers/sql/postgresql/pg_repack {};
+
   phonon = callPackage ../development/libraries/phonon {};
 
   phonon-backend-gstreamer = callPackage ../development/libraries/phonon/backends/gstreamer.nix {};
@@ -9821,12 +9823,12 @@ in
     inherit (darwin) libobjc;
   };
 
-  webkitgtk212x = callPackage ../development/libraries/webkitgtk/2.12.nix {
+  webkitgtk214x = callPackage ../development/libraries/webkitgtk/2.14.nix {
     harfbuzz = harfbuzz-icu;
     gst-plugins-base = gst_all_1.gst-plugins-base;
   };
 
-  webkitgtk210x = callPackage ../development/libraries/webkitgtk/2.10.nix {
+  webkitgtk212x = callPackage ../development/libraries/webkitgtk/2.12.nix {
     harfbuzz = harfbuzz-icu;
     gst-plugins-base = gst_all_1.gst-plugins-base;
   };
@@ -11406,6 +11408,8 @@ in
 
     rtl8812au = callPackage ../os-specific/linux/rtl8812au { };
 
+    rtlwifi_new = callPackage ../os-specific/linux/rtlwifi_new { };
+
     openafsClient = callPackage ../servers/openafs-client { };
 
     facetimehd = callPackage ../os-specific/linux/facetimehd { };
@@ -11621,6 +11625,8 @@ in
 
   numad = callPackage ../os-specific/linux/numad { };
 
+  nvme-cli = callPackage ../os-specific/linux/nvme-cli { };
+
   open-vm-tools = callPackage ../applications/virtualization/open-vm-tools {
     inherit (gnome2) gtk gtkmm;
   };
@@ -11731,6 +11737,8 @@ in
   rt5677-firmware = callPackage ../os-specific/linux/firmware/rt5677 { };
 
   rtl8723bs-firmware = callPackage ../os-specific/linux/firmware/rtl8723bs-firmware { };
+
+  rtlwifi_new-firmware = callPackage ../os-specific/linux/firmware/rtlwifi_new-firmware { };
 
   s3ql = callPackage ../tools/backup/s3ql { };
 
