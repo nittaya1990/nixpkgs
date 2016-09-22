@@ -11469,15 +11469,15 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  StringFlogger = buildPerlPackage {
-    name = "String-Flogger-1.101244";
+  StringFlogger = buildPerlPackage rec {
+    name = "String-Flogger-1.101245";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RJ/RJBS/String-Flogger-1.101244.tar.gz;
-      sha256 = "0cx3d85sz1dqjvbczpf9wx0i1b05jwbxcg7lpq5qygdkblq85nzd";
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/${name}.tar.gz";
+      sha256 = "aa03c08e01f802a358c175c6093c02adf9688659a087a8ddefdc3e9cef72640b";
     };
-    propagatedBuildInputs = [ JSON ParamsUtil SubExporter ];
+    propagatedBuildInputs = [ JSONMaybeXS ParamsUtil SubExporter ];
     meta = {
-      homepage = https://github.com/rjbs/string-flogger;
+      homepage = https://github.com/rjbs/String-Flogger;
       description = "String munging for loggers";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -11695,10 +11695,14 @@ let self = _self // overrides; _self = with self; {
   };
 
   SubIdentify = buildPerlPackage rec {
-    name = "Sub-Identify-0.04";
+    name = "Sub-Identify-0.12";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RG/RGARCIA/${name}.tar.gz";
-      sha256 = "16g4dkmb4h5hh15jsq0kvsf3irrlrlqdv7qk6605wh5gjjwbcjxy";
+      sha256 = "83bb785a66113b4a966db0a4186fd1dd07987acdacb4502b1e1558f817dde825";
+    };
+    meta = {
+      description = "Retrieve names of code references";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
