@@ -10968,6 +10968,8 @@ in
 
   tt-rss = callPackage ../servers/tt-rss { };
 
+  selfoss = callPackage ../servers/web-apps/selfoss { };
+
   axis2 = callPackage ../servers/http/tomcat/axis2 { };
 
   unifi = callPackage ../servers/unifi { };
