@@ -1136,8 +1136,6 @@ in
 
   libpinyin = callPackage ../development/libraries/libpinyin { };
 
-  ibus-libpinyin = callPackage ../tools/inputmethods/ibus-engines/ibus-libpinyin { };
-
   m17n_db = callPackage ../tools/inputmethods/m17n-db { };
 
   m17n_lib = callPackage ../tools/inputmethods/m17n-lib { };
@@ -13340,7 +13338,7 @@ in
   gksu = callPackage ../applications/misc/gksu { };
 
   gnuradio = callPackage ../applications/misc/gnuradio {
-    inherit (pythonPackages) lxml matplotlib numpy python pyopengl pyqt4 scipy wxPython;
+    inherit (pythonPackages) lxml matplotlib numpy python pyopengl pyqt4 scipy wxPython pygtk;
     fftw = fftwFloat;
   };
 
@@ -13939,9 +13937,7 @@ in
 
   kdevplatform = kde5.callPackage ../applications/editors/kdevelop5/kdevplatform.nix {};
 
-  keepnote = callPackage ../applications/office/keepnote {
-    pygtk = pyGtkGlade;
-  };
+  keepnote = callPackage ../applications/office/keepnote { };
 
   kermit = callPackage ../tools/misc/kermit { };
 
