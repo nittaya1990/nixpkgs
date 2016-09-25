@@ -3279,8 +3279,6 @@ in
 
   pygmentex = callPackage ../tools/typesetting/pygmentex { };
 
-  pystringtemplate = callPackage ../development/python-modules/stringtemplate { };
-
   pythonIRClib = pythonPackages.pythonIRClib;
 
   pythonSexy = callPackage ../development/python-modules/libsexy { };
@@ -6543,9 +6541,7 @@ in
 
   dejagnu = callPackage ../development/tools/misc/dejagnu { };
 
-  dfeet = callPackage ../development/tools/misc/d-feet {
-    inherit (pythonPackages) pep8;
-  };
+  dfeet = callPackage ../development/tools/misc/d-feet { };
 
   dfu-programmer = callPackage ../development/tools/misc/dfu-programmer { };
 
@@ -10371,8 +10367,6 @@ in
 
   pysideTools = pythonPackages.pysideTools;
 
-  pysideShiboken = pythonPackages.pysideShiboken;
-
   pyxml = pythonPackages.pyxml;
 
   rbtools = pythonPackages.rbtools;
@@ -13482,7 +13476,6 @@ in
   freecad = callPackage ../applications/graphics/freecad {
     boost = boost155;
     opencascade = opencascade_oce;
-    inherit (pythonPackages) matplotlib pycollada pivy;
   };
 
   freemind = callPackage ../applications/misc/freemind { };
@@ -13517,7 +13510,6 @@ in
     inherit (gnome2) libart_lgpl;
     webkit = null;
     lcms = lcms2;
-    wrapPython = pythonPackages.wrapPython;
   };
 
   gimp = gimp_2_8;
@@ -13860,7 +13852,6 @@ in
   inginious = callPackage ../servers/inginious {};
 
   inkscape = callPackage ../applications/graphics/inkscape {
-    inherit (pythonPackages) python pyxml lxml numpy;
     lcms = lcms2;
   };
 
