@@ -10784,6 +10784,8 @@ in
     inherit (darwin.apple_sdk.frameworks) AppKit Carbon Cocoa;
   };
 
+  radicale = callPackage ../servers/radicale { };
+
   rake = callPackage ../development/tools/build-managers/rake { };
 
   redis = callPackage ../servers/nosql/redis { };
