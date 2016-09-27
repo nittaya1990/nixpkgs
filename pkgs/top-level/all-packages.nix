@@ -4880,8 +4880,6 @@ in
 
   jrePlugin = jre8Plugin;
 
-  jre6Plugin = lowPrio (pkgs.jdkdistro false true);
-
   jre7Plugin = lowPrio (pkgs.oraclejdk7distro false true);
 
   jre8Plugin = lowPrio (pkgs.oraclejdk8distro false true);
@@ -4890,10 +4888,7 @@ in
     system == "i686-linux" ||
     system == "x86_64-linux";
 
-  jdkdistro = installjdk: pluginSupport:
-    assert supportsJDK;
-    (if pluginSupport then appendToName "with-plugin" else x: x)
-      (callPackage ../development/compilers/oraclejdk/jdk6-linux.nix { });
+  jdkdistro = oraclejdk8distro;
 
   oraclejdk7distro = installjdk: pluginSupport:
     assert supportsJDK;
@@ -8230,6 +8225,7 @@ in
   };
 
   libxmlxx = callPackage ../development/libraries/libxmlxx { };
+  libxmlxx3 = callPackage ../development/libraries/libxmlxx/v3.nix { };
 
   libxmp = callPackage ../development/libraries/libxmp { };
 
