@@ -3487,6 +3487,8 @@ in
 
   safe-rm = callPackage ../tools/system/safe-rm { };
 
+  salt = callPackage ../tools/admin/salt {};
+
   salut_a_toi = callPackage ../applications/networking/instant-messengers/salut-a-toi {};
 
   samplicator = callPackage ../tools/networking/samplicator { };
