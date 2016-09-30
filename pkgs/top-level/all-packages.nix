@@ -7978,6 +7978,8 @@ in
 
   libosip_3 = callPackage ../development/libraries/osip/3.nix {};
 
+  libosmocore = callPackage ../applications/misc/libosmocore { };
+
   libosmpbf = callPackage ../development/libraries/libosmpbf {};
 
   libotr = callPackage ../development/libraries/libotr { };
@@ -12640,10 +12642,16 @@ in
   };
 
   gnuradio-with-packages = callPackage ../applications/misc/gnuradio/wrapper.nix {
-    extraPackages = [ gnuradio-nacl gnuradio-osmosdr ];
+    extraPackages = [ gnuradio-nacl gnuradio-osmosdr gnuradio-gsm gnuradio-ais gnuradio-rds ];
   };
 
   gnuradio-nacl = callPackage ../applications/misc/gnuradio-nacl { };
+
+  gnuradio-gsm = callPackage ../applications/misc/gnuradio-gsm { };
+
+  gnuradio-ais = callPackage ../applications/misc/gnuradio-ais { };
+
+  gnuradio-rds = callPackage ../applications/misc/gnuradio-rds { };
 
   gnuradio-osmosdr = callPackage ../applications/misc/gnuradio-osmosdr { };
 
