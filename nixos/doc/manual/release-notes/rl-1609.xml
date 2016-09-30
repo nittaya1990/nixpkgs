@@ -4,7 +4,7 @@
          version="5.0"
          xml:id="sec-release-16.09">
 
-<title>Release 16.09 (“Flounder”, 2016/09/31)</title>
+<title>Release 16.09 (“Flounder”, 2016/09/30)</title>
 
 <para>In addition to numerous new and upgraded packages, this release
 has the following highlights: </para>
@@ -82,6 +82,14 @@ following incompatible changes:</para>
   </listitem>
 
   <listitem>
+    <para>
+      <literal>/var/empty</literal> is now immutable. Activation script runs <command>chattr +i</command>
+      to forbid any modifications inside the folder. See <link xlink:href="https://github.com/NixOS/nixpkgs/pull/18365">
+      the pull request</link> for what bugs this caused.
+    </para>
+  </listitem>
+
+  <listitem>
     <para>Gitlab's maintainance script
     <command>gitlab-runner</command> was removed and split up into the
     more clearer <command>gitlab-run</command> and
@@ -132,6 +140,12 @@ following incompatible changes:</para>
     was changed to YAML.</para>
   </listitem>
 
+  <listitem>
+    <para>
+      PHP has been upgraded to 7.0
+    </para>
+  </listitem>
+
 </itemizedlist>
 
 
@@ -175,6 +189,31 @@ following incompatible changes:</para>
     updated atomically to prevent failures if the switch to a new
     configuration is interrupted.</link></para>
   </listitem>
+
+  <listitem>
+    <para><literal>services.xserver.startGnuPGAgent</literal>
+      has been removed due to GnuPG 2.1.x bump. See <link
+        xlink:href="https://github.com/NixOS/nixpkgs/commit/5391882ebd781149e213e8817fba6ac3c503740c">
+        how to achieve similar behavior</link>. You might need to
+      <literal>pkill gpg-agent</literal> after the upgrade
+      to prevent a stale agent being in the way.
+    </para>
+  </listitem>
+
+  <listitem><para>
+    <link xlink:href="https://github.com/NixOS/nixpkgs/commit/e561edc322d275c3687fec431935095cfc717147">
+    Declarative users could share the uid due to the bug in
+    the script handling conflict resolution.
+    </link>
+  </para></listitem>
+
+  <listitem><para>
+    Gummi boot has been replaced using systemd-boot.
+  </para></listitem>
+
+  <listitem><para>
+    Hydra package and NixOS module were added for convenience.
+  </para></listitem>
 
 </itemizedlist>
 
