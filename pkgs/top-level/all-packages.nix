@@ -9977,6 +9977,8 @@ in
   pfixtools = callPackage ../servers/mail/postfix/pfixtools.nix { };
   pflogsumm = callPackage ../servers/mail/postfix/pflogsumm.nix { };
 
+  postgrey = callPackage ../servers/mail/postgrey { };
+
   pshs = callPackage ../servers/http/pshs { };
 
   libpulseaudio = callPackage ../servers/pulseaudio { libOnly = true; };
@@ -15596,7 +15598,7 @@ in
     };
   };
 
-  superTux = callPackage ../games/super-tux { };
+  superTux = callPackage ../games/supertux { };
 
   superTuxKart = callPackage ../games/super-tux-kart { };
 
