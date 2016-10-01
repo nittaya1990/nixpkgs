@@ -3627,6 +3627,8 @@ in
 
   storebrowse = callPackage ../tools/system/storebrowse { };
 
+  syntex = callPackage ../tools/graphics/syntex {};
+
   fusesmb = callPackage ../tools/filesystems/fusesmb { samba = samba3; };
 
   sl = callPackage ../tools/misc/sl { };
@@ -3991,6 +3993,8 @@ in
   wal_e = callPackage ../tools/backup/wal-e { };
 
   watchman = callPackage ../development/tools/watchman { };
+
+  wavefunctioncollapse = callPackage ../tools/graphics/wavefunctioncollapse {};
 
   wbox = callPackage ../tools/networking/wbox {};
 
@@ -7367,6 +7371,9 @@ in
   libaal = callPackage ../development/libraries/libaal { };
 
   libaccounts-glib = callPackage ../development/libraries/libaccounts-glib { };
+
+  libagar = callPackage ../development/libraries/libagar { };
+  libagar_test = callPackage ../development/libraries/libagar/libagar_test.nix { };
 
   libao = callPackage ../development/libraries/libao {
     usePulseAudio = config.pulseaudio or true;
@@ -12162,6 +12169,8 @@ in
   conkeror = wrapFirefox conkeror-unwrapped { };
 
   containerd = callPackage ../applications/virtualization/containerd { };
+
+  convchain = callPackage ../tools/graphics/convchain {};
 
   cpp_ethereum = callPackage ../applications/misc/webthree-umbrella {
     withOpenCL = true;
