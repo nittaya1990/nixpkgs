@@ -2136,6 +2136,31 @@ in modules // {
     };
   };
 
+  capstone = buildPythonPackage rec {
+    name = "capstone-3.0.4";
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/c/capstone/${name}.tar.gz";
+      sha256 = "945d3b8c3646a1c3914824c416439e2cf2df8969dd722c8979cdcc23b40ad225";
+    };
+    patches = [
+      (pkgs.fetchpatch {
+        stripLen = 2;
+        url = "https://patch-diff.githubusercontent.com/raw/aquynh/capstone/pull/783/commits/23fe9f36622573c747e2bab6119ff245437bf276.patch";
+        sha256 = "0yizqrdlxqxn16873593kdx2vrr7gvvilhgcf9xy6hr0603d3m5r";
+      })
+    ];
+    postPatch = ''
+      patchShebangs src/make.sh
+    '';
+    propagatedBuildInputs = [ ];
+    meta = with pkgs.stdenv.lib; {
+      homepage = "http://www.capstone-engine.org/";
+      license = licenses.bsdOriginal;
+      description = "Capstone disassembly engine";
+      maintainers = with maintainers; [ bennofs ];
+    };
+  };
+
   cgroup-utils = buildPythonPackage rec {
     version = "0.6";
     name = "cgroup-utils-${version}";
@@ -10534,6 +10559,21 @@ in modules // {
       homepage = https://pycodestyle.readthedocs.io;
       license = licenses.mit;
       maintainers = with maintainers; [ garbas ];
+    };
+  };
+
+  filebytes = buildPythonPackage rec {
+    name = "filebytes-0.9.12";
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/f/filebytes/${name}.tar.gz";
+      sha256 = "6cd1c4ca823f6541c963a317e55382609789802dedad08209f4d038369e3f0ac";
+    };
+    propagatedBuildInputs = [ ];
+    meta = with pkgs.stdenv.lib; {
+      homepage = "https://scoding.de/filebytes-introduction";
+      license = licenses.gpl2;
+      description = "Scripts to parse ELF, PE, Mach-O and OAT (Android Runtime)";
+      maintainers = with maintainers; [ bennofs ];
     };
   };
 
@@ -21825,6 +21865,20 @@ in modules // {
      };
   };
 
+  ropper = buildPythonApplication rec {
+    name = "ropper-1.10.10";
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/r/ropper/${name}.tar.gz";
+      sha256 = "1676e07947a19df9d17002307a7555c2647a4224d6f2869949e8fc4bd18f2e87";
+    };
+    propagatedBuildInputs = with self; [ capstone filebytes readline ];
+    meta = with pkgs.stdenv.lib; {
+      homepage = "https://scoding.de/ropper/";
+      license = licenses.gpl2;
+      description = "Show information about files in different file formats";
+      maintainers = with maintainers; [ bennofs ];
+    };
+  };
 
 
   routes = buildPythonPackage rec {

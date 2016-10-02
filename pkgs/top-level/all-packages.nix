@@ -7263,6 +7263,8 @@ in
 
   imlib2 = callPackage ../development/libraries/imlib2 { };
 
+  imlibsetroot = callPackage ../applications/graphics/imlibsetroot { libXinerama = xorg.libXinerama; } ;
+
   ijs = callPackage ../development/libraries/ijs { };
 
   incrtcl = callPackage ../development/libraries/incrtcl { };
@@ -15233,6 +15235,8 @@ in
   beancount = callPackage ../applications/office/beancount {
       pythonPackages = python3Packages;
   };
+
+  bean-add = callPackage ../applications/office/beancount/bean-add.nix { };
 
   beret = callPackage ../games/beret { };
 
