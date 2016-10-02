@@ -8258,6 +8258,8 @@ in
 
   lightlocker = callPackage ../misc/screensavers/light-locker { };
 
+  linenoise = callPackage ../development/libraries/linenoise { };
+
   lirc = callPackage ../development/libraries/lirc { };
 
   liquidfun = callPackage ../development/libraries/liquidfun { };
