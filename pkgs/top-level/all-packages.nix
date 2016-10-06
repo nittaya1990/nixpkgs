@@ -5056,6 +5056,8 @@ in
 
   nvidia_cg_toolkit = callPackage ../development/compilers/nvidia-cg-toolkit { };
 
+  obliv-c = callPackage ../development/compilers/obliv-c {};
+
   ocaml-ng = callPackage ./ocaml-packages.nix { };
 
   ocamlPackages = recurseIntoAttrs ocaml-ng.ocamlPackages;
