@@ -287,7 +287,7 @@ in
       inherit kernel rootModules allowMissing;
     };
 
-  nixBufferBuilders = import ../build-support/emacs/buffer.nix { inherit (pkgs) lib writeText; };
+  nixBufferBuilders = import ../build-support/emacs/buffer.nix { inherit (pkgs) lib writeText; inherit (emacsPackagesNg) inherit-local; };
 
   pathsFromGraph = ../build-support/kernel/paths-from-graph.pl;
 
@@ -2295,6 +2295,8 @@ in
   leocad = callPackage ../applications/graphics/leocad { };
 
   less = callPackage ../tools/misc/less { };
+
+  lf = callPackage ../tools/misc/lf {};
 
   libcpuid = callPackage ../tools/misc/libcpuid { };
 
@@ -4891,6 +4893,7 @@ in
     else
       callPackage ../development/compilers/openjdk/8.nix {
         bootjdk = callPackage ../development/compilers/openjdk/bootstrap.nix { version = "8"; };
+        inherit (gnome2) GConf gnome_vfs;
       };
 
   openjdk = if stdenv.isDarwin then openjdk7 else openjdk8;
@@ -4904,6 +4907,9 @@ in
   jre8 = lib.setName "openjre-${lib.getVersion pkgs.openjdk8.jre}"
     (lib.addMetaAttrs { outputsToInstall = [ "jre" ]; }
       (openjdk8.jre // { outputs = [ "jre" ]; }));
+  jre8_headless = lib.setName "openjre-${lib.getVersion pkgs.openjdk8.jre}-headless"
+    (lib.addMetaAttrs { outputsToInstall = [ "jre" ]; }
+      ((openjdk8.override { minimal = true; }).jre // { outputs = [ "jre" ]; }));
 
   jdk = if stdenv.isDarwin then jdk7 else jdk8;
   jre = if stdenv.isDarwin then jre7 else jre8;
@@ -8639,7 +8645,7 @@ in
   pcl = callPackage ../development/libraries/pcl {
     vtk = vtkWithQt4;
     inherit (darwin) cf-private;
-    inherit (darwin.apple_sdk.frameworks) Cocoa AGL;
+    inherit (darwin.apple_sdk.frameworks) Cocoa AGL OpenGL;
   };
 
   pcre = callPackage ../development/libraries/pcre { };
@@ -9011,6 +9017,8 @@ in
 
   silgraphite = callPackage ../development/libraries/silgraphite {};
   graphite2 = callPackage ../development/libraries/silgraphite/graphite2.nix {};
+
+  simavr = callPackage ../development/tools/simavr { };
 
   simgear = callPackage ../development/libraries/simgear { };
 
@@ -11562,6 +11570,8 @@ in
 
   cabin = callPackage ../data/fonts/cabin { };
 
+  camingo-code = callPackage ../data/fonts/camingo-code { };
+
   dosis = callPackage ../data/fonts/dosis { };
 
   dosemu_fonts = callPackage ../data/fonts/dosemu-fonts { };
@@ -11834,7 +11844,7 @@ in
 
   xlsx2csv = pythonPackages.xlsx2csv;
 
-  zeal = qt55.callPackage ../data/documentation/zeal { };
+  zeal = qt5.callPackage ../data/documentation/zeal { };
 
 
   ### APPLICATIONS
@@ -11929,14 +11939,19 @@ in
 
   ao = callPackage ../applications/graphics/ao {};
 
-  ardour = ardour4;
+  ardour = ardour5;
 
   ardour3 =  callPackage ../applications/audio/ardour/ardour3.nix {
     inherit (gnome2) libgnomecanvas libgnomecanvasmm;
     inherit (vamp) vampSDK;
   };
 
-  ardour4 =  callPackage ../applications/audio/ardour {
+  ardour4 =  callPackage ../applications/audio/ardour/ardour4.nix {
+    inherit (gnome2) libgnomecanvas libgnomecanvasmm;
+    inherit (vamp) vampSDK;
+  };
+
+  ardour5 =  callPackage ../applications/audio/ardour {
     inherit (gnome2) libgnomecanvas libgnomecanvasmm;
     inherit (vamp) vampSDK;
   };
@@ -13733,7 +13748,7 @@ in
 
   pcmanfm = callPackage ../applications/misc/pcmanfm { };
 
-  pcmanfm-qt = callPackage ../applications/misc/pcmanfm-qt { };
+  pcmanfm-qt = lxqt.pcmanfm-qt;
 
   pcmanx-gtk2 = callPackage ../applications/misc/pcmanx-gtk2 { };
 
@@ -14327,6 +14342,8 @@ in
   squishyball = callPackage ../applications/audio/squishyball { };
 
   ssvnc = callPackage ../applications/networking/remote/ssvnc { };
+
+  styx = callPackage ../applications/misc/styx { };
 
   tecoc = callPackage ../applications/editors/tecoc { };
 
@@ -16081,6 +16098,8 @@ in
         in self;
 
     in makeOverridable makePackages extra;
+
+  lxqt = recurseIntoAttrs (callPackage ../desktops/lxqt { });
 
   mate = recurseIntoAttrs (callPackage ../desktops/mate {
     callPackage = newScope pkgs.mate;
