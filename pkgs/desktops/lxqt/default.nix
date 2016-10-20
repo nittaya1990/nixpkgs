@@ -59,7 +59,10 @@ let
     compton-conf = callPackage ./optional/compton-conf { };
     obconf-qt = callPackage ./optional/obconf-qt { };
     lximage-qt = callPackage ./optional/lximage-qt { };
-   
+    qps = callPackage ./optional/qps { };
+    screengrab = callPackage ./optional/screengrab { };
+    qlipper = callPackage ./optional/qlipper { };
+
   };
 
 in self
