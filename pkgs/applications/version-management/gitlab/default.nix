@@ -15,7 +15,7 @@ let
     meta = with lib; {
       homepage = http://www.gitlab.com/;
       platforms = platforms.linux;
-      maintainers = [ ];
+      maintainers = with maintainers; [ fpletz ];
       license = licenses.mit;
     };
   };
@@ -24,7 +24,7 @@ in
 
 stdenv.mkDerivation rec {
   name = "gitlab-${version}";
-  version = "8.11.2";
+  version = "8.12.6";
 
   buildInputs = [ env ruby bundler tzdata git nodejs procps ];
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     owner = "gitlabhq";
     repo = "gitlabhq";
     rev = "v${version}";
-    sha256 = "1id6jsf4mshxis07dqlkgdyqi1v415rp4lx9ix8sjfznchria58b";
+    sha256 = "14dbr8a1il75xz83hkdjm3yq49168mkn62l86bi36n5pfw44kcvh";
   };
 
   patches = [

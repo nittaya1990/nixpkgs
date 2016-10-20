@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   name = "mysql-${version}";
-  version = "5.5.50";
+  version = "5.5.53";
 
   src = fetchurl {
     url = "mirror://mysql/MySQL-5.5/${name}.tar.gz";
-    sha256 = "0lgr6badwnwbrzm6sbll4a25m02xfy85v4q6q0rq5cdjn745bb2y";
+    sha256 = "1snnyz8s7dd3ypm73vbpw36pflz7wqh2bawdvp4riri44pa6va57";
   };
 
   patches = if stdenv.isCygwin then [

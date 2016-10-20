@@ -1,6 +1,7 @@
 { stdenv, fetchurl, ncurses, openssl, aspell, gnutls
 , zlib, curl , pkgconfig, libgcrypt
 , cmake, makeWrapper, libobjc, libiconv
+, asciidoctor # manpages
 , guileSupport ? true, guile
 , luaSupport ? true, lua5
 , perlSupport ? true, perl
@@ -20,15 +21,21 @@ let
 in
 
 stdenv.mkDerivation rec {
-  version = "1.5";
+  version = "1.6";
   name = "weechat-${version}";
 
   src = fetchurl {
     url = "http://weechat.org/files/src/weechat-${version}.tar.bz2";
-    sha256 = "0n4cbhh9a7qq6y70ac9b4r0kb7hydwsic99h45ppr2jly322fvij";
+    sha256 = "0d1wcpsxx13clcf1ygcn5hsa1pjkck4xznbjbxphbdxd5whsbv3k";
   };
 
-  cmakeFlags = with stdenv.lib; []
+  outputs = [ "out" "doc" ];
+
+  enableParallelBuilding = true;
+  cmakeFlags = with stdenv.lib; [
+    "-DENABLE_MAN=ON"
+    "-DENABLE_DOC=ON"
+  ]
     ++ optionals stdenv.isDarwin ["-DICONV_LIBRARY=${libiconv}/lib/libiconv.dylib" "-DCMAKE_FIND_FRAMEWORK=LAST"]
     ++ optional (!guileSupport) "-DENABLE_GUILE=OFF"
     ++ optional (!luaSupport)   "-DENABLE_LUA=OFF"
@@ -41,7 +48,8 @@ stdenv.mkDerivation rec {
       ncurses python openssl aspell gnutls zlib curl pkgconfig
       libgcrypt pycrypto makeWrapper
       cmake
-    ]
+      asciidoctor
+      ]
     ++ optionals stdenv.isDarwin [ pync libobjc ]
     ++ optional  guileSupport    guile
     ++ optional  luaSupport      lua5
@@ -50,7 +58,9 @@ stdenv.mkDerivation rec {
     ++ optional  tclSupport      tcl
     ++ extraBuildInputs;
 
-  NIX_CFLAGS_COMPILE = "-I${python}/include/${python.libPrefix} -DCA_FILE=/etc/ssl/certs/ca-certificates.crt";
+  NIX_CFLAGS_COMPILE = "-I${python}/include/${python.libPrefix}"
+    # Fix '_res_9_init: undefined symbol' error
+    + (stdenv.lib.optionalString stdenv.isDarwin "-DBIND_8_COMPAT=1");
 
   postInstall = with stdenv.lib; ''
     NIX_PYTHONPATH="$out/lib/${python.libPrefix}/site-packages"

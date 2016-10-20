@@ -227,6 +227,7 @@ in rec {
   tests.containers-bridge = callTest tests/containers-bridge.nix {};
   tests.containers-imperative = callTest tests/containers-imperative.nix {};
   tests.containers-extra_veth = callTest tests/containers-extra_veth.nix {};
+  tests.containers-physical_interfaces = callTest tests/containers-physical_interfaces.nix {};
   tests.docker = hydraJob (import tests/docker.nix { system = "x86_64-linux"; });
   tests.dnscrypt-proxy = callTest tests/dnscrypt-proxy.nix { system = "x86_64-linux"; };
   tests.ecryptfs = callTest tests/ecryptfs.nix {};
@@ -244,6 +245,7 @@ in rec {
   tests.gnome3-gdm = callTest tests/gnome3-gdm.nix {};
   tests.grsecurity = callTest tests/grsecurity.nix {};
   tests.hibernate = callTest tests/hibernate.nix {};
+  tests.hound = callTest tests/hound.nix {};
   tests.i3wm = callTest tests/i3wm.nix {};
   tests.installer = callSubTests tests/installer.nix {};
   tests.influxdb = callTest tests/influxdb.nix {};
@@ -260,6 +262,7 @@ in rec {
   #tests.logstash = callTest tests/logstash.nix {};
   tests.mathics = callTest tests/mathics.nix {};
   tests.misc = callTest tests/misc.nix {};
+  tests.mongodb = callTest tests/mongodb.nix {};
   tests.mumble = callTest tests/mumble.nix {};
   tests.munin = callTest tests/munin.nix {};
   tests.mysql = callTest tests/mysql.nix {};
@@ -283,6 +286,7 @@ in rec {
   tests.quagga = callTest tests/quagga.nix {};
   tests.quake3 = callTest tests/quake3.nix {};
   tests.runInMachine = callTest tests/run-in-machine.nix {};
+  tests.samba = callTest tests/samba.nix {};
   tests.sddm = callTest tests/sddm.nix {};
   tests.simple = callTest tests/simple.nix {};
   tests.smokeping = callTest tests/smokeping.nix {};

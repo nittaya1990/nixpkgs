@@ -29,6 +29,9 @@ let
     "-storage.local.path=${cfg.dataDir}/metrics"
     "-config.file=${writePrettyJSON "prometheus.yml" promConfig}"
     "-web.listen-address=${cfg.listenAddress}"
+    "-alertmanager.notification-queue-capacity=${toString cfg.alertmanagerNotificationQueueCapacity}"
+    "-alertmanager.timeout=${toString cfg.alertmanagerTimeout}s"
+    (optionalString (cfg.alertmanagerURL != []) "-alertmanager.url=${concatStringsSep "," cfg.alertmanagerURL}")
   ];
 
   promTypes.globalConfig = types.submodule {
@@ -297,13 +300,14 @@ let
       };
       regex = mkOption {
         type = types.str;
+        default = "(.*)";
         description = ''
           Regular expression against which the extracted value is matched.
         '';
       };
       replacement = mkOption {
         type = types.str;
-        default = "";
+        default = "$1";
         description = ''
           Replacement value against which a regex replace is performed if the
           regular expression matches.
@@ -311,6 +315,7 @@ let
       };
       action = mkOption {
         type = types.enum ["replace" "keep" "drop"];
+        default = "replace";
         description = ''
           Action to perform based on regex matching.
         '';
@@ -386,6 +391,30 @@ in {
         apply = x: map _filter x;
         description = ''
           A list of scrape configurations.
+        '';
+      };
+
+      alertmanagerURL = mkOption {
+        type = types.listOf types.str;
+        default = [];
+        description = ''
+          List of Alertmanager URLs to send notifications to.
+        '';
+      };
+
+      alertmanagerNotificationQueueCapacity = mkOption {
+        type = types.int;
+        default = 10000;
+        description = ''
+          The capacity of the queue for pending alert manager notifications.
+        '';
+      };
+
+      alertmanagerTimeout = mkOption {
+        type = types.int;
+        default = 10;
+        description = ''
+          Alert manager HTTP API timeout (in seconds).
         '';
       };
     };

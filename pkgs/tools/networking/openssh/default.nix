@@ -44,6 +44,7 @@ stdenv.mkDerivation rec {
 
   patches =
     [
+      ./RH-1380296-NEWKEYS-null-pointer-deref.patch
       ./locale_archive.patch
       ./fix-host-key-algorithms-plus.patch
 
@@ -53,7 +54,7 @@ stdenv.mkDerivation rec {
     ++ optional withGssapiPatches gssapiSrc;
 
   buildInputs = [ zlib openssl libedit pkgconfig pam ]
-    ++ optional withKerberos [ kerberos ];
+    ++ optional withKerberos kerberos;
 
   # I set --disable-strip because later we strip anyway. And it fails to strip
   # properly when cross building.

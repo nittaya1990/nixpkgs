@@ -53,15 +53,20 @@ let
     kio-extras = callPackage ./kio-extras.nix {};
     kompare = callPackage ./kompare.nix {};
     konsole = callPackage ./konsole.nix {};
+    kwalletmanager = callPackage ./kwalletmanager.nix {};
     libkdcraw = callPackage ./libkdcraw.nix {};
     libkexiv2 = callPackage ./libkexiv2.nix {};
     libkipi = callPackage ./libkipi.nix {};
     libkomparediff2 = callPackage ./libkomparediff2.nix {};
+    marble = callPackage ./marble.nix {};
     okular = callPackage ./okular.nix {};
     print-manager = callPackage ./print-manager.nix {};
     spectacle = callPackage ./spectacle.nix {};
 
     l10n = pkgs.recurseIntoAttrs (import ./l10n.nix { inherit callPackage lib pkgs; });
+
+    # External packages
+    kipi-plugins = callPackage ../../../applications/graphics/kipi-plugins/5.x.nix {};
   };
 
 in packages

@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub, go }:
+{ stdenv, lib, fetchFromGitHub, go, pkgs }:
 
 stdenv.mkDerivation rec {
-  version = "0.14.6";
+  version = "0.14.8";
   name = "syncthing-${version}";
 
   src = fetchFromGitHub {
-    owner = "syncthing";
-    repo = "syncthing";
-    rev = "v${version}";
-    sha256 = "1w8a46c6r3rddfl9xbx7j2mavai4dm9h8flpm4qr0bsd6whf60hz";
+    owner  = "syncthing";
+    repo   = "syncthing";
+    rev    = "v${version}";
+    sha256 = "0zhxgl6pgf60x99cappdfzk7h23g37hlanh72bwypx7pwbvhc91l";
   };
 
   buildInputs = [ go ];
@@ -25,15 +25,28 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    mkdir -p $out/bin
+    mkdir -p $out/bin $out/etc/systemd/{system,user}
+
     cp bin/* $out/bin
+  '' + lib.optionalString (stdenv.isLinux) ''
+    substitute etc/linux-systemd/system/syncthing-resume.service \
+               $out/etc/systemd/system/syncthing-resume.service \
+               --replace /usr/bin/pkill ${pkgs.procps}/bin/pkill
+
+    substitute etc/linux-systemd/system/syncthing@.service \
+               $out/etc/systemd/system/syncthing@.service \
+               --replace /usr/bin/syncthing $out/bin/syncthing
+
+    substitute etc/linux-systemd/user/syncthing.service \
+               $out/etc/systemd/user/syncthing.service \
+               --replace /usr/bin/syncthing $out/bin/syncthing
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = https://www.syncthing.net/;
     description = "Open Source Continuous File Synchronization";
     license = stdenv.lib.licenses.mpl20;
     maintainers = with stdenv.lib.maintainers; [ pshendry joko peterhoeg ];
-    platforms = with stdenv.lib.platforms; linux ++ freebsd ++ openbsd ++ netbsd;
+    platforms = stdenv.lib.platforms.unix;
   };
 }
