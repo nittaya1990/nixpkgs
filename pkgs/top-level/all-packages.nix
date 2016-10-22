@@ -4857,6 +4857,8 @@ in
 
   dotnetPackages = recurseIntoAttrs (callPackage ./dotnet-packages.nix {});
 
+  glslang = callPackage ../development/compilers/glslang { };
+
   go_bootstrap = callPackage ../development/compilers/go/1.4.nix {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -6359,6 +6361,8 @@ in
   speedtest-cli = callPackage ../tools/networking/speedtest-cli { };
 
   spin = callPackage ../development/tools/analysis/spin { };
+
+  spirv-tools = callPackage ../development/tools/spirv-tools { };
 
   splint = callPackage ../development/tools/analysis/splint {
     flex = flex_2_5_35;
@@ -9376,6 +9380,8 @@ in
                                           CoreText IOSurface ImageIO OpenGL GLUT;
   };
 
+  vulkan-loader = callPackage ../development/libraries/vulkan-loader { };
+
   vtkWithQt4 = vtk.override { qtLib = qt4; };
 
   vxl = callPackage ../development/libraries/vxl {
@@ -11812,6 +11818,8 @@ in
 
   sampradaya = callPackage ../data/fonts/sampradaya { };
 
+  shaderc = callPackage ../development/compilers/shaderc { };
+
   shared_mime_info = callPackage ../data/misc/shared-mime-info { };
 
   shared_desktop_ontologies = callPackage ../data/misc/shared-desktop-ontologies { };
@@ -12177,6 +12185,8 @@ in
   };
 
   bspwm = callPackage ../applications/window-managers/bspwm { };
+
+  bspwm-unstable = callPackage ../applications/window-managers/bspwm/unstable.nix { };
 
   bvi = callPackage ../applications/editors/bvi { };
 
@@ -13861,6 +13871,8 @@ in
   sawfish = callPackage ../applications/window-managers/sawfish { };
 
   sxhkd = callPackage ../applications/window-managers/sxhkd { };
+
+  sxhkd-unstable = callPackage ../applications/window-managers/sxhkd/unstable.nix { };
 
   mpop = callPackage ../applications/networking/mpop {
     inherit (darwin.apple_sdk.frameworks) Security;
