@@ -15557,6 +15557,8 @@ in
 
   gltron = callPackage ../games/gltron { };
 
+  gmad = callPackage ../games/gmad { };
+
   gnubg = callPackage ../games/gnubg { };
 
   gnuchess = callPackage ../games/gnuchess { };
@@ -16818,6 +16820,8 @@ in
   beep = callPackage ../misc/beep { };
 
   blackbird = callPackage ../misc/themes/blackbird { };
+
+  bootil = callPackage ../development/libraries/bootil { };
 
   brgenml1lpr = callPackage_i686 ../misc/cups/drivers/brgenml1lpr {};
 
