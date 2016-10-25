@@ -12312,6 +12312,32 @@ in modules // {
 
   icdiff = callPackage ../tools/text/icdiff {};
 
+  imageio = buildPythonPackage rec {
+    name = "imageio-${version}";
+    version = "1.6";
+
+    src = pkgs.fetchurl {
+      url = "https://github.com/imageio/imageio/archive/v${version}.tar.gz";
+      sha256 = "195snkk3fsbjqd5g1cfsd9alzs5q45gdbi2ka9ph4yxqb31ijrbv";
+    };
+
+    buildInputs = with self; [ pytest ];
+    propagatedBuildInputs = with self; [ numpy ];
+
+    checkPhase = ''
+      py.test
+    '';
+
+    # Tries to write in /var/tmp/.imageio
+    doCheck = false;
+
+    meta = {
+      description = "Library for reading and writing a wide range of image, video, scientific, and volumetric data formats";
+      homepage = http://imageio.github.io/;
+      license = licenses.bsd2;
+    };
+  };
+
   importlib = buildPythonPackage rec {
     name = "importlib-1.0.2";
 
@@ -13921,6 +13947,26 @@ in modules // {
     meta = {
       description = "A minimalistic mocking library for python";
       homepage = https://pypi.python.org/pypi/MiniMock;
+    };
+  };
+
+  moviepy = buildPythonPackage rec {
+    name = "moviepy-${version}";
+    version = "0.2.2.11";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/m/moviepy/${name}.tar.gz";
+      sha256 = "d937d817e534efc54eaee2fc4c0e70b48fcd81e1528cd6425f22178704681dc3";
+    };
+
+    # No tests
+    doCheck = false;
+    propagatedBuildInputs = with self; [ numpy decorator imageio tqdm ];
+
+    meta = {
+      description = "Video editing with Python";
+      homepage = http://zulko.github.io/moviepy/;
+      license = licenses.mit;
     };
   };
 
