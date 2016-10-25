@@ -2673,11 +2673,11 @@ in modules // {
 
   blaze = buildPythonPackage rec {
     name = "blaze-${version}";
-    version = "0.10.2";
+    version = "0.11.0";
 
     src = pkgs.fetchurl {
-      url = "mirror://pypi/b/blaze/${name}.tar.gz";
-      sha256 = "16m1nzs5gzwa62pwybjsxgbdpd9jy10rhs3c3niacyf6aa6hr9jh";
+      url = "https://github.com/blaze/blaze/archive/${version}.tar.gz";
+      sha256 = "07zrrxkmdqk84xvdmp29859zcfzlpx5pz6g62l28nqp6n6a7yq9a";
     };
 
     buildInputs = with self; [ pytest ];
@@ -2848,11 +2848,11 @@ in modules // {
 
   bokeh = buildPythonPackage rec {
     name = "bokeh-${version}";
-    version = "0.12.1";
+    version = "0.12.3";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/b/bokeh/${name}.tar.gz";
-      sha256 = "06d3ed14308f550376d5b0c7e9f2bacb3ff5bbcceefd7f6369d070de71dfa563";
+      sha256 = "e138941b62f59bc48bc5b8d249e90c03fed31c1d5abe47ab2ce9e4c83202f73c";
     };
 
     disabled = isPyPy;
@@ -2869,7 +2869,6 @@ in modules // {
       werkzeug
       itsdangerous
       dateutil
-      futures
       requests2
       six
       pygments
@@ -2880,6 +2879,7 @@ in modules // {
       tornado
       colorama
       ]
+      ++ optionals ( !isPy3k ) [ futures ]
       ++ optionals ( isPy26 ) [ argparse ]
       ++ optionals ( !isPy3k && !isPyPy ) [ websocket_client ]
       ++ optionals ( !isPyPy ) [ numpy pandas greenlet ];
