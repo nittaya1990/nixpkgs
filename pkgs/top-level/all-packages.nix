@@ -6530,6 +6530,9 @@ in
     #      apr with db58 on freebsd (nov 2015), for unknown reasons
   };
 
+  arb = callPackage ../development/libraries/arb {};
+  arb-git = callPackage ../development/libraries/arb/git.nix {};
+
   armadillo = callPackage ../development/libraries/armadillo {};
 
   assimp = callPackage ../development/libraries/assimp { };
@@ -6609,6 +6612,8 @@ in
   ccnx = callPackage ../development/libraries/ccnx { };
 
   ndn-cxx = callPackage ../development/libraries/ndn-cxx { };
+
+  cddlib = callPackage ../development/libraries/cddlib {};
 
   cdk = callPackage ../development/libraries/cdk {};
 
@@ -6783,6 +6788,8 @@ in
 
   dxflib = callPackage ../development/libraries/dxflib {};
 
+  eclib = callPackage ../development/libraries/eclib {};
+
   eigen = callPackage ../development/libraries/eigen {};
 
   eigen2 = callPackage ../development/libraries/eigen/2.0.nix {};
@@ -6827,6 +6834,9 @@ in
   };
 
   fcgi = callPackage ../development/libraries/fcgi { };
+
+  fflas-ffpack = callPackage ../development/libraries/fflas-ffpack {};
+  fflas-ffpack_1 = callPackage ../development/libraries/fflas-ffpack/1.nix {};
 
   ffmpeg_0_10 = callPackage ../development/libraries/ffmpeg/0.10.nix {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
@@ -6885,6 +6895,8 @@ in
 
   flann = callPackage ../development/libraries/flann { };
 
+  flint = callPackage ../development/libraries/flint { };
+
   flite = callPackage ../development/libraries/flite { };
 
   fltk13 = callPackage ../development/libraries/fltk { };
@@ -6893,6 +6905,9 @@ in
   fmod = callPackage ../development/libraries/fmod { };
 
   fmod42416 = callPackage ../development/libraries/fmod/4.24.16.nix { };
+
+  fplll = callPackage ../development/libraries/fplll {};
+  fplll_20160331 = callPackage ../development/libraries/fplll/20160331.nix {};
 
   freeimage = callPackage ../development/libraries/freeimage { };
 
@@ -6979,6 +6994,8 @@ in
 
   gettext = callPackage ../development/libraries/gettext { };
 
+  gf2x = callPackage ../development/libraries/gf2x {};
+
   gd = callPackage ../development/libraries/gd {
     libtiff = null;
     libXpm = null;
@@ -6995,6 +7012,10 @@ in
   giblib = callPackage ../development/libraries/giblib { };
 
   gio-sharp = callPackage ../development/libraries/gio-sharp { };
+
+  givaro = callPackage ../development/libraries/givaro {};
+  givaro_3 = callPackage ../development/libraries/givaro/3.nix {};
+  givaro_3_7 = callPackage ../development/libraries/givaro/3.7.nix {};
 
   icon-lang = callPackage ../development/interpreters/icon-lang { };
 
@@ -7079,6 +7100,11 @@ in
 
   #GMP ex-satellite, so better keep it near gmp
   mpfr = callPackage ../development/libraries/mpfr/default.nix { };
+  
+  mpfi = callPackage ../development/libraries/mpfi { };
+
+  # A GMP fork
+  mpir = callPackage ../development/libraries/mpir {};
 
   gobjectIntrospection = callPackage ../development/libraries/gobject-introspection {
     nixStoreDir = config.nix.storeDir or builtins.storeDir;
@@ -7352,6 +7378,8 @@ in
   };
 
   imv = callPackage ../applications/graphics/imv/default.nix { };
+
+  iml = callPackage ../development/libraries/iml { };
 
   imlib2 = callPackage ../development/libraries/imlib2 { };
 
@@ -7698,6 +7726,8 @@ in
   libfpx = callPackage ../development/libraries/libfpx { };
 
   libgadu = callPackage ../development/libraries/libgadu { };
+
+  libgap = callPackage ../development/libraries/libgap { };
 
   libgdata = gnome3.libgdata;
 
@@ -9205,6 +9235,8 @@ in
   szip = callPackage ../development/libraries/szip { };
 
   t1lib = callPackage ../development/libraries/t1lib { };
+
+  tachyon = callPackage ../development/libraries/tachyon {};
 
   taglib = callPackage ../development/libraries/taglib { };
   taglib_1_9 = callPackage ../development/libraries/taglib/1.9.nix { };
@@ -16376,6 +16408,8 @@ in
 
   metis = callPackage ../development/libraries/science/math/metis {};
 
+  nauty = callPackage ../applications/science/math/nauty {};
+
   sage = callPackage ../applications/science/math/sage { };
 
   suitesparse_4_2 = callPackage ../development/libraries/science/math/suitesparse/4.2.nix { };
@@ -16383,6 +16417,8 @@ in
   suitesparse = suitesparse_4_4;
 
   superlu = callPackage ../development/libraries/science/math/superlu {};
+
+  symmetrica = callPackage ../applications/science/math/symmetrica {};
 
   ipopt = callPackage ../development/libraries/science/math/ipopt { openblas = openblasCompat; };
 
@@ -16537,6 +16573,8 @@ in
 
   gappa = callPackage ../applications/science/logic/gappa { };
 
+  gfan = callPackage ../applications/science/math/gfan {};
+
   ginac = callPackage ../applications/science/math/ginac { };
 
   glucose = callPackage ../applications/science/logic/glucose { };
@@ -16673,11 +16711,15 @@ in
 
   geogebra = callPackage ../applications/science/math/geogebra { };
 
-  maxima = callPackage ../applications/science/math/maxima { };
+  maxima = callPackage ../applications/science/math/maxima { ecl = null; };
+  maxima-ecl = callPackage ../applications/science/math/maxima { sbcl = null; };
 
   wxmaxima = callPackage ../applications/science/math/wxmaxima { wxGTK = wxGTK30; };
 
   pari = callPackage ../applications/science/math/pari {};
+  pari_alpha = callPackage ../applications/science/math/pari/alpha.nix {};
+
+  ratpoints = callPackage ../applications/science/math/ratpoints {};
 
   calc = callPackage ../applications/science/math/calc { };
 
@@ -16688,6 +16730,9 @@ in
   };
 
   singular = callPackage ../applications/science/math/singular {};
+  libsingular = callPackage ../applications/science/math/singular {
+    asLibsingular = true;
+  };
 
   scilab = callPackage ../applications/science/math/scilab {
     withXaw3d = false;
