@@ -698,6 +698,7 @@ in
   caddy = callPackage ../servers/caddy { };
 
   calamares = qt5.callPackage ../tools/misc/calamares rec {
+    python = python3;
     boost = pkgs.boost.override { python=python3; };
     libyamlcpp = callPackage ../development/libraries/libyaml-cpp { boost=boost; };
   };
@@ -1032,7 +1033,9 @@ in
 
   burp = callPackage ../tools/backup/burp { };
 
-  buku = callPackage ../applications/misc/buku {};
+  buku = callPackage ../applications/misc/buku {
+    pythonPackages = python3Packages;
+  };
 
   byzanz = callPackage ../applications/video/byzanz {};
 
@@ -1387,7 +1390,8 @@ in
 
   diffoscope = callPackage ../tools/misc/diffoscope {
     jdk = jdk7;
-    rpm = rpm.override;
+    pythonPackages = python3Packages;
+    rpm = rpm.override { python = python3; };
   };
 
   diffstat = callPackage ../tools/text/diffstat { };
@@ -2906,7 +2910,9 @@ in
 
   notify-osd = callPackage ../applications/misc/notify-osd { };
 
-  nox = callPackage ../tools/package-management/nox {};
+  nox = callPackage ../tools/package-management/nox {
+    pythonPackages = python3Packages;
+  };
 
   nq = callPackage ../tools/system/nq { };
 
@@ -3764,6 +3770,7 @@ in
 
   system-config-printer = callPackage ../tools/misc/system-config-printer {
     libxml2 = libxml2Python;
+    pythonPackages = python3Packages;
    };
 
   sitecopy = callPackage ../tools/networking/sitecopy { };
@@ -5568,7 +5575,7 @@ in
 
   pythonDocs = recurseIntoAttrs (callPackage ../development/interpreters/python/cpython/docs {});
 
-  pypi2nix = callPackage ../development/tools/pypi2nix {};
+  pypi2nix = callPackage ../development/tools/pypi2nix { python = python35; };
 
   svg2tikz = python27Packages.svg2tikz;
 
@@ -6203,7 +6210,9 @@ in
 
   ninja = callPackage ../development/tools/build-managers/ninja { };
 
-  nixbang = callPackage ../development/tools/misc/nixbang {};
+  nixbang = callPackage ../development/tools/misc/nixbang {
+      pythonPackages = python3Packages;
+  };
 
   nexus = callPackage ../development/tools/repository-managers/nexus { };
 
@@ -9209,7 +9218,7 @@ in
 
   stlport = callPackage ../development/libraries/stlport { };
 
-  streamlink = callPackage ../applications/video/streamlink {};
+  streamlink = callPackage ../applications/video/streamlink { pythonPackages = python3Packages; };
 
   strigi = callPackage ../development/libraries/strigi { clucene_core = clucene_core_2; };
 
@@ -10361,6 +10370,8 @@ in
   serfdom = callPackage ../servers/serf { };
 
   seyren = callPackage ../servers/monitoring/seyren { };
+
+  ruby-zoom = callPackage ../tools/text/ruby-zoom { };
 
   sensu = callPackage ../servers/monitoring/sensu {
     ruby = ruby_2_1;
@@ -12182,6 +12193,7 @@ in
 
   blender = callPackage  ../applications/misc/blender {
     cudatoolkit = cudatoolkit75;
+    python = python35;
   };
 
   bluefish = callPackage ../applications/editors/bluefish {
@@ -12725,7 +12737,9 @@ in
 
   eq10q = callPackage ../applications/audio/eq10q { };
 
-  errbot = callPackage ../applications/networking/errbot {};
+  errbot = callPackage ../applications/networking/errbot {
+    pythonPackages = python3Packages;
+  };
 
   espeak-classic = callPackage ../applications/audio/espeak { };
 
@@ -14124,7 +14138,9 @@ in
 
   purple-facebook = callPackage ../applications/networking/instant-messengers/pidgin-plugins/purple-facebook { };
 
-  pithos = callPackage ../applications/audio/pithos {};
+  pithos = callPackage ../applications/audio/pithos {
+    pythonPackages = python3Packages;
+  };
 
   pinfo = callPackage ../applications/misc/pinfo { };
 
@@ -15414,7 +15430,9 @@ in
 
   bastet = callPackage ../games/bastet {};
 
-  beancount = callPackage ../applications/office/beancount {};
+  beancount = callPackage ../applications/office/beancount {
+      pythonPackages = python3Packages;
+  };
 
   bean-add = callPackage ../applications/office/beancount/bean-add.nix { };
 
@@ -17298,7 +17316,9 @@ in
 
   webfs = callPackage ../servers/http/webfs { };
 
-  wikicurses = callPackage ../applications/misc/wikicurses {};
+  wikicurses = callPackage ../applications/misc/wikicurses {
+    pythonPackages = python3Packages;
+  };
 
   wineMinimal = callPackage ../misc/emulators/wine {
     wineRelease = config.wine.release or "stable";
