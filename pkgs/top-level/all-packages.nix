@@ -698,7 +698,6 @@ in
   caddy = callPackage ../servers/caddy { };
 
   calamares = qt5.callPackage ../tools/misc/calamares rec {
-    python = python3;
     boost = pkgs.boost.override { python=python3; };
     libyamlcpp = callPackage ../development/libraries/libyaml-cpp { boost=boost; };
   };
@@ -1033,9 +1032,7 @@ in
 
   burp = callPackage ../tools/backup/burp { };
 
-  buku = callPackage ../applications/misc/buku {
-    pythonPackages = python3Packages;
-  };
+  buku = callPackage ../applications/misc/buku {};
 
   byzanz = callPackage ../applications/video/byzanz {};
 
@@ -1390,8 +1387,7 @@ in
 
   diffoscope = callPackage ../tools/misc/diffoscope {
     jdk = jdk7;
-    pythonPackages = python3Packages;
-    rpm = rpm.override { python = python3; };
+    rpm = rpm.override;
   };
 
   diffstat = callPackage ../tools/text/diffstat { };
@@ -1485,7 +1481,7 @@ in
 
   ecryptfs = callPackage ../tools/security/ecryptfs { };
 
-  ecryptfs-helper = callPackage ../tools/security/ecryptfs/helper.nix { python = python2; };
+  ecryptfs-helper = callPackage ../tools/security/ecryptfs/helper.nix { };
 
   editres = callPackage ../tools/graphics/editres { };
 
@@ -2851,6 +2847,8 @@ in
 
   networkmanager_openconnect = callPackage ../tools/networking/network-manager/openconnect.nix { };
 
+  networkmanager_strongswan = callPackage ../tools/networking/network-manager/strongswan.nix { };
+
   networkmanagerapplet = newScope gnome2 ../tools/networking/network-manager-applet { };
 
   newsbeuter = callPackage ../applications/networking/feedreaders/newsbeuter { };
@@ -2908,9 +2906,7 @@ in
 
   notify-osd = callPackage ../applications/misc/notify-osd { };
 
-  nox = callPackage ../tools/package-management/nox {
-    pythonPackages = python3Packages;
-  };
+  nox = callPackage ../tools/package-management/nox {};
 
   nq = callPackage ../tools/system/nq { };
 
@@ -2967,9 +2963,7 @@ in
 
   odt2txt = callPackage ../tools/text/odt2txt { };
 
-  offlineimap = callPackage ../tools/networking/offlineimap {
-    inherit (pythonPackages) sqlite3;
-  };
+  offlineimap = callPackage ../tools/networking/offlineimap { };
 
   oh-my-zsh = callPackage ../shells/oh-my-zsh { };
 
@@ -3001,11 +2995,7 @@ in
 
   openobex = callPackage ../tools/bluetooth/openobex { };
 
-  openopc = callPackage ../tools/misc/openopc {
-    pythonFull = python27.buildEnv.override {
-      extraLibs = [ python27Packages.pyro3 ];
-    };
-  };
+  openopc = callPackage ../tools/misc/openopc { };
 
   openresolv = callPackage ../tools/networking/openresolv { };
 
@@ -3774,7 +3764,6 @@ in
 
   system-config-printer = callPackage ../tools/misc/system-config-printer {
     libxml2 = libxml2Python;
-    pythonPackages = python3Packages;
    };
 
   sitecopy = callPackage ../tools/networking/sitecopy { };
@@ -4418,9 +4407,7 @@ in
 
   es = callPackage ../shells/es { };
 
-  fish = callPackage ../shells/fish {
-    python = python27Full;
-  };
+  fish = callPackage ../shells/fish { };
 
   fish-foreign-env = callPackage ../shells/fish-foreign-env { };
 
@@ -5528,9 +5515,17 @@ in
   };
   purePackages = recurseIntoAttrs (callPackage ./pure-packages.nix {});
 
+  # Python interpreters. All standard library modules are included except for tkinter, which is
+  # available as `pythonPackages.tkinter` and can be used as any other Python package.
   python = python2;
   python2 = python27;
   python3 = python35;
+
+  # Python interpreter that is build with all modules, including tkinter.
+  # These are for compatibility and should not be used inside Nixpkgs.
+  pythonFull = python.override{x11Support=true;};
+  python2Full = python2.override{x11Support=true;};
+  python3Full = python3.override{x11Support=true;};
 
   # pythonPackages further below, but assigned here because they need to be in sync
   pythonPackages = python2Packages;
@@ -5547,6 +5542,7 @@ in
   };
   python33 = callPackage ../development/interpreters/python/cpython/3.3 {
     self = python33;
+    inherit (darwin) CF configd;
   };
   python34 = hiPrio (callPackage ../development/interpreters/python/cpython/3.4 {
     inherit (darwin) CF configd;
@@ -5565,24 +5561,14 @@ in
 
   pypy27 = callPackage ../development/interpreters/python/pypy/2.7 {
     self = pypy27;
-  };
-
-  pythonFull = python2Full;
-  python2Full = python27Full;
-  python26Full = python26.override {
-    includeModules = true;
-    self = python26Full;
-  };
-  python27Full = python27.override {
-    includeModules = true;
-    self = python27Full;
+    python = python27.override{x11Support=true;};
   };
 
   python2nix = callPackage ../tools/package-management/python2nix { };
 
   pythonDocs = recurseIntoAttrs (callPackage ../development/interpreters/python/cpython/docs {});
 
-  pypi2nix = callPackage ../development/tools/pypi2nix { python = python35; };
+  pypi2nix = callPackage ../development/tools/pypi2nix {};
 
   svg2tikz = python27Packages.svg2tikz;
 
@@ -5737,9 +5723,9 @@ in
 
   augeas = callPackage ../tools/system/augeas { };
 
-  ansible = pythonPackages.ansible;
+  ansible = python2Packages.ansible;
 
-  ansible2 = pythonPackages.ansible2;
+  ansible2 = python2Packages.ansible2;
 
   antlr = callPackage ../development/tools/parsing/antlr/2.7.7.nix { };
 
@@ -5829,9 +5815,15 @@ in
     wxGTK = wxGTK30;
   };
 
-  buildbot = callPackage ../development/tools/build-managers/buildbot { };
-  buildbot-worker = callPackage ../development/tools/build-managers/buildbot/worker.nix { };
-  buildbot-plugins = callPackage ../development/tools/build-managers/buildbot/plugins.nix { };
+  buildbot = callPackage ../development/tools/build-managers/buildbot {
+    pythonPackages = python2Packages;
+  };
+  buildbot-worker = callPackage ../development/tools/build-managers/buildbot/worker.nix {
+    pythonPackages = python2Packages;
+  };
+  buildbot-plugins = callPackage ../development/tools/build-managers/buildbot/plugins.nix {
+    pythonPackages = python2Packages;
+  };
   buildbot-ui = self.buildbot.override {
     plugins = with self.buildbot-plugins; [ www ];
   };
@@ -6211,9 +6203,7 @@ in
 
   ninja = callPackage ../development/tools/build-managers/ninja { };
 
-  nixbang = callPackage ../development/tools/misc/nixbang {
-      pythonPackages = python3Packages;
-  };
+  nixbang = callPackage ../development/tools/misc/nixbang {};
 
   nexus = callPackage ../development/tools/repository-managers/nexus { };
 
@@ -7109,6 +7099,7 @@ in
   gobjectIntrospection = callPackage ../development/libraries/gobject-introspection {
     nixStoreDir = config.nix.storeDir or builtins.storeDir;
     inherit (darwin) cctools;
+    python = python2;
   };
 
   goocanvas = callPackage ../development/libraries/goocanvas { };
@@ -7220,7 +7211,8 @@ in
 
   gtkmathview = callPackage ../development/libraries/gtkmathview { };
 
-  glib = callPackage ../development/libraries/glib { };
+  glib = callPackage ../development/libraries/glib {
+  };
   glib-tested = glib.override { # checked version separate to break cycles
     doCheck = true;
     libffi = libffi.override { doCheck = true; };
@@ -7294,7 +7286,7 @@ in
   gts = callPackage ../development/libraries/gts { };
 
   gvfs = callPackage ../development/libraries/gvfs {
-    gnome = self.gnome2;
+    gnome = self.gnome3;
   };
 
   gwenhywfar = callPackage ../development/libraries/aqbanking/gwenhywfar.nix { };
@@ -7344,7 +7336,7 @@ in
 
   htmlcxx = callPackage ../development/libraries/htmlcxx { };
 
-  http-parser = callPackage ../development/libraries/http-parser { inherit (pythonPackages) gyp; };
+  http-parser = callPackage ../development/libraries/http-parser { };
 
   hunspell = callPackage ../development/libraries/hunspell { };
 
@@ -8351,7 +8343,8 @@ in
 
   libxmi = callPackage ../development/libraries/libxmi { };
 
-  libxml2 = callPackage ../development/libraries/libxml2 { };
+  libxml2 = callPackage ../development/libraries/libxml2 {
+  };
   libxml2Python = pkgs.buildEnv { # slightly hacky
     name = "libxml2+py-${self.libxml2.version}";
     paths = with libxml2; [ dev bin py ];
@@ -9216,7 +9209,7 @@ in
 
   stlport = callPackage ../development/libraries/stlport { };
 
-  streamlink = callPackage ../applications/video/streamlink { pythonPackages = python3Packages; };
+  streamlink = callPackage ../applications/video/streamlink {};
 
   strigi = callPackage ../development/libraries/strigi { clucene_core = clucene_core_2; };
 
@@ -9404,9 +9397,7 @@ in
 
   vid-stab = callPackage ../development/libraries/vid-stab { };
 
-  vigra = callPackage ../development/libraries/vigra {
-    inherit (pkgs.pythonPackages) numpy;
-  };
+  vigra = callPackage ../development/libraries/vigra { };
 
   vlock = callPackage ../misc/screensavers/vlock { };
 
@@ -10454,11 +10445,12 @@ in
     inherit clangStdenv fetchurl fetchgit fetchpatch stdenv pkgconfig intltool freetype fontconfig
       libxslt expat libpng zlib perl mesa_drivers spice_protocol libunwind
       dbus libuuid openssl gperf m4 libevdev tradcpp libinput mcpp makeWrapper autoreconfHook
-      autoconf automake libtool xmlto asciidoc flex bison python mtdev pixman
+      autoconf automake libtool xmlto asciidoc flex bison mtdev pixman
       cairo epoxy;
     inherit (darwin) apple_sdk cf-private libobjc;
     bootstrap_cmds = if stdenv.isDarwin then darwin.bootstrap_cmds else null;
     mesa = mesa_noglu;
+    python = python2; # Incompatible with Python 3x
     udev = if stdenv.isLinux then udev else null;
     libdrm = if stdenv.isLinux then libdrm else null;
     fglrxCompat = config.xorg.fglrxCompat or false; # `config` because we have no `xorg.override`
@@ -10646,11 +10638,7 @@ in
 
   drbd = callPackage ../os-specific/linux/drbd { };
 
-  dstat = callPackage ../os-specific/linux/dstat {
-    # pythonFull includes the "curses" standard library module, for pretty
-    # dstat color output
-    python = pythonFull;
-  };
+  dstat = callPackage ../os-specific/linux/dstat { };
 
   libossp_uuid = callPackage ../development/libraries/libossp-uuid { };
 
@@ -12194,7 +12182,6 @@ in
 
   blender = callPackage  ../applications/misc/blender {
     cudatoolkit = cudatoolkit75;
-    python = python35;
   };
 
   bluefish = callPackage ../applications/editors/bluefish {
@@ -12738,9 +12725,7 @@ in
 
   eq10q = callPackage ../applications/audio/eq10q { };
 
-  errbot = callPackage ../applications/networking/errbot {
-    pythonPackages = python3Packages;
-  };
+  errbot = callPackage ../applications/networking/errbot {};
 
   espeak-classic = callPackage ../applications/audio/espeak { };
 
@@ -12824,11 +12809,12 @@ in
   gksu = callPackage ../applications/misc/gksu { };
 
   gnuradio = callPackage ../applications/misc/gnuradio {
-    inherit (pythonPackages) lxml matplotlib numpy python pyopengl pyqt4 scipy wxPython pygtk;
+    inherit (python2Packages) cheetah lxml matplotlib numpy python pyopengl pyqt4 scipy wxPython pygtk;
     fftw = fftwFloat;
   };
 
   gnuradio-with-packages = callPackage ../applications/misc/gnuradio/wrapper.nix {
+    inherit (python2Packages) python;
     extraPackages = [ gnuradio-nacl gnuradio-osmosdr gnuradio-gsm gnuradio-ais gnuradio-rds ];
   };
 
@@ -12906,9 +12892,9 @@ in
 
   inherit (callPackages ../applications/networking/browsers/firefox {
     inherit (gnome2) libIDL;
-    inherit (pythonPackages) pysqlite;
     libpng = libpng_apng;
     enableGTK3 = false;
+    python = python2;
   }) firefox-unwrapped firefox-esr-unwrapped;
 
   firefox = wrapFirefox firefox-unwrapped { };
@@ -14138,9 +14124,7 @@ in
 
   purple-facebook = callPackage ../applications/networking/instant-messengers/pidgin-plugins/purple-facebook { };
 
-  pithos = callPackage ../applications/audio/pithos {
-    pythonPackages = python3Packages;
-  };
+  pithos = callPackage ../applications/audio/pithos {};
 
   pinfo = callPackage ../applications/misc/pinfo { };
 
@@ -14728,7 +14712,7 @@ in
   };
 
   termite = callPackage ../applications/misc/termite {
-    vte = gnome3.vte-select-text;
+    vte = gnome3_20.vte-select-text;
   };
 
   tesseract = callPackage ../applications/graphics/tesseract { };
@@ -15407,9 +15391,7 @@ in
 
   angband = callPackage ../games/angband { };
 
-  anki = callPackage ../games/anki {
-    inherit (pythonPackages) wrapPython pysqlite sqlalchemy pyaudio beautifulsoup httplib2 matplotlib pyqt4;
-  };
+  anki = callPackage ../games/anki { };
 
   armagetronad = callPackage ../games/armagetronad { };
 
@@ -15432,9 +15414,7 @@ in
 
   bastet = callPackage ../games/bastet {};
 
-  beancount = callPackage ../applications/office/beancount {
-      pythonPackages = python3Packages;
-  };
+  beancount = callPackage ../applications/office/beancount {};
 
   bean-add = callPackage ../applications/office/beancount/bean-add.nix { };
 
@@ -16029,7 +16009,9 @@ in
 
   gnome3_20 = recurseIntoAttrs (callPackage ../desktops/gnome-3/3.20 { });
 
-  gnome3 = gnome3_20;
+  gnome3_22 = recurseIntoAttrs (callPackage ../desktops/gnome-3/3.22 { });
+
+  gnome3 = gnome3_22;
 
   hsetroot = callPackage ../tools/X11/hsetroot { };
 
@@ -16041,6 +16023,8 @@ in
     kdePackagesFor
       {
         libusb = libusb1;
+        python2Packages = python2Packages;
+        inherit (python2Packages) python;
         libcanberra = libcanberra_kde;
         boost = boost155;
         kdelibs = kde5.kdelibs;
@@ -17076,9 +17060,7 @@ in
 
   nut = callPackage ../applications/misc/nut { };
 
-  solfege = callPackage ../misc/solfege {
-      pysqlite = pkgs.pythonPackages.sqlite3;
-  };
+  solfege = callPackage ../misc/solfege { };
 
   disnix = callPackage ../tools/package-management/disnix { };
 
@@ -17316,9 +17298,7 @@ in
 
   webfs = callPackage ../servers/http/webfs { };
 
-  wikicurses = callPackage ../applications/misc/wikicurses {
-    pythonPackages = python3Packages;
-  };
+  wikicurses = callPackage ../applications/misc/wikicurses {};
 
   wineMinimal = callPackage ../misc/emulators/wine {
     wineRelease = config.wine.release or "stable";
@@ -17487,9 +17467,7 @@ in
 
   zimg = callPackage ../development/libraries/zimg { };
 
-  zk-shell = callPackage ../applications/misc/zk-shell {
-    inherit (pythonPackages) buildPythonApplication;
-  };
+  zk-shell = callPackage ../applications/misc/zk-shell { };
 
   zuki-themes = callPackage ../misc/themes/zuki { };
 
