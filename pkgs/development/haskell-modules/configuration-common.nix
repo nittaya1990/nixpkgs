@@ -43,7 +43,7 @@ self: super: {
     src = pkgs.fetchFromGitHub {
       owner = "joeyh";
       repo = "git-annex";
-      sha256 = "1j29ydbw86j3qd4qb4l348pcnjd24irgdra9ss2afi6w2pn60yjn";
+      sha256 = "1nd1q5c4jr9s6xczyv464zq4y10rk8c1av22nfb28abrskxagcjc";
       rev = drv.version;
     };
   })).overrideScope (self: super: {
@@ -976,7 +976,7 @@ self: super: {
 
   # https://github.com/commercialhaskell/stack/issues/2263
   stack = super.stack.overrideScope (self: super: {
-    http-client = self.http-client_0_5_3_2;
+    http-client = self.http-client_0_5_3_3;
     http-client-tls = self.http-client-tls_0_3_3;
     http-conduit = self.http-conduit_2_2_3;
     optparse-applicative = dontCheck self.optparse-applicative_0_13_0_0;
