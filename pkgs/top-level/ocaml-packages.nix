@@ -340,6 +340,8 @@ let
     piqi = callPackage ../development/ocaml-modules/piqi { };
     piqi-ocaml = callPackage ../development/ocaml-modules/piqi-ocaml { };
 
+    ptime = callPackage ../development/ocaml-modules/ptime { };
+
     re2_p4 = callPackage ../development/ocaml-modules/re2 { };
 
     result = callPackage ../development/ocaml-modules/ocaml-result { };
@@ -428,6 +430,8 @@ let
     re = callPackage ../development/ocaml-modules/re { };
 
     safepass = callPackage ../development/ocaml-modules/safepass { };
+
+    sedlex = callPackage ../development/ocaml-modules/sedlex { };
 
     sqlite3EZ = callPackage ../development/ocaml-modules/sqlite3EZ { };
 
