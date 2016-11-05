@@ -13,18 +13,18 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ jdk ant saxon ];
 
-  preBuild = "CLASSPATH='${saxon}/saxon.jar'; echo CLASSPATH=$CLASSPATH; ant";
+  preBuild = "ant";
 
   installPhase = ''
     mkdir -p "$out"/{share/java,bin}
     cp ./build/*.jar "$out/share/java/"
 
     for tool in jing trang; do
-      cat > "$out/bin/$tool" <<EOF
-      #! $SHELL
-      export JAVA_HOME='${jre}'
-      exec '${jre}/bin/java' -jar '$out/share/java/$tool.jar' "\$@"
-      EOF
+    cat > "$out/bin/$tool" <<EOF
+    #! $SHELL
+    export JAVA_HOME='${jre}'
+    exec '${jre}/bin/java' -jar '$out/share/java/$tool.jar' "\$@"
+    EOF
     done
 
     chmod +x "$out"/bin/*
