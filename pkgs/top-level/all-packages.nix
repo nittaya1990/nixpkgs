@@ -2236,6 +2236,9 @@ in
 
   jhead = callPackage ../tools/graphics/jhead { };
 
+  jing = self.jing-trang;
+  jing-trang = callPackage ../tools/text/xml/jing-trang { };
+
   jmespath = callPackage ../development/tools/jmespath { };
 
   jmtpfs = callPackage ../tools/filesystems/jmtpfs { };
@@ -4105,6 +4108,8 @@ in
   tm = callPackage ../tools/system/tm { };
 
   tradcpp = callPackage ../development/tools/tradcpp { };
+
+  trang = self.jing-trang;
 
   tre = callPackage ../development/libraries/tre { };
 
