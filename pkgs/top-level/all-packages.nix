@@ -14979,6 +14979,8 @@ in
 
   VoiceOfFaust = callPackage ../applications/audio/VoiceOfFaust { };
 
+  volnoti = callPackage ../applications/misc/volnoti { };
+
   vorbis-tools = callPackage ../applications/audio/vorbis-tools { };
 
   vscode = callPackage ../applications/editors/vscode { };
