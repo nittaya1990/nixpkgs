@@ -367,6 +367,8 @@ in
 
   afpfs-ng = callPackage ../tools/filesystems/afpfs-ng/default.nix { };
 
+  agrep = callPackage ../tools/text/agrep { };
+
   aha = callPackage ../tools/text/aha { };
 
   ahcpd = callPackage ../tools/networking/ahcpd { };
@@ -3169,8 +3171,6 @@ in
   pdf2odt = callPackage ../tools/typesetting/pdf2odt { };
 
   pdf2svg = callPackage ../tools/graphics/pdf2svg { };
-
-  pdfjam = callPackage ../tools/typesetting/pdfjam { };
 
   pdfmod = callPackage ../applications/misc/pdfmod { };
 
