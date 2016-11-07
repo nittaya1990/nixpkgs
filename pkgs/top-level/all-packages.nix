@@ -16942,8 +16942,6 @@ in
 
   faust1 = callPackage ../applications/audio/faust/faust1.nix { };
 
-  faust1git = callPackage ../applications/audio/faust/faust1git.nix { };
-
   faust2 = callPackage ../applications/audio/faust/faust2.nix {
     llvm = llvm_38;
   };
