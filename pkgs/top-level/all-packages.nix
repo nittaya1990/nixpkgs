@@ -14274,6 +14274,8 @@ in
 
   quirc = callPackage ../tools/graphics/quirc {};
 
+  quiterss = qt5.callPackage ../applications/networking/newsreaders/quiterss {};
+
   quodlibet = callPackage ../applications/audio/quodlibet { };
 
   quodlibet-with-gst-plugins = callPackage ../applications/audio/quodlibet {
@@ -17306,7 +17308,7 @@ in
 
   vimPlugins = recurseIntoAttrs (callPackage ../misc/vim-plugins {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
-    llvmPackages = llvmPackages_38;
+    llvmPackages = llvmPackages_39;
   });
 
   vimprobable2-unwrapped = callPackage ../applications/networking/browsers/vimprobable2 {
