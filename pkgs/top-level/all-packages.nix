@@ -1443,6 +1443,8 @@ in
 
   driftnet = callPackage ../tools/networking/driftnet {};
 
+  drone = callPackage ../development/tools/continuous-integration/drone { };
+
   dropbear = callPackage ../tools/networking/dropbear { };
 
   dtach = callPackage ../tools/misc/dtach { };
@@ -11244,6 +11246,8 @@ in
   };
 
   go-bindata = callPackage ../development/tools/go-bindata { };
+
+  go-bindata-assetfs = callPackage ../development/tools/go-bindata-assetfs { };
 
   gocode = callPackage ../development/tools/gocode { };
 
