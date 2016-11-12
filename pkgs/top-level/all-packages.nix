@@ -16750,6 +16750,8 @@ in
 
   beep = callPackage ../misc/beep { };
 
+  biscuit = callPackage ../tools/security/biscuit { };
+
   blackbird = callPackage ../misc/themes/blackbird { };
 
   brgenml1lpr = callPackage_i686 ../misc/cups/drivers/brgenml1lpr {};
