@@ -14173,6 +14173,8 @@ in
     gtksharp = gtk-sharp-2_0;
   };
 
+  plover = callPackage ../applications/misc/plover { };
+
   plugin-torture = callPackage ../applications/audio/plugin-torture { };
 
   pmenu = callPackage ../applications/misc/pmenu { };
