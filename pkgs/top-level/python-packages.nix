@@ -29,7 +29,7 @@ let
 
 in {
 
-  inherit python bootstrapped-pip isPy26 isPy27 isPy33 isPy34 isPy35 isPy36 isPyPy isPy3k mkPythonDerivation buildPythonPackage buildPythonApplication;
+  inherit python bootstrapped-pip pythonAtLeast pythonOlder isPy26 isPy27 isPy33 isPy34 isPy35 isPy36 isPyPy isPy3k mkPythonDerivation buildPythonPackage buildPythonApplication;
 
   # helpers
 
@@ -2199,6 +2199,10 @@ in {
       maintainers = with maintainers; [ bluescreen303 ];
     };
   };
+
+  # Build boost for this specific Python version
+  # TODO: use separate output for libboost_python.so
+  boost = pkgs.boost.override {inherit python;};
 
   buttersink = buildPythonPackage rec {
     name = "buttersink-0.6.8";
@@ -8969,14 +8973,17 @@ in {
       sha256 = "0g5w1cira1bl9f2ji11cbr9daj947nrfydydymjp4bbxbpl2jnaq";
     };
 
-    doCheck = pythonOlder "3.5";
-
     buildInputs = with self; [
       decorator
       appdirs
       six
       numpy
+      pytest
     ];
+
+    checkPhase = ''
+      py.test -k 'not test_persistent_dict'
+    '';
 
     meta = {
       homepage = https://github.com/inducer/pytools/;
@@ -13657,45 +13664,7 @@ in {
     };
   };
 
-  llvmlite = let
-    llvm = pkgs.llvm_38;
-  in buildPythonPackage rec {
-    name = "llvmlite-${version}";
-    version = "0.13.0";
-
-    disabled = isPyPy;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/l/llvmlite/${name}.tar.gz";
-      sha256 = "f852be3391acb2e77ef484c5d0ff90e7cf2821dcf9575e358a1f08c274c582eb";
-    };
-
-    propagatedBuildInputs = with self; [ llvm ] ++ optional (pythonOlder "3.4") enum34;
-
-    # Disable static linking
-    # https://github.com/numba/llvmlite/issues/93
-    patchPhase = ''
-      substituteInPlace ffi/Makefile.linux --replace "-static-libstdc++" ""
-
-      substituteInPlace llvmlite/tests/test_binding.py --replace "test_linux" "nope"
-    '';
-    # Set directory containing llvm-config binary
-    preConfigure = ''
-      export LLVM_CONFIG=${llvm}/bin/llvm-config
-    '';
-    checkPhase = ''
-      ${self.python.executable} runtests.py
-    '';
-
-    __impureHostDeps = optionals stdenv.isDarwin [ "/usr/lib/libm.dylib" ];
-
-    meta = {
-      description = "A lightweight LLVM python binding for writing JIT compilers";
-      homepage = "http://llvmlite.pydata.org/";
-      license = licenses.bsd2;
-      maintainers = with maintainers; [ fridh ];
-    };
-  };
+  llvmlite = callPackage ../development/python-modules/llvmlite {llvm=pkgs.llvm_38;};
 
   lockfile = buildPythonPackage rec {
     name = "lockfile-${version}";
@@ -15768,41 +15737,7 @@ in {
     };
   };
 
-  numba = buildPythonPackage rec {
-    version = "0.27.0";
-    name = "numba-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/n/numba/${name}.tar.gz";
-      sha256 = "5fc8069cdc839b8b44ac6c54260902f60cbd77bd027b20999970a81cce7008ba";
-    };
-
-    NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-I${pkgs.libcxx}/include/c++/v1";
-
-    propagatedBuildInputs = with self; [numpy llvmlite argparse] ++ optional (!isPy3k) funcsigs ++ optional (isPy27 || isPy33) singledispatch;
-    # Future work: add Cuda support.
-    #propagatedBuildInputs = with self; [numpy llvmlite argparse pkgs.cudatoolkit6];
-    #buildPhase = ''
-    #  export NUMBAPRO_CUDA_DRIVER=
-    #  export NUMBAPRO_NVVM=${pkgs.cudatoolkit6}
-    #  export NUMBAPRO_LIBDEVICE=
-    #'';
-
-    # Copy test script into $out and run the test suite.
-    checkPhase = ''
-      cp runtests.py $out/${python.sitePackages}/numba/runtests.py
-      ${python.interpreter} $out/${python.sitePackages}/numba/runtests.py
-    '';
-    # ImportError: cannot import name '_typeconv'
-    doCheck = false;
-
-    meta = {
-      homepage = http://numba.pydata.org/;
-      license = licenses.bsd2;
-      description = "Compiling Python code using LLVM";
-      maintainers = with maintainers; [ fridh ];
-    };
-  };
+  numba = callPackage ../development/python-modules/numba { };
 
   numexpr = buildPythonPackage rec {
     version = "2.5.2";
@@ -19990,7 +19925,7 @@ in {
       sha256 = "12zcjv4cwwjihiaf74kslrdmmk4bs47h7006gyqfwdfchfjdgg4r";
     };
 
-    buildInputs = with self; [ pkgs.boost pkgs.freetype pkgs.ftgl pkgs.mesa ];
+    buildInputs = with self; [ boost pkgs.freetype pkgs.ftgl pkgs.mesa ];
 
     meta = {
       description = "Python bindings for FTGL (FreeType for OpenGL)";
@@ -20123,6 +20058,8 @@ in {
         description = "A bug and style checker for Python";
     };
   };
+
+  pyopencl = callPackage ../development/python-modules/pyopencl { };
 
   pyrr = buildPythonPackage rec {
     name = "pyrr-${version}";
@@ -21914,6 +21851,8 @@ in {
       homepage = "https://pypi.python.org/pypi/redis/";
     };
   };
+
+  reikna = callPackage ../development/python-modules/reikna { };
 
   repocheck = buildPythonPackage rec {
     name = "repocheck-2015-08-05";
