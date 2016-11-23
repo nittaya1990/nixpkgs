@@ -1456,7 +1456,7 @@ in {
     propagatedBuildInputs = with self; [ unidecode regex ];
 
     meta = with stdenv.lib; {
-      homepage = https://github.com/dimka665/awesome-slugify;
+      homepage = "https://github.com/dimka665/awesome-slugify";
       description = "Python flexible slugify function";
       license = licenses.gpl3;
       platforms = platforms.all;
@@ -8670,17 +8670,17 @@ in {
 
   python-axolotl = buildPythonPackage rec {
     name = "python-axolotl-${version}";
-    version = "0.1.7";
+    version = "0.1.35";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/python-axolotl/${name}.tar.gz";
-      sha256 = "1i3id1mjl67n4sca31s5zwq96kswgsi6lga6np83ayb45rxggvhx";
+      sha256 = "0ch2d5wqfgxy22dkbxwzilq91wkqy9ficrjy39qhal8g8rdc4jr0";
     };
 
-    propagatedBuildInputs = with self; [ python-axolotl-curve25519 protobuf pycrypto ];
+    propagatedBuildInputs = with self; [ python-axolotl-curve25519 protobuf3_0 pycrypto ];
 
     meta = {
-      homepage = https://github.com/tgalal/python-axolotl;
+      homepage = "https://github.com/tgalal/python-axolotl";
       description = "Python port of libaxolotl-android";
       maintainers = with maintainers; [ abbradar ];
       license = licenses.gpl3;
@@ -8698,7 +8698,7 @@ in {
     };
 
     meta = {
-      homepage = https://github.com/tgalal/python-axolotl;
+      homepage = "https://github.com/tgalal/python-axolotl";
       description = "Curve25519 with ed25519 signatures";
       maintainers = with maintainers; [ abbradar ];
       license = licenses.gpl3;
@@ -8723,7 +8723,7 @@ in {
     '';
 
     meta = {
-      homepage = https://launchpad.net/pypolicyd-spf/;
+      homepage = "https://launchpad.net/pypolicyd-spf/";
       description = "Postfix policy engine for Sender Policy Framework (SPF) checking";
       maintainers = with maintainers; [ abbradar ];
       license = licenses.asl20;
@@ -8926,7 +8926,7 @@ in {
     };
 
     meta = {
-      homepage = http://bmsi.com/python/milter.html;
+      homepage = "http://bmsi.com/python/milter.html";
       description = "Python API for Sendmail Milters (SPF)";
       maintainers = with maintainers; [ abbradar ];
       license = licenses.gpl2;
@@ -9081,7 +9081,7 @@ in {
     };
 
     meta = {
-      homepage = http://sarge.readthedocs.org/;
+      homepage = "http://sarge.readthedocs.org/";
       description = "A wrapper for subprocess which provides command pipeline functionality";
       license = licenses.bsd3;
       platform = platforms.all;
@@ -9446,16 +9446,16 @@ in {
 
   regex = buildPythonPackage rec {
     name = "regex-${version}";
-    version = "2016.01.10";
+    version = "2016.11.18";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/r/regex/${name}.tar.gz";
-      sha256 = "1q3rbmnijjzn7y3cm3qy49b5lqw1fq38zv974xma387lwc37d9q2";
+      sha256 = "126ds2b355n3pgl7brshhscpxn14ycs0yznzl8k4akj4sps1i6c6";
     };
 
     meta = {
       description = "Alternative regular expression module, to replace re";
-      homepage = https://bitbucket.org/mrabarnett/mrab-regex;
+      homepage = "https://bitbucket.org/mrabarnett/mrab-regex";
       license = licenses.psfl;
       platforms = platforms.linux;
       maintainers = with maintainers; [ abbradar ];
@@ -10979,17 +10979,17 @@ in {
 
   flask_assets = buildPythonPackage rec {
     name = "Flask-Assets-${version}";
-    version = "0.11";
+    version = "0.12";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/F/Flask-Assets/${name}.tar.gz";
-      sha256 = "1vs59gygwhwqj37if8hiw6vd2rns09xkblaz4qkmpp6hpy3shrvf";
+      sha256 = "0ivqsihk994rxw58vdgzrx4d77d7lpzjm4qxb38hjdgvi5xm4cb0";
     };
 
     propagatedBuildInputs = with self; [ flask webassets flask_script nose ];
 
     meta = {
-      homepage = http://github.com/miracle2k/flask-assets;
+      homepage = "http://github.com/miracle2k/flask-assets";
       description = "Asset management for Flask, to compress and merge CSS and Javascript files";
       license = licenses.bsd2;
       maintainers = with maintainers; [ abbradar ];
@@ -11034,11 +11034,11 @@ in {
 
   flask_login = buildPythonPackage rec {
     name = "Flask-Login-${version}";
-    version = "0.2.2";
+    version = "0.4.0";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/F/Flask-Login/${name}.tar.gz";
-      sha256 = "09ygn0r3i3jz065a5psng6bhlsqm78msnly4z6x39bs48r5ww17p";
+      sha256 = "19w2f33lglkyvxqnj3qghhxa4pr8mp13235k1bd557x52imkapnj";
     };
 
     propagatedBuildInputs = with self; [ flask ];
@@ -11047,7 +11047,7 @@ in {
     doCheck = false;
 
     meta = {
-      homepage = http://github.com/miracle2k/flask-assets;
+      homepage = "https://github.com/maxcountryman/flask-login";
       description = "User session management for Flask";
       license = licenses.mit;
       platforms = platforms.all;
@@ -11092,7 +11092,7 @@ in {
     propagatedBuildInputs = with self; [ flask blinker nose ];
 
     meta = {
-      homepage = http://packages.python.org/Flask-Principal/;
+      homepage = "http://packages.python.org/Flask-Principal/";
       description = "Identity management for flask";
       license = licenses.bsd2;
       platforms = platforms.all;
@@ -11131,7 +11131,7 @@ in {
     propagatedBuildInputs = with self; [ flask ];
 
     meta = {
-      homepage = http://github.com/smurfix/flask-script;
+      homepage = "http://github.com/smurfix/flask-script";
       description = "Scripting support for Flask";
       license = licenses.bsd3;
       platforms = platforms.all;
@@ -13369,7 +13369,7 @@ in {
     };
 
     meta = {
-      homepage = https://github.com/jlhutch/pylru;
+      homepage = "https://github.com/jlhutch/pylru";
       description = "A least recently used (LRU) cache implementation";
       license = licenses.gpl2;
       platforms = platforms.all;
@@ -25982,18 +25982,18 @@ in {
 
   webassets = buildPythonPackage rec {
     name = "webassets-${version}";
-    version = "0.11.1";
+    version = "0.12.0";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/w/webassets/${name}.tar.gz";
-      sha256 = "0p1qypcbq9b88ipcylxh3bbnby5n6dr421wb4bwmrlcrgvj4r5lz";
+      sha256 = "14m13xa5sc7iqq2j1wsd2klcwaihqlhz2l9lmn92dks2yc8hplcr";
     };
 
     propagatedBuildInputs = with self; [ pyyaml ];
 
     meta = {
       description = "Media asset management for Python, with glue code for various web frameworks";
-      homepage = http://github.com/miracle2k/webassets/;
+      homepage = "http://github.com/miracle2k/webassets/";
       license = licenses.bsd2;
       platforms = platforms.all;
       maintainers = with maintainers; [ abbradar ];
