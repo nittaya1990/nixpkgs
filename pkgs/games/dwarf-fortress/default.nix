@@ -9,9 +9,6 @@ let
 
     dfhack = callPackage ./dfhack {
       inherit (pkgs.perlPackages) XMLLibXML XMLLibXSLT;
-      protobuf = with pkgs; protobuf.override {
-        stdenv = overrideInStdenv stdenv [ useOldCXXAbi ];
-      };
     };
 
     dwarf-fortress-unfuck = callPackage ./unfuck.nix { };
