@@ -1,8 +1,10 @@
 { stdenv, fetchgit, fetchurl
 # build tools
 , gfortran, m4, makeWrapper, patchelf, perl, which, python2
+, runCommand
 # libjulia dependencies
-, libunwind, llvm, readline, utf8proc, zlib
+, libunwind, readline, utf8proc, zlib
+, llvm, libffi, ncurses
 # standard library dependencies
 , curl, fftwSinglePrec, fftw, gmp, libgit2, mpfr, openlibm, openspecfun, pcre2
 # linear algebra
@@ -21,9 +23,6 @@ in
 let
   arpack = arpack_.override { inherit openblas; };
   suitesparse = suitesparse_.override { inherit openblas; };
-  llvmShared = if stdenv.isDarwin
-               then llvm.override { enableSharedLibraries = true; }
-               else llvm;
 in
 
 let
@@ -33,10 +32,10 @@ let
     sha256 = "03kaqbjbi6viz0n33dk5jlf6ayxqlsq4804n7kwkndiga9s4hd42";
   };
 
-  libuvVersion = "efb40768b7c7bd9f173a7868f74b92b1c5a61a0e";
+  libuvVersion = "8d5131b6c1595920dd30644cd1435b4f344b46c8";
   libuv = fetchurl {
     url = "https://api.github.com/repos/JuliaLang/libuv/tarball/${libuvVersion}";
-    sha256 = "1znkxyv1cy9pjap7afypipzsn04533ni3pqjd191fdgw2sv9cal7";
+    sha256 = "1886r04igcs0k24sbb61wn10f8ki35c39jsnc5djv3rg4hvn9l49";
   };
 
   rmathVersion = "0.1";
@@ -44,47 +43,58 @@ let
     url = "https://api.github.com/repos/JuliaLang/Rmath-julia/tarball/v${rmathVersion}";
     sha256 = "0ai5dhjc43zcvangz123ryxmlbm51s21rg13bllwyn98w67arhb4";
   };
+  
+  virtualenvVersion = "15.0.0";
+  virtualenv = fetchurl {
+    url = "mirror://pypi/v/virtualenv/virtualenv-${virtualenvVersion}.tar.gz";
+    sha256 = "06fw4liazpx5vf3am45q2pdiwrv0id7ckv7n6zmpml29x6vkzmkh";
+  };
 in
 
 stdenv.mkDerivation rec {
   pname = "julia";
-  version = "0.4.7";
+  version = "0.5.0";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "https://github.com/JuliaLang/${pname}/releases/download/v${version}/${name}.tar.gz";
-    sha256 = "09f531jhs8pyd1xng5c26x994w7q0sxxr28mr3qfw9wpkbmsc2pf";
+    sha256 = "0bhickil88lalp9jdj1kmf4is70zinhx8ha9rng0g3z50r4a2qmv";
   };
-
   prePatch = ''
-    cp "${dsfmt}" "./deps/dsfmt-${dsfmtVersion}.tar.gz"
-    cp "${rmath-julia}" "./deps/Rmath-julia-${rmathVersion}.tar.gz"
-    cp "${libuv}" "./deps/libuv-${libuvVersion}.tar.gz"
+    mkdir deps/srccache
+    cp "${dsfmt}" "./deps/srccache/dsfmt-${dsfmtVersion}.tar.gz"
+    cp "${rmath-julia}" "./deps/srccache/Rmath-julia-${rmathVersion}.tar.gz"
+    cp "${libuv}" "./deps/srccache/libuv-${libuvVersion}.tar.gz"
+    cp "${virtualenv}" "./deps/srccache/virtualenv-${virtualenvVersion}.tar.gz"
   '';
 
   patches = [
-    ./0001-use-system-utf8proc.patch
+    ./0001.1-use-system-utf8proc.patch
     ./0002-use-system-suitesparse.patch
-    ./0003-no-ldconfig.patch
   ];
 
   postPatch = ''
     patchShebangs . contrib
+    for i in backtrace replutil cmdlineargs compile; do
+      mv test/$i.jl{,.off}
+      touch test/$i.jl
+    done
   '';
 
   buildInputs = [
-    arpack fftw fftwSinglePrec gmp libgit2 libunwind llvmShared mpfr
+    arpack fftw fftwSinglePrec gmp libgit2 libunwind mpfr
     pcre2.dev openblas openlibm openspecfun readline suitesparse utf8proc
-    zlib
-  ] ++
-    stdenv.lib.optionals stdenv.isDarwin [CoreServices ApplicationServices] ;
+    zlib llvm
+  ]
+  ++ stdenv.lib.optionals stdenv.isDarwin [CoreServices ApplicationServices]
+  ;
 
   nativeBuildInputs = [ curl gfortran m4 makeWrapper patchelf perl python2 which ];
 
   makeFlags =
     let
       arch = head (splitString "-" stdenv.system);
-      march = { "x86_64" = "x86-64"; "i686" = "i686"; }."${arch}"
+      march = { "x86_64" = "x86-64"; "i686" = "pentium4"; }."${arch}"
               or (throw "unsupported architecture: ${arch}");
       # Julia requires Pentium 4 (SSE2) or better
       cpuTarget = { "x86_64" = "x86-64"; "i686" = "pentium4"; }."${arch}"
@@ -115,7 +125,10 @@ stdenv.mkDerivation rec {
       "USE_SYSTEM_GMP=1"
       "USE_SYSTEM_LIBGIT2=1"
       "USE_SYSTEM_LIBUNWIND=1"
+      
       "USE_SYSTEM_LLVM=1"
+      "LLVM_VER=3.8.1"
+
       "USE_SYSTEM_MPFR=1"
       "USE_SYSTEM_OPENLIBM=1"
       "USE_SYSTEM_OPENSPECFUN=1"
@@ -132,10 +145,8 @@ stdenv.mkDerivation rec {
 
   LD_LIBRARY_PATH = makeLibraryPath [
     arpack fftw fftwSinglePrec gmp libgit2 mpfr openblas openlibm
-    openspecfun pcre2 suitesparse
+    openspecfun pcre2 suitesparse llvm
   ];
-
-  NIX_LDFLAGS = optionalString stdenv.isDarwin "-rpath ${llvmShared}/lib";
 
   dontStrip = true;
   dontPatchELF = true;
@@ -147,12 +158,18 @@ stdenv.mkDerivation rec {
   # Julia's tests require read/write access to $HOME
   preCheck = ''
     export HOME="$NIX_BUILD_TOP"
+    set
+  '';
+
+  preBuild = ''
+    sed -e '/^install:/s@[^ ]*/doc/[^ ]*@@' -i Makefile
+    sed -e '/[$](DESTDIR)[$](docdir)/d' -i Makefile
   '';
 
   postInstall = ''
     for prog in "$out/bin/julia" "$out/bin/julia-debug"; do
         wrapProgram "$prog" \
-            --prefix LD_LIBRARY_PATH : "$LD_LIBRARY_PATH" \
+            --prefix LD_LIBRARY_PATH : "$LD_LIBRARY_PATH:$out/lib/julia" \
             --prefix PATH : "${stdenv.lib.makeBinPath [ curl ]}"
     done
   '';
