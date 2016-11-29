@@ -5220,6 +5220,8 @@ in
   };
 
   rust = rustStable;
+  rustcNightlyBin = lowPrio(callPackage ../development/compilers/rust/nightlyBin.nix {});
+  rustcNightlyBin-2016-11-26 = rustcNightlyBin;
   rustStable = callPackage ../development/compilers/rust {};
   rustBeta = callPackage ../development/compilers/rust/beta.nix {};
   rustUnstable = callPackage ../development/compilers/rust/head.nix {
