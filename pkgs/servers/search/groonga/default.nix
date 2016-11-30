@@ -7,11 +7,11 @@
 stdenv.mkDerivation rec {
 
   name    = "groonga-${version}";
-  version = "6.0.9";
+  version = "6.1.1";
 
   src = fetchurl {
     url    = "http://packages.groonga.org/source/groonga/${name}.tar.gz";
-    sha256 = "1n7kf25yimgy9wy04hv5qvp4rzdzdr0ar92lhwms812qkhp3i4mq";
+    sha256 = "03h65gycy0j2q4n5h62x3sw76ibdywdvmiciys5a7ppxb2mncabz";
   };
 
   buildInputs = with stdenv.lib; [ pkgconfig mecab kytea libedit ] ++

@@ -1,4 +1,4 @@
-{ kdeFramework, lib, ecm, kactivities, karchive
+{ kdeFramework, lib, fetchurl, ecm, kactivities, karchive
 , kconfig, kconfigwidgets, kcoreaddons, kdbusaddons, kdeclarative
 , kdoctools, kglobalaccel, kguiaddons, ki18n, kiconthemes, kio
 , knotifications, kpackage, kservice, kwindowsystem, kxmlgui

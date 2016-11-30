@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, cmake, gettext, libmsgpack, libtermkey
 , libtool, libuv, luajit, luaPackages, man, ncurses, perl, pkgconfig
-, unibilium, makeWrapper, vimUtils, xsel
+, unibilium, makeWrapper, vimUtils, xsel, gperf
 
 , withPython ? true, pythonPackages, extraPythonPackages ? []
 , withPython3 ? true, python3Packages, extraPython3Packages ? []
@@ -18,13 +18,13 @@ let
   # Note: this is NOT the libvterm already in nixpkgs, but some NIH silliness:
   neovimLibvterm = stdenv.mkDerivation rec {
     name = "neovim-libvterm-${version}";
-    version = "2015-11-06";
+    version = "2016-10-07";
 
     src = fetchFromGitHub {
       owner = "neovim";
       repo = "libvterm";
-      rev = "487f21dbf65f1c28962fef3f064603f415fbaeb2";
-      sha256 = "1fig6v0qk0ylr7lqqk0d6x5yywb9ymh85vay4spw5b5r5p0ky7yx";
+      rev = "11682793d84668057c5aedc3d7f8071bb54eaf2c";
+      sha256 = "0pd90yx6xsagrqjipi26sxri1l4wdnx23ziad1zbxnqx9njxa7g3";
     };
 
     buildInputs = [ perl ];
@@ -60,13 +60,13 @@ let
 
   neovim = stdenv.mkDerivation rec {
     name = "neovim-${version}";
-    version = "0.1.5";
+    version = "0.1.7";
 
     src = fetchFromGitHub {
       owner = "neovim";
       repo = "neovim";
       rev = "v${version}";
-      sha256 = "1ihlgm2h7147xyd5wrwg61vsnmkqc9j3ghsida4g2ilr7gw9c85y";
+      sha256 = "0bk0raxlb1xsqyw9pmqmxvcq5szqhimidrasnvzrci84gld8cwz4";
     };
 
     enableParallelBuilding = true;
@@ -80,6 +80,7 @@ let
       unibilium
       luajit
       luaPackages.lua
+      gperf
     ] ++ optional withJemalloc jemalloc
       ++ lualibs;
 

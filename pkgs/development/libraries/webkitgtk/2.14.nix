@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, python, ruby, bison, gperf, cmake
+{ stdenv, fetchurl, perl, python2, ruby, bison, gperf, cmake
 , pkgconfig, gettext, gobjectIntrospection, libnotify, gnutls
 , gtk2, gtk3, wayland, libwebp, enchant, xlibs, libxkbcommon, epoxy, at_spi2_core
 , libxml2, libsoup, libsecret, libxslt, harfbuzz, libpthreadstubs
@@ -11,7 +11,7 @@ assert enableGeoLocation -> geoclue2 != null;
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "webkitgtk-${version}";
-  version = "2.14.0";
+  version = "2.14.1";
 
   meta = {
     description = "Web content rendering engine, GTK+ port";
@@ -26,14 +26,14 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://webkitgtk.org/releases/${name}.tar.xz";
-    sha256 = "02paj0anbnqn1z3hn5c4csmq9nga995rzagiplj3sjk2dj1ss4q5";
+    sha256 = "1dffnz20psgc604azhbzn9a6cdhafar9dw74w3bbwrfy531pcb9f";
   };
 
   # see if we can clean this up....
 
   patches = [ ./finding-harfbuzz-icu.patch ];
 
-  cmakeFlags = [ 
+  cmakeFlags = [
   "-DPORT=GTK"
   "-DUSE_LIBHYPHEN=0"
   "-DENABLE_GLES2=ON"
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = "-I${gst-plugins-base.dev}/include/gstreamer-1.0";
 
   nativeBuildInputs = [
-    cmake perl python ruby bison gperf sqlite
+    cmake perl python2 ruby bison gperf sqlite
     pkgconfig gettext gobjectIntrospection
   ];
 

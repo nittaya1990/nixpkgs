@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchzip, pkgs }:
+{ stdenv, fetchurl, fetchzip, pkgs, fetchurlBoot }:
 
 let
   # This attrset can in theory be computed automatically, but for that to work nicely we need
@@ -22,6 +22,7 @@ let
       ppp           = "809.50.2";
       libclosure    = "65";
       Libinfo       = "477.50.4";
+      Libsystem     = "1226.10.1";
       removefile    = "41";
       libresolv     = "60";
 
@@ -33,6 +34,12 @@ let
 
       libutil       = "43";
       libunwind     = "35.3";
+      Librpcsvc     = "26";
+      developer_cmds= "62";
+      network_cmds  = "481.20.1";
+      basic_cmds    = "55";
+      adv_cmds      = "163";
+      file_cmds     = "264.1.1";
     };
     "osx-10.11.5" = {
       Libc          = "1082.50.1"; # 10.11.6 still unreleased :/
@@ -122,7 +129,14 @@ let
     };
   };
 
-  fetchApple = version: sha256: name: fetchurl {
+  fetchApple = version: sha256: name: let
+    # When cross-compiling, fetchurl depends on libiconv, resulting
+    # in an infinite recursion without this. It's not clear why this
+    # worked fine when not cross-compiling
+    fetch = if name == "libiconv"
+      then fetchurlBoot
+      else fetchurl;
+  in fetch {
     url = "http://www.opensource.apple.com/tarballs/${name}/${name}-${versions.${version}.${name}}.tar.gz";
     inherit sha256;
   };
@@ -204,7 +218,7 @@ let
     Libnotify       = applePackage "Libnotify"         "osx-10.11.6"     "14rhhfzb75r9jf3kyj8fzd01n09n7km1fsdj3dzl3lkkp1sir78m" {};
     libpthread      = applePackage "libpthread"        "osx-10.11.6"     "1kbw738cmr9pa7pz1igmajs307clfq7gv2vm1sqdzhcnnjxbl28w" {};
     libresolv       = applePackage "libresolv"         "osx-10.11.6"     "09flfdi3dlzq0yap32sxidacpc4nn4va7z12a6viip21ix2xb2gf" {};
-    Libsystem       = applePackage "Libsystem"         "osx-10.9.5"      "1yfj2qdrf9vrzs7p9m4wlb7zzxcrim1gw43x4lvz4qydpp5kg2rh" {};
+    Libsystem       = applePackage "Libsystem"         "osx-10.11.6"     "1nfkmbqml587v2s1d1y2s2v8nmr577jvk51y6vqrfvsrhdhc2w94" {};
     libutil         = applePackage "libutil"           "osx-10.11.6"     "1gmgmcyqdyc684ih7dimdmxdljnq7mzjy5iqbf589wc0pa8h5abm" {};
     libunwind       = applePackage "libunwind"         "osx-10.11.6"     "16nhx2pahh9d62mvszc88q226q5lwjankij276fxwrm8wb50zzlx" {};
     mDNSResponder   = applePackage "mDNSResponder"     "osx-10.11.6"     "069incq28a78yh1bnr17h9cd5if5mwqpq8ahnkyxxx25fkaxgzcf" {};
@@ -213,6 +227,12 @@ let
     removefile      = applePackage "removefile"        "osx-10.11.6"     "1b6r74ry3k01kypvlaclf33fha15pcm0kzx9zrymlg66wg0s0i3r" {};
     Security        = applePackage "Security"          "osx-10.9.5"      "1nv0dczf67dhk17hscx52izgdcyacgyy12ag0jh6nl5hmfzsn8yy" {};
     xnu             = applePackage "xnu"               "osx-10.11.6"     "0yhziq4dqqcbjpf6vyqn8xhwva2zb525gndkx8cp8alzwp76jnr9" {};
+    Librpcsvc       = applePackage "Librpcsvc"         "osx-10.11.6"     "1zwfwcl9irxl1dlnf2b4v30vdybp0p0r6n6g1pd14zbdci1jcg2k" {};
+    adv_cmds        = applePackage "adv_cmds/xcode.nix" "osx-10.11.6"    "12gbv35i09aij9g90p6b3x2f3ramw43qcb2gjrg8lzkzmwvcyw9q" {};
+    basic_cmds      = applePackage "basic_cmds"        "osx-10.11.6"     "0hvab4b1v5q2x134hdkal0rmz5gsdqyki1vb0dbw4py1bqf0yaw9" {};
+    developer_cmds  = applePackage "developer_cmds"    "osx-10.11.6"     "1r9c2b6dcl22diqf90x58psvz797d3lxh4r2wppr7lldgbgn24di" {};
+    network_cmds    = applePackage "network_cmds"      "osx-10.11.6"     "0lhi9wz84qr1r2ab3fb4nvmdg9gxn817n5ldg7zw9gnf3wwn42kw" {};
+    file_cmds       = applePackage "file_cmds"         "osx-10.11.6"     "1zfxbmasps529pnfdjvc13p7ws2cfx8pidkplypkswyff0nff4wp" {};
 
     libsecurity_apple_csp      = libsecPackage "libsecurity_apple_csp"      "osx-10.7.5" "1ngyn1ik27n4x981px3kfd1z1n8zx7r5w812b6qfjpy5nw4h746w" {};
     libsecurity_apple_cspdl    = libsecPackage "libsecurity_apple_cspdl"    "osx-10.7.5" "1svqa5fhw7p7njzf8bzg7zgc5776aqjhdbnlhpwmr5hmz5i0x8r7" {};

@@ -120,12 +120,12 @@ in
 {
   clion = buildClion rec {
     name = "clion-${version}";
-    version = "2016.2.2";
+    version = "2016.3";
     description  = "C/C++ IDE. New. Intelligent. Cross-platform";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/cpp/CLion-${version}.tar.gz";
-      sha256 = "06aq3lfccki9203gjvibzj3gn9d82pc6s5z0m3fnf049zxk58ndi";
+      sha256 = "16nszamr0bxg8aghyrg4wzxbp9158kjzhr957ljpbipz0rlixf31";
     };
     wmClass = "jetbrains-clion";
   };
@@ -156,12 +156,12 @@ in
 
   idea-community = buildIdea rec {
     name = "idea-community-${version}";
-    version = "2016.2.4";
+    version = "2016.3";
     description = "Integrated Development Environment (IDE) by Jetbrains, community edition";
     license = stdenv.lib.licenses.asl20;
     src = fetchurl {
       url = "https://download.jetbrains.com/idea/ideaIC-${version}.tar.gz";
-      sha256 = "0hk7z402qvkaa6hkhh4wsqxki2bnai5qkd2r0ngvy8kd71svrldz";
+      sha256 = "1bp2a1x8nl5flklf160n7ka5clnb0xx9gwv5zd9li2bsf04zlzf3";
     };
     wmClass = "jetbrains-idea-ce";
   };
@@ -192,24 +192,24 @@ in
 
   idea-ultimate = buildIdea rec {
     name = "idea-ultimate-${version}";
-    version = "2016.2.4";
+    version = "2016.3";
     description = "Integrated Development Environment (IDE) by Jetbrains, requires paid license";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/idea/ideaIU-${version}.tar.gz";
-      sha256 = "165nchdnbyp85r2w0riv87j77lb7r492dkwrvm8q7qjnlfgznh7r";
+      sha256 = "1sax3sjhsyvb9qfnn0gc74p3ym6j5f30mmapd4irq9fk4bsl8c31";
     };
     wmClass = "jetbrains-idea";
   };
 
   ruby-mine = buildRubyMine rec {
     name = "ruby-mine-${version}";
-    version = "2016.2.2";
+    version = "2016.2.5";
     description = "The Most Intelligent Ruby and Rails IDE";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/ruby/RubyMine-${version}.tar.gz";
-      sha256 = "1ck4axjbrvq2n1j2rvf9a2f7dqvalg2b8sqy9n9qkzdn04szaqsl";
+      sha256 = "1rncnm5dvhpfb7l5p2k0hs4yqzp8n1c4rvz9vldlf5k7mvwggp7p";
     };
     wmClass = "jetbrains-rubymine";
   };
@@ -240,36 +240,36 @@ in
 
   pycharm-community = buildPycharm rec {
     name = "pycharm-community-${version}";
-    version = "2016.2.3";
+    version = "2016.3";
     description = "PyCharm Community Edition";
     license = stdenv.lib.licenses.asl20;
     src = fetchurl {
       url = "https://download.jetbrains.com/python/${name}.tar.gz";
-      sha256 = "0nph0dp0a2y6vrbc1a2d5iy1fzhm4wbkp6kpdk6mcfpnz5ppz84f";
+      sha256 = "1pi822ihzy58jszdy7y2pyni6pki9ih8s9xdbwlbwg9vck1iqprs";
     };
     wmClass = "jetbrains-pycharm-ce";
   };
 
   pycharm-professional = buildPycharm rec {
     name = "pycharm-professional-${version}";
-    version = "2016.2.3";
+    version = "2016.3";
     description = "PyCharm Professional Edition";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/python/${name}.tar.gz";
-      sha256 = "0pjgdwpkbf6fgrhml97inmsjavz1n9l4ns1pnhv3mssnribg3vm1";
+      sha256 = "1b4ib77wzg0y12si8zqrfwbhv4kvmy9nm5dsrdr3k7f89dqg3279";
     };
     wmClass = "jetbrains-pycharm";
   };
 
   phpstorm = buildPhpStorm rec {
     name = "phpstorm-${version}";
-    version = "2016.2.1";
+    version = "2016.3";
     description = "Professional IDE for Web and PHP developers";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/webide/PhpStorm-${version}.tar.gz";
-      sha256 = "0vgr0ds6z0y8qw2v55nr3pi5zb5x0n6pxm13hcp44iradns5kmbp";
+      sha256 = "0hzjhwij2x3b5fqwyd69h24ld13bpc2bf9wdcd1jy758waf0d91y";
     };
     wmClass = "jetbrains-phpstorm";
   };
@@ -288,12 +288,12 @@ in
 
   webstorm = buildWebStorm rec {
     name = "webstorm-${version}";
-    version = "2016.2.2";
+    version = "2016.3.1";
     description = "Professional IDE for Web and JavaScript development";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/webstorm/WebStorm-${version}.tar.gz";
-      sha256 = "0n2fvhjasklshyfcbwwn6wahzld8x65bid08245awdqv33p87bq6";
+      sha256 = "10za4d6w9yns7kclbviizslq2y7zas9rkmvs3xwrfw1rdw2b69af";
     };
     wmClass = "jetbrains-webstorm";
   };

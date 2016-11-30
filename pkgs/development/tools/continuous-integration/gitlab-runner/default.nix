@@ -1,16 +1,16 @@
 { lib, buildGoPackage, fetchFromGitLab, fetchurl, go-bindata }:
 
 let
-  version = "1.6.0";
+  version = "1.8.0";
   # Gitlab runner embeds some docker images these are prebuilt for arm and x86_64
   docker_x86_64 = fetchurl {
     url = "https://gitlab-ci-multi-runner-downloads.s3.amazonaws.com/v${version}/docker/prebuilt-x86_64.tar.xz";
-    sha256 = "1ygc2ipprd5pr8b7y511id1af91zw15f8j28v3rx4vjapmbzpk8d";
+    sha256 = "0fa8hfdxg903n1dqrqbm4069sr8rq6zx7zzybfyj7qz4mmayp24m";
   };
 
   docker_arm = fetchurl {
     url = "https://gitlab-ci-multi-runner-downloads.s3.amazonaws.com/v${version}/docker/prebuilt-arm.tar.xz";
-    sha256 = "0aw6cfh92f7fywzry0yswa635hpmzh6fqcav0ljc5vqs26wdmjc1";
+    sha256 = "1rvvz34rsjxrgg59rda6v4k8zw16slwprnh4h5b16yhyp7lcx93q";
   };
 in
 buildGoPackage rec {
@@ -29,7 +29,7 @@ buildGoPackage rec {
     owner = "gitlab-org";
     repo = "gitlab-ci-multi-runner";
     rev = "v${version}";
-    sha256 = "10w222k4klxqyzk08c0j7nmhdbdnn70p6n1hfqy6h5mczlffqv61";
+    sha256 = "0svmy2dc4h6jll80y8j2ml7k0a9krknsp9d0zpsfkw3wcz1wfipl";
   };
 
   buildInputs = [ go-bindata ];

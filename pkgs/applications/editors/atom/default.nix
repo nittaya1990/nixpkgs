@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, lib, makeWrapper, gvfs, atomEnv }:
+{ stdenv, fetchurl, lib, makeWrapper, gvfs, atomEnv, libXScrnSaver, libxkbfile }:
 
 stdenv.mkDerivation rec {
   name = "atom-${version}";
-  version = "1.11.1";
+  version = "1.12.6";
 
   src = fetchurl {
     url = "https://github.com/atom/atom/releases/download/v${version}/atom-amd64.deb";
-    sha256 = "1wpfpj9dv4l710758gcx05s2aj8mn21fr7wah2xv5qildx2qy31q";
+    sha256 = "0b85bjfxdd18i2v8py5jx4284m58zxad38c2vvqhgx7cxm9hn8k6";
     name = "${name}.deb";
   };
 
@@ -21,7 +21,9 @@ stdenv.mkDerivation rec {
     rm -r $out/share/lintian
     rm -r $out/usr/
     wrapProgram $out/bin/atom \
-      --prefix "PATH" : "${gvfs}/bin"
+      --prefix "PATH" : "${gvfs}/bin" \
+      --prefix LD_PRELOAD : ${stdenv.lib.makeLibraryPath [ libXScrnSaver ]}/libXss.so.1 \
+      --prefix LD_PRELOAD : ${stdenv.lib.makeLibraryPath [ libxkbfile ]}/libxkbfile.so.1
 
     fixupPhase
 

@@ -37,13 +37,10 @@ self: super: {
   xhtml = null;
 
   # Enable latest version of cabal-install.
-  cabal-install = (doDistribute (dontJailbreak (dontCheck (super.cabal-install)))).overrideScope (self: super: { Cabal = self.Cabal_1_24_0_0; });
-
-  # Jailbreaking is required for the test suite only (which we don't run).
-  Cabal_1_24_0_0 = dontJailbreak (dontCheck super.Cabal_1_24_0_0);
+  cabal-install = (dontCheck (super.cabal-install)).overrideScope (self: super: { Cabal = self.Cabal_1_24_1_0; });
 
   # Build jailbreak-cabal with the latest version of Cabal.
-  jailbreak-cabal = super.jailbreak-cabal.override { Cabal = self.Cabal_1_24_0_0; };
+  jailbreak-cabal = super.jailbreak-cabal.override { Cabal = self.Cabal_1_24_1_0; };
 
   Extra = appendPatch super.Extra (pkgs.fetchpatch {
     url = "https://github.com/seereason/sr-extra/commit/29787ad4c20c962924b823d02a7335da98143603.patch";
@@ -148,7 +145,7 @@ self: super: {
   tasty-rerun = dontHaddock (appendConfigureFlag super.tasty-rerun "--ghc-option=-XFlexibleContexts");
 
   # http://hub.darcs.net/ivanm/graphviz/issue/5
-  graphviz = dontCheck (dontJailbreak (appendPatch super.graphviz ./patches/graphviz-fix-ghc710.patch));
+  graphviz = dontCheck (appendPatch super.graphviz ./patches/graphviz-fix-ghc710.patch);
 
   # https://github.com/HugoDaniel/RFC3339/issues/14
   timerep = dontCheck super.timerep;

@@ -4,11 +4,16 @@ with import ./lib.nix { inherit pkgs; };
 
 self: super: {
 
+  # Some Hackage packages reference this attribute, which exists only in the
+  # GHCJS package set. We provide a dummy version here to fix potential
+  # evaluation errors.
+  ghcjs-base = null;
+
   # Some packages need a non-core version of Cabal.
-  cabal-install = super.cabal-install.overrideScope (self: super: { Cabal = self.Cabal_1_24_0_0; });
+  cabal-install = super.cabal-install.overrideScope (self: super: { Cabal = self.Cabal_1_24_1_0; });
 
   # Link statically to avoid runtime dependency on GHC.
-  jailbreak-cabal = (disableSharedExecutables super.jailbreak-cabal).override { Cabal = dontJailbreak self.Cabal_1_20_0_4; };
+  jailbreak-cabal = (disableSharedExecutables super.jailbreak-cabal).override { Cabal = self.Cabal_1_20_0_4; };
 
   # Apply NixOS-specific patches.
   ghc-paths = appendPatch super.ghc-paths ./patches/ghc-paths-nix.patch;
@@ -43,7 +48,7 @@ self: super: {
     src = pkgs.fetchFromGitHub {
       owner = "joeyh";
       repo = "git-annex";
-      sha256 = "1j29ydbw86j3qd4qb4l348pcnjd24irgdra9ss2afi6w2pn60yjn";
+      sha256 = "0yy4fdk0sp19hc838j82sls68l5wnrhr55zzs0gbqnagna77cxhd";
       rev = drv.version;
     };
   })).overrideScope (self: super: {
@@ -139,16 +144,15 @@ self: super: {
   groupoids = dontHaddock super.groupoids;
   hamlet = dontHaddock super.hamlet;
   HaXml = dontHaddock super.HaXml;
-  HDBC-odbc = dontHaddock super.HDBC-odbc;
   hoodle-core = dontHaddock super.hoodle-core;
   hsc3-db = dontHaddock super.hsc3-db;
-  hspec-discover = dontHaddock super.hspec-discover;
   http-client-conduit = dontHaddock super.http-client-conduit;
   http-client-multipart = dontHaddock super.http-client-multipart;
   markdown-unlit = dontHaddock super.markdown-unlit;
   network-conduit = dontHaddock super.network-conduit;
   shakespeare-js = dontHaddock super.shakespeare-js;
   shakespeare-text = dontHaddock super.shakespeare-text;
+  swagger = dontHaddock super.swagger;  # http://hydra.cryp.to/build/2035868/nixlog/1/raw
   wai-test = dontHaddock super.wai-test;
   zlib-conduit = dontHaddock super.zlib-conduit;
 
@@ -166,6 +170,13 @@ self: super: {
   halive = if pkgs.stdenv.isDarwin
     then addBuildDepend super.halive pkgs.darwin.apple_sdk.frameworks.AppKit
     else super.halive;
+
+  # Hakyll's tests are broken on Darwin (3 failures); and they require util-linux
+  hakyll = if pkgs.stdenv.isDarwin
+    then dontCheck (overrideCabal super.hakyll (drv: {
+      testToolDepends = [];
+    }))
+    else super.hakyll;
 
   # cabal2nix likes to generate dependencies on hinotify when hfsevents is really required
   # on darwin: https://github.com/NixOS/cabal2nix/issues/146.
@@ -284,14 +295,12 @@ self: super: {
   bitcoin-api-extra = dontCheck super.bitcoin-api-extra;
   bitx-bitcoin = dontCheck super.bitx-bitcoin;          # http://hydra.cryp.to/build/926187/log/raw
   concurrent-dns-cache = dontCheck super.concurrent-dns-cache;
-  dbus = dontCheck super.dbus;                          # http://hydra.cryp.to/build/498404/log/raw
   digitalocean-kzs = dontCheck super.digitalocean-kzs;  # https://github.com/KazumaSATO/digitalocean-kzs/issues/1
   github-types = dontCheck super.github-types;          # http://hydra.cryp.to/build/1114046/nixlog/1/raw
   hadoop-rpc = dontCheck super.hadoop-rpc;              # http://hydra.cryp.to/build/527461/nixlog/2/raw
   hasql = dontCheck super.hasql;                        # http://hydra.cryp.to/build/502489/nixlog/4/raw
   hasql-transaction = dontCheck super.hasql-transaction; # wants to connect to postgresql
   hjsonschema = overrideCabal super.hjsonschema (drv: { testTarget = "local"; });
-  hoogle_5_0_4 = super.hoogle_5_0_4.override { haskell-src-exts = self.haskell-src-exts_1_18_2; };
   marmalade-upload = dontCheck super.marmalade-upload;  # http://hydra.cryp.to/build/501904/nixlog/1/raw
   mongoDB = dontCheck super.mongoDB;
   network-transport-tcp = dontCheck super.network-transport-tcp;
@@ -456,7 +465,6 @@ self: super: {
   translatable-intset = dontCheck super.translatable-intset;
   ua-parser = dontCheck super.ua-parser;
   unagi-chan = dontCheck super.unagi-chan;
-  wai-app-file-cgi = dontCheck super.wai-app-file-cgi;
   wai-logger = dontCheck super.wai-logger;
   WebBits = dontCheck super.WebBits;                    # http://hydra.cryp.to/build/499604/log/raw
   webdriver = dontCheck super.webdriver;
@@ -780,19 +788,9 @@ self: super: {
     src = pkgs.fetchFromGitHub {
       owner = "chrisdone";
       repo = "structured-haskell-mode";
-      sha256 = "1vrycvqp4n2pp6sq7z2v0zkqz6662nvacm7cla5hrrzl157cg0j5";
-      rev = "1ffb4db1e7049d4089fea430d4f20bce2eff263d";
+      rev = "dde5104ee28e1c63ca9fbc37c969f8e319b4b903";
+      sha256 = "0g5qpnxzr9qmgzvsld5mg94rb28xb8kd1a02q045r6zlmv1zx7lp";
     };
-    patches = [ (pkgs.fetchpatch {
-                  url = "https://github.com/chrisdone/structured-haskell-mode/pull/140.patch";
-                  sha256 = "1zwyxfmkl04dy34mbifk24qj9g0sfpz0j8rm688qdah8lavp44df";
-                })
-                (pkgs.fetchpatch {
-                  url = "https://github.com/chrisdone/structured-haskell-mode/pull/141.patch";
-                  sha256 = "1bqgzw8cvxs0yg3yipsayksf7djccslamksm0nkw0kfp22axzmng";
-                })
-              ];
-    jailbreak = false;
     # Statically linked Haskell libraries make the tool start-up much faster,
     # which is important for use in Emacs.
     enableSharedExecutables = false;
@@ -805,11 +803,11 @@ self: super: {
       ln -s $lispdir $out/share/emacs/site-lisp
     '';
   })).override {
-    haskell-src-exts = self.haskell-src-exts_1_18_2;
+    haskell-src-exts = self.haskell-src-exts_1_19_0;
   };
 
   # # Make elisp files available at a location where people expect it.
-  hindent = overrideCabal super.hindent (drv: {
+  hindent = (overrideCabal super.hindent (drv: {
     # We cannot easily byte-compile these files, unfortunately, because they
     # depend on a new version of haskell-mode that we don't have yet.
     postInstall = ''
@@ -818,7 +816,9 @@ self: super: {
       ln -s $lispdir $out/share/emacs/site-lisp
     '';
     doCheck = false; # https://github.com/chrisdone/hindent/issues/299
-  });
+  })).override {
+    haskell-src-exts = self.haskell-src-exts_1_19_0;
+  };
 
   # https://github.com/yesodweb/Shelly.hs/issues/106
   # https://github.com/yesodweb/Shelly.hs/issues/108
@@ -979,13 +979,35 @@ self: super: {
   });
 
   # https://github.com/commercialhaskell/stack/issues/2263
-  stack = (dontJailbreak super.stack).overrideScope (self: super: {
-    http-client = self.http-client_0_5_3_2;
+  stack = super.stack.overrideScope (self: super: {
+    http-client = self.http-client_0_5_4;
     http-client-tls = self.http-client-tls_0_3_3;
     http-conduit = self.http-conduit_2_2_3;
     optparse-applicative = dontCheck self.optparse-applicative_0_13_0_0;
     criterion = super.criterion.override { inherit (super) optparse-applicative; };
   });
+
+  # The latest Hoogle needs versions not yet in LTS Haskell 7.x.
+  hoogle = super.hoogle.override { haskell-src-exts = self.haskell-src-exts_1_19_0; };
+
+  # To be in sync with Hoogle.
+  lambdabot-haskell-plugins = (overrideCabal super.lambdabot-haskell-plugins (drv: {
+    patches = [
+      (pkgs.fetchpatch {
+        url = "https://github.com/lambdabot/lambdabot/commit/78a2361024724acb70bc1c12c42f3a16015bb373.patch";
+        sha256 = "0aw0jpw07idkrg8pdn3y3qzhjfrxsvmx3plg51m1aqgbzs000yxf";
+        stripLen = 2;
+        addPrefixes = true;
+      })
+    ];
+
+    jailbreak = true;
+  })).override {
+    haskell-src-exts = self.haskell-src-exts-simple;
+  };
+
+  # Needs new version.
+  haskell-src-exts-simple = super.haskell-src-exts-simple.override { haskell-src-exts = self.haskell-src-exts_1_18_2; };
 
   # Test suite fails a QuickCheck property.
   optparse-applicative_0_13_0_0 = dontCheck super.optparse-applicative_0_13_0_0;
@@ -1019,11 +1041,26 @@ self: super: {
     doCheck = false;
   });
 
+  # http-api-data_0.3.x requires QuickCheck > 2.9, but overriding that version
+  # is hard because of transitive dependencies, so we just disable tests.
+  http-api-data_0_3_3 = dontCheck super.http-api-data_0_3_3;
+
+  # Fix build for latest versions of servant and servant-client.
+  servant_0_9_1_1 = super.servant_0_9_1_1.overrideScope (self: super: {
+    http-api-data = self.http-api-data_0_3_3;
+  });
+  servant-client_0_9_1_1 = super.servant-client_0_9_1_1.overrideScope (self: super: {
+    http-api-data = self.http-api-data_0_3_3;
+    servant-server = self.servant-server_0_9_1_1;
+    servant = self.servant_0_9_1_1;
+  });
+
   # https://github.com/pontarius/pontarius-xmpp/issues/105
   pontarius-xmpp = dontCheck super.pontarius-xmpp;
 
   # https://github.com/fpco/store/issues/77
   store = dontCheck super.store;
+  store_0_3 = super.store_0_3.overrideScope (self: super: { store-core = self.store-core_0_3; });
 
   # https://github.com/bmillwood/applicative-quoters/issues/6
   applicative-quoters = doJailbreak super.applicative-quoters;
@@ -1031,7 +1068,66 @@ self: super: {
   # https://github.com/roelvandijk/terminal-progress-bar/issues/13
   terminal-progress-bar = doJailbreak super.terminal-progress-bar;
 
+  # https://github.com/hdbc/hdbc-odbc/pull/29
+  HDBC-odbc = overrideCabal super.HDBC-odbc (old: {
+    postPatch = old.postPatch or "" + ''
+      sed -e '/data BoundValue =/ { s/$/{/ ; n; n ; s/{ bvVal/  bvVal/ }' \
+          -e 's/-- | This is rather/-- This is rather/' \
+          -i Database/HDBC/ODBC/Statement.hsc
+    '';
+  });
+
   # https://github.com/vshabanov/HsOpenSSL/issues/11
   HsOpenSSL = doJailbreak super.HsOpenSSL;
 
+  # https://github.com/NixOS/nixpkgs/issues/19612
+  wai-app-file-cgi = (dontCheck super.wai-app-file-cgi).overrideScope (self: super: {
+    http-client = self.http-client_0_5_3_2;
+    http-client-tls = self.http-client-tls_0_3_3;
+    http-conduit = self.http-conduit_2_2_3;
+  });
+
+  # https://hydra.nixos.org/build/42769611/nixlog/1/raw
+  # note: the library is unmaintained, no upstream issue
+  dataenc = doJailbreak super.dataenc;
+
+  libsystemd-journal = overrideCabal super.libsystemd-journal (old: {
+    librarySystemDepends = old.librarySystemDepends or [] ++ [ pkgs.systemd ];
+  });
+
+  # horribly outdated (X11 interface changed a lot)
+  sindre = markBroken super.sindre;
+
+  # https://github.com/jmillikin/haskell-dbus/pull/7
+  # http://hydra.cryp.to/build/498404/log/raw
+  dbus = dontCheck (appendPatch super.dbus ./patches/hdbus-semicolons.patch);
+
+  # Test suite occasionally runs for 1+ days on Hydra.
+  distributed-process-tests = dontCheck super.distributed-process-tests;
+
+  # https://github.com/mulby/diff-parse/issues/9
+  diff-parse = doJailbreak super.diff-parse;
+
+  # https://github.com/josefs/STMonadTrans/issues/4
+  STMonadTrans = dontCheck super.STMonadTrans;
+
+  socket_0_7_0_0 = super.socket_0_7_0_0.overrideScope (self: super: { QuickCheck = self.QuickCheck_2_9_2; });
+
+  # 0.5.6 invokes $PAGER in a way that crashes if there are args such as $PAGER="less -R"
+  ghc-core = overrideCabal super.ghc-core (drv: {
+    src = pkgs.fetchFromGitHub {
+      owner  = "shachaf";
+      repo   = "ghc-core";
+      rev    = "630196adf0bebf073328325302453ef1c409fd9a";
+      sha256 = "05jzpjy5zkri2faw5jnq5vh12mx58lrb0zfzz4h598miq2vc8848";
+    };
+    version = "2012-12-15";
+  });
+
+  # Encountered missing dependencies: hspec >=1.3 && <2.1
+  # https://github.com/rampion/ReadArgs/issues/8
+  ReadArgs = doJailbreak super.ReadArgs;
+
+  # https://github.com/philopon/barrier/issues/3
+  barrier = doJailbreak super.barrier;
 }

@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, pkgconfig, gtk2, gtk3, pango, perl, python, zip, libIDL
 , libjpeg, zlib, dbus, dbus_glib, bzip2, xorg
 , freetype, fontconfig, file, alsaLib, nspr, nss, libnotify
-, yasm, mesa, sqlite, unzip, makeWrapper, pysqlite
+, yasm, mesa, sqlite, unzip, makeWrapper
 , hunspell, libevent, libstartup_notification, libvpx
 , cairo, gstreamer, gst_plugins_base, icu, libpng, jemalloc, libpulseaudio
 , autoconf213, which
@@ -34,7 +34,7 @@ common = { pname, version, sha512 }: stdenv.mkDerivation rec {
       python dbus dbus_glib pango freetype fontconfig xorg.libXi
       xorg.libX11 xorg.libXrender xorg.libXft xorg.libXt file
       alsaLib nspr nss libnotify xorg.pixman yasm mesa
-      xorg.libXScrnSaver xorg.scrnsaverproto pysqlite
+      xorg.libXScrnSaver xorg.scrnsaverproto
       xorg.libXext xorg.xextproto sqlite unzip makeWrapper
       hunspell libevent libstartup_notification libvpx /* cairo */
       icu libpng jemalloc
@@ -70,6 +70,7 @@ common = { pname, version, sha512 }: stdenv.mkDerivation rec {
       "--enable-jemalloc"
       "--disable-gconf"
       "--enable-default-toolkit=cairo-gtk2"
+      "--with-google-api-keyfile=ga"
     ]
     ++ lib.optional enableGTK3 "--enable-default-toolkit=cairo-gtk3"
     ++ (if debugBuild then [ "--enable-debug" "--enable-profiling" ]
@@ -85,6 +86,11 @@ common = { pname, version, sha512 }: stdenv.mkDerivation rec {
       configureScript="$(realpath ./configure)"
       mkdir ../objdir
       cd ../objdir
+
+      # Google API key used by Chromium and Firefox.
+      # Note: These are for NixOS/nixpkgs use ONLY. For your own distribution,
+      # please get your own set of keys.
+      echo "AIzaSyDGi15Zwl11UNe6Y-5XW_upsfyw31qwZPI" >ga
     '';
 
   preInstall =
@@ -141,14 +147,14 @@ in {
 
   firefox-unwrapped = common {
     pname = "firefox";
-    version = "49.0.1";
-    sha512 = "0b1lmsxazd32xxlbbzg01xam7qc9m7abv6fnl1ixv4dz0xpfc88l1zikskghhdk9snzglyl3lidgnbkli9039g3gf9m06yv77gasmkg";
+    version = "50.0.1";
+    sha512 = "3gz7z5vk5zzwy6zzay4s72rbjmlgdgbij859ppzx6h38vhljj4vl7s9g5rg2byx9vjar593i9jhx46mr8bzr3530291aq8a7qmss4hw";
   };
 
   firefox-esr-unwrapped = common {
     pname = "firefox-esr";
-    version = "45.4.0esr";
-    sha512 = "2955e02f829a10186a8b22320fb97d4b0fc2b45721fcffa6295653fd760d516ae72b5656547685ba1e0699b381e28044996d9ee12a8738842b4e6b8acd296715";
+    version = "45.5.0esr";
+    sha512 = "fadac65fcad4bd4701026c9f3d87ba7dec304205e3c375769db7f7de9e596877deed9b21d3e8c34c1ce8ae689dd2979b3627742dfbec9bc0cb16a5cb1ce7507d";
   };
 
 }

@@ -1,15 +1,15 @@
-{ stdenv, fetchurl, pythonPackages }:
+{ stdenv, fetchurl, python2Packages }:
 
-pythonPackages.buildPythonApplication rec {
+python2Packages.buildPythonApplication rec {
   name = "electrum-${version}";
-  version = "2.7.8";
+  version = "2.7.11";
 
   src = fetchurl {
     url = "https://download.electrum.org/${version}/Electrum-${version}.tar.gz";
-    sha256 = "0p4dx5fks68avzxkknawv094xxf7322hgm068js4v56qirvxm563";
+    sha256 = "0qy2ynyw57jgi7fw3xzsyy608yk4bhsda7qfw0j26zqinv52mrsb";
   };
 
-  propagatedBuildInputs = with pythonPackages; [
+  propagatedBuildInputs = with python2Packages; [
     dns
     ecdsa
     jsonrpclib
