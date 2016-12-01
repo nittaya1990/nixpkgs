@@ -1430,7 +1430,6 @@ in
   diffoscope = callPackage ../tools/misc/diffoscope {
     jdk = jdk7;
     pythonPackages = python3Packages;
-    rpm = rpm.override { python = python3; };
   };
 
   diffstat = callPackage ../tools/text/diffstat { };
@@ -13589,8 +13588,6 @@ in
   kiwix = callPackage ../applications/misc/kiwix {
     stdenv = overrideCC stdenv gcc49;
   };
-
-  koji = callPackage ../tools/package-management/koji { };
 
   konversation = qt5.callPackage ../applications/networking/irc/konversation/1.6.nix { };
 
