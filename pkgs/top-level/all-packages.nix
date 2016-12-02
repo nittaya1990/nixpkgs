@@ -6507,6 +6507,8 @@ in
 
   tcptrack = callPackage ../development/tools/misc/tcptrack { };
 
+  teensyduino = arduino-core.override { withGui = true; withTeensyduino = true; };
+
   teensy-loader-cli = callPackage ../development/tools/misc/teensy-loader-cli { };
 
   texinfo413 = callPackage ../development/tools/misc/texinfo/4.13a.nix { };
