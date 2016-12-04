@@ -1681,11 +1681,11 @@ let
   }) // {inherit ;};
 
   xf86videoamdgpu = (mkDerivation "xf86videoamdgpu" {
-    name = "xf86-video-amdgpu-1.1.2";
+    name = "xf86-video-amdgpu-1.2.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-video-amdgpu-1.1.2.tar.bz2;
-      sha256 = "0y87d4rhm5r71qpzcmmz4q37f3d3461jzh3sr99j7lbhdpnpzs3f";
+      url = mirror://xorg/individual/driver/xf86-video-amdgpu-1.2.0.tar.bz2;
+      sha256 = "13vcwxswhzq611ly890fcl11vkpai7gs303l7nx5azqjbyn1lnr7";
     };
     buildInputs = [pkgconfig fontsproto mesa libdrm udev randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto ];
     meta.platforms = stdenv.lib.platforms.unix;
@@ -2067,15 +2067,15 @@ let
   }) // {inherit fontsproto libpciaccess randrproto renderproto xextproto xorgserver xproto ;};
 
   xf86videovmware = (mkDerivation "xf86videovmware" {
-    name = "xf86-video-vmware-13.1.0";
+    name = "xf86-video-vmware-13.2.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-video-vmware-13.1.0.tar.bz2;
-      sha256 = "1k50whwnkzxam2ihc1sw456dx0pvr76naycm4qhyjxqv9d72879w";
+      url = mirror://xorg/individual/driver/xf86-video-vmware-13.2.1.tar.bz2;
+      sha256 = "0azn3g0vcki47n5jddagk2rmbwdvp845k8p7d2r56zxs3w8ggxz2";
     };
-    buildInputs = [pkgconfig fontsproto libdrm libpciaccess randrproto renderproto videoproto libX11 libXext xextproto xineramaproto xorgserver xproto ];
+    buildInputs = [pkgconfig fontsproto libdrm udev libpciaccess randrproto renderproto videoproto libX11 libXext xextproto xineramaproto xorgserver xproto ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) // {inherit fontsproto libdrm libpciaccess randrproto renderproto videoproto libX11 libXext xextproto xineramaproto xorgserver xproto ;};
+  }) // {inherit fontsproto libdrm udev libpciaccess randrproto renderproto videoproto libX11 libXext xextproto xineramaproto xorgserver xproto ;};
 
   xf86videovoodoo = (mkDerivation "xf86videovoodoo" {
     name = "xf86-video-voodoo-1.2.5";
