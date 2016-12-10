@@ -13760,6 +13760,8 @@ in
 
   lyx = qt5.callPackage ../applications/misc/lyx { };
 
+  mail-notification = callPackage ../desktops/gnome-2/desktop/mail-notification {};
+
   magnetophonDSP = {
     CharacterCompressor = callPackage ../applications/audio/magnetophonDSP/CharacterCompressor { };
     CompBus = callPackage ../applications/audio/magnetophonDSP/CompBus { };
