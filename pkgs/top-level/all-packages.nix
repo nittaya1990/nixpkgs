@@ -2237,6 +2237,8 @@ in
 
   inetutils = callPackage ../tools/networking/inetutils { };
 
+  inform7 = callPackage ../development/compilers/inform7 { };
+
   innoextract = callPackage ../tools/archivers/innoextract { };
 
   ioping = callPackage ../tools/system/ioping { };
@@ -2293,6 +2295,8 @@ in
   jfsutils = callPackage ../tools/filesystems/jfsutils { };
 
   jhead = callPackage ../tools/graphics/jhead { };
+
+  jid = callPackage ../development/tools/jid { };
 
   jing = self.jing-trang;
   jing-trang = callPackage ../tools/text/xml/jing-trang { };
@@ -4533,6 +4537,8 @@ in
 
 
   ### DEVELOPMENT / COMPILERS
+
+  abcl = callPackage ../development/compilers/abcl {};
 
   aldor = callPackage ../development/compilers/aldor { };
 
@@ -10127,6 +10133,8 @@ in
   jboss_mysql_jdbc = callPackage ../servers/http/jboss/jdbc/mysql { };
 
   jetty = callPackage ../servers/http/jetty { };
+
+  knot-dns = callPackage ../servers/dns/knot-dns { };
 
   rdkafka = callPackage ../development/libraries/rdkafka { };
 
@@ -16689,6 +16697,11 @@ in
     camlp5 = ocamlPackages.camlp5_transitional;
   };
 
+  coq_8_6 = callPackage ../applications/science/logic/coq/8.6.nix {
+    inherit (ocamlPackages) ocaml findlib lablgtk;
+    camlp5 = ocamlPackages.camlp5_transitional;
+  };
+
   coq_8_5 = callPackage ../applications/science/logic/coq/8.5.nix {
     inherit (ocamlPackages) ocaml findlib lablgtk;
     camlp5 = ocamlPackages.camlp5_transitional;
@@ -16772,8 +16785,29 @@ in
 
   };
 
+  mkCoqPackages_8_6 = self: let callPackage = newScope self; in rec {
+
+    inherit callPackage;
+
+    coq = coq_8_6;
+
+    coq-ext-lib = callPackage ../development/coq-modules/coq-ext-lib {};
+
+    coquelicot = callPackage ../development/coq-modules/coquelicot {};
+
+    dpdgraph = callPackage ../development/coq-modules/dpdgraph {};
+
+    flocq = callPackage ../development/coq-modules/flocq {};
+
+    interval = callPackage ../development/coq-modules/interval {};
+
+    fiat_HEAD = callPackage ../development/coq-modules/fiat/HEAD.nix {};
+
+  };
+
   coqPackages = mkCoqPackages_8_4 coqPackages;
   coqPackages_8_5 = mkCoqPackages_8_5 coqPackages_8_5;
+  coqPackages_8_6 = mkCoqPackages_8_6 coqPackages_8_6;
 
   cryptoverif = callPackage ../applications/science/logic/cryptoverif { };
 
