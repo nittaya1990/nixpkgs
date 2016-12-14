@@ -212,6 +212,8 @@ in {
     '';
   };
 
+  discordpy = callPackage ../development/python-modules/discordpy { };
+
   h5py = callPackage ../development/python-modules/h5py {
     hdf5 = pkgs.hdf5;
   };
@@ -26208,6 +26210,7 @@ in {
     };
   };
 
+  websockets = callPackage ../development/python-modules/websockets { };
 
   wand = buildPythonPackage rec {
     name = "Wand-0.3.5";
