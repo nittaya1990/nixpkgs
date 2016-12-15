@@ -12107,6 +12107,8 @@ in
 
   unifont_upper = callPackage ../data/fonts/unifont_upper { };
 
+  unscii = callPackage ../data/fonts/unscii { };
+
   vanilla-dmz = callPackage ../data/icons/vanilla-dmz { };
 
   vistafonts = callPackage ../data/fonts/vista-fonts { };
