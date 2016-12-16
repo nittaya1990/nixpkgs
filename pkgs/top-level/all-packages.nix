@@ -14040,8 +14040,6 @@ in
     withSidebar = true;
   };
 
-  mutt-kz = callPackage ../applications/networking/mailreaders/mutt-kz { };
-
   neomutt = callPackage ../applications/networking/mailreaders/neomutt { };
 
   notion = callPackage ../applications/window-managers/notion { };
