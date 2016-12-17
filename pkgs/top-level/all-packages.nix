@@ -5618,6 +5618,8 @@ in
 
   inherit (callPackages ../development/interpreters/perl {}) perl perl520 perl522;
 
+  pachyderm = callPackage ../applications/networking/cluster/pachyderm { };
+
   php = php70;
 
   phpPackages = php70Packages;
