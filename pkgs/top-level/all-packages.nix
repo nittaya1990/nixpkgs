@@ -5329,7 +5329,9 @@ in
     lua = lua5_1;
   };
 
-  teyjus = callPackage ../development/compilers/teyjus { };
+  teyjus = callPackage ../development/compilers/teyjus {
+    omake = omake_rc1;
+  };
 
   thrust = callPackage ../development/tools/thrust {
     gconf = pkgs.gnome2.GConf;
@@ -6380,6 +6382,8 @@ in
   omake = callPackage ../development/tools/ocaml/omake {
     inherit (ocamlPackages_4_02) ocaml;
   };
+
+  inherit (ocamlPackages) omake_rc1;
 
   omniorb = callPackage ../development/tools/omniorb { };
 
