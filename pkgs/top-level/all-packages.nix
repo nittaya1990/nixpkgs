@@ -14825,6 +14825,8 @@ in
 
   ssr = callPackage ../applications/audio/soundscape-renderer {};
 
+  ssrc = callPackage ../applications/audio/ssrc { };
+
   stalonetray = callPackage ../applications/window-managers/stalonetray {};
 
   stp = callPackage ../applications/science/logic/stp {};
