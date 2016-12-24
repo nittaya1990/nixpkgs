@@ -4654,6 +4654,8 @@ in
     '';
   });
 
+  crystal = callPackage ../development/compilers/crystal { };
+
   devpi-client = callPackage ../development/tools/devpi-client {};
 
   drumstick = callPackage ../development/libraries/drumstick { };
@@ -6505,6 +6507,8 @@ in
 
   sbt = callPackage ../development/tools/build-managers/sbt { };
   simpleBuildTool = sbt;
+
+  shards = callPackage ../development/tools/build-managers/shards { };
 
   shellcheck = self.haskellPackages.ShellCheck;
 
