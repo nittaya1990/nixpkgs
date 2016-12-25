@@ -5247,6 +5247,8 @@ in {
     };
   });
 
+  pytest-expect = callPackage ../development/python-modules/pytest-expect { };
+
   pytest-virtualenv = buildPythonPackage rec {
     name = "${pname}-${version}";
     pname = "pytest-virtualenv";
@@ -12512,12 +12514,14 @@ in {
       sha256 = "09j6194f5mlnd5xwbavwvnndwl1x91jw74shxl6hcxjp4fxg3h05";
     };
 
-    buildInputs = with self; [ nose flake8 ];
+    buildInputs = with self; [ flake8 pytest pytest-expect mock ];
     propagatedBuildInputs = with self; [
-      six
+      six webencodings
     ] ++ optionals isPy26 [ ordereddict ];
 
-    checkPhase = "nosetests";
+    checkPhase = ''
+      py.test
+    '';
 
     meta = {
       homepage = https://github.com/html5lib/html5lib-python;
@@ -25867,6 +25871,8 @@ in {
     };
   };
 
+  u-msgpack-python = callPackage ../development/python-modules/u-msgpack-python { };
+
   umalqurra = buildPythonPackage rec {
     name = "umalqurra-${version}";
     version = "0.2";
@@ -26420,6 +26426,8 @@ EOF
       platforms = platforms.linux;
     };
   };
+
+  webencodings = callPackage ../development/python-modules/webencodings { };
 
   websockets = callPackage ../development/python-modules/websockets { };
 
