@@ -3138,6 +3138,8 @@ in
 
   olsrd = callPackage ../tools/networking/olsrd { };
 
+  os-prober = callPackage ../tools/misc/os-prober {};
+
   ossec = callPackage ../tools/security/ossec {};
 
   ostree = callPackage ../tools/misc/ostree { };
