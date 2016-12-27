@@ -9304,27 +9304,48 @@ in {
 
 
   librosa = buildPythonPackage rec {
-    name = "librosa-${version}";
-    version = "0.4.0";
+    pname = "librosa";
+    name = "${pname}-${version}";
+    version = "0.4.3";
     src = pkgs.fetchurl {
-      url = "mirror://pypi/l/librosa/librosa-0.4.0.tar.gz";
-      sha256 = "cc11dcc41f51c08e442292e8a2fc7d7ee77e0d47ff771259eb63f57fcee6f6e7";
+      url = "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${name}.tar.gz";
+      sha256 = "209626c53556ca3922e52d2fae767bf5b398948c867fcc8898f948695dacb247";
     };
 
-    propagatedBuildInputs = with self;
-      [ joblib matplotlib six scikitlearn decorator audioread samplerate ];
+    propagatedBuildInputs = with self; [ joblib matplotlib six scikitlearn
+      decorator audioread resampy ];
+
+    # No tests
+    doCheck = false;
+
+    meta = {
+      description = "Python module for audio and music processing";
+      homepage = http://librosa.github.io/;
+      license = licenses.isc;
+    };
   };
 
   joblib = buildPythonPackage rec {
-    name = "joblib-${version}";
-    version = "0.9.4";
+    pname = "joblib";
+    name = "${pname}-${version}";
+    version = "0.10.3";
     src = pkgs.fetchurl {
-      url = "mirror://pypi/j/joblib/${name}.tar.gz";
-      sha256 = "e5faacf0da7b3035dbca9d56210962b86564aafca71a25f4ea376a405455cd60";
+      url = "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${name}.tar.gz";
+      sha256 = "29b2965a9efbc90a5fe66a389ae35ac5b5b0c1feabfc7cab7fd5d19f429a071d";
     };
 
-    buildInputs = with self; [ nose ];
+    buildInputs = with self; [ nose sphinx numpydoc ];
 
+    # Failing test on Python 3.x
+    postPatch = '''' + optionalString isPy3k ''
+      sed -i -e '70,84d' joblib/test/test_format_stack.py
+    '';
+
+    meta = {
+      description = "Lightweight pipelining: using Python functions as pipeline jobs";
+      homepage = http://pythonhosted.org/joblib/;
+      license = licenses.bsd3;
+    };
   };
 
   samplerate = buildPythonPackage rec {
@@ -16105,12 +16126,13 @@ in {
   };
 
   numpydoc = buildPythonPackage rec {
-    name = "numpydoc-${version}";
-    version = "0.5";
+    pname = "numpydoc";
+    name = "${pname}-${version}";
+    version = "0.6.0";
 
     src = pkgs.fetchurl {
-      url = "mirror://pypi/n/numpydoc/${name}.tar.gz";
-      sha256 = "0d4dnifaxkll50jx6czj05y8cb4ny60njd2wz299sj2jxfy51w4k";
+      url = "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${name}.tar.gz";
+      sha256 = "1ec573e91f6d868a9940d90a6599f3e834a2d6c064030fbe078d922ee21dcfa1";
     };
 
     buildInputs = [ self.nose ];
@@ -22490,6 +22512,28 @@ in {
     meta = {
       description = "ISO 8601 date/time parser";
       homepage = http://cheeseshop.python.org/pypi/isodate;
+    };
+  };
+
+  resampy = buildPythonPackage rec {
+    pname = "resampy";
+    version = "0.1.4";
+    name = "${pname}-${version}";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${name}.tar.gz";
+      sha256 = "cf4f149d8699af70a1b4b0769fa16fab21835d936ea7ff25e98446aa49e743d4";
+    };
+
+    checkInputs = with self; [ pytest pytestcov ];
+    # No tests included
+    doCheck = false;
+    propagatedBuildInputs = with self; [ numpy scipy cython six ];
+
+    meta = {
+      homepage = https://github.com/bmcfee/resampy;
+      description = "Efficient signal resampling";
+      license = licenses.isc;
     };
   };
 
