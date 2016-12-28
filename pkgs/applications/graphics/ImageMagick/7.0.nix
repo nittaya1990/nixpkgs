@@ -11,22 +11,10 @@ let
     else throw "ImageMagick is not supported on this platform.";
 
   cfg = {
-    version = "6.9.7-0";
-    sha256 = "0c6ff1am2mhc0dc26h50l78yx6acwqymwpwgkxgx69cb6jfpwrdx";
+    version = "7.0.4-0";
+    sha256 = "0hfkdvfl60f9ksh07c06cpq8ib05apczl767yyvc671gd90n11ds";
     patches = [];
-  }
-    # Freeze version on mingw so we don't need to port the patch too often.
-    # FIXME: This version has multiple security vulnerabilities
-    // lib.optionalAttrs (stdenv.cross.libc or null == "msvcrt") {
-        version = "6.9.2-0";
-        sha256 = "17ir8bw1j7g7srqmsz3rx780sgnc21zfn0kwyj78iazrywldx8h7";
-        patches = [(fetchpatch {
-          name = "mingw-build.patch";
-          url = "https://raw.githubusercontent.com/Alexpux/MINGW-packages/"
-            + "01ca03b2a4ef/mingw-w64-imagemagick/002-build-fixes.patch";
-          sha256 = "1pypszlcx2sf7wfi4p37w1y58ck2r8cd5b2wrrwr9rh87p7fy1c0";
-        })];
-      };
+  };
 in
 
 stdenv.mkDerivation rec {
@@ -81,7 +69,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     (cd "$dev/include" && ln -s ImageMagick* ImageMagick)
     moveToOutput "bin/*-config" "$dev"
-    moveToOutput "lib/ImageMagick-*/config-Q16" "$dev" # includes configure params
+    moveToOutput "lib/ImageMagick-*/config-Q16HDRI" "$dev" # includes configure params
     for file in "$dev"/bin/*-config; do
       substituteInPlace "$file" --replace pkg-config \
         "PKG_CONFIG_PATH='$dev/lib/pkgconfig' '${pkgconfig}/bin/pkg-config'"
