@@ -12558,6 +12558,8 @@ in
     inherit (gnome2) GConf ORBit2 metacity;
   };
 
+  confclerk = callPackage ../applications/misc/confclerk { };
+
   copyq = callPackage ../applications/misc/copyq { };
 
   coriander = callPackage ../applications/video/coriander {
