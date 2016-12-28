@@ -8935,6 +8935,8 @@ in
 
   pg_repack = callPackage ../servers/sql/postgresql/pg_repack {};
 
+  pg_similarity = callPackage ../servers/sql/postgresql/pg_similarity {};
+
   phonon = callPackage ../development/libraries/phonon {};
 
   phonon-backend-gstreamer = callPackage ../development/libraries/phonon/backends/gstreamer.nix {};
@@ -9165,6 +9167,8 @@ in
   quicksynergy = callPackage ../applications/misc/quicksynergy { };
 
   qwt = callPackage ../development/libraries/qwt {};
+
+  qwt6_qt4 = callPackage ../development/libraries/qwt/6_qt4.nix { };
 
   qxt = callPackage ../development/libraries/qxt {};
 
@@ -17070,6 +17074,8 @@ in
   cytoscape = callPackage ../applications/science/misc/cytoscape { };
 
   fityk = callPackage ../applications/science/misc/fityk { };
+
+  gplates = callPackage ../applications/science/misc/gplates { };
 
   gravit = callPackage ../applications/science/astronomy/gravit { };
 
