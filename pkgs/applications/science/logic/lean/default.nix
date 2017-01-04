@@ -1,27 +1,21 @@
-{ stdenv, fetchFromGitHub, cmake, gmp, mpfr, boost, python
-, gperftools, ninja, makeWrapper }:
+{ stdenv, fetchFromGitHub, cmake, gmp, mpfr, gperftools }:
 
 stdenv.mkDerivation rec {
   name = "lean-${version}";
-  version = "2016-07-05";
+  version = "2016-12-30";
 
   src = fetchFromGitHub {
     owner  = "leanprover";
     repo   = "lean";
-    rev    = "cc70845332e63a1f1be21dc1f96d17269fc85909";
-    sha256 = "09qz2vjw7whiggvw0cdaa4i2f49wnch2sd4r43glq181ssln27d6";
+    rev    = "fd4fffea27c442b12a45f664a8680ebb47482ca3";
+    sha256 = "1izbjxbr1nvv5kv2b7qklqjx2b1qmwrxhmvk0f2lrl9pxz9h0bmd";
   };
 
-  buildInputs = [ gmp mpfr boost cmake python gperftools ninja makeWrapper ];
+  buildInputs = [ gmp mpfr cmake gperftools ];
   enableParallelBuilding = true;
 
   preConfigure = ''
-    patchShebangs bin/leantags
     cd src
-  '';
-
-  postInstall = ''
-    wrapProgram $out/bin/linja --prefix PATH : $out/bin:${ninja}/bin
   '';
 
   meta = with stdenv.lib; {

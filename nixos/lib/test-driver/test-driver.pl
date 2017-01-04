@@ -8,6 +8,7 @@ use IO::Pty;
 use Logger;
 use Cwd;
 use POSIX qw(_exit dup2);
+use Time::HiRes qw(clock_gettime CLOCK_MONOTONIC);
 
 $SIG{PIPE} = 'IGNORE'; # because Unix domain sockets may die unexpectedly
 
@@ -189,7 +190,12 @@ END {
     $log->close();
 }
 
+my $now1 = clock_gettime(CLOCK_MONOTONIC);
 
 runTests;
+
+my $now2 = clock_gettime(CLOCK_MONOTONIC);
+
+printf STDERR "test script finished in %.2fs\n", $now2 - $now1;
 
 exit ($nrSucceeded < $nrTests ? 1 : 0);

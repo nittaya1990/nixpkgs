@@ -1,12 +1,15 @@
 { stdenv, fetchurl, zlib ? null, zlibSupport ? true, bzip2, pkgconfig, libffi
 , sqlite, openssl, ncurses, python, expat, tcl, tk, xlibsWrapper, libX11
-, makeWrapper, callPackage, self, pypyPackages, gdbm, db }:
+, makeWrapper, callPackage, self, gdbm, db
+# For the Python package set
+, pkgs, packageOverrides ? (self: super: {})
+}:
 
 assert zlibSupport -> zlib != null;
 
 let
-  majorVersion = "5.4";
-  minorVersion = "1";
+  majorVersion = "5.6";
+  minorVersion = "0";
   minorVersionSuffix = "";
   pythonVersion = "2.7";
   version = "${majorVersion}.${minorVersion}${minorVersionSuffix}";
@@ -20,7 +23,7 @@ let
 
     src = fetchurl {
       url = "https://bitbucket.org/pypy/pypy/get/release-pypy${pythonVersion}-v${version}.tar.bz2";
-      sha256 = "1x8sa5x1nkrb8wrmicri94ji8kvyxihyryi8br5fk7gak0agcai0";
+      sha256 = "145a0kd5c0s1v2rpavw9ihncfb05s2x7chc70v8fssvyxq601911";
     };
 
    # http://bugs.python.org/issue27369
@@ -120,14 +123,17 @@ let
         echo "manylinux1_compatible=False" >> $out/lib/${libPrefix}/_manylinux.py
     '';
 
-    passthru = rec {
+    passthru = let
+      pythonPackages = callPackage ../../../../../top-level/python-packages.nix {python=self; overrides=packageOverrides;};
+    in rec {
       inherit zlibSupport libPrefix;
       executable = "pypy";
       isPypy = true;
       buildEnv = callPackage ../../wrapper.nix { python = self; };
       interpreter = "${self}/bin/${executable}";
       sitePackages = "site-packages";
-      withPackages = import ../../with-packages.nix { inherit buildEnv; pythonPackages = pypyPackages; };
+      withPackages = import ../../with-packages.nix { inherit buildEnv pythonPackages;};
+      pkgs = pythonPackages;
     };
 
     enableParallelBuilding = true;  # almost no parallelization without STM

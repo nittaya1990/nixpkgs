@@ -2,7 +2,7 @@
 
 # Linked dynamic libraries.
 , glib, fontconfig, freetype, pango, cairo, libX11, libXi, atk, gconf, nss, nspr
-, libXcursor, libXext, libXfixes, libXrender, libXScrnSaver, libXcomposite
+, libXcursor, libXext, libXfixes, libXrender, libXScrnSaver, libXcomposite, libxcb
 , alsaLib, libXdamage, libXtst, libXrandr, expat, cups
 , dbus_libs, gtk2, gdk_pixbuf, gcc
 
@@ -42,7 +42,7 @@ let
   deps = [
     stdenv.cc.cc
     glib fontconfig freetype pango cairo libX11 libXi atk gconf nss nspr
-    libXcursor libXext libXfixes libXrender libXScrnSaver libXcomposite
+    libXcursor libXext libXfixes libXrender libXScrnSaver libXcomposite libxcb
     alsaLib libXdamage libXtst libXrandr expat cups
     dbus_libs gtk2 gdk_pixbuf gcc
     systemd
@@ -51,10 +51,13 @@ let
     flac harfbuzz icu libpng opusWithCustomModes snappy speechd
     bzip2 libcap
   ] ++ optional pulseSupport libpulseaudio;
+
+  suffix = if channel != "stable" then "-" + channel else "";
+
 in stdenv.mkDerivation rec {
   inherit version;
 
-  name = "google-chrome-${version}";
+  name = "google-chrome${suffix}-${version}";
 
   src = binary;
 
