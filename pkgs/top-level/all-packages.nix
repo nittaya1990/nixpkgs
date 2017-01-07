@@ -16353,7 +16353,7 @@ in
     libjpeg = libjpeg62;
   };
 
-  warzone2100 = callPackage ../games/warzone2100 { };
+  warzone2100 = qt5.callPackage ../games/warzone2100 { };
 
   wesnoth = callPackage ../games/wesnoth { };
 
