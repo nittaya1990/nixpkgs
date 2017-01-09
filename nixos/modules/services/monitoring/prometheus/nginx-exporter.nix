@@ -3,18 +3,15 @@
 with lib;
 
 let
-  cfg = config.services.prometheus.nodeExporter;
-  cmdlineArgs = cfg.extraFlags ++ [
-    "-web.listen-address=${cfg.listenAddress}"
-  ];
+  cfg = config.services.prometheus.nginxExporter;
 in {
   options = {
-    services.prometheus.nodeExporter = {
-      enable = mkEnableOption "prometheus node exporter";
+    services.prometheus.nginxExporter = {
+      enable = mkEnableOption "prometheus nginx exporter";
 
       port = mkOption {
         type = types.int;
-        default = 9100;
+        default = 9113;
         description = ''
           Port to listen on.
         '';
@@ -28,12 +25,12 @@ in {
         '';
       };
 
-      enabledCollectors = mkOption {
-        type = types.listOf types.string;
-        default = [];
-        example = ''[ "systemd" ]'';
+      scrapeUri = mkOption {
+        type = types.string;
+        default = "http://localhost/nginx_status";
         description = ''
-          Collectors to enable, additionally to the defaults.
+          Address to access the nginx status page.
+          Can be enabled with services.nginx.statusPage = true.
         '';
       };
 
@@ -41,7 +38,7 @@ in {
         type = types.listOf types.str;
         default = [];
         description = ''
-          Extra commandline options when launching the node exporter.
+          Extra commandline options when launching the nginx exporter.
         '';
       };
 
@@ -58,22 +55,22 @@ in {
   config = mkIf cfg.enable {
     networking.firewall.allowedTCPPorts = optional cfg.openFirewall cfg.port;
 
-    systemd.services.prometheus-node-exporter = {
-      description = "Prometheus exporter for machine metrics";
-      unitConfig.Documentation = "https://github.com/prometheus/node_exporter";
+    systemd.services.prometheus-nginx-exporter = {
+      after = [ "network.target" "nginx.service" ];
+      description = "Prometheus exporter for nginx metrics";
+      unitConfig.Documentation = "https://github.com/discordianfish/nginx_exporter";
       wantedBy = [ "multi-user.target" ];
-      script = ''
-        exec ${pkgs.prometheus-node-exporter}/bin/node_exporter \
-          ${optionalString (cfg.enabledCollectors != [])
-            ''-collectors.enabled ${concatStringsSep "," cfg.enabledCollectors}''} \
-          -web.listen-address ${cfg.listenAddress}:${toString cfg.port} \
-          ${concatStringsSep " \\\n  " cfg.extraFlags}
-      '';
       serviceConfig = {
         User = "nobody";
         Restart  = "always";
         PrivateTmp = true;
         WorkingDirectory = /tmp;
+        ExecStart = ''
+          ${pkgs.prometheus-nginx-exporter}/bin/nginx_exporter \
+            -nginx.scrape_uri '${cfg.scrapeUri}' \
+            -telemetry.address ${cfg.listenAddress}:${toString cfg.port} \
+            ${concatStringsSep " \\\n  " cfg.extraFlags}
+        '';
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
       };
     };
