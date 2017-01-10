@@ -16423,6 +16423,8 @@ in
 
   xsnow = callPackage ../games/xsnow { };
 
+  xsok = callPackage ../games/xsok { };
+
   xsokoban = callPackage ../games/xsokoban { };
 
   zandronum = callPackage ../games/zandronum {
