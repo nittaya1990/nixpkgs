@@ -17723,6 +17723,8 @@ in
 
   terraform = callPackage ../applications/networking/cluster/terraform {};
 
+  terragrunt = callPackage ../applications/networking/cluster/terragrunt {};
+
   tetex = callPackage ../tools/typesetting/tex/tetex { libpng = libpng12; };
 
   tewi-font = callPackage ../data/fonts/tewi  {};
