@@ -4558,6 +4558,8 @@ in
 
   zsh-syntax-highlighting = callPackage ../shells/zsh-syntax-highlighting { };
 
+  zsh-autosuggestions = callPackage ../shells/zsh-autosuggestions { };
+
   zstd = callPackage ../tools/compression/zstd { };
 
   zsync = callPackage ../tools/compression/zsync { };
@@ -7277,8 +7279,6 @@ in
       inherit (darwin) libiconv;
     }
   );
-
-  libgit2_0_21 = callPackage ../development/libraries/git2/0.21.nix { };
 
   gle = callPackage ../development/libraries/gle { };
 
