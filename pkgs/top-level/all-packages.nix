@@ -876,6 +876,8 @@ in
 
   gdrivefs = python27Packages.gdrivefs;
 
+  go-dependency-manager = callPackage ../development/tools/gdm { };
+
   gencfsm = callPackage ../tools/security/gencfsm { };
 
   genromfs = callPackage ../tools/filesystems/genromfs { };
@@ -13427,6 +13429,8 @@ in
   linssid = qt5.callPackage ../applications/networking/linssid { };
 
   manuskript = callPackage ../applications/editors/manuskript { };
+
+  manul = callPackage ../development/tools/manul { };
 
   mi2ly = callPackage ../applications/audio/mi2ly {};
 
