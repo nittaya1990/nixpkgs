@@ -60,8 +60,6 @@ self: super: {
   })).overrideScope (self: super: {
     # https://github.com/bitemyapp/esqueleto/issues/8
     esqueleto = self.esqueleto_2_4_3;
-    # https://github.com/yesodweb/yesod/issues/1324
-    yesod-persistent = self.yesod-persistent_1_4_1_1;
     # https://github.com/prowdsponsor/esqueleto/issues/137
     persistent = self.persistent_2_2_4_1;
     persistent-template = self.persistent-template_2_1_8_1;
@@ -1003,7 +1001,7 @@ self: super: {
   # The most current version needs some packages to build that are not in LTS 7.x.
   stack = super.stack.overrideScope (self: super: {
     http-client = self.http-client_0_5_5;
-    http-client-tls = self.http-client-tls_0_3_3;
+    http-client-tls = self.http-client-tls_0_3_3_1;
     http-conduit = self.http-conduit_2_2_3;
     optparse-applicative = dontCheck self.optparse-applicative_0_13_0_0;
     criterion = super.criterion.override { inherit (super) optparse-applicative; };
@@ -1110,7 +1108,7 @@ self: super: {
   # https://github.com/NixOS/nixpkgs/issues/19612
   wai-app-file-cgi = (dontCheck super.wai-app-file-cgi).overrideScope (self: super: {
     http-client = self.http-client_0_5_5;
-    http-client-tls = self.http-client-tls_0_3_3;
+    http-client-tls = self.http-client-tls_0_3_3_1;
     http-conduit = self.http-conduit_2_2_3;
   });
 
