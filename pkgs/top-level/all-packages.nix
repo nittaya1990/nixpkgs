@@ -3671,7 +3671,7 @@ in
   rtorrent = callPackage ../tools/networking/p2p/rtorrent { };
 
   rubber = callPackage ../tools/typesetting/rubber { };
-  
+
   rubocop = callPackage ../development/tools/rubocop { };
 
   runningx = callPackage ../tools/X11/runningx { };
@@ -14491,6 +14491,8 @@ in
   pavucontrol = callPackage ../applications/audio/pavucontrol { };
 
   paraview = callPackage ../applications/graphics/paraview { };
+
+  packet = callPackage ../development/tools/packet { };
 
   pbrt = callPackage ../applications/graphics/pbrt { };
 
