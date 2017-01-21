@@ -18016,7 +18016,7 @@ in
 
   discord = callPackage ../applications/networking/instant-messengers/discord { };
 
-  golden-cheetah = qt55.callPackage ../applications/misc/golden-cheetah {};
+  golden-cheetah = qt5.callPackage ../applications/misc/golden-cheetah {};
 
   linkchecker = callPackage ../tools/networking/linkchecker { };
 
