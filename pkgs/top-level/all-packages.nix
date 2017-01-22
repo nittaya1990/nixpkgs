@@ -6485,6 +6485,8 @@ in
 
   mk = callPackage ../development/tools/build-managers/mk { };
 
+  msgpack-tools = callPackage ../development/tools/msgpack-tools { };
+
   msitools = callPackage ../development/tools/misc/msitools { };
 
   multi-ghc-travis = callPackage ../development/tools/haskell/multi-ghc-travis { };
