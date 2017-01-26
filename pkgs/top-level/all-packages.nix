@@ -10713,6 +10713,7 @@ with pkgs;
   spawn_fcgi = callPackage ../servers/http/spawn-fcgi { };
 
   squid = callPackage ../servers/squid { };
+  squid4 = callPackage ../servers/squid/4.nix { };
 
   sslh = callPackage ../servers/sslh { };
 
