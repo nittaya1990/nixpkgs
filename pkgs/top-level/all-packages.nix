@@ -15182,7 +15182,9 @@ with pkgs;
     vte = gnome2.vte.override { pythonSupport = true; };
   };
 
-  termite = callPackage ../applications/misc/termite { vte = null; };
+  termite = callPackage ../applications/misc/termite {
+    vte = gnome3.vte-ng;
+  };
 
   tesseract = callPackage ../applications/graphics/tesseract { };
 
