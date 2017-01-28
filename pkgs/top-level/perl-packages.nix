@@ -6263,7 +6263,11 @@ let self = _self // overrides; _self = with self; {
     name = "HTML-Tiny-1.05";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AN/ANDYA/${name}.tar.gz";
-      sha256 = "18zxg7z51f5daidnwl9vxsrs3lz0y6n5ddqhpb748bjyk3awkkfp";
+      sha256 = "d7cdc9d5985e2e44ceba10b756acf1e0d3a1b3ee3b516e5b54adb850fe79fda3";
+    };
+    meta = {
+      description = "Lightweight, dependency free HTML/XML generation";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
@@ -6597,10 +6601,15 @@ let self = _self // overrides; _self = with self; {
   };
 
   IOCaptureOutput = buildPerlPackage rec {
-    name = "IO-CaptureOutput-1.1103";
+    name = "IO-CaptureOutput-1.1104";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DA/DAGOLDEN/${name}.tar.gz";
-      sha256 = "1bcl7p87ysbzab6hssq19xn3djzc0yk9l4hk0a2mqbqb8hv6p0m5";
+      sha256 = "fcc732fcb438f97a72b30e8c7796484bef2562e374553b207028e2fbf73f8330";
+    };
+    meta = {
+      homepage = https://github.com/dagolden/IO-CaptureOutput;
+      description = "Capture STDOUT and STDERR from Perl code, subprocesses or XS";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
