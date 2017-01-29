@@ -11106,6 +11106,8 @@ with pkgs;
 
   kmscon = callPackage ../os-specific/linux/kmscon { };
 
+  kmscube = callPackage ../os-specific/linux/kmscube { };
+
   latencytop = callPackage ../os-specific/linux/latencytop { };
 
   ldm = callPackage ../os-specific/linux/ldm { };
