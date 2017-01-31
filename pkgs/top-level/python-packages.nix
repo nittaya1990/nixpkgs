@@ -1149,6 +1149,25 @@ in {
     };
   };
 
+  chainmap = buildPythonPackage rec {
+    name = "chainmap-1.0.2";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/c/chainmap/${name}.tar.gz";
+      sha256 = "09h5gq43w516fqswlca0nhmd2q3v8hxq15z4wqrznfwix6ya6pa0";
+    };
+
+    # Requires tox
+    doCheck = false;
+
+    meta = {
+      description = "Backport/clone of ChainMap";
+      homepage = "https://bitbucket.org/jeunice/chainmap";
+      license = licenses.psfl;
+      maintainers = with maintainers; [ abbradar ];
+    };
+  };
+
   arrow = buildPythonPackage rec {
     name = "arrow-${version}";
     version = "0.7.0";
@@ -2994,11 +3013,11 @@ in {
 
   boto = buildPythonPackage rec {
     name = "boto-${version}";
-    version = "2.42.0";
+    version = "2.45.0";
 
     src = pkgs.fetchurl {
       url = "https://github.com/boto/boto/archive/${version}.tar.gz";
-      sha256 = "04ywn8xszk57s87jnkv4j1hswc6ra7z811y9lawfvhvnfshrpx5d";
+      sha256 = "18z5nacnbdpw3pmzc56didhy4sfik8riap204px24350g9xlgz7i";
     };
 
     checkPhase = ''
@@ -9632,6 +9651,23 @@ in {
     };
   };
 
+  scandir = self.buildPythonPackage rec {
+    name = "scandir-${version}";
+    version = "1.4";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/s/scandir/${name}.tar.gz";
+      sha256 = "0yjrgp0mxp3d8bjkq2m1ac2ys8n76wykksvgyjrnil9gr3fx7a5d";
+    };
+
+    meta = with stdenv.lib; {
+      description = "A better directory iterator and faster os.walk()";
+      homepage = "https://github.com/benhoyt/scandir";
+      license = licenses.gpl3;
+      maintainers = with maintainers; [ abbradar ];
+    };
+  };
+
   scfbuild = self.buildPythonPackage rec {
     name = "scfbuild-${version}";
     version = "1.0.3";
@@ -14212,8 +14248,6 @@ in {
   matplotlib = callPackage ../development/python-modules/matplotlib/default.nix {
     stdenv = if stdenv.isDarwin then pkgs.clangStdenv else pkgs.stdenv;
     enableGhostscript = true;
-    inherit (pkgs.darwin.apple_sdk.frameworks) Cocoa Foundation CoreData;
-    inherit (pkgs.darwin) cf-private libobjc;
   };
 
 
