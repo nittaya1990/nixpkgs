@@ -10490,8 +10490,6 @@ with pkgs;
 
   pies = callPackage ../servers/pies { };
 
-  portmap = callPackage ../servers/portmap { };
-
   rpcbind = callPackage ../servers/rpcbind { };
 
   mariadb = callPackage ../servers/sql/mariadb {
