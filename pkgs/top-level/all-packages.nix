@@ -16076,6 +16076,8 @@ with pkgs;
 
   gav = callPackage ../games/gav { };
 
+  gcs = callPackage ../games/gcs { };
+
   gemrb = callPackage ../games/gemrb { };
 
   ghostOne = callPackage ../servers/games/ghost-one { };
