@@ -17589,6 +17589,7 @@ with pkgs;
   kops = callPackage ../applications/networking/cluster/kops { };
 
   lilypond = callPackage ../misc/lilypond { guile = guile_1_8; };
+  lilypond-unstable = callPackage ../misc/lilypond/unstable.nix { guile = guile_1_8; };
 
   mailcore2 = callPackage ../development/libraries/mailcore2 { };
 
