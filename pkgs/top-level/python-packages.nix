@@ -19316,12 +19316,11 @@ in {
 
   protobuf = self.protobuf2_6;
   # only required by tensorflow
-  protobuf3_0_0b2 = callPackage ../development/python-modules/protobuf.nix {
-    disabled = isPyPy || isPy3k;
-    doCheck = isPy3k;
-    protobuf = pkgs.protobuf3_0_0b2;
+  protobuf3_2 = callPackage ../development/python-modules/protobuf.nix {
+    disabled = isPyPy;
+    doCheck = !isPy3k;
+    protobuf = pkgs.protobuf3_2;
   };
-
   protobuf3_0 = callPackage ../development/python-modules/protobuf.nix {
     disabled = isPyPy;
     doCheck = isPy3k;
@@ -20184,6 +20183,8 @@ in {
       maintainers = with maintainers; [ womfoo ];
     };
   };
+
+  pyext = callPackage ../development/python-modules/pyext { };
 
   pyfantom = buildPythonPackage rec {
      name = "pyfantom-${version}";
@@ -31253,7 +31254,9 @@ EOF
 
   tensorflowWithoutCuda = callPackage ../development/python-modules/tensorflow { };
 
-  tensorflowWithCuda = callPackage ../development/python-modules/tensorflow/cuda.nix { };
+  tensorflowWithCuda = callPackage ../development/python-modules/tensorflow {
+    cudaSupport = true;
+  };
 
   tflearn = buildPythonPackage rec {
     name = "tflearn-0.2.1";
