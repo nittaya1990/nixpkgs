@@ -52,6 +52,12 @@ doNotDisplayTwice rec {
   git-hub = gitAndTools.git-hub; # added 2016-04-29
   googleAuthenticator = google-authenticator; # added 2016-10-16
   grantlee5 = qt5.grantlee;  # added 2015-12-19
+  gst_ffmpeg = gst-ffmpeg;  # added 2017-02
+  gst_plugins_base = gst-plugins-base;  # added 2017-02
+  gst_plugins_good = gst-plugins-good;  # added 2017-02
+  gst_plugins_bad = gst-plugins-bad;  # added 2017-02
+  gst_plugins_ugly = gst-plugins-ugly;  # added 2017-02
+  gst_python = gst-python;  # added 2017-02
   gupnptools = gupnp-tools;  # added 2015-12-19
   gnustep-make = gnustep.make; # added 2016-7-6
   htmlTidy = html-tidy;  # added 2014-12-06
@@ -93,6 +99,8 @@ doNotDisplayTwice rec {
   poppler_qt5 = qt5.poppler;  # added 2015-12-19
   qca-qt5 = qt5.qca-qt5;  # added 2015-12-19
   QmidiNet = qmidinet;  # added 2016-05-22
+  qt_gstreamer = qt-gstreamer;  # added 2017-02
+  qt_gstreamer1 = qt-gstreamer1;  # added 2017-02
   quake3game = ioquake3; # added 2016-01-14
   qwt6 = qt5.qwt;  # added 2015-12-19
   rdiff_backup = rdiff-backup;  # added 2014-11-23
