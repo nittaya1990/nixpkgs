@@ -22,6 +22,8 @@ in
 rec {
   # Try to keep this generally alphabetized
 
+  bfg-repo-cleaner = callPackage ./bfg-repo-cleaner { };
+
   bitbucket-server-cli = callPackage ./bitbucket-server-cli { };
 
   darcsToGit = callPackage ./darcs-to-git { };
@@ -55,6 +57,8 @@ rec {
   git-cola = callPackage ./git-cola { };
 
   git-crypt = callPackage ./git-crypt { };
+
+  git-dit = callPackage ./git-dit { };
 
   git-extras = callPackage ./git-extras { };
 

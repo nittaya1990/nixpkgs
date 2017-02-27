@@ -41,6 +41,9 @@ self: super: {
   nanospec = dontCheck super.nanospec;
   options = dontCheck super.options;
   statistics = dontCheck super.statistics;
+  http-streams = dontCheck super.http-streams;
+
+  # segfault due to missing return: https://github.com/haskell/c2hs/pull/184
   c2hs = dontCheck super.c2hs;
 
   # This test keeps being aborted because it runs too quietly for too long
@@ -62,7 +65,7 @@ self: super: {
     src = pkgs.fetchFromGitHub {
       owner = "joeyh";
       repo = "git-annex";
-      sha256 = "1vy6bj7f8zyj4n1r0gpi0r7mxapsrjvhwmsi5sbnradfng5j3jya";
+      sha256 = "0f79i2i1cr8j02vc4ganw92prbkv9ca1yl9jgkny0rxf28wdlc6v";
       rev = drv.version;
     };
   }))).override {
@@ -139,9 +142,9 @@ self: super: {
   # https://github.com/techtangents/ablist/issues/1
   ABList = dontCheck super.ABList;
 
-  # https://github.com/haskell/vector/issues/47
-  # https://github.com/haskell/vector/issues/138
-  vector = doJailbreak (if pkgs.stdenv.isi686 then appendConfigureFlag super.vector "--ghc-options=-msse2" else super.vector);
+  # sse2 flag due to https://github.com/haskell/vector/issues/47.
+  # dontCheck due to https://github.com/haskell/vector/issues/138
+  vector = dontCheck (if pkgs.stdenv.isi686 then appendConfigureFlag super.vector "--ghc-options=-msse2" else super.vector);
 
   # Fix Darwin build.
   halive = if pkgs.stdenv.isDarwin
@@ -228,7 +231,6 @@ self: super: {
   wai-middleware-hmac = dontCheck super.wai-middleware-hmac;
   xkbcommon = dontCheck super.xkbcommon;
   xmlgen = dontCheck super.xmlgen;
-  hapistrano = dontCheck super.hapistrano;
   HerbiePlugin = dontCheck super.HerbiePlugin;
   wai-cors = dontCheck super.wai-cors;
 
@@ -278,7 +280,6 @@ self: super: {
   dotfs = dontCheck super.dotfs;                        # http://hydra.cryp.to/build/498599/log/raw
   DRBG = dontCheck super.DRBG;                          # http://hydra.cryp.to/build/498245/nixlog/1/raw
   ed25519 = dontCheck super.ed25519;
-  either-unwrap = dontCheck super.either-unwrap;        # http://hydra.cryp.to/build/498782/log/raw
   etcd = dontCheck super.etcd;
   fb = dontCheck super.fb;                              # needs credentials for Facebook
   fptest = dontCheck super.fptest;                      # http://hydra.cryp.to/build/499124/log/raw
@@ -307,7 +308,6 @@ self: super: {
   hi = dontCheck super.hi;
   hierarchical-clustering = dontCheck super.hierarchical-clustering;
   hmatrix-tests = dontCheck super.hmatrix-tests;
-  hPDB-examples = dontCheck super.hPDB-examples;
   hquery = dontCheck super.hquery;
   hs2048 = dontCheck super.hs2048;
   hsbencher = dontCheck super.hsbencher;
@@ -340,6 +340,7 @@ self: super: {
   opaleye = dontCheck super.opaleye;
   openpgp = dontCheck super.openpgp;
   optional = dontCheck super.optional;
+  orgmode-parse = dontCheck super.orgmode-parse;
   os-release = dontCheck super.os-release;
   persistent-redis = dontCheck super.persistent-redis;
   pipes-extra = dontCheck super.pipes-extra;
@@ -392,7 +393,6 @@ self: super: {
 
   # https://ghc.haskell.org/trac/ghc/ticket/9625
   vty = dontCheck super.vty;
-  vty_5_15 = dontCheck super.vty_5_15;
 
   # https://github.com/vincenthz/hs-crypto-pubkey/issues/20
   crypto-pubkey = dontCheck super.crypto-pubkey;
@@ -428,9 +428,6 @@ self: super: {
   # https://github.com/NixOS/nixpkgs/issues/6350
   paypal-adaptive-hoops = overrideCabal super.paypal-adaptive-hoops (drv: { testTarget = "local"; });
 
-  # https://github.com/afcowie/http-streams/issues/80
-  http-streams = dontCheck super.http-streams;
-
   # https://github.com/vincenthz/hs-asn1/issues/12
   asn1-encoding = dontCheck super.asn1-encoding;
 
@@ -452,9 +449,6 @@ self: super: {
   apiary-session = dontCheck super.apiary-session;
   apiary-websockets = dontCheck super.apiary-websockets;
 
-  # https://github.com/alephcloud/hs-configuration-tools/issues/40
-  configuration-tools = dontCheck super.configuration-tools;
-
   # HsColour: Language/Unlambda.hs: hGetContents: invalid argument (invalid byte sequence)
   unlambda = dontHyperlinkSource super.unlambda;
 
@@ -470,11 +464,6 @@ self: super: {
   # Relax overspecified constraints. Unfortunately, jailbreak won't work.
   pandoc = overrideCabal super.pandoc (drv: {
     preConfigure = "sed -i -e 's,time .* < 1.6,time >= 1.5,' -e 's,haddock-library >= 1.1 && < 1.3,haddock-library >= 1.1,' pandoc.cabal";
-  });
-
-  # Requires bower-json >= 1.0.0.1 && < 1.1
-  purescript_0_10_5 = super.purescript_0_10_5.overrideScope (self: super: {
-    bower-json = self.bower-json_1_0_0_1;
   });
 
   # https://github.com/tych0/xcffib/issues/37
@@ -496,41 +485,6 @@ self: super: {
 
   # https://github.com/anton-k/csound-expression-dynamic/issues/1
   csound-expression-dynamic = dontHaddock super.csound-expression-dynamic;
-
-  # Packages of the diagrams ecosystem that require:
-  #   diagrams-core ==1.4.*
-  #   diagrams-lib ==1.4.*
-  #   optparse-applicative ==0.13.*
-  diagrams_1_4 = super.diagrams_1_4.overrideScope (self: super: {
-    diagrams-contrib = self.diagrams-contrib_1_4_0_1;
-    diagrams-core = self.diagrams-core_1_4;
-    diagrams-lib = self.diagrams-lib_1_4_0_1;
-    diagrams-svg = self.diagrams-svg_1_4_1;
-    optparse-applicative = self.optparse-applicative_0_13_0_0;
-  });
-  diagrams-contrib_1_4_0_1 = super.diagrams-contrib_1_4_0_1.overrideScope (self: super: {
-    diagrams-core = self.diagrams-core_1_4;
-    diagrams-lib = self.diagrams-lib_1_4_0_1;
-  });
-  diagrams-lib_1_4_0_1 = super.diagrams-lib_1_4_0_1.overrideScope (self: super: {
-    diagrams-core = self.diagrams-core_1_4;
-    optparse-applicative = self.optparse-applicative_0_13_0_0;
-  });
-  diagrams-pgf = super.diagrams-pgf.overrideScope (self: super: {
-    diagrams-core = self.diagrams-core_1_4;
-    diagrams-lib = self.diagrams-lib_1_4_0_1;
-    optparse-applicative = self.optparse-applicative_0_13_0_0;
-  });
-  diagrams-rasterific_1_4 = super.diagrams-rasterific_1_4.overrideScope (self: super: {
-    diagrams-core = self.diagrams-core_1_4;
-    diagrams-lib = self.diagrams-lib_1_4_0_1;
-    optparse-applicative = self.optparse-applicative_0_13_0_0;
-  });
-  diagrams-svg_1_4_1 = super.diagrams-svg_1_4_1.overrideScope (self: super: {
-    diagrams-core = self.diagrams-core_1_4;
-    diagrams-lib = self.diagrams-lib_1_4_0_1;
-    optparse-applicative = self.optparse-applicative_0_13_0_0;
-  });
 
   # Test suite won't compile against tasty-hunit 0.9.x.
   zlib = dontCheck super.zlib;
@@ -735,24 +689,13 @@ self: super: {
   # Tools that use gtk2hs-buildtools now depend on them in a custom-setup stanza
   cairo = addBuildTool super.cairo self.gtk2hs-buildtools;
   pango = disableHardening (addBuildTool super.pango self.gtk2hs-buildtools) ["fortify"];
+  gtk =
+    if pkgs.stdenv.isDarwin
+    then appendConfigureFlag super.gtk "-fhave-quartz-gtk"
+    else super.gtk;
 
-  # Fix tests which would otherwise fail with "Couldn't launch intero process."
-  intero = overrideCabal super.intero (drv: {
-    postPatch = (drv.postPatch or "") + ''
-      substituteInPlace src/test/Main.hs --replace "\"intero\"" "\"$PWD/dist/build/intero/intero\""
-    '';
-  });
-
-  # The most current version needs some packages to build that are not in LTS 7.x.
-  stack = super.stack.overrideScope (self: super: {
-    http-client = self.http-client_0_5_5;
-    http-client-tls = self.http-client-tls_0_3_3_1;
-    http-conduit = self.http-conduit_2_2_3;
-    optparse-applicative = dontCheck self.optparse-applicative_0_13_0_0;
-    criterion = super.criterion.override { inherit (super) optparse-applicative; };
-    aeson = self.aeson_1_0_2_1;
-    hpack = self.hpack_0_15_0;
-  });
+  # https://github.com/commercialhaskell/stack/issues/3001
+  stack = doJailbreak super.stack;
 
   # The latest Hoogle needs versions not yet in LTS Haskell 7.x.
   hoogle = super.hoogle.override { haskell-src-exts = self.haskell-src-exts_1_19_1; };
@@ -776,9 +719,6 @@ self: super: {
   # Needs new version.
   haskell-src-exts-simple = super.haskell-src-exts-simple.override { haskell-src-exts = self.haskell-src-exts_1_19_1; };
 
-  # Test suite fails a QuickCheck property.
-  optparse-applicative_0_13_0_0 = dontCheck super.optparse-applicative_0_13_0_0;
-
   # https://github.com/Philonous/hs-stun/pull/1
   # Remove if a version > 0.1.0.1 ever gets released.
   stunclient = overrideCabal super.stunclient (drv: {
@@ -788,28 +728,16 @@ self: super: {
   });
 
   # test suite cannot find its own "idris" binary
-  idris = overrideCabal super.idris (drv: {
-    # "idris" binary cannot find Idris library otherwise while building. After
-    # installing it's completely fine though. This seems like a bug in Idris
-    # that's related to builds with shared libraries enabled. It would be great
-    # if someone who knows a thing or two about Idris could look into this.
-    preBuild = "export LD_LIBRARY_PATH=$PWD/dist/build:$LD_LIBRARY_PATH";
-    doCheck = false;
-  });
+  idris = doJailbreak (dontCheck super.idris);
 
   # https://github.com/bos/math-functions/issues/25
   math-functions = dontCheck super.math-functions;
 
-  # http-api-data_0.3.x requires QuickCheck > 2.9, but overriding that version
-  # is hard because of transitive dependencies, so we just disable tests.
-  http-api-data_0_3_5 = dontCheck super.http-api-data_0_3_5;
+  # broken test suite
+  servant-server = dontCheck super.servant-server;
 
   # Fix build for latest versions of servant and servant-client.
-  servant_0_10 = super.servant_0_10.overrideScope (self: super: {
-    http-api-data = self.http-api-data_0_3_5;
-  });
   servant-client_0_10 = super.servant-client_0_10.overrideScope (self: super: {
-    http-api-data = self.http-api-data_0_3_5;
     servant-server = self.servant-server_0_10;
     servant = self.servant_0_10;
   });
@@ -824,7 +752,7 @@ self: super: {
           owner = "haskell-servant";
           repo = "servant";
           rev = "v${ver}";
-          sha256 = "0fynv77m7rk79pdp535c2a2bd44csgr32zb4wqavbalr7grpxg4q";
+          sha256 = "09kjinnarf9q9l8irs46gcrai8bprq39n8pj43bmdv47hl38csa0";
         }}/doc";
         buildInputs = with pkgs.pythonPackages; [ sphinx recommonmark sphinx_rtd_theme ];
         makeFlags = "html";
@@ -842,15 +770,8 @@ self: super: {
   # https://github.com/plow-technologies/servant-auth/issues/20
   servant-auth = dontCheck super.servant-auth;
 
-  servant-auth-server = super.servant-auth-server.overrideScope (self: super: {
-    jose = super.jose_0_5_0_2;
-  });
-
   # https://github.com/pontarius/pontarius-xmpp/issues/105
   pontarius-xmpp = dontCheck super.pontarius-xmpp;
-
-  # Use proper store-core version.
-  store_0_3 = super.store_0_3.overrideScope (self: super: { store-core = self.store-core_0_3; });
 
   # https://github.com/bmillwood/applicative-quoters/issues/6
   applicative-quoters = doJailbreak super.applicative-quoters;
@@ -869,6 +790,9 @@ self: super: {
   # note: the library is unmaintained, no upstream issue
   dataenc = doJailbreak super.dataenc;
 
+  # https://github.com/divipp/ActiveHs-misc/issues/10
+  data-pprint = doJailbreak super.data-pprint;
+
   # horribly outdated (X11 interface changed a lot)
   sindre = markBroken super.sindre;
 
@@ -885,22 +809,63 @@ self: super: {
   # https://github.com/josefs/STMonadTrans/issues/4
   STMonadTrans = dontCheck super.STMonadTrans;
 
-  socket_0_7_0_0 = super.socket_0_7_0_0.overrideScope (self: super: { QuickCheck = self.QuickCheck_2_9_2; });
-
-  # requires most recent vty
-  brick = super.brick.overrideScope (self: super: { vty = self.vty_5_15; });
-
-  turtle_1_3_1 = super.turtle_1_3_1.overrideScope (self: super: {
-    optparse-applicative = self.optparse-applicative_0_13_0_0;
-  });
-
   # No upstream issue tracker
   hspec-expectations-pretty-diff = dontCheck super.hspec-expectations-pretty-diff;
 
-  lentil = super.lentil.overrideScope (self: super: {
-    pipes = self.pipes_4_3_2;
-    optparse-applicative = self.optparse-applicative_0_13_0_0;
-    # https://github.com/roelvandijk/terminal-progress-bar/issues/14
-    terminal-progress-bar = doJailbreak self.terminal-progress-bar_0_1_1;
+  # https://github.com/basvandijk/lifted-base/issues/34
+  lifted-base = doJailbreak super.lifted-base;
+
+  # https://github.com/aslatter/parsec/issues/68
+  parsec = doJailbreak super.parsec;
+
+  # Don't depend on chell-quickcheck, which doesn't compile due to restricting
+  # QuickCheck to versions ">=2.3 && <2.9".
+  system-filepath = dontCheck super.system-filepath;
+
+  # https://github.com/basvandijk/case-insensitive/issues/24
+  case-insensitive = doJailbreak super.case-insensitive;
+
+  # https://github.com/hvr/uuid/issues/28
+  uuid-types = doJailbreak super.uuid-types;
+  uuid = doJailbreak super.uuid;
+
+  # https://github.com/hspec/hspec/issues/307
+  hspec-contrib = dontCheck super.hspec-contrib;
+
+  # https://github.com/ekmett/lens/issues/713
+  lens = disableCabalFlag super.lens "test-doctests";
+
+  # https://github.com/haskell/fgl/issues/60
+  fgl = doJailbreak super.fgl;
+  fgl-arbitrary = doJailbreak super.fgl-arbitrary;
+
+  # https://github.com/Gabriel439/Haskell-DirStream-Library/issues/8
+  dirstream = doJailbreak super.dirstream;
+
+  # https://github.com/xmonad/xmonad-extras/issues/3
+  xmonad-extras = doJailbreak super.xmonad-extras;
+
+  # https://github.com/bmillwood/pointfree/issues/21
+  pointfree = appendPatch super.pointfree (pkgs.fetchpatch {
+    url = "https://github.com/bmillwood/pointfree/pull/22.patch";
+    sha256 = "04q0b5d78ill2yrpflkphvk2y38qc50si2qff4bllp47wj42aqmp";
   });
+
+  # https://github.com/int-e/QuickCheck-safe/issues/2
+  QuickCheck-safe = doJailbreak super.QuickCheck-safe;
+
+  # https://github.com/mokus0/dependent-sum-template/issues/7
+  dependent-sum-template = doJailbreak super.dependent-sum-template;
+
+  # https://github.com/jcristovao/newtype-generics/issues/13
+  newtype-generics = doJailbreak super.newtype-generics;
+
+  # https://github.com/lambdabot/lambdabot/issues/158
+  lambdabot-core = doJailbreak super.lambdabot-core;
+
+  # https://github.com/lambdabot/lambdabot/issues/159
+  lambdabot = doJailbreak super.lambdabot;
+
+  # https://github.com/jswebtools/language-ecmascript/pull/81
+  language-ecmascript = doJailbreak super.language-ecmascript;
 }

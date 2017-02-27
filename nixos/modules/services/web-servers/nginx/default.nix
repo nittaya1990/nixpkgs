@@ -5,31 +5,21 @@ with lib;
 let
   cfg = config.services.nginx;
   virtualHosts = mapAttrs (vhostName: vhostConfig:
-    vhostConfig // {
+    let
       serverName = if vhostConfig.serverName != null
         then vhostConfig.serverName
         else vhostName;
+    in
+    vhostConfig // {
+      inherit serverName;
     } // (optionalAttrs vhostConfig.enableACME {
-      sslCertificate = "/var/lib/acme/${vhostName}/fullchain.pem";
-      sslCertificateKey = "/var/lib/acme/${vhostName}/key.pem";
+      sslCertificate = "/var/lib/acme/${serverName}/fullchain.pem";
+      sslCertificateKey = "/var/lib/acme/${serverName}/key.pem";
     })
   ) cfg.virtualHosts;
   enableIPv6 = config.networking.enableIPv6;
 
-  configFile = pkgs.runCommand "nginx.conf" {
-    inherit configFileUnformatted;
-    passAsFile = [ "configFileUnformatted" ];
-    # configFileUnformatted is created locally, therefore so should this be.
-    preferLocalBuild = true;
-    allowSubstitutes = false;
-  } ''
-    cp ${configFileUnformatted} nginx.conf
-    chmod u+w nginx.conf
-    ${pkgs.nginx-config-formatter}/bin/nginxfmt nginx.conf
-    cp nginx.conf $out
-  '';
-
-  configFileUnformatted = pkgs.writeText "nginx.unformatted.conf" ''
+  configFile = pkgs.writeText "nginx.conf" ''
     user ${cfg.user} ${cfg.group};
     error_log stderr;
     daemon off;
@@ -395,6 +385,7 @@ in
       description = "Nginx Web Server";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
+      stopIfChanged = false;
       preStart =
         ''
         mkdir -p ${cfg.stateDir}/logs
@@ -416,7 +407,7 @@ in
         acmeEnabledVhosts = filter (vhostConfig: vhostConfig.enableACME) vhostsConfigs;
         acmePairs = map (vhostConfig: { name = vhostConfig.serverName; value = {
             user = cfg.user;
-            group = cfg.group;
+            group = lib.mkDefault cfg.group;
             webroot = vhostConfig.acmeRoot;
             extraDomains = genAttrs vhostConfig.serverAliases (alias: null);
             postRun = ''

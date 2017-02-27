@@ -1,16 +1,17 @@
-{ stdenv, lib, buildGoPackage, fetchFromGitHub }:
+{ stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   name = "wuzz-${version}";
-  version = "2017-02-05";
+  version = "0.2.0";
+  rev = "v${version}";
 
   goPackagePath = "https://github.com/asciimoo/wuzz";
 
   src = fetchFromGitHub {
     owner = "asciimoo";
     repo = "wuzz";
-    rev = "45b6a64e667b3647216af68e06e253958b81b3c4";
-    sha256 = "0jjdyqh1jvfg1dg5fwwavcvkn8fkm1a44gyv35c1g5cd9gxwj8nw";
+    inherit rev;
+    sha256 = "1fcr5jr0vn5w60bn08lkh2mi0hdarwp361h94in03139j7hhqrfs";
   };
 
   goDeps = ./deps.nix;

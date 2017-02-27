@@ -42,7 +42,8 @@ let
       "systemd-udevd.service"
       "systemd-udev-settle.service"
       "systemd-udev-trigger.service"
-      "systemd-hwdb-update.service"
+      # hwdb.bin is managed by NixOS
+      # "systemd-hwdb-update.service"
 
       # Consoles.
       "getty.target"
@@ -61,7 +62,6 @@ let
       # Login stuff.
       "systemd-logind.service"
       "autovt@.service"
-      #"systemd-vconsole-setup.service"
       "systemd-user-sessions.service"
       "dbus-org.freedesktop.login1.service"
       "dbus-org.freedesktop.machine1.service"
@@ -329,7 +329,7 @@ let
           ${let env = cfg.globalEnvironment // def.environment;
             in concatMapStrings (n:
               let s = optionalString (env."${n}" != null)
-                "Environment=\"${n}=${env.${n}}\"\n";
+                "Environment=${builtins.toJSON "${n}=${env.${n}}"}\n";
               in if stringLength s >= 2048 then throw "The value of the environment variable ‘${n}’ in systemd service ‘${name}.service’ is too long." else s) (attrNames env)}
           ${if def.reloadIfChanged then ''
             X-ReloadIfChanged=true
@@ -753,7 +753,8 @@ in
 
         # Keep a persistent journal. Note that systemd-tmpfiles will
         # set proper ownership/permissions.
-        mkdir -m 0700 -p /var/log/journal
+        # FIXME: revert to 0700 with systemd v233.
+        mkdir -m 0750 -p /var/log/journal
       '';
 
     users.extraUsers.systemd-network.uid = config.ids.uids.systemd-network;
@@ -841,6 +842,7 @@ in
     systemd.services.systemd-journald.stopIfChanged = false;
     systemd.targets.local-fs.unitConfig.X-StopOnReconfiguration = true;
     systemd.targets.remote-fs.unitConfig.X-StopOnReconfiguration = true;
+    systemd.targets.network-online.wantedBy = [ "multi-user.target" ];
     systemd.services.systemd-binfmt.wants = [ "proc-sys-fs-binfmt_misc.automount" ];
 
     # Don't bother with certain units in containers.

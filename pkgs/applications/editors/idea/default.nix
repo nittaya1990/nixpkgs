@@ -136,12 +136,12 @@ in
 {
   clion = buildClion rec {
     name = "clion-${version}";
-    version = "2016.3.2";
+    version = "2016.3.3";
     description  = "C/C++ IDE. New. Intelligent. Cross-platform";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/cpp/CLion-${version}.tar.gz";
-      sha256 = "0ygnj3yszgd1si1qgx7m4n7smm583l5pww8xhx8n86mvz7ywdhbn";
+      sha256 = "1zziyg0y51lfybflq83qwd94wcypkv4gh0cdkwfybbk4yidpnz05";
     };
     wmClass = "jetbrains-clion";
   };
@@ -172,12 +172,12 @@ in
 
   idea-community = buildIdea rec {
     name = "idea-community-${version}";
-    version = "2016.3.3";
+    version = "2016.3.4";
     description = "Integrated Development Environment (IDE) by Jetbrains, community edition";
     license = stdenv.lib.licenses.asl20;
     src = fetchurl {
       url = "https://download.jetbrains.com/idea/ideaIC-${version}.tar.gz";
-      sha256 = "1v9rzfj84fyz3m3b6bh45jns8wcil9n8f8mfha0x8m8534r6w368";
+      sha256 = "712dccd726b43e2187e8025a6effb711d35310b36d553dbf7bf85400ec1cec15";
     };
     wmClass = "jetbrains-idea-ce";
   };
@@ -208,12 +208,12 @@ in
 
   idea-ultimate = buildIdea rec {
     name = "idea-ultimate-${version}";
-    version = "2016.3.3";
+    version = "2016.3.4";
     description = "Integrated Development Environment (IDE) by Jetbrains, requires paid license";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/idea/ideaIU-${version}.tar.gz";
-      sha256 = "1bwy86rm0mifizmhkm9wxwc4nrrizk2zp4zl5ycxh6zdiad1r1wm";
+      sha256 = "1ichjrdmnhyqv9cr73d8kif9l53k3x36i8js8nf9cmkbhdsfckn3";
     };
     wmClass = "jetbrains-idea";
   };
@@ -304,12 +304,12 @@ in
 
   webstorm = buildWebStorm rec {
     name = "webstorm-${version}";
-    version = "2016.3.2";
+    version = "2016.3.3";
     description = "Professional IDE for Web and JavaScript development";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/webstorm/WebStorm-${version}.tar.gz";
-      sha256 = "1h3kjvd10j48n9ch2ldqjsizq5n8gkm0vrrvznayc1bz2kjvhavn";
+      sha256 = "08f266afi8ia5jvvgk2lncra2n3i0l5c3h7c8fwxz6y8fhhlas4y";
     };
     wmClass = "jetbrains-webstorm";
   };

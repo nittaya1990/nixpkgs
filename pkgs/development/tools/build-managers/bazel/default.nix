@@ -1,9 +1,8 @@
-{ stdenv, fetchFromGitHub, buildFHSUserEnv, writeScript, jdk, zip, unzip,
-  which, makeWrapper, binutils }:
+{ stdenv, fetchurl, jdk, zip, unzip, which, bash, binutils, perl }:
 
-let
+stdenv.mkDerivation rec {
 
-  version = "0.3.2";
+  version = "0.4.4";
 
   meta = with stdenv.lib; {
     homepage = http://github.com/bazelbuild/bazel/;
@@ -13,58 +12,57 @@ let
     platforms = platforms.linux;
   };
 
-  bootstrapEnv = buildFHSUserEnv {
-    name = "bazel-bootstrap-env";
+  name = "bazel-${version}";
 
-    targetPkgs = pkgs: [ ];
-
-    inherit meta;
+  src = fetchurl {
+    url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-dist.zip";
+    sha256 = "1fwfahkqi680zyxmdriqj603lpacyh6cg6ff25bn9bkilbfj2anm";
   };
 
-  bazelBinary = stdenv.mkDerivation rec {
-    name = "bazel-${version}";
+  sourceRoot = ".";
 
-    src = fetchFromGitHub {
-      owner = "bazelbuild";
-      repo = "bazel";
-      rev = version;
-      sha256 = "085cjz0qhm4a12jmhkjd9w3ic4a67035j01q111h387iklvgn6xg";
-    };
-    patches = [ ./java_stub_template.patch ];
+  patches = [ ./bin_to_env.patch ];
 
-    packagesNotFromEnv = [
-        stdenv.cc stdenv.cc.cc.lib jdk which zip unzip binutils ];
-    buildInputs = packagesNotFromEnv ++ [ bootstrapEnv makeWrapper ];
+  postPatch = ''
+    patchShebangs ./compile.sh
+    for d in scripts src/java_tools src/test src/tools third_party/ijar/test tools; do
+      patchShebangs $d
+    done
+  '';
 
-    buildTimeBinPath = stdenv.lib.makeBinPath packagesNotFromEnv;
-    buildTimeLibPath = stdenv.lib.makeLibraryPath packagesNotFromEnv;
+  buildInputs = [
+    stdenv.cc
+    stdenv.cc.cc.lib
+    bash
+    jdk
+    zip
+    unzip
+    which
+    binutils
+  ];
 
-    runTimeBinPath = stdenv.lib.makeBinPath [ jdk stdenv.cc.cc ];
-    runTimeLibPath = stdenv.lib.makeLibraryPath [ stdenv.cc.cc.lib ];
+  # If TMPDIR is in the unpack dir we run afoul of blaze's infinite symlink
+  # detector (see com.google.devtools.build.lib.skyframe.FileFunction).
+  # Change this to $(mktemp -d) as soon as we figure out why.
 
-    buildWrapper = writeScript "build-wrapper.sh" ''
-      #! ${stdenv.shell} -e
-      export PATH="${buildTimeBinPath}:$PATH"
-      export LD_LIBRARY_PATH="${buildTimeLibPath}:$LD_LIBRARY_PATH"
-      ./compile.sh
-    '';
+  buildPhase = ''
+    export TMPDIR=/tmp
+    ./compile.sh
+  '';
 
-    buildPhase = ''
-      bazel-bootstrap-env ${buildWrapper}
-    '';
+  # Build the CPP and Java examples to verify that Bazel works.
+  doCheck = true;
+  checkPhase = ''
+    export TEST_TMPDIR=$(pwd)
+    ./output/bazel test examples/cpp:hello-success_test
+    ./output/bazel test examples/java-native/src/test/java/com/example/myproject:hello
+  '';
 
-    installPhase = ''
-      mkdir -p $out/bin
-      cp output/bazel $out/bin/
-      wrapProgram $out/bin/bazel \
-          --suffix PATH ":" "${runTimeBinPath}" \
-          --suffix LD_LIBRARY_PATH ":" "${runTimeLibPath}"
-    '';
+  installPhase = ''
+    mkdir -p $out/bin
+    mv output/bazel $out/bin
+  '';
 
-    dontStrip = true;
-    dontPatchELF = true;
-
-    inherit meta;
-  };
-
-in bazelBinary
+  dontStrip = true;
+  dontPatchELF = true;
+}
