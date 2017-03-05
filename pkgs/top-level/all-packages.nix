@@ -14990,7 +14990,8 @@ with pkgs;
     qt = qt4;
   };
 
-  qsyncthingtray = libsForQt5.callPackage ../applications/misc/qsyncthingtray { };
+  # 0.5.7 segfaults when opening the main panel with qt 5.7
+  qsyncthingtray = libsForQt56.callPackage ../applications/misc/qsyncthingtray { };
 
   qsynth = callPackage ../applications/audio/qsynth { };
 
@@ -15980,7 +15981,8 @@ with pkgs;
   };
   xbmc-retroarch-advanced-launchers = kodi-retroarch-advanced-launchers;
 
-  xca = libsForQt5.callPackage ../applications/misc/xca { };
+  # v1.3.2 segfaults with qt 5.7
+  xca = libsForQt56.callPackage ../applications/misc/xca { };
 
   xcalib = callPackage ../tools/X11/xcalib { };
 
