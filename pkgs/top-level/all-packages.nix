@@ -5180,7 +5180,13 @@ with pkgs;
     stdenv = stdenvAdapters.overrideCC pkgs.stdenv pkgs.clang_38;
   });
 
-  go = go_1_7;
+  go_1_8 = callPackage ../development/compilers/go/1.8.nix ({
+    inherit (darwin.apple_sdk.frameworks) Security Foundation;
+  } // stdenv.lib.optionalAttrs stdenv.isDarwin {
+    stdenv = stdenvAdapters.overrideCC pkgs.stdenv pkgs.clang_38;
+  });
+
+  go = go_1_8;
 
   go-repo-root = callPackage ../development/tools/go-repo-root { };
 
@@ -10258,7 +10264,11 @@ with pkgs;
     go = go_1_7;
   };
 
-  buildGoPackage = buildGo17Package;
+  buildGo18Package = callPackage ../development/go-modules/generic {
+    go = go_1_8;
+  };
+
+  buildGoPackage = buildGo18Package;
 
   go2nix = callPackage ../development/tools/go2nix { };
 
@@ -17725,6 +17735,10 @@ with pkgs;
 
   lilypond = callPackage ../misc/lilypond { guile = guile_1_8; };
   lilypond-unstable = callPackage ../misc/lilypond/unstable.nix { guile = guile_1_8; };
+  lilypond-with-fonts = callPackage ../misc/lilypond/with-fonts.nix {
+    lilypond = lilypond-unstable;
+  };
+  openlilylib-fonts = callPackage ../misc/lilypond/fonts.nix { };
 
   mailcore2 = callPackage ../development/libraries/mailcore2 { };
 
