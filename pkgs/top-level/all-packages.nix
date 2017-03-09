@@ -7009,6 +7009,7 @@ with pkgs;
   boost_process = callPackage ../development/libraries/boost-process { };
 
   botan = callPackage ../development/libraries/botan { };
+  botan2 = callPackage ../development/libraries/botan/2.0.nix { };
   botanUnstable = callPackage ../development/libraries/botan/unstable.nix { };
 
   box2d = callPackage ../development/libraries/box2d { };
@@ -7789,6 +7790,8 @@ with pkgs;
   hyena = callPackage ../development/libraries/hyena { };
 
   icu = callPackage ../development/libraries/icu { };
+  # Needed for LibreOffice Still as of 5.2.6.2
+  icu_57 = callPackage ../development/libraries/icu/57.nix { };
 
   id3lib = callPackage ../development/libraries/id3lib { };
 
@@ -14280,7 +14283,9 @@ with pkgs;
     lcms = lcms2;
     harfbuzz = harfbuzz.override {
       withIcu = true; withGraphite2 = true;
+      icu = icu_57;
     };
+    icu = icu_57;
   });
 
 
