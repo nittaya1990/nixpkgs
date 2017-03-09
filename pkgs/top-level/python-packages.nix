@@ -2991,7 +2991,7 @@ in {
       description = "Generate block-diagram image from spec-text file (similar to Graphviz)";
       homepage = http://blockdiag.com/;
       license = licenses.asl20;
-      platforms = platforms.linux;
+      platforms = platforms.unix;
       maintainers = with maintainers; [ bjornfor ];
     };
   };
@@ -7204,7 +7204,7 @@ in {
       description = "Recursive descent parsing library based on functional combinators";
       homepage = https://code.google.com/p/funcparserlib/;
       license = licenses.mit;
-      platforms = platforms.linux;
+      platforms = platforms.unix;
     };
   };
 
@@ -26886,7 +26886,7 @@ EOF
       description = "Library for working with color names/values defined by the HTML and CSS specifications";
       homepage = https://bitbucket.org/ubernostrum/webcolors/overview/;
       license = licenses.bsd3;
-      platforms = platforms.linux;
+      platforms = platforms.unix;
     };
   };
 
