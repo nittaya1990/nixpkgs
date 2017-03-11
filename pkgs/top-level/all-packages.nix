@@ -291,6 +291,8 @@ with pkgs;
 
   nukeReferences = callPackage ../build-support/nuke-references/default.nix { };
 
+  removeReferencesTo = callPackage ../build-support/remove-references-to/default.nix { };
+
   vmTools = callPackage ../build-support/vm/default.nix { };
 
   releaseTools = callPackage ../build-support/release/default.nix { };
@@ -1099,6 +1101,8 @@ with pkgs;
   ori = callPackage ../tools/backup/ori { };
 
   atool = callPackage ../tools/archivers/atool { };
+
+  bsc = callPackage ../tools/compression/bsc { };
 
   bzip2 = callPackage ../tools/compression/bzip2 { };
 
@@ -2775,6 +2779,8 @@ with pkgs;
   lxd = callPackage ../tools/admin/lxd { };
 
   lzfse = callPackage ../tools/compression/lzfse { };
+
+  lzham = callPackage ../tools/compression/lzham { };
 
   lzip = callPackage ../tools/compression/lzip { };
 
@@ -11427,7 +11433,6 @@ with pkgs;
   linux_3_12 = callPackage ../os-specific/linux/kernel/linux-3.12.nix {
     kernelPatches = with kernelPatches;
       [ bridge_stp_helper
-        DCCP_double_free_vulnerability_CVE-2017-6074
       ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
       [ kernelPatches.mips_fpureg_emu
@@ -14126,6 +14131,8 @@ with pkgs;
   k9copy = libsForQt5.callPackage ../applications/video/k9copy {};
 
   kadu = kde4.callPackage ../applications/networking/instant-messengers/kadu { };
+
+  kanboard = callPackage ../applications/misc/kanboard { };
 
   kde-telepathy = kde4.callPackage ../applications/networking/instant-messengers/telepathy/kde {};
 
