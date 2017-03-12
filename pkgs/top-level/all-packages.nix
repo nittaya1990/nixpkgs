@@ -16200,8 +16200,6 @@ with pkgs;
 
   inherit (gnome3) yelp;
 
-  ykpers = callPackage ../applications/misc/ykpers {};
-
   yoshimi = callPackage ../applications/audio/yoshimi { };
 
   inherit (python3Packages) you-get;
