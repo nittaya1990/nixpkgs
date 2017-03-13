@@ -13131,6 +13131,13 @@ in {
       sha256 = "3a0624a251a26463c9dfa0ffa635ec51c4265380980d9a50d65611c3c2bd82a6";
     };
 
+    patches = [
+      (pkgs.fetchpatch {
+        url = "https://github.com/ipython/ipython_genutils/commit/6d74d8cb34e49820e48ba8b4f5e5f8322824f4f7.patch";
+        sha256 = "13ah6a11qldzzywax50la6qwq02sk5929gjkzzn456lg1ja5gq35";
+      })
+    ];
+
     LC_ALL = "en_US.UTF-8";
     buildInputs = with self; [ nose pkgs.glibcLocales ];
 
@@ -25654,12 +25661,13 @@ in {
   };
 
   traitlets = buildPythonPackage rec {
-    version = "4.3.1";
-    name = "traitlets-${version}";
+    pname = "traitlets";
+    version = "4.3.2";
+    name = "${pname}-${version}";
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/t/traitlets/${name}.tar.gz";
-      sha256 = "ba8c94323ccbe8fd792e45d8efe8c95d3e0744cc8c085295b607552ab573724c";
+    src = fetchPypi {
+      inherit pname version;
+      sha256 = "9c4bd2d267b7153df9152698efb1050a5d84982d3384a37b2c1f7723ba3e7835";
     };
 
     LC_ALL = "en_US.UTF-8";
