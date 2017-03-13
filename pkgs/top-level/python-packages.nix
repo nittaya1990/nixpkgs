@@ -5841,17 +5841,16 @@ in {
 
   requests-cache = buildPythonPackage (rec {
     name = "requests-cache-${version}";
-    version = "0.4.10";
-    disabled = isPy3k;
+    version = "0.4.13";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/r/requests-cache/${name}.tar.gz";
-      sha256 = "671969d00719fa3e80476b128dc9232025926884d0110d4d235abdd9c3508fc0";
+      sha256 = "18jpyivnq5pjbkymk3i473rihpj2bgikafpha7xvr6w736hiqmpy";
     };
 
     buildInputs = with self; [ mock ];
 
-    propagatedBuildInputs = with self; [ self.six requests2 ];
+    propagatedBuildInputs = with self; [ requests2 six urllib3 ];
 
     meta = {
       description = "Persistent cache for requests library";
@@ -31281,7 +31280,7 @@ EOF
       sha256 = "0hq887yb3rwc0rcw32lh7xdkk9bbrqy274aspzqkd6f7dyhp73ih";
     };
 
-    disabled = isPy3k;
+    propagatedBuildInputs = with self; [ requests-cache ];
 
     meta = {
       description = "Simple to use TVDB (thetvdb.com) API in Python.";
@@ -31293,19 +31292,18 @@ EOF
 
   tvnamer = buildPythonPackage rec {
     name = "tvnamer-${version}";
-    version = "2.3";
+    version = "2.4";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/t/tvnamer/${name}.tar.gz";
-      sha256 = "15i6qvhwhcx08c96xx3s2841yc7k8gxrqqvhw908c11g0045c2r3";
+      sha256 = "10iizmwna2xpyc2694hsrvny68y3bdq576p8kxsvg5gj2spnsxav";
     };
 
-    propagatedBuildInputs = with self; [
-      tvdb_api
-    ];
+    buildInputs = with self; [ pytest ];
+    propagatedBuildInputs = with self; [ tvdb_api ];
 
-    # tvdb_api isn't working with Python 3
-    disabled = isPy3k;
+    # a ton of tests fail with: IOError: tvnamer/main.py could not be found in . or ..
+    doCheck = false;
 
     meta = {
       description = "Automatic TV episode file renamer, uses data from thetvdb.com via tvdb_api.";
