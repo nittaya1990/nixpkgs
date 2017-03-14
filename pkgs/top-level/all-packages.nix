@@ -5457,7 +5457,7 @@ with pkgs;
 
   ocaml_make = callPackage ../development/ocaml-modules/ocamlmake { };
 
-  inherit (ocamlPackages) ocaml-top;
+  ocaml-top = callPackage ../development/tools/ocaml/ocaml-top { };
 
   opa = callPackage ../development/compilers/opa {
     nodejs = nodejs-4_x;
