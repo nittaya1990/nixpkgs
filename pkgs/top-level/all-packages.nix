@@ -5661,6 +5661,8 @@ with pkgs;
 
   ceptre = callPackage ../development/interpreters/ceptre { };
 
+  clips = callPackage ../development/interpreters/clips { };
+
   clisp = callPackage ../development/interpreters/clisp { };
   clisp-tip = callPackage ../development/interpreters/clisp/hg.nix { };
 
