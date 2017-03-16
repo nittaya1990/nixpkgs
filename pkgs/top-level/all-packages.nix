@@ -15030,6 +15030,8 @@ with pkgs;
 
   qjackctl = libsForQt5.callPackage ../applications/audio/qjackctl { };
 
+  qmetro = callPackage ../applications/misc/qmetro { };
+
   qmidinet = callPackage ../applications/audio/qmidinet { };
 
   qmidiroute = callPackage ../applications/audio/qmidiroute { };
