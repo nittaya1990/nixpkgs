@@ -14411,6 +14411,7 @@ with pkgs;
   makeself = callPackage ../applications/misc/makeself { };
 
   marathon = callPackage ../applications/networking/cluster/marathon { };
+  marathonctl = callPackage ../tools/virtualization/marathonctl { } ;
 
   marp = callPackage ../applications/office/marp { };
 
