@@ -1604,11 +1604,11 @@ let
   }) // {inherit inputproto xorgserver xproto ;};
 
   xf86inputlibinput = (mkDerivation "xf86inputlibinput" {
-    name = "xf86-input-libinput-0.23.0";
+    name = "xf86-input-libinput-0.25.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-input-libinput-0.23.0.tar.bz2;
-      sha256 = "1p596v3kbmjpdz3kz8z19bnd79l860f1pbwjvma7bz7qx3gynlqb";
+      url = mirror://xorg/individual/driver/xf86-input-libinput-0.25.0.tar.bz2;
+      sha256 = "0vsmijamfzf6vcljrr0am2qcz33zl2l0lj2mzmbwgrm7ixjx2zxv";
     };
     buildInputs = [pkgconfig inputproto xorgserver xproto ];
     meta.platforms = stdenv.lib.platforms.unix;
@@ -1670,11 +1670,11 @@ let
   }) // {inherit ;};
 
   xf86videoamdgpu = (mkDerivation "xf86videoamdgpu" {
-    name = "xf86-video-amdgpu-1.2.0";
+    name = "xf86-video-amdgpu-1.3.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-video-amdgpu-1.2.0.tar.bz2;
-      sha256 = "13vcwxswhzq611ly890fcl11vkpai7gs303l7nx5azqjbyn1lnr7";
+      url = mirror://xorg/individual/driver/xf86-video-amdgpu-1.3.0.tar.bz2;
+      sha256 = "0w2f7xz44pym2k5kr76p983dwbc2f2p2jazpff999giqi4i0yqy1";
     };
     buildInputs = [pkgconfig fontsproto mesa libdrm udev randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto ];
     meta.platforms = stdenv.lib.platforms.unix;
