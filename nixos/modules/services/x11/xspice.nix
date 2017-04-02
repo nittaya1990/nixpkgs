@@ -32,7 +32,7 @@ let
     Xft.lcdfilter: lcd${fontconfig.subpixel.lcdfilter}
     Xft.hinting: ${if fontconfig.hinting.enable then "1" else "0"}
     Xft.autohint: ${if fontconfig.hinting.autohint then "1" else "0"}
-    Xft.hintstyle: hint${fontconfig.hinting.style}
+    Xft.hintstyle: hintslight
   '';
 
   slimConfig = pkgs.writeText "slim.cfg"
