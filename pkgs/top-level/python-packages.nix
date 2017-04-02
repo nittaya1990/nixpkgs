@@ -816,18 +816,22 @@ in {
 
   python-gnupg = buildPythonPackage rec {
     name    = "python-gnupg-${version}";
-    version = "0.3.8";
+    version = "0.4.0";
 
     src = pkgs.fetchurl {
       url    = "mirror://pypi/p/python-gnupg/${name}.tar.gz";
-      sha256 = "0nkbs9c8f30lra7ca39kg91x8cyxn0jb61vih4qky839gpbwwwiq";
+      sha256 = "1yd88acafs9nwk6gzpbxjzpx0zd04qrvc6hmwhj1i89ghm2g7ap6";
     };
+
+    propagatedBuildInputs = [ pkgs.gnupg1 ];
 
     # Let's make the library default to our gpg binary
     patchPhase = ''
       substituteInPlace gnupg.py \
         --replace "gpgbinary='gpg'" "gpgbinary='${pkgs.gnupg1}/bin/gpg'"
     '';
+
+    doCheck = false;
 
     meta = {
       description = "A wrapper for the Gnu Privacy Guard";
@@ -3837,11 +3841,11 @@ in {
   };
 
   click = buildPythonPackage rec {
-    name = "click-6.6";
+    name = "click-6.7";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/c/click/${name}.tar.gz";
-      sha256 = "1sggipyz52crrybwbr9xvwxd4aqigvplf53k9w3ygxmzivd1jsnc";
+      sha256 = "02qkfpykbq35id8glfgwc38yc430427yd05z1wc5cnld8zgicmgi";
     };
 
     buildInputs = with self; [ pytest ];
@@ -5755,11 +5759,11 @@ in {
 
   libtmux = buildPythonPackage rec {
     name = "libtmux-${version}";
-    version = "0.6.0";
+    version = "0.6.4";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/l/libtmux/${name}.tar.gz";
-      sha256 = "117savw47c2givq9vxr5m02nyxmsk34l2ihxyy5axlaiqyxyf20s";
+      sha256 = "0kmw7x8cxb2hj2mzibmg9nxaijhsm1kcm0vdihn99fhm5kw1phh5";
     };
 
     buildInputs = with self; [ pytest_29 ];
@@ -7035,9 +7039,10 @@ in {
     buildInputs = with self; [ fudge_9 nose ];
   };
 
-  fedora_cert = mkPythonDerivation rec {
+  fedora_cert = buildPythonPackage rec {
     name = "fedora-cert-0.5.9.2";
     meta.maintainers = with maintainers; [ mornfall ];
+    format = "other";
 
     src = pkgs.fetchurl {
       url = "https://fedorahosted.org/releases/f/e/fedora-packager/fedora-packager-0.5.9.2.tar.bz2";
@@ -8949,6 +8954,7 @@ in {
     };
   };
 
+  podcastparser = callPackage ../development/python-modules/podcastparser { };
 
   poppler-qt4 = buildPythonPackage rec {
     name = "poppler-qt4-${version}";
@@ -10314,36 +10320,8 @@ in {
 
   django = self.django_1_10;
 
-  django_1_10 = buildPythonPackage rec {
-    name = "Django-${version}";
-    version = "1.10.5";
-    disabled = pythonOlder "2.7";
-
-    src = pkgs.fetchurl {
-      url = "http://www.djangoproject.com/m/releases/1.10/${name}.tar.gz";
-      sha256 = "12szjsmnfhh2yr54sfynyjr8vl0q9gb6qak3ayqcifcinrs97f0d";
-    };
-
-    patches = [
-      (pkgs.substituteAll {
-        src = ../development/python-modules/django/1.10-gis-libs.template.patch;
-        geos = pkgs.geos;
-        gdal = self.gdal;
-      })
-    ];
-
-    # patch only $out/bin to avoid problems with starter templates (see #3134)
-    postFixup = ''
-      wrapPythonProgramsIn $out/bin "$out $pythonPath"
-    '';
-
-    # too complicated to setup
-    doCheck = false;
-
-    meta = {
-      description = "A high-level Python Web framework";
-      homepage = https://www.djangoproject.com/;
-    };
+  django_1_10 = callPackage ../development/python-modules/django/1_10.nix {
+    gdal = self.gdal;
   };
 
   django_1_9 = buildPythonPackage rec {
@@ -20080,7 +20058,7 @@ in {
       sha256 = "0v5w66ir3siimfzg3kc8hfrrilwwnbxq5bvipmrpyxar0kw715vf";
     };
 
-    propagatedBuildInputs = with self; [ pkgs.curl pkgs.openssl.out ];
+    buildInputs = with self; [ pkgs.curl pkgs.openssl.out ];
 
     # error: invalid command 'test'
     doCheck = false;
@@ -21809,8 +21787,9 @@ in {
   };
 
 
-  pysvn = mkPythonDerivation rec {
+  pysvn = buildPythonPackage rec {
     name = "pysvn-1.8.0";
+    format = "other";
 
     src = pkgs.fetchurl {
       url = "http://pysvn.barrys-emacs.org/source_kits/${name}.tar.gz";
@@ -21965,9 +21944,10 @@ in {
   });
 
 
-  pywebkitgtk = mkPythonDerivation rec {
+  pywebkitgtk = buildPythonPackage rec {
     name = "pywebkitgtk-${version}";
     version = "1.1.8";
+    format = "other";
 
     src = pkgs.fetchurl {
       url = "http://pywebkitgtk.googlecode.com/files/${name}.tar.bz2";
@@ -22300,10 +22280,11 @@ in {
 
   qscintilla = if isPy3k || isPyPy
     then throw "qscintilla-${pkgs.qscintilla.version} not supported for interpreter ${python.executable}"
-    else mkPythonDerivation rec {
+    else buildPythonPackage rec {
       # TODO: Qt5 support
       name = "qscintilla-${version}";
       version = pkgs.qscintilla.version;
+      format = "other";
 
       src = pkgs.qscintilla.src;
 
@@ -24608,6 +24589,25 @@ in {
     };
   };
 
+  sockjs-tornado = buildPythonPackage rec {
+    name = "sockjs-tornado-${version}";
+    version = "1.0.3";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/s/sockjs-tornado/${name}.tar.gz";
+      sha256 = "16cff40nniqsyvda1pb2j3b4zwmrw7y2g1vqq78lp20xpmhnwwkd";
+    };
+
+    propagatedBuildInputs = with self; [ tornado ];
+
+    meta = {
+      homepage = "http://github.com/mrjoes/sockjs-tornado/";
+      description = "SockJS python server implementation on top of Tornado framework";
+      license = licenses.mit;
+      maintainers = with maintainers; [ abbradar ];
+    };
+  };
+
   sorl_thumbnail = buildPythonPackage rec {
     name = "sorl-thumbnail-11.12";
 
@@ -24748,6 +24748,8 @@ in {
     # Tests requires Pygments >=2.0.2 which isn't worth keeping around for this:
     doCheck = false;
   };
+
+  hieroglyph = callPackage ../development/python-modules/hieroglyph { };
 
   sphinx_rtd_theme = buildPythonPackage (rec {
     name = "sphinx_rtd_theme-0.1.9";
@@ -25833,9 +25835,10 @@ in {
   # Python package.
   tkinter = let
     py = python.override{x11Support=true;};
-  in mkPythonDerivation rec {
+  in buildPythonPackage rec {
     name = "tkinter-${python.version}";
     src = py;
+    format = "other";
 
     disabled = isPy26 || isPyPy;
 
@@ -26613,6 +26616,23 @@ in {
       description = "Python implementation of URI Template";
       license = licenses.asl20;
       maintainers = with maintainers; [ matthiasbeyer ];
+    };
+  };
+
+  uptime = buildPythonPackage rec {
+    name = "uptime-${version}";
+    version = "3.0.1";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/u/uptime/${name}.tar.gz";
+      sha256 = "0wr9jkixprlywz0plyn5p42a5fd31aiwvjrxdvj7r02vfxa04c3w";
+    };
+
+    meta = with stdenv.lib; {
+      homepage = https://github.com/Cairnarvon/uptime;
+      description = "Cross-platform way to retrieve system uptime and boot time";
+      license = licenses.bsd2;
+      maintainers = with maintainers; [ rob ];
     };
   };
 
@@ -27530,25 +27550,7 @@ EOF
     };
   };
 
-
-  BTrees = self.buildPythonPackage rec {
-    name = "BTrees-4.1.4";
-
-    propagatedBuildInputs = with self; [ persistent zope_interface transaction ];
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/B/BTrees/${name}.tar.gz";
-      sha256 = "1avvhkd7rvp3rzhw20v6ank8a8m9a1lmh99c4gjjsa1ry0zsri3y";
-    };
-
-    patches = [ ../development/python-modules/btrees-py35.patch ];
-
-    meta = {
-      description = "Scalable persistent components";
-      homepage = http://packages.python.org/BTrees;
-    };
-  };
-
+  BTrees = callPackage ../development/python-modules/btrees {};
 
   persistent = self.buildPythonPackage rec {
     name = "persistent-4.0.8";
@@ -28457,11 +28459,11 @@ EOF
 
 
   websocket_client = buildPythonPackage rec {
-    name = "websocket_client-0.32.0";
+    name = "websocket_client-0.40.0";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/w/websocket-client/${name}.tar.gz";
-      sha256 = "cb3ab95617ed2098d24723e3ad04ed06c4fde661400b96daa1859af965bfe040";
+      sha256 = "1yz67wdjijrvwpx0a0f6wdfy8ajsvr9xbj5514ld452fqnh19b20";
     };
 
     propagatedBuildInputs = with self; [ six backports_ssl_match_hostname unittest2 argparse ];
@@ -29058,13 +29060,13 @@ EOF
   };
 
   libvirt = let
-    version = "3.0.0";
+    version = "3.1.0";
   in assert version == pkgs.libvirt.version; pkgs.stdenv.mkDerivation rec {
     name = "libvirt-python-${version}";
 
     src = pkgs.fetchurl {
       url = "http://libvirt.org/sources/python/${name}.tar.gz";
-      sha256 = "1ha4bqf029si1lla1z7ca786w571fh3wfs4h7zaglfk4gb2w39wl";
+      sha256 = "06524dhm27fjfnmr5bqdxlmm1g9ixvzaaq572hgyy5dqwfn64spk";
     };
 
     buildInputs = with self; [ python pkgs.pkgconfig pkgs.libvirt lxml ];
@@ -29099,7 +29101,8 @@ EOF
         --replace 'lxml==3.7.1' 'lxml' \
         --replace 'pyopenssl==16.2.0' 'pyopenssl' \
         --replace 'requests[socks]==2.12.4' 'requests[socks]' \
-        --replace 'pygments==2.1.3' 'pygments>=2.1,<3.0'
+        --replace 'pygments==2.1.3' 'pygments>=2.1,<3.0' \
+        --replace 'python-dateutil==2.5.3' 'python-dateutil>=2.5,<3.0'
     '';
 
     propagatedBuildInputs = with self; [
@@ -30695,12 +30698,11 @@ EOF
     propagatedBuildInputs = with self; [ scipy ];
     buildInputs = with self; [ nose ];
 
-    # Cannot be installed with Python 2.x, most likely due to the patch below.
-    disabled = !isPy3k;
-
     postPatch = ''
       cd python-package
 
+      sed "s/CURRENT_DIR = os.path.dirname(__file__)/CURRENT_DIR = os.path.abspath(os.path.dirname(__file__))/g" -i setup.py
+      sed "/^LIB_PATH.*/a LIB_PATH = [os.path.relpath(LIB_PATH[0], CURRENT_DIR)]" -i setup.py
       cat <<EOF >xgboost/libpath.py
       def find_lib_path():
         return ["${pkgs.xgboost}/lib/libxgboost.so"]
