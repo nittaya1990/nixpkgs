@@ -4254,6 +4254,8 @@ with pkgs;
 
   u9fs = callPackage ../servers/u9fs { };
 
+  ua = callPackage ../tools/networking/ua { };
+
   ucl = callPackage ../development/libraries/ucl { };
 
   ucspi-tcp = callPackage ../tools/networking/ucspi-tcp { };
