@@ -15629,7 +15629,7 @@ with pkgs;
 
   taskserver = callPackage ../servers/misc/taskserver { };
 
-  tdesktop = qt56.callPackage ../applications/networking/instant-messengers/telegram/tdesktop {
+  tdesktop = qt5.callPackage ../applications/networking/instant-messengers/telegram/tdesktop {
     inherit (pythonPackages) gyp;
   };
 
