@@ -17783,6 +17783,8 @@ with pkgs;
 
   cups-dymo = callPackage ../misc/cups/drivers/dymo {};
 
+  cups-toshiba-estudio = callPackage ../misc/cups/drivers/estudio {};
+
   crashplan = callPackage ../applications/backup/crashplan { };
 
   colort = callPackage ../applications/misc/colort { };
