@@ -11054,6 +11054,8 @@ with pkgs;
 
   sipwitch = callPackage ../servers/sip/sipwitch { };
 
+  slimserver = callPackage ../servers/slimserver { };
+
   smcroute = callPackage ../servers/smcroute { };
 
   spawn_fcgi = callPackage ../servers/http/spawn-fcgi { };
