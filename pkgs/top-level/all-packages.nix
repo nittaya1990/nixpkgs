@@ -8067,9 +8067,7 @@ with pkgs;
 
   levmar = callPackage ../development/libraries/levmar { };
 
-  leptonica = callPackage ../development/libraries/leptonica {
-    libpng = libpng12;
-  };
+  leptonica = callPackage ../development/libraries/leptonica { };
 
   lib3ds = callPackage ../development/libraries/lib3ds { };
 
@@ -15704,6 +15702,7 @@ with pkgs;
   };
 
   tesseract = callPackage ../applications/graphics/tesseract { };
+  tesseract_4 = lowPrio (callPackage ../applications/graphics/tesseract/4.x.nix { });
 
   tetraproc = callPackage ../applications/audio/tetraproc { };
 
