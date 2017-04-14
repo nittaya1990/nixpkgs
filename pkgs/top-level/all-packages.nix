@@ -6080,7 +6080,9 @@ with pkgs;
 
   pythonDocs = recurseIntoAttrs (callPackage ../development/interpreters/python/cpython/docs {});
 
-  pypi2nix = callPackage ../development/tools/pypi2nix { python = python35; };
+  pypi2nix = callPackage ../development/tools/pypi2nix {
+    pythonPackages = python3Packages;
+  };
 
   svg2tikz = python27Packages.svg2tikz;
 
@@ -6407,6 +6409,8 @@ with pkgs;
   "cl-launch" = callPackage ../development/tools/misc/cl-launch {};
 
   coan = callPackage ../development/tools/analysis/coan { };
+
+  compile-daemon = callPackage ../development/tools/compile-daemon { };
 
   complexity = callPackage ../development/tools/misc/complexity { };
 
@@ -7864,6 +7868,10 @@ with pkgs;
     gtk = gtk2;
   };
 
+  gtk-mac-integration-gtk3 = callPackage ../development/libraries/gtk-mac-integration {
+    gtk = gtk3;
+  };
+
   gtk-mac-bundler = callPackage ../development/tools/gtk-mac-bundler {};
 
   gtkspell2 = callPackage ../development/libraries/gtkspell { };
@@ -9277,7 +9285,7 @@ with pkgs;
 
   openslp = callPackage ../development/libraries/openslp {};
 
-  libressl = libressl_2_4;
+  libressl = libressl_2_5;
   libressl_2_4 = callPackage ../development/libraries/libressl/2.4.nix {
     fetchurl = fetchurlBoot;
   };
@@ -13917,7 +13925,7 @@ with pkgs;
     libart = pkgs.gnome2.libart_lgpl;
   };
 
-  idea = recurseIntoAttrs (callPackages ../applications/editors/idea { androidsdk = androidsdk_extras; });
+  jetbrains = recurseIntoAttrs (callPackages ../applications/editors/jetbrains { androidsdk = androidsdk_extras; });
 
   libquvi = callPackage ../applications/video/quvi/library.nix { };
 
@@ -14010,7 +14018,9 @@ with pkgs;
 
   gosmore = callPackage ../applications/misc/gosmore { };
 
-  gpsbabel = libsForQt5.callPackage ../applications/misc/gpsbabel { };
+  gpsbabel = libsForQt5.callPackage ../applications/misc/gpsbabel {
+    inherit (darwin) IOKit;
+  };
 
   gpscorrelate = callPackage ../applications/misc/gpscorrelate { };
 
