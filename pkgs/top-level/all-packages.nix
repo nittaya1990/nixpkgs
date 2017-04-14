@@ -10595,6 +10595,8 @@ with pkgs;
   bosun = callPackage ../servers/monitoring/bosun { };
   scollector = bosun;
 
+  cayley = callPackage ../servers/cayley { };
+
   charybdis = callPackage ../servers/irc/charybdis {};
 
   couchdb = callPackage ../servers/http/couchdb {
