@@ -2524,6 +2524,8 @@ in {
     doCheck = false; # lazy packager
   };
 
+  csscompressor = callPackage ../development/python-modules/csscompressor.nix {};
+
   csvkit = buildPythonPackage rec {
     name = "csvkit-${version}";
     version = "0.9.1";
@@ -7746,6 +7748,9 @@ in {
       license = licenses.bsd3;
     };
   });
+
+
+  htmlmin = callPackage ../development/python-modules/htmlmin.nix {};
 
   httpauth = buildPythonPackage rec {
     version = "0.3";
