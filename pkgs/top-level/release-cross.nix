@@ -50,7 +50,7 @@ in
     in assertTrue (
         f path { inherit system; }
         ==
-        f (["buildPackages"] ++ path) { inherit system crossSystem; };
+        f (["buildPackages"] ++ path) { inherit system crossSystem; }
       );
 
     testEqual = path: systems: forAllSupportedSystems systems (testEqualOne path);
@@ -77,7 +77,7 @@ in
       arch = "arm";
       float = "soft";
       withTLS = true;
-      platform = pkgs.platforms.sheevaplug;
+      platform = lib.systems.platforms.sheevaplug;
       libc = "glibc";
       openssl.system = "linux-generic32";
     };
@@ -136,7 +136,7 @@ in
       float = "hard";
       withTLS = true;
       libc = "glibc";
-      platform = lib.platforms.fuloong2f_n32;
+      platform = lib.systems.platforms.fuloong2f_n32;
       openssl.system = "linux-generic32";
       gcc = {
         arch = "loongson2f";
@@ -160,7 +160,7 @@ in
       fpu = "vfp";
       withTLS = true;
       libc = "glibc";
-      platform = lib.platforms.raspberrypi;
+      platform = lib.systems.platforms.raspberrypi;
       openssl.system = "linux-generic32";
       gcc = {
         arch = "armv6";
