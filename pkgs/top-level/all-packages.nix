@@ -9706,6 +9706,8 @@ with pkgs;
     haskell-lib = haskell.lib;
   };
 
+  lambda-mod-zsh-theme = callPackage ../shells/lambda-mod-zsh-theme/default.nix { };
+
   leksah = callPackage ../development/tools/haskell/leksah {
     inherit (haskellPackages) ghcWithPackages;
   };
