@@ -4703,6 +4703,8 @@ with pkgs;
 
   xsel = callPackage ../tools/misc/xsel { };
 
+  xsv = callPackages ../tools/text/xsv { };
+
   xtreemfs = callPackage ../tools/filesystems/xtreemfs {};
 
   xurls = callPackage ../tools/text/xurls {};
