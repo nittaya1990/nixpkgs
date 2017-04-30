@@ -11918,6 +11918,16 @@ with pkgs;
   # Build a kernel for Xen dom0
   linuxPackages_latest_xen_dom0 = recurseIntoAttrs (linuxPackagesFor (pkgs.linux_latest.override { features.xen_dom0=true; }));
 
+  # Hardened linux
+  linux_hardened = linux_4_9.override {
+    extraConfig = import ../os-specific/linux/kernel/hardened-config.nix {
+      inherit stdenv;
+    };
+  };
+
+  linuxPackages_hardened =
+    recurseIntoAttrs (linuxPackagesFor linux_hardened);
+
   # Grsecurity packages
 
   linux_grsec_nixos = kernelPatches.grsecurity_testing;
@@ -11925,16 +11935,7 @@ with pkgs;
   linuxPackages_grsec_nixos =
     recurseIntoAttrs (linuxPackagesFor linux_grsec_nixos);
 
-  # An unsupported grsec xen guest kernel
-  linux_grsec_server_xen = linux_grsec_nixos.override {
-    extraConfig = ''
-      GRKERNSEC_CONFIG_AUTO y
-      GRKERNSEC_CONFIG_PRIORITY_SECURITY y
-      GRKERNSEC_CONFIG_SERVER y
-      GRKERNSEC_CONFIG_VIRT_GUEST y
-      GRKERNSEC_CONFIG_VIRT_XEN y
-    '';
-  };
+  linux_grsec_server_xen = linux_grsec_nixos;
 
   # ChromiumOS kernels
   linuxPackages_chromiumos_3_18 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_chromiumos_3_18);
