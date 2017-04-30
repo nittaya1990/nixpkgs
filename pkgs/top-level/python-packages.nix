@@ -1240,12 +1240,11 @@ in {
   };
 
   apscheduler = buildPythonPackage rec {
-    name = "APScheduler-3.0.4";
-    disabled = !isPy27;
+    name = "APScheduler-3.3.1";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/A/APScheduler/${name}.tar.gz";
-      sha256 = "1ljjhn6cv8b1pccsi3mgc887ypi2vim317r9p0zh0amd0bhkk6wb";
+      sha256 = "f68874dff1bdffcc6ce3adb7840c1e4d162c609a3e3f831351df30b75732767b";
     };
 
     buildInputs = with self; [
@@ -1255,8 +1254,8 @@ in {
       twisted
       mock
       trollius
-      funcsigs
       gevent
+      setuptools_scm
     ];
 
     propagatedBuildInputs = with self; [
@@ -1264,6 +1263,7 @@ in {
       pytz
       tzlocal
       futures
+      funcsigs
     ];
 
     meta = with pkgs.stdenv.lib; {
@@ -2067,13 +2067,13 @@ in {
   };
 
   babelfish = buildPythonPackage rec {
-    version = "0.5.3";
+    version = "0.5.5";
     name = "babelfish-${version}";
     disabled = isPy3k;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/b/babelfish/${name}.tar.gz";
-      sha256 = "0wrw21dyq7v6lbffwvi1ik43d7dhmcv8xvgrrihhiv7ys1rd3gag";
+      sha256 = "8380879fa51164ac54a3e393f83c4551a275f03617f54a99d70151358e444104";
     };
 
     meta = {
@@ -3847,15 +3847,17 @@ in {
 
   cherrypy = buildPythonPackage (rec {
     name = "cherrypy-${version}";
-    version = "3.2.2";
+    version = "8.7.0";
 
     src = pkgs.fetchurl {
-      url = "http://download.cherrypy.org/cherrypy/${version}/CherryPy-${version}.tar.gz";
-      sha256 = "14dn129h69wj0h8yr0bjwbrk8kygl6mkfnxc5m3fxhlm4xb8hnnw";
+      url = "mirror://pypi/C/CherryPy/CherryPy-${version}.tar.gz";
+      sha256 = "cbf418bf46458a67eb841944f2d414c23bf59d090baf2a28704bd67243e6a79f";
     };
 
-    # error: invalid command 'test'
-    doCheck = false;
+    # wsgiserver.ssl_pyopenssl is broken on py3k.
+    doCheck = !isPy3k;
+    buildInputs = with self; [ pytest setuptools_scm pytestrunner ];
+    propagatedBuildInputs = with self; [ six ];
 
     meta = {
       homepage = "http://www.cherrypy.org";
