@@ -3363,9 +3363,7 @@ with pkgs;
     owncloud90
     owncloud91;
 
-  owncloud-client = callPackage ../applications/networking/owncloud-client {
-    inherit (libsForQt5) qtkeychain;
-  };
+  owncloud-client = libsForQt56.callPackage ../applications/networking/owncloud-client { };
 
   p2pvc = callPackage ../applications/video/p2pvc {};
 
