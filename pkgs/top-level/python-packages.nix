@@ -756,6 +756,24 @@ in {
     };
   };
 
+  aniso8601 = buildPythonPackage rec {
+    name = "aniso8601-${version}";
+    version = "1.2.0";
+ 
+    meta = {
+      description = "Parses ISO 8601 strings.";
+      homepage    = "https://bitbucket.org/nielsenb/aniso8601";
+      license     = licenses.bsd3;
+    };
+ 
+    propagatedBuildInputs = with self; [ dateutil ];
+ 
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/a/aniso8601/${name}.tar.gz";
+      sha256 = "502400f82574afa804cc915d83f15c67533d364dcd594f8a6b9d2053f3404dd4";
+    };
+  };
+
   asgiref = buildPythonPackage rec {
     name = "asgiref-${version}";
     version = "1.0.0";
@@ -2490,6 +2508,22 @@ in {
     doCheck = false; # weird error
 
     propagatedBuildInputs = with self; [ iowait psutil pyzmq tornado mock ];
+  };
+
+  colorclass = buildPythonPackage rec {
+    version = "2.2.0";
+    name = "colorclass-${version}";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/c/colorclass/${name}.tar.gz";
+      sha256 = "b05c2a348dfc1aff2d502527d78a5b7b7e2f85da94a96c5081210d8e9ee8e18b";
+    };
+
+    meta = {
+      homepage = "https://github.com/Robpol86/colorclass";
+      license = licenses.mit;
+      description = "Automatic support for console colors";
+    };
   };
 
   colorlog = buildPythonPackage rec {
@@ -9655,6 +9689,23 @@ in {
     };
   };
 
+  safe = buildPythonPackage rec {
+    version = "0.4";
+    name = "Safe-${version}";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/S/Safe/${name}.tar.gz";
+      sha256 = "a2fdac9fe8a9dcf02b438201d6ce0b7be78f85dc6492d03edfb89be2adf489de";
+    };
+
+    buildInputs = with self; [ nose ];
+    meta = {
+      homepage = "https://github.com/lepture/safe";
+      license = licenses.bsd3;
+      description = "Check password strength";
+    };
+  };
+
   samplerate = buildPythonPackage rec {
     name = "scikits.samplerate-${version}";
     version = "0.3.3";
@@ -11496,6 +11547,24 @@ in {
     };
   };
 
+  flask-compress = buildPythonPackage rec {
+    name = "Flask-Compress-${version}";
+    version = "1.3.2";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/F/Flask-Compress/${name}.tar.gz";
+      sha256 = "4fbb53e7f6ce8b1458a2c3d7a528564912f2641ab2f9f43819fc96ed7f770734";
+    };
+
+    propagatedBuildInputs = with self; [ flask ];
+
+    meta = {
+      description = "Compress responses in your Flask app with gzip";
+      homepage = "https://libwilliam.github.io/flask-compress/";
+      license = licenses.mit;
+    };
+  };
+
   flask-cors = buildPythonPackage rec {
     name = "Flask-Cors-${version}";
     version = "2.1.2";
@@ -11583,6 +11652,53 @@ in {
       homepage = "http://flask-pymongo.readthedocs.org/";
       description = "PyMongo support for Flask applications";
       license = licenses.bsd2;
+    };
+  };
+
+  flask-restful = buildPythonPackage rec {
+    name = "Flask-RESTful-${version}";
+    version = "0.3.5";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/F/Flask-RESTful/${name}.tar.gz";
+      sha256 = "cce4aeff959b571136b5af098bebe7d3deeca7eb1411c4e722ff2c5356ab4c42";
+    };
+
+    # TypeError: Only byte strings can be passed to C code
+    patchPhase = if isPy3k then ''
+      rm tests/test_crypto.py tests/test_paging.py
+    '' else null;
+    buildInputs = with self; [ nose mock blinker ];
+    propagatedBuildInputs = with self; [ flask six pytz aniso8601 pycrypto ];
+    PYTHON_EGG_CACHE = "`pwd`/.egg-cache";
+
+    meta = {
+      homepage = "http://flask-restful.readthedocs.io/";
+      description = "REST API building blocks for Flask";
+      license = licenses.bsd3;
+    };
+  };
+
+  flask-restplus = buildPythonPackage rec {
+    name = "flask-restplus-${version}";
+    # Exactly 0.8.6 is required by flexget
+    version = "0.8.6";
+    disabled = isPy3k;
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/f/flask-restplus/${name}.tar.gz";
+      sha256 = "3bb76cc156b9a09da62396d82b29fa31e4f27cccf79528538fe7155cf2785593";
+    };
+
+    # Requires additional packages.
+    doCheck = false;
+    buildInputs = with self; [ nose blinker tzlocal ];
+    propagatedBuildInputs = with self; [ flask six jsonschema pytz aniso8601 flask-restful ];
+
+    meta = {
+      homepage = "https://github.com/noirbizarre/flask-restplus";
+      description = "Fast, easy and documented API development with Flask";
+      license = licenses.mit;
     };
   };
 
@@ -12607,6 +12723,27 @@ in {
       homepage = http://pypi.python.org/pypi/guessit;
       license = licenses.lgpl3;
       description = "A library for guessing information from video files";
+    };
+  };
+
+  rebulk = buildPythonPackage rec {
+    version = "0.8.2";
+    name = "rebulk-${version}";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/r/rebulk/${name}.tar.gz";
+      sha256 = "8c09901bda7b79a21d46faf489d67d017aa54d38bdabdb53f824068a6640401a";
+    };
+
+    # Some kind of trickery with imports that doesn't work.
+    doCheck = false;
+    buildInputs = with self; [ pytest pytestrunner ];
+    propagatedBuildInputs = with self; [ six regex ];
+
+    meta = {
+      homepage = "https://github.com/Toilal/rebulk/";
+      license = licenses.mit;
+      description = "Advanced string matching from simple patterns";
     };
   };
 
@@ -25410,6 +25547,22 @@ in {
     };
   };
 
+  terminaltables = buildPythonPackage rec {
+    name = "terminaltables-${version}";
+    version = "3.1.0";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/t/terminaltables/${name}.tar.gz";
+      sha256 = "f3eb0eb92e3833972ac36796293ca0906e998dc3be91fbe1f8615b331b853b81";
+    };
+
+    meta = {
+      description = "Display simple tables in terminals";
+      homepage = "https://github.com/Robpol86/terminaltables";
+      license = licenses.mit;
+    };
+  };
+
   keystoneclient = buildPythonPackage rec {
     name = "keystoneclient-${version}";
     version = "1.8.1";
@@ -31133,6 +31286,9 @@ EOF
       lockfile
       clize
     ];
+    # zerobin doesn't have any tests, but includes a copy of cherrypy which
+    # can wrongly fail the check phase.
+    doCheck = false;
     meta = {
       description = "A client side encrypted pastebin";
       homepage = "http://0bin.net/";

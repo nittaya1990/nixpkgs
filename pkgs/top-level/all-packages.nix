@@ -1552,6 +1552,8 @@ with pkgs;
 
   docbook2mdoc = callPackage ../tools/misc/docbook2mdoc { };
 
+  dockbarx = callPackage ../applications/misc/dockbarx { };
+
   dog = callPackage ../tools/system/dog { };
 
   dosfstools = callPackage ../tools/filesystems/dosfstools { };
@@ -4231,11 +4233,11 @@ with pkgs;
   tor-arm = callPackage ../tools/security/tor/tor-arm.nix { };
 
   # added 2017-04-05
-  torbrowser = builtins.trace ''
+  torbrowser = /* builtins.trace ''
     [1;31mWARNING[0m: torbrowser package was renamed to tor-browser-bundle-bin.
 
     Also, consider using nix-built tor-browser-unwrapped package instead. Read its longDescription.
-  '' tor-browser-bundle-bin;
+  '' */ tor-browser-bundle-bin;
 
   tor-browser-bundle-bin = callPackage ../applications/networking/browsers/tor-browser-bundle-bin { };
 
