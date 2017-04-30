@@ -7405,6 +7405,8 @@ with pkgs;
 
   dxflib = callPackage ../development/libraries/dxflib {};
 
+  eccodes = callPackage ../development/libraries/eccodes { };
+
   eclib = callPackage ../development/libraries/eclib {};
 
   eigen = callPackage ../development/libraries/eigen {};
@@ -11655,7 +11657,6 @@ with pkgs;
     kernelPatches =
       [ kernelPatches.bridge_stp_helper
         kernelPatches.p9_fixes
-        kernelPatches.packet_fix_race_condition_CVE_2016_8655
         kernelPatches.DCCP_double_free_vulnerability_CVE-2017-6074
       ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
@@ -18613,6 +18614,7 @@ with pkgs;
 
   ghc-standalone-archive = callPackage ../os-specific/darwin/ghc-standalone-archive { inherit (darwin) cctools; };
 
+  chrome-gnome-shell = callPackage  ../desktops/gnome-3/extensions/chrome-gnome-shell {};
   messenger-for-desktop = callPackage ../applications/networking/instant-messengers/messenger-for-desktop {};
 
   NSPlist = callPackage ../development/libraries/NSPlist {};
