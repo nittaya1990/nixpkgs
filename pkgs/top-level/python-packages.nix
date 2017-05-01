@@ -2832,26 +2832,6 @@ in {
     };
   };
 
-  billiard_33 = buildPythonPackage rec {
-    name = "billiard-${version}";
-    version = "3.3.0.23";
-
-    disabled = isPyPy;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/b/billiard/${name}.tar.gz";
-      sha256 = "02wxsc6bhqvzh8j6w758kvgqbnj14l796mvmrcms8fgfamd2lak9";
-    };
-
-    buildInputs = with self; [ nose unittest2 mock ];
-
-    meta = {
-      homepage = https://github.com/celery/billiard;
-      description = "Python multiprocessing fork with improvements and bugfixes";
-      license = licenses.bsd3;
-    };
-  };
-
   billiard = buildPythonPackage rec {
     name = "billiard-${version}";
     version = "3.5.0.2";
@@ -14135,25 +14115,6 @@ in {
     };
   });
 
-  lxml_3_5 = buildPythonPackage ( rec {
-    name = "lxml-3.5.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/l/lxml/${name}.tar.gz";
-      sha256 = "0y7m2s8ci6q642zl85y5axkj8z827l0vhjl532acb75hlkir77rl";
-    };
-
-    buildInputs = with self; [ pkgs.libxml2 pkgs.libxslt ];
-
-    hardeningDisable = stdenv.lib.optional stdenv.isDarwin "format";
-
-    meta = {
-      description = "Pythonic binding for the libxml2 and libxslt libraries";
-      homepage = http://lxml.de;
-      license = licenses.bsd3;
-    };
-  });
-
   lxc = buildPythonPackage (rec {
     name = "python-lxc-unstable-2016-08-25";
     disabled = !isPy27;
@@ -14420,24 +14381,6 @@ in {
       homepage = "https://github.com/flintwork/mccabe";
       license = licenses.mit;
       maintainers = with maintainers; [ garbas ];
-    };
-  });
-
-  mccabe_0_5 = buildPythonPackage (rec {
-    name = "mccabe-0.5.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/m/mccabe/${name}.tar.gz";
-      sha256 = "1zss8c5cn8wvxsbjzv70dxymybh3cjzrjl19vxfbnyvmidng0wrl";
-    };
-
-    buildInputs = with self; [ pytestrunner pytest ];
-
-    meta = {
-      description = "McCabe checker, plugin for flake8";
-      homepage = "https://github.com/flintwork/mccabe";
-      license = licenses.mit;
-      maintainers = with maintainers; [ ];
     };
   });
 
