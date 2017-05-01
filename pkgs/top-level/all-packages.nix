@@ -3715,6 +3715,8 @@ with pkgs;
 
   radvd = callPackage ../tools/networking/radvd { };
 
+  rainbowstream = pythonPackages.rainbowstream;
+
   rambox = callPackage ../applications/networking/instant-messengers/rambox { };
 
   ranger = callPackage ../applications/misc/ranger { };
