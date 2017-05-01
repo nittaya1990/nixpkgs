@@ -6446,24 +6446,7 @@ in {
     };
   };
 
-  dogpile_cache = buildPythonPackage rec {
-    name = "dogpile.cache-0.5.4";
-
-    propagatedBuildInputs = with self; [ dogpile_core ];
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/d/dogpile.cache/dogpile.cache-0.5.4.tar.gz";
-      sha256 = "9eab7a5dc05ad1b6573144c4a2717226b5c38811f9ec29b514e774535a91ea24";
-    };
-
-    doCheck = false;
-
-    meta = {
-      description = "A caching front-end based on the Dogpile lock";
-      homepage = http://bitbucket.org/zzzeek/dogpile.cache;
-      license = licenses.bsd3;
-    };
-  };
+  dogpile_cache = callPackage ../development/python-modules/dogpile.cache { };
 
   dogpile_core = buildPythonPackage rec {
     name = "dogpile.core-0.4.1";
@@ -10352,7 +10335,11 @@ in {
     };
   };
 
-  django = self.django_1_10;
+  django = self.django_1_11;
+
+  django_1_11 = callPackage ../development/python-modules/django/1_11.nix {
+    gdal = self.gdal;
+  };
 
   django_1_10 = callPackage ../development/python-modules/django/1_10.nix {
     gdal = self.gdal;
@@ -10498,27 +10485,7 @@ in {
     };
   };
 
-  django_compat = buildPythonPackage rec {
-    name = "django-compat-${version}";
-    version = "1.0.13";
-
-    # build process attempts to access a missing README.rst
-    disabled = isPy35;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/d/django-compat/${name}.tar.gz";
-      sha256 = "0s0z7cx0vv1kjsyzk24sg256hfnd09ssilc9rakhxrzr3firgx80";
-    };
-
-    buildInputs = with self; [ django_nose ];
-    propagatedBuildInputs = with self; [ django six ];
-
-    meta = {
-      description = "Forward and backwards compatibility layer for Django 1.4, 1.7, 1.8, 1.9 and 1.10";
-      homepage = https://github.com/arteria/django-compat;
-      license = licenses.mit;
-    };
-  };
+  django_compat = callPackage ../development/python-modules/django-compat { };
 
   django_environ = buildPythonPackage rec {
     name = "django-environ-${version}";
@@ -18375,26 +18342,7 @@ in {
     };
   };
 
-  pbr = buildPythonPackage rec {
-    name = "pbr-${version}";
-    version = "1.8.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pbr/${name}.tar.gz";
-      sha256 = "0jcny36cf3s8ar5r4a575npz080hndnrfs4np1fqhv0ym4k7c4p2";
-    };
-
-    # circular dependencies with fixtures
-    doCheck = false;
-    #buildInputs = with self; [ testtools testscenarios testresources
-    #  testrepository fixtures ];
-
-    meta = {
-      description = "Python Build Reasonableness";
-      homepage = "http://docs.openstack.org/developer/pbr/";
-      license = licenses.asl20;
-    };
-  };
+  pbr = callPackage ../development/python-modules/pbr { };
 
   fixtures = buildPythonPackage rec {
     name = "fixtures-1.4.0";
