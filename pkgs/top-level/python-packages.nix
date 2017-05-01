@@ -1247,39 +1247,7 @@ in {
     };
   };
 
-  apscheduler = buildPythonPackage rec {
-    name = "APScheduler-3.3.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/A/APScheduler/${name}.tar.gz";
-      sha256 = "f68874dff1bdffcc6ce3adb7840c1e4d162c609a3e3f831351df30b75732767b";
-    };
-
-    buildInputs = with self; [
-      pytest
-      sqlalchemy
-      tornado
-      twisted
-      mock
-      trollius
-      gevent
-      setuptools_scm
-    ];
-
-    propagatedBuildInputs = with self; [
-      six
-      pytz
-      tzlocal
-      futures
-      funcsigs
-    ];
-
-    meta = with pkgs.stdenv.lib; {
-      description = "A Python library that lets you schedule your Python code to be executed";
-      homepage = http://pypi.python.org/pypi/APScheduler/;
-      license = licenses.mit;
-    };
-  };
+  APScheduler = callPackage ../development/python-modules/APScheduler { };
 
   args = buildPythonPackage rec {
     name = "args-0.1.0";
@@ -2077,7 +2045,6 @@ in {
   babelfish = buildPythonPackage rec {
     version = "0.5.5";
     name = "babelfish-${version}";
-    disabled = isPy3k;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/b/babelfish/${name}.tar.gz";
@@ -2189,26 +2156,6 @@ in {
       license = licenses.mit;
       maintainers = with maintainers; [ domenkozar ];
     };
-  });
-
-  # flexget needs beatifulsoup < 4.4 for now
-  beautifulsoup_4_1_3 = buildPythonPackage (rec {
-    name = "beautifulsoup4-4.1.3";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/b/beautifulsoup4/${name}.tar.gz";
-      sha256 = "0cbcml88bkx9gf1wznxa0kqz1wpyakfbyh9gmxw0wljhda1q0zk1";
-    };
-
-    meta = {
-      homepage = http://crummy.com/software/BeautifulSoup/bs4/;
-      description = "HTML and XML parser";
-      license = licenses.mit;
-      maintainers = with maintainers; [ domenkozar ];
-    };
-
-    disabled = isPy3k;
-
   });
 
   beaker = buildPythonPackage rec {
@@ -2519,13 +2466,17 @@ in {
   };
 
   colorclass = buildPythonPackage rec {
+    pname = "colorclass";
     version = "2.2.0";
-    name = "colorclass-${version}";
+    name = "${pname}-${version}";
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/c/colorclass/${name}.tar.gz";
+    src = fetchPypi {
+      inherit pname version;
       sha256 = "b05c2a348dfc1aff2d502527d78a5b7b7e2f85da94a96c5081210d8e9ee8e18b";
     };
+
+    # No tests in archive
+    doCheck = false;
 
     meta = {
       homepage = "https://github.com/Robpol86/colorclass";
@@ -6139,28 +6090,6 @@ in {
     };
 
     propagatedBuildInputs = with self; [ self.six ];
-
-    meta = {
-      description = "Powerful extensions to the standard datetime module";
-      homepage = http://pypi.python.org/pypi/python-dateutil;
-      license = "BSD-style";
-    };
-  });
-
-  # flexget requires 2.1
-  dateutil_2_1 = buildPythonPackage (rec {
-    name = "dateutil-2.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/python-dateutil/python-${name}.tar.gz";
-      sha256 = "1vlx0lpsxjxz64pz87csx800cwfqznjyr2y7nk3vhmzhkwzyqi2c";
-    };
-
-    propagatedBuildInputs = with self; [ self.six ];
-
-    buildInputs = [ pkgs.glibcLocales ];
-
-    LC_ALL="en_US.UTF-8";
 
     meta = {
       description = "Powerful extensions to the standard datetime module";
@@ -11665,28 +11594,8 @@ in {
     };
   };
 
-  flask-restplus = buildPythonPackage rec {
-    name = "flask-restplus-${version}";
-    # Exactly 0.8.6 is required by flexget
-    version = "0.8.6";
-    disabled = isPy3k;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/f/flask-restplus/${name}.tar.gz";
-      sha256 = "3bb76cc156b9a09da62396d82b29fa31e4f27cccf79528538fe7155cf2785593";
-    };
-
-    # Requires additional packages.
-    doCheck = false;
-    buildInputs = with self; [ nose blinker tzlocal ];
-    propagatedBuildInputs = with self; [ flask six jsonschema pytz aniso8601 flask-restful ];
-
-    meta = {
-      homepage = "https://github.com/noirbizarre/flask-restplus";
-      description = "Fast, easy and documented API development with Flask";
-      license = licenses.mit;
-    };
-  };
+  # Exactly 0.8.6 is required by flexget
+  flask-restplus_0_8 = callPackage ../development/python-modules/flask-restplus/0.8.nix { };
 
   flask_script = buildPythonPackage rec {
     name = "Flask-Script-${version}";
@@ -12688,29 +12597,7 @@ in {
     };
   };
 
-  guessit = buildPythonPackage rec {
-    version = "0.9.4";
-    name = "guessit-${version}";
-    disabled = isPy3k;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/g/guessit/${name}.tar.gz";
-      sha256 = "068d3dmyk4v04p2zna0340lsdnpkm10gyza62apd9akgjh9rfs48";
-    };
-
-    propagatedBuildInputs = with self; [
-      dateutil_2_1 requests stevedore babelfish pyyaml
-    ];
-
-    # A unicode test fails
-    doCheck = false;
-
-    meta = {
-      homepage = http://pypi.python.org/pypi/guessit;
-      license = licenses.lgpl3;
-      description = "A library for guessing information from video files";
-    };
-  };
+  guessit = callPackage ../development/python-modules/guessit { };
 
   rebulk = buildPythonPackage rec {
     version = "0.8.2";
@@ -19133,16 +19020,7 @@ in {
 
   };
 
-  plumbum = buildPythonPackage rec {
-    name = "plumbum-1.5.0";
-
-    buildInputs = with self; [ self.six ];
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/plumbum/${name}.tar.gz";
-      sha256 = "b759f9e3b6771dff3332f01bc0683d1a56218f44d97942dabd906a0cd1cfb756";
-    };
-  };
+  plumbum = callPackage ../development/python-modules/plumbum { };
 
 
   polib = buildPythonPackage rec {
@@ -21043,13 +20921,18 @@ in {
     };
   });
 
-  pyrss2gen = buildPythonPackage (rec {
-    name = "PyRSS2Gen-1.0.0";
+  PyRSS2Gen = buildPythonPackage (rec {
+    pname = "PyRSS2Gen";
+    version = "1.1";
+    name = "${pname}-${version}";
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/P/PyRSS2Gen/${name}.tar.gz";
+    src = fetchPypi {
+      inherit pname version;
       sha256 = "4929d022713129401160fd47550d5158931e4ea6a7136b5d8dfe3b13ac16f2f0";
     };
+
+    # No tests in archive
+    doCheck = false;
 
     meta = {
       homepage = http://www.dalkescientific.om/Python/PyRSS2Gen.html;
@@ -22363,6 +22246,23 @@ in {
       description = "Python client for Redis key-value store";
       homepage = "https://pypi.python.org/pypi/redis/";
     };
+  };
+
+  rednose = buildPythonPackage rec {
+    name = "rednose-${version}";
+    version = "1.2.1";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/r/rednose/${name}.tar.gz";
+      sha256 = "0b0bsna217lr1nykyhl5fgjly15zhdvqd4prg4wy1zrgfv7al6m0";
+    };
+
+    meta = {
+      description = "A python nose plugin adding color to console results.";
+    };
+
+    buildInputs = with self; [ nose six ];
+    propagatedBuildInputs = with self; [ colorama termstyle ];
   };
 
   reikna = callPackage ../development/python-modules/reikna { };
@@ -32077,6 +31977,8 @@ EOF
       maintainer = maintainers.fridh;
     };
   };
+
+  zxcvbn-python = callPackage ../development/python-modules/zxcvbn-python { };
 
   incremental = callPackage ../development/python-modules/incremental { };
 
