@@ -9696,6 +9696,8 @@ with pkgs;
       withQt5 = true;
     };
 
+    qtinstaller = callPackage ../development/libraries/qtinstaller { };
+
     qtkeychain = callPackage ../development/libraries/qtkeychain {
       withQt5 = true;
     };
