@@ -67,10 +67,14 @@ let
         else throw "Unsupported kind ${kind}");
     in fetcher (builtins.removeAttrs attrs ["format"]);
 
+  # This should become part of stdenv!
+  sharedLibraryExtension = if stdenv.isDarwin then ".dylib" else ".so";
+
 in {
 
   inherit python bootstrapped-pip pythonAtLeast pythonOlder isPy26 isPy27 isPy33 isPy34 isPy35 isPy36 isPyPy isPy3k mkPythonDerivation buildPythonPackage buildPythonApplication;
   inherit fetchPypi;
+  inherit sharedLibraryExtension;
 
   # helpers
 
@@ -24814,20 +24818,20 @@ in {
     };
   };
 
-  sqlalchemy_imageattach = buildPythonPackage rec {
-    name = "SQLAlchemy-ImageAttach-${version}";
-    version = "0.8.2";
-    disabled = isPy33;
+  SQLAlchemy-ImageAttach = buildPythonPackage rec {
+    pname = "SQLAlchemy-ImageAttach";
+    version = "1.0.0";
+    name = "${pname}-${version}";
 
     src = pkgs.fetchFromGitHub {
       repo = "sqlalchemy-imageattach";
-      owner = "crosspop";
+      owner = "dahlia";
       rev = "${version}";
-      sha256 = "1pqf7vk4lsvnhw169cqfyk0iz5f8n45470mdslklpi38z2fax9p0";
+      sha256 = "0ba97pn5dh00qvxyjbr0mr3pilxqw5kb3a6jd4wwbsfcv6nngqig";
     };
 
-    buildInputs = with self; [ pytest webob pkgs.imagemagick nose ];
-    propagatedBuildInputs = with self; [ sqlalchemy8 Wand ];
+    checkInputs = with self; [ pytest Wand.imagemagick webob ];
+    propagatedBuildInputs = with self; [ sqlalchemy Wand ];
 
     checkPhase = ''
       cd tests
@@ -24839,7 +24843,7 @@ in {
     doCheck = !isPyPy;  # failures due to sqla version mismatch
 
     meta = {
-      homepage = https://github.com/crosspop/sqlalchemy-imageattach;
+      homepage = https://github.com/dahlia/sqlalchemy-imageattach;
       description = "SQLAlchemy extension for attaching images to entity objects";
       license = licenses.mit;
     };
@@ -26717,27 +26721,9 @@ EOF
 
   websockets = callPackage ../development/python-modules/websockets { };
 
-  Wand = buildPythonPackage rec {
-    pname = "Wand";
-    version = "0.4.4";
-    name = "${pname}-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${name}.tar.gz";
-      sha256 = "28e0454c9d16d69c5d5034918d96320d8f9f1377b4fdaf4944eec2f938c74704";
-    };
-
-    buildInputs = with self; [ pkgs.imagemagick pytest psutil memory_profiler pytest_xdist ];
-
-    # No tests
-    doCheck = false;
-    meta = {
-      description = "Ctypes-based simple MagickWand API binding for Python";
-      homepage = http://wand-py.org/;
-      platforms = platforms.all;
-    };
+  Wand = callPackage ../development/python-modules/Wand {
+    imagemagick = pkgs.imagemagickBig;
   };
-
 
   wcwidth = buildPythonPackage rec {
     name = "wcwidth-${version}";

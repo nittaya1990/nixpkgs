@@ -548,6 +548,8 @@ with pkgs;
 
   pass = callPackage ../tools/security/pass { };
 
+  browserpass = callPackage ../tools/security/browserpass { };
+
   oracle-instantclient = callPackage ../development/libraries/oracle-instantclient { };
 
   kwakd = callPackage ../servers/kwakd { };
@@ -9755,6 +9757,8 @@ with pkgs;
     inherit (haskellPackages) ghcWithPackages;
   };
 
+  libgme = callPackage ../development/libraries/audio/libgme { };
+
   librdf_raptor = callPackage ../development/libraries/librdf/raptor.nix { };
 
   librdf_raptor2 = callPackage ../development/libraries/librdf/raptor2.nix { };
@@ -15826,6 +15830,12 @@ with pkgs;
 
   terminator = callPackage ../applications/misc/terminator {
     vte = gnome2.vte.override { pythonSupport = true; };
+  };
+
+  deepin-terminal = callPackage ../applications/misc/deepin-terminal {
+    vte = gnome3.vte;
+    wnck = libwnck3;
+    gee = libgee_0_8;
   };
 
   termite = callPackage ../applications/misc/termite {
