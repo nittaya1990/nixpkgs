@@ -4743,7 +4743,7 @@ with pkgs;
 
   xsel = callPackage ../tools/misc/xsel { };
 
-  xsv = callPackages ../tools/text/xsv { };
+  xsv = callPackage ../tools/text/xsv { };
 
   xtreemfs = callPackage ../tools/filesystems/xtreemfs {};
 
