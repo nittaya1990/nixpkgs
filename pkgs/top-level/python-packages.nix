@@ -19838,20 +19838,7 @@ in {
     };
    });
 
-  pydot = buildPythonPackage rec {
-    name = "pydot-1.2.3";
-    disabled = isPy3k;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pydot/${name}.tar.gz";
-      sha256 = "edb5d3f249f97fbd9c4bb16959e61bc32ecf40eee1a9f6d27abe8d01c0a73502";
-    };
-    propagatedBuildInputs = with self; [pyparsing pkgs.graphviz];
-    meta = {
-      homepage = https://github.com/erocarrera/pydot;
-      description = "Allows to easily create both directed and non directed graphs from Python";
-    };
-  };
+  pydot = callPackage ../development/python-modules/pydot { };
 
   pydot_ng = buildPythonPackage rec {
     name = "pydot_ng-1.0.0";
@@ -23752,25 +23739,7 @@ in {
     };
   };
 
-  stevedore = buildPythonPackage rec {
-    name = "stevedore-1.7.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/s/stevedore/${name}.tar.gz";
-      sha256 = "149pjc0c3z6khjisn4yil3f94qjnzwafz093wc8rrzbw828qdkv8";
-    };
-
-    doCheck = false;
-
-    buildInputs = with self; [ oslosphinx ];
-    propagatedBuildInputs = with self; [ pbr six argparse ];
-
-    meta = {
-      description = "Manage dynamic plugins for Python applications";
-      homepage = "https://pypi.python.org/pypi/stevedore";
-      license = licenses.asl20;
-    };
-  };
+  stevedore = callPackage ../development/python-modules/stevedore {};
 
   Theano = self.TheanoWithoutCuda;
 
