@@ -3264,6 +3264,8 @@ in {
     };
   };
 
+  branca = callPackage ../development/python-modules/branca { };
+
   bugwarrior = buildPythonPackage rec {
     name = "bugwarrior-${version}";
     version = "1.4.0";
@@ -11785,6 +11787,8 @@ in {
       description = "FastCGI Python module set";
     };
   });
+
+  folium = callPackage ../development/python-modules/folium { };
 
   fontforge = pkgs.fontforge.override {
     withPython = true;
