@@ -4282,6 +4282,10 @@ in {
         ${if stdenv.cc.isClang or false then ''--exclude="(cpdef_extern_func|libcpp_algo)"'' else ""}
     '';
 
+    # Disable tests temporarily
+    # https://github.com/cython/cython/issues/1676
+    doCheck = false;
+
     meta = {
       description = "An optimising static compiler for both the Python programming language and the extended Cython programming language";
       platforms = platforms.all;
@@ -15810,28 +15814,8 @@ in {
     };
   };
 
-
-  buildNumpyPackage = callPackage ../development/python-modules/numpy.nix {
-    gfortran = pkgs.gfortran;
+  numpy = callPackage ../development/python-modules/numpy {
     blas = pkgs.openblasCompat;
-  };
-
-  numpy = self.numpy_1_11;
-
-  numpy_1_10 = self.buildNumpyPackage rec {
-    version = "1.10.4";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/n/numpy/numpy-${version}.tar.gz";
-      sha256 = "7356e98fbcc529e8d540666f5a919912752e569150e9a4f8d869c686f14c720b";
-    };
-  };
-
-  numpy_1_11 = self.buildNumpyPackage rec {
-    version = "1.11.3";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/n/numpy/numpy-${version}.zip";
-      sha256 = "2e0fc5248246a64628656fe14fcab0a959741a2820e003bd15538226501b82f7";
-    };
   };
 
   numpydoc = buildPythonPackage rec {
@@ -22756,29 +22740,7 @@ in {
     };
   };
 
-  buildScipyPackage = callPackage ../development/python-modules/scipy.nix {
-    gfortran = pkgs.gfortran;
-  };
-
-  scipy = self.scipy_0_18;
-
-  scipy_0_17 = self.buildScipyPackage rec {
-    version = "0.17.1";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/s/scipy/scipy-${version}.tar.gz";
-      sha256 = "1b1qpfz2j2rvmlplsjbnznnxnqr9ckbmis506110ii1w07wd4k4w";
-    };
-    numpy = self.numpy;
-  };
-
-  scipy_0_18 = self.buildScipyPackage rec {
-    version = "0.18.1";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/s/scipy/scipy-${version}.tar.gz";
-      sha256 = "8ab6e9c808bf2fb3e8576cd8cf07226d9cdc18b012c06d9708429a821ac6634e";
-    };
-    numpy = self.numpy;
-  };
+  scipy = callPackage ../development/python-modules/scipy { };
 
   scikitimage = buildPythonPackage rec {
     name = "scikit-image-${version}";
