@@ -10204,6 +10204,7 @@ with pkgs;
 
   v8 = callPackage ../development/libraries/v8 {
     inherit (python2Packages) python gyp;
+    cctools = darwin.cctools;
   };
 
   v8_static = lowPrio (self.v8.override { static = true; });
