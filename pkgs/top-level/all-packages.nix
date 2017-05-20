@@ -4240,6 +4240,8 @@ with pkgs;
 
   tcpkali = callPackage ../applications/networking/tcpkali { };
 
+  tcpreplay = callPackage ../tools/networking/tcpreplay { };
+
   teamviewer = callPackage ../applications/networking/remote/teamviewer {
     stdenv = stdenv_32bit;
   };
