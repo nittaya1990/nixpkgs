@@ -13330,6 +13330,8 @@ with pkgs;
 
   clipit = callPackage ../applications/misc/clipit { };
 
+  cloud-print-connector = callPackage ../servers/cloud-print-connector { };
+  
   cmatrix = callPackage ../applications/misc/cmatrix { };
 
   cmus = callPackage ../applications/audio/cmus {
