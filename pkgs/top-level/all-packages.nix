@@ -2121,6 +2121,8 @@ with pkgs;
   # rename to upower-notify?
   go-upower-notify = callPackage ../tools/misc/upower-notify { };
 
+  google-app-engine-go-sdk = callPackage ../development/tools/google-app-engine-go-sdk { };
+
   google-authenticator = callPackage ../os-specific/linux/google-authenticator { };
 
   google-cloud-sdk = callPackage ../tools/admin/google-cloud-sdk { };
@@ -18505,6 +18507,8 @@ with pkgs;
   terraform_0_8 = terraform_0_8_8;
   terraform_0_9 = terraform_0_9_4;
   terraform = terraform_0_9;
+
+  terraform-inventory = callPackage ../applications/networking/cluster/terraform-inventory {};
 
   terragrunt = callPackage ../applications/networking/cluster/terragrunt {};
 
