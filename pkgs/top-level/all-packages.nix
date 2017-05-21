@@ -1099,6 +1099,10 @@ with pkgs;
 
   mongodb-tools = callPackage ../tools/misc/mongodb-tools { };
 
+  mozlz4a = callPackage ../tools/compression/mozlz4a {
+    pylz4 = python3Packages.lz4;
+  };
+
   msr-tools = callPackage ../os-specific/linux/msr-tools { };
 
   mstflint = callPackage ../tools/misc/mstflint { };
@@ -2640,6 +2644,8 @@ with pkgs;
   };
 
   lksctp-tools = callPackage ../os-specific/linux/lksctp-tools { };
+
+  lldpd = callPackage ../tools/networking/lldpd { };
 
   lnav = callPackage ../tools/misc/lnav { };
 
