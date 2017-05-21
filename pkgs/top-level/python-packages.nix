@@ -6463,6 +6463,8 @@ in {
     propagatedBuildInputs = with self; [ configparser ];
   };
 
+  enzyme = callPackage ../development/python-modules/enzyme {};
+
   escapism = buildPythonPackage rec {
     name = "escapism-${version}";
     version = "0.0.1";
@@ -9342,6 +9344,8 @@ in {
       maintainers = with maintainers; [ abbradar ];
     };
   };
+
+  subliminal = callPackage ../development/python-modules/subliminal {};
 
   hyp = buildPythonPackage rec {
     name = "hyp-server-${version}";
