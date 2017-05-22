@@ -103,7 +103,7 @@ in {
 
       plugins = mkOption {
         default = null;
-        #type = types.nullOr (types.attrsOf types.package);
+        type = types.nullOr (types.attrsOf types.package);
         description = ''
           A set of plugins to activate. Note that this will completely
           remove and replace any previously installed plugins. If you
@@ -180,7 +180,7 @@ in {
                       (n: v: "cp ${v} ${cfg.home}/plugins/${n}.hpi")
                       cfg.plugins;
                 in ''
-                  rm -r ${cfg.home}/plugins
+                  rm -r ${cfg.home}/plugins || true
                   mkdir -p ${cfg.home}/plugins
                   ${lib.strings.concatStringsSep "\n" pluginCmds}
                 '';
