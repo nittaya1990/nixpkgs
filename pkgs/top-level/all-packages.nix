@@ -18681,6 +18681,7 @@ with pkgs;
     gphoto2Support = true;
     ldapSupport = true;
     pulseaudioSupport = true;
+    udevSupport = true;
   });
   wineStable = self.wine.override { wineRelease = "stable"; };
   wineUnstable = lowPrio (self.wine.override { wineRelease = "unstable"; });
