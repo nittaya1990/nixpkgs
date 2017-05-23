@@ -438,10 +438,10 @@ if test -e /sys/power/resume -a -e /sys/power/disk; then
 fi
 
 if test -n "$debug1PreMounts"; then
-    echo "waiting until admin deletes /tmp/deleteWhenDone before proceeding"
-    touch /tmp/deleteWhenDone
-    sleep 1
-    while [ -e /tmp/deleteWhenDone ] ; do
+    echo "Providing a 10 min window for admin connection and creation of /tmp/hold"
+    sleep 600
+    while [ -e /tmp/hold ] ; do
+        echo "Waiting until admin deletes /tmp/hold before proceeding..."
         sleep 10
     done
 fi
