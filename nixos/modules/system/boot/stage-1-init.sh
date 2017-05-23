@@ -133,6 +133,10 @@ for o in $(cat /proc/cmdline); do
             allowShell=1
             debug1devices=1
             ;;
+        boot.debug1PreMounts) # stop before mounting file systems
+            allowShell=1
+            debug1PreMounts=1
+            ;;
         boot.debug1mounts) # stop after mounting file systems
             allowShell=1
             debug1mounts=1
@@ -433,6 +437,14 @@ if test -e /sys/power/resume -a -e /sys/power/disk; then
     fi
 fi
 
+if test -n "$debug1PreMounts"; then
+    echo "waiting until admin deletes /tmp/deleteWhenDone before proceeding"
+    touch /tmp/deleteWhenDone
+    sleep 1
+    while [ -e /tmp/deleteWhenDone ] ; do
+        sleep 10
+    done
+fi
 
 # Try to find and mount the root device.
 mkdir -p $targetRoot
