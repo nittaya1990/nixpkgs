@@ -2653,6 +2653,8 @@ with pkgs;
 
   lnav = callPackage ../tools/misc/lnav { };
 
+  loadlibrary = callPackage ../tools/misc/loadlibrary { };
+
   loc = callPackage ../development/misc/loc { };
 
   lockfileProgs = callPackage ../tools/misc/lockfile-progs { };
@@ -6721,7 +6723,7 @@ with pkgs;
   flow = callPackage ../development/tools/analysis/flow {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
     inherit (darwin) cf-private;
-    ocaml = ocaml_4_02;
+    inherit (ocamlPackages_4_03) ocaml findlib camlp4 sedlex ocamlbuild;
   };
 
   framac = callPackage ../development/tools/analysis/frama-c { };
@@ -13368,7 +13370,7 @@ with pkgs;
   clipit = callPackage ../applications/misc/clipit { };
 
   cloud-print-connector = callPackage ../servers/cloud-print-connector { };
-  
+
   cmatrix = callPackage ../applications/misc/cmatrix { };
 
   cmus = callPackage ../applications/audio/cmus {
@@ -17806,7 +17808,7 @@ with pkgs;
   coqPackages_8_5 = mkCoqPackages_8_5 coqPackages_8_5;
   coqPackages_8_6 = mkCoqPackages_8_6 coqPackages_8_6;
   coqPackages = coqPackages_8_6;
-  
+
   coq_8_4 = coqPackages_8_4.coq;
   coq_8_5 = coqPackages_8_5.coq;
   coq_8_6 = coqPackages_8_6.coq;
