@@ -969,6 +969,8 @@ with pkgs;
 
   fsmon = callPackage ../tools/misc/fsmon { };
 
+  fsql = callPackage ../tools/misc/fsql { };
+
   fop = callPackage ../tools/typesetting/fop { };
 
   fondu = callPackage ../tools/misc/fondu { };
@@ -4060,6 +4062,8 @@ with pkgs;
 
   silver-searcher = callPackage ../tools/text/silver-searcher { };
   ag = self.silver-searcher;
+
+  simpleproxy = callPackage ../tools/networking/simpleproxy { };
 
   simplescreenrecorder = callPackage ../applications/video/simplescreenrecorder { };
 
