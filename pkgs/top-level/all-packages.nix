@@ -3805,6 +3805,8 @@ with pkgs;
 
   quilt = callPackage ../development/tools/quilt { };
 
+  wiggle = callPackage ../development/tools/wiggle { };
+
   radamsa = callPackage ../tools/security/radamsa { };
 
   radarr = callPackage ../servers/radarr { };
