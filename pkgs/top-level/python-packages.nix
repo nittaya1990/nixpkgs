@@ -5354,33 +5354,7 @@ in {
     };
   });
 
-  dask = buildPythonPackage rec {
-    pname = "dask";
-    name = "${pname}-${version}";
-    version = "0.14.1";
-
-    src = fetchPypi {
-      inherit pname version;
-      sha256 = "46c8ef9aa41a5755f2194b535bff7fdef1343d3993ab294b198caf95155ec94e";
-    };
-
-    buildInputs = with self; [ pytest ];
-    propagatedBuildInputs = with self; [ cloudpickle  numpy toolz dill pandas partd ];
-
-    checkPhase = ''
-      py.test dask
-    '';
-
-    # URLError
-    doCheck = false;
-
-    meta = {
-      description = "Minimal task scheduling abstraction";
-      homepage = "http://github.com/ContinuumIO/dask/";
-      license = licenses.bsd3;
-      maintainers = with maintainers; [ fridh ];
-    };
-  };
+  dask = callPackage ../development/python-modules/dask { };
 
   datrie = buildPythonPackage rec {
     name = "datrie";
@@ -14806,56 +14780,9 @@ in {
     };
   };
 
-  nbconvert = buildPythonPackage rec {
-    version = "5.1.1";
-    name = "nbconvert-${version}";
+  nbconvert = callPackage ../development/python-modules/nbconvert { };
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/n/nbconvert/${name}.tar.gz";
-      sha256 = "847731bc39829d0eb1e15a450ac98c71730e3598e53683d4d76a3f3b3fc5017d";
-    };
-
-    buildInputs = with self; [nose ipykernel ];
-
-    propagatedBuildInputs = with self; [ entrypoints bleach mistune jinja2 pygments traitlets testpath jupyter_core nbformat ipykernel pandocfilters tornado jupyter_client];
-
-    checkPhase = ''
-      nosetests -v
-    '';
-
-    # PermissionError. Likely due to being in a chroot
-    doCheck = false;
-
-    meta = {
-      description = "Converting Jupyter Notebooks";
-      homepage = http://jupyter.org/;
-      license = licenses.bsd3;
-      maintainers = with maintainers; [ fridh ];
-    };
-  };
-
-  nbformat = buildPythonPackage rec {
-    version = "4.3.0";
-    name = "nbformat-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/n/nbformat/${name}.tar.gz";
-      sha256 = "5febcce872672f1c97569e89323992bdcb8573fdad703f835e6521253191478b";
-    };
-    LC_ALL="en_US.UTF-8";
-    buildInputs = with self; [ pytest pkgs.glibcLocales ];
-    propagatedBuildInputs = with self; [ipython_genutils traitlets testpath jsonschema jupyter_core];
-
-    # Failing tests and permission issues
-    doCheck = false;
-
-    meta = {
-      description = "The Jupyter Notebook format";
-      homepage = "http://jupyter.org/";
-      license = licenses.bsd3;
-      maintainers = with maintainers; [ fridh ];
-    };
-  };
+  nbformat = callPackage ../development/python-modules/nbformat { };
 
   nbxmpp = buildPythonPackage rec {
     name = "nbxmpp-${version}";
