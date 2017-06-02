@@ -8920,6 +8920,8 @@ with pkgs;
 
   libnetfilter_cttimeout = callPackage ../development/libraries/libnetfilter_cttimeout { };
 
+  libnetfilter_log = callPackage ../development/libraries/libnetfilter_log { };
+
   libnetfilter_queue = callPackage ../development/libraries/libnetfilter_queue { };
 
   libnfnetlink = callPackage ../development/libraries/libnfnetlink { };
@@ -15837,6 +15839,8 @@ with pkgs;
   swingsane = callPackage ../applications/graphics/swingsane { };
 
   sxiv = callPackage ../applications/graphics/sxiv { };
+
+  resilio-sync = callPackage ../applications/networking/resilio-sync { };
 
   bittorrentSync = bittorrentSync14;
   bittorrentSync14 = callPackage ../applications/networking/bittorrentsync/1.4.x.nix { };
