@@ -11,13 +11,13 @@
 
 let
   pname = "discord.py";
-  version = "0.15.1";
+  version = "0.16.8";
 in buildPythonPackage rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${name}.tar.gz";
-    sha256 = "01lgidvnwwva1i65853gaplamllym2nsk0jis2r6f1rzbamgk1yj";
+    sha256 = "d775b701383e3a5762accf3816b819f357f299476701615ac30c7715a5ea79aa";
   };
 
   propagatedBuildInputs = [ asyncio aiohttp websockets pynacl ];

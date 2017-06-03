@@ -4,17 +4,18 @@ let
          then "linux-amd64"
          else "darwin-amd64";
   checksum = if stdenv.isLinux
-             then "1797ab74720f122432eace591fb415e5e5f5db97f4b6608ca8dbe59bae988374"
-             else "2b522dcfe27e987138f7826c79fb26a187075dd9be5c5a4c76fd6846bf109014";
-in
-stdenv.mkDerivation rec {
+             then "0vjkcilxzwvkgcczcbq58nl2j17ddqiysxm5yl13agnmxzvxw6r2"
+             else "1ga9gxzji48vhbaa0pkxd03h89zgjsbikbki9xla1qbvyvqjnw5g";
+
   pname = "helm";
-  version = "2.1.2";
+  version = "2.4.1";
+in
+stdenv.mkDerivation {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "https://kubernetes-helm.storage.googleapis.com/helm-v${version}-${arch}.tar.gz";
-    sha256 = "${checksum}";
+    sha256 = checksum;
   };
 
   preferLocalBuild = true;
@@ -33,6 +34,10 @@ stdenv.mkDerivation rec {
     tar -xvzf $src
     cp ${arch}/helm $out/bin/${pname}
     chmod +x $out/bin/${pname}
+    mkdir -p $out/share/bash-completion/completions
+    mkdir -p $out/share/zsh/site-functions
+    $out/bin/helm completion bash > $out/share/bash-completion/completions/helm
+    $out/bin/helm completion zsh > $out/share/zsh/site-functions/_helm
   '';
 
   meta = with stdenv.lib; {

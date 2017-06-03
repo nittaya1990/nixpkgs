@@ -3,99 +3,61 @@
 let buildFor = toolsArch: (
 
 let
+  lib = import ../../../lib;
   pkgsFun = import ../../..;
-  pkgsNoParams = pkgsFun {};
 
-  sheevaplugCrossSystem = {
-    crossSystem = rec {
-      config = "arm-linux-gnueabi";
-      bigEndian = false;
-      arch = "armv5te";
-      float = "soft";
-      withTLS = true;
-      libc = "glibc";
-      platform = pkgsNoParams.platforms.sheevaplug;
-      openssl.system = "linux-generic32";
-      inherit (platform) gcc;
-    };
-  };
-
-  raspberrypiCrossSystem = {
-    crossSystem = rec {
-      config = "arm-linux-gnueabihf";
-      bigEndian = false;
-      arch = "armv6";
-      float = "hard";
-      fpu = "vfp";
-      withTLS = true;
-      libc = "glibc";
-      platform = pkgsNoParams.platforms.raspberrypi;
-      openssl.system = "linux-generic32";
-      inherit (platform) gcc;
-    };
-  };
-
-  armv7l-hf-multiplatform-crossSystem = {
-    crossSystem = rec {
-      config = "arm-linux-gnueabihf";
-      bigEndian = false;
-      arch = "armv7-a";
-      float = "hard";
-      fpu = "vfpv3-d16";
-      withTLS = true;
-      libc = "glibc";
-      platform = pkgsNoParams.platforms.armv7l-hf-multiplatform;
-      openssl.system = "linux-generic32";
-      inherit (platform) gcc;
-    };
-  };
+  inherit (lib.systems.examples)
+    sheevaplug raspberryPi armv7l-hf-multiplatform
+    aarch64-multiplatform scaleway-c1 pogoplug4;
 
   selectedCrossSystem =
-    if toolsArch == "armv5tel" then sheevaplugCrossSystem else
-    if toolsArch == "armv6l" then raspberrypiCrossSystem else
-    if toolsArch == "armv7l" then armv7l-hf-multiplatform-crossSystem else null;
+    if toolsArch == "armv5tel" then sheevaplug else
+    if toolsArch == "scaleway" then scaleway-c1 else
+    if toolsArch == "pogoplug4" then pogoplug4 else
+    if toolsArch == "armv6l" then raspberryPi else
+    if toolsArch == "armv7l" then armv7l-hf-multiplatform else
+    if toolsArch == "aarch64" then aarch64-multiplatform else null;
 
-  pkgs = pkgsFun ({inherit system;} // selectedCrossSystem);
-
-  inherit (pkgs) stdenv nukeReferences cpio binutilsCross;
+  pkgs = pkgsFun ({ inherit system; crossSystem = selectedCrossSystem; });
 
   glibc = pkgs.libcCross;
-  bash = pkgs.bash.crossDrv;
-  findutils = pkgs.findutils.crossDrv;
-  diffutils = pkgs.diffutils.crossDrv;
-  gnused = pkgs.gnused.crossDrv;
-  gnugrep = pkgs.gnugrep.crossDrv;
-  gawk = pkgs.gawk.crossDrv;
-  gzip = pkgs.gzip.crossDrv;
-  bzip2 = pkgs.bzip2.crossDrv;
-  gnumake = pkgs.gnumake.crossDrv;
-  patch = pkgs.patch.crossDrv;
-  patchelf = pkgs.patchelf.crossDrv;
-  gcc = pkgs.gcc.cc.crossDrv;
-  gmpxx = pkgs.gmpxx.crossDrv;
-  mpfr = pkgs.mpfr.crossDrv;
-  zlib = pkgs.zlib.crossDrv;
-  libmpc = pkgs.libmpc.crossDrv;
-  binutils = pkgs.binutils.crossDrv;
-  libelf = pkgs.libelf.crossDrv;
+  bash = pkgs.bash;
+  findutils = pkgs.findutils;
+  diffutils = pkgs.diffutils;
+  gnused = pkgs.gnused;
+  gnugrep = pkgs.gnugrep;
+  gawk = pkgs.gawk;
+  gzip = pkgs.gzip;
+  bzip2 = pkgs.bzip2;
+  gnumake = pkgs.gnumake;
+  patch = pkgs.patch;
+  patchelf = pkgs.patchelf;
+  gcc = pkgs.gcc.cc;
+  gmpxx = pkgs.gmpxx;
+  mpfr = pkgs.mpfr;
+  zlib = pkgs.zlib;
+  libmpc = pkgs.libmpc;
+  binutils = pkgs.binutils;
+  libelf = pkgs.libelf;
 
   # Keep these versions in sync with the versions used in the current GCC!
-  isl = pkgs.isl_0_14.crossDrv;
+  isl = pkgs.isl_0_14;
 in
 
 rec {
 
 
-  coreutilsMinimal = (pkgs.coreutils.override (args: {
-    # We want coreutils without ACL support.
+  coreutilsMinimal = pkgs.coreutils.override (args: {
+    # We want coreutils without ACL/attr support.
     aclSupport = false;
+    attrSupport = false;
     # Our tooling currently can't handle scripts in bin/, only ELFs and symlinks.
     singleBinary = "symlinks";
-  })).crossDrv;
+  });
 
-  tarMinimal = (pkgs.gnutar.override { acl = null; }).crossDrv;
+  tarMinimal = pkgs.gnutar.override { acl = null; };
 
-  busyboxMinimal = (pkgs.busybox.override {
+  busyboxMinimal = pkgs.busybox.override {
     useMusl = true;
     enableStatic = true;
     enableMinimal = true;
@@ -108,15 +70,19 @@ rec {
       CONFIG_TAR y
       CONFIG_UNXZ y
     '';
-  }).crossDrv;
+  };
 
   build =
 
-    stdenv.mkDerivation {
+    pkgs.stdenv.mkDerivation {
       name = "stdenv-bootstrap-tools-cross";
-      crossConfig = stdenv.cross.config;
+      crossConfig = pkgs.hostPlatform.config;
 
-      buildInputs = [nukeReferences cpio binutilsCross];
+      nativeBuildInputs = [
+        pkgs.buildPackages.nukeReferences
+        pkgs.buildPackages.cpio
+        pkgs.buildPackages.binutils
+      ];
 
       buildCommand = ''
         set -x
@@ -172,7 +138,7 @@ rec {
         cp -d ${patch}/bin/* $out/bin
         cp ${patchelf}/bin/* $out/bin
 
-        cp -d ${gnugrep.pcre.crossDrv.out}/lib/libpcre*.so* $out/lib # needed by grep
+        cp -d ${gnugrep.pcre.out}/lib/libpcre*.so* $out/lib # needed by grep
 
         # Copy what we need of GCC.
         cp -d ${gcc.out}/bin/gcc $out/bin
@@ -207,15 +173,14 @@ rec {
         # GCC has certain things built in statically. See
         # pkgs/stdenv/linux/default.nix for the details.
         cp -d ${isl}/lib/libisl*.so* $out/lib
-        # Also this is needed since bzip2 uses a custom build system
-        # for native builds but autoconf (via a patch) for cross builds
+
         cp -d ${bzip2.out}/lib/libbz2.so* $out/lib
 
         # Copy binutils.
         for i in as ld ar ranlib nm strip readelf objdump; do
           cp ${binutils.out}/bin/$i $out/bin
         done
-        cp -d ${binutils.out}/lib/lib*.so* $out/lib
+        cp -d ${binutils.lib}/lib/lib*.so* $out/lib
 
         chmod -R u+w $out
 
@@ -248,7 +213,7 @@ rec {
       allowedReferences = [];
     };
 
-  dist = stdenv.mkDerivation {
+  dist = pkgs.stdenv.mkDerivation {
     name = "stdenv-bootstrap-tools-cross";
 
     buildCommand = ''
@@ -263,4 +228,7 @@ rec {
     armv5tel = buildFor "armv5tel";
     armv6l = buildFor "armv6l";
     armv7l = buildFor "armv7l";
+    aarch64 = buildFor "aarch64";
+    scaleway = buildFor "scaleway";
+    pogoplug4 = buildFor "pogoplug4";
 }

@@ -1,19 +1,17 @@
-{ stdenv, fetchFromGitHub, rustPlatform, makeWrapper }:
+{ stdenv, fetchFromGitHub, rustPlatform }:
 
-with rustPlatform;
-
-buildRustPackage rec {
+rustPlatform.buildRustPackage rec {
   name = "rustfmt-${version}";
-  version = "0.6.3";
+  version = "0.8.3";
 
   src = fetchFromGitHub {
     owner = "rust-lang-nursery";
     repo = "rustfmt";
-    rev = "61ab06a92eae355ed6447d85d3c416fb65e96bdb";
-    sha256 = "0fa16ycbvhyxs1b278q8jizrx9z0gis0ysjwk8fjws0282xsyvbk";
+    rev = "${version}";
+    sha256 = "1nh0h8mncz5vnn5hmw74f8nnh5cxdlrg67891l4dyq0p38vjhimz";
   };
 
-  depsSha256 = "1qg04nzba30fqswjf97wf0slai6lhrsy0bfv648sqnrf50virx5h";
+  depsSha256 = "002d7y33a0bavd07wl7xrignmyaamnzfabdnr7a2x3zfizkfnblb";
 
   meta = with stdenv.lib; {
     description = "A tool for formatting Rust code according to style guidelines";

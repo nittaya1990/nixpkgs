@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   name = "aria2-${version}";
-  version = "1.29.0";
+  version = "1.32.0";
 
   src = fetchFromGitHub {
     owner = "aria2";
     repo = "aria2";
     rev = "release-${version}";
-    sha256 = "1ivxz2ld4cl9z29kdicban9dir6s0si2jqn4g11gz587x7pagbim";
+    sha256 = "098ahj7nyf5c70221aq5q3aqllb94frz9lzig8rkhqfsa4mmslg5";
   };
 
   nativeBuildInputs = [ pkgconfig autoreconfHook ];

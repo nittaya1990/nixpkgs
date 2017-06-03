@@ -11,36 +11,37 @@ let
   };
   matrix-synapse-ldap3 = pythonPackages.buildPythonApplication rec {
     name = "matrix-synapse-ldap3-${version}";
-    version = "0.1.1";
+    version = "0.1.2";
 
     src = fetchFromGitHub {
       owner = "matrix-org";
       repo = "matrix-synapse-ldap3";
-      rev = "564eb3f109ce7f1082c47d5f8efaa792d90467f1";
-      sha256 = "1mkjlvy7a3rq405m59ihkh1wq7pa4l03fp8hgwwyjnbmz25bqmbk";
+      rev = "v${version}";
+      sha256 = "16pivz1lhs1c3z84rxxy8khyvn0hqxwxaz552br1y9ri0maa0aq8";
     };
 
     propagatedBuildInputs = with pythonPackages; [ service-identity ldap3 twisted ];
   };
 in pythonPackages.buildPythonApplication rec {
   name = "matrix-synapse-${version}";
-  version = "0.18.6-rc2";
+  version = "0.21.0";
 
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "synapse";
     rev = "v${version}";
-    sha256 = "0alsby8hghhzgpzism2f9v5pmz91v20bd18nflfka79f3ss03h0q";
+    sha256 = "0mxgpfyh7265kh379hsb53lni43xcq9nffanbxwrg8hp8c79pcg3";
   };
 
   patches = [ ./matrix-synapse.patch ];
 
   propagatedBuildInputs = with pythonPackages; [
     blist canonicaljson daemonize dateutil frozendict pillow pybcrypt pyasn1
-    pydenticon pymacaroons-pynacl pynacl pyopenssl pysaml2 pytz requests2
+    pydenticon pymacaroons-pynacl pynacl pyopenssl pysaml2 pytz requests
     signedjson systemd twisted ujson unpaddedbase64 pyyaml
     matrix-angular-sdk bleach netaddr jinja2 psycopg2
     psutil msgpack lxml matrix-synapse-ldap3
+    phonenumbers jsonschema
   ];
 
   # Checks fail because of Tox.

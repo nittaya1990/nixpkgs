@@ -1,10 +1,10 @@
-{ stdenv, lib, bundlerEnv, ruby_2_2, curl }:
+{ stdenv, lib, bundlerEnv, ruby }:
 
 bundlerEnv rec {
   name = "jekyll-${version}";
-  version = "3.0.1";
 
-  ruby = ruby_2_2;
+  version = (import gemset).jekyll.version;
+  inherit ruby;
   gemfile = ./Gemfile;
   lockfile = ./Gemfile.lock;
   gemset = ./gemset.nix;

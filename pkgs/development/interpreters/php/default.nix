@@ -9,9 +9,10 @@ let
   generic =
     { version, sha256 }:
 
-    let php7 = lib.versionAtLeast version "7.0"; in
+    let php7 = lib.versionAtLeast version "7.0";
+        mysqlHeaders = mysql.lib.dev or mysql;
 
-    composableDerivation.composableDerivation {} (fixed: {
+    in composableDerivation.composableDerivation {} (fixed: {
 
       inherit version;
 
@@ -22,11 +23,6 @@ let
       buildInputs = [ flex bison pkgconfig ]
         ++ lib.optional stdenv.isLinux systemd;
 
-      configureFlags = [
-        "EXTENSION_DIR=$(out)/lib/php/extensions"
-      ] ++ lib.optional stdenv.isDarwin "--with-iconv=${libiconv}"
-        ++ lib.optional stdenv.isLinux  "--with-fpm-systemd";
-
       flags = {
 
         # much left to do here...
@@ -36,6 +32,10 @@ let
         apxs2 = {
           configureFlags = ["--with-apxs2=${apacheHttpd.dev}/bin/apxs"];
           buildInputs = [apacheHttpd];
+        };
+
+        embed = {
+          configureFlags = ["--enable-embed"];
         };
 
         # Extensions
@@ -110,12 +110,12 @@ let
 
         mysql = {
           configureFlags = ["--with-mysql"];
-          buildInputs = [ mysql.lib.dev ];
+          buildInputs = [ mysqlHeaders ];
         };
 
         mysqli = {
-          configureFlags = ["--with-mysqli=${mysql.lib.dev}/bin/mysql_config"];
-          buildInputs = [ mysql.lib.dev ];
+          configureFlags = ["--with-mysqli=${mysqlHeaders}/bin/mysql_config"];
+          buildInputs = [ mysqlHeaders ];
         };
 
         mysqli_embedded = {
@@ -125,8 +125,8 @@ let
         };
 
         pdo_mysql = {
-          configureFlags = ["--with-pdo-mysql=${mysql.lib.dev}"];
-          buildInputs = [ mysql.lib.dev ];
+          configureFlags = ["--with-pdo-mysql=${mysqlHeaders}"];
+          buildInputs = [ mysqlHeaders ];
         };
 
         bcmath = {
@@ -230,6 +230,7 @@ let
         pdo_mysqlSupport = config.php.pdo_mysql or true;
         libxml2Support = config.php.libxml2 or true;
         apxs2Support = config.php.apxs2 or (!stdenv.isDarwin);
+        embedSupport = config.php.embed or false;
         bcmathSupport = config.php.bcmath or true;
         socketsSupport = config.php.sockets or true;
         curlSupport = config.php.curl or true;
@@ -261,9 +262,9 @@ let
 
       hardeningDisable = [ "bindnow" ];
 
-      configurePhase = ''
+      preConfigure = ''
         # Don't record the configure flags since this causes unnecessary
-        # runtime dependencies.
+        # runtime dependencies
         for i in main/build-defs.h.in scripts/php-config.in; do
           substituteInPlace $i \
             --replace '@CONFIGURE_COMMAND@' '(omitted)' \
@@ -271,12 +272,29 @@ let
             --replace '@PHP_LDFLAGS@' ""
         done
 
-        [[ -z "$libxml2" ]] || export PATH=$PATH:$libxml2/bin
-        ./configure --with-config-file-scan-dir=/etc/php.d --with-config-file-path=$out/etc --prefix=$out $configureFlags
+        #[[ -z "$libxml2" ]] || addToSearchPath PATH $libxml2/bin
+
+        export EXTENSION_DIR=$out/lib/php/extensions
+
+        configureFlags+=(--with-config-file-path=$out/etc \
+          --includedir=$dev/include)
       '';
+
+      configureFlags = [
+        "--with-config-file-scan-dir=/etc/php.d"
+      ] ++ lib.optional stdenv.isDarwin "--with-iconv=${libiconv}"
+        ++ lib.optional stdenv.isLinux  "--with-fpm-systemd";
 
       postInstall = ''
         cp php.ini-production $out/etc/php.ini
+      '';
+
+      postFixup = ''
+        mkdir -p $dev/bin $dev/share/man/man1
+        mv $out/bin/phpize $out/bin/php-config $dev/bin/
+        mv $out/share/man/man1/phpize.1.gz \
+          $out/share/man/man1/php-config.1.gz \
+          $dev/share/man/man1/
       '';
 
       src = fetchurl {
@@ -290,6 +308,7 @@ let
         license = licenses.php301;
         maintainers = with maintainers; [ globin ];
         platforms = platforms.all;
+        outputsToInstall = [ "out" "dev" ];
       };
 
       patches = if !php7 then [ ./fix-paths.patch ] else [ ./fix-paths-php7.patch ];
@@ -298,21 +317,25 @@ let
         substituteInPlace configure --replace "-lstdc++" "-lc++"
       '';
 
+      stripDebugList = "bin sbin lib modules";
+
+      outputs = [ "out" "dev" ];
+
     });
 
 in {
   php56 = generic {
-    version = "5.6.29";
-    sha256 = "1fr530x1hxpaf0gb1ayrs9a4xa9v14dfb4hn2560dgm7i96896s9";
+    version = "5.6.30";
+    sha256 = "01krq8r9xglq59x376zlg261yikckq179jmhnlcg3gqxza9w41d1";
   };
 
   php70 = generic {
-    version = "7.0.14";
-    sha256 = "0d0596vzpyw86a77smk799sxl4mh2wylzsvmrv8mzda21nd3di7v";
+    version = "7.0.19";
+    sha256 = "0nbxgx5fkj1bcach97a3169kwic7jbd4b435n7v25v1aq2pw0fhg";
   };
 
   php71 = generic {
-    version = "7.1.0";
-    sha256 = "0qcf4aahkiwypidw42pd5dz34n10296zgjfyh56lgcymxryzvg38";
+    version = "7.1.5";
+    sha256 = "15w60nrickdi0rlsy5yw6aa1j42m6z2chv90f7fbgn0v9xwa9si8";
   };
 }

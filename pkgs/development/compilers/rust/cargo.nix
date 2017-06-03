@@ -23,24 +23,7 @@ rustPlatform.buildRustPackage rec {
 
   LIBGIT2_SYS_USE_PKG_CONFIG=1;
 
-  configurePhase = ''
-    ./configure --enable-optimize --prefix=$out
-  '';
-
-  buildPhase = "make";
-
-  installPhase = ''
-    make install
-    ${postInstall}
-  '';
-
   postInstall = ''
-    rm "$out/lib/rustlib/components" \
-       "$out/lib/rustlib/install.log" \
-       "$out/lib/rustlib/rust-installer-version" \
-       "$out/lib/rustlib/uninstall.sh" \
-       "$out/lib/rustlib/manifest-cargo"
-
     # NOTE: We override the `http.cainfo` option usually specified in
     # `.cargo/config`. This is an issue when users want to specify
     # their own certificate chain as environment variables take

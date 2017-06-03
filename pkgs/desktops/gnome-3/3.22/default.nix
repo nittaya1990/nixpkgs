@@ -14,13 +14,13 @@ let
   callPackage = pkgs.newScope self;
 
   version = "3.22";
-  maintainers = with pkgs.lib.maintainers; [ lethalman jgeerds DamienCassou ];
+  maintainers = with pkgs.lib.maintainers; [ lethalman jgeerds ];
 
   corePackages = with gnome3; [
     pkgs.desktop_file_utils pkgs.ibus
     pkgs.shared_mime_info # for update-mime-database
     glib # for gsettings
-    gtk3 # for gtk-update-icon-cache
+    gtk3.out # for gtk-update-icon-cache
     glib_networking gvfs dconf gnome-backgrounds gnome_control_center
     gnome-menus gnome_settings_daemon gnome_shell
     gnome_themes_standard defaultIconTheme gnome-shell-extensions
@@ -31,7 +31,7 @@ let
     gucharmap nautilus totem vino yelp gnome-bluetooth
     gnome-calculator gnome-contacts gnome-font-viewer gnome-screenshot
     gnome-system-log gnome-system-monitor
-    gnome_terminal gnome-user-docs bijiben evolution file-roller gedit
+    gnome_terminal gnome-user-docs evolution file-roller gedit
     gnome-clocks gnome-music gnome-tweak-tool gnome-photos
     nautilus-sendto dconf-editor vinagre gnome-weather gnome-logs
     gnome-maps gnome-characters gnome-calendar accerciser gnome-nettool
@@ -45,7 +45,7 @@ let
     hitori gnome-taquin
   ];
 
-  inherit (pkgs) glib gtk2 webkitgtk214x gtk3 gtkmm3 libcanberra_gtk2
+  inherit (pkgs) glib gtk2 webkitgtk216x gtk3 gtkmm3 libcanberra_gtk2
     clutter clutter-gst clutter_gtk cogl gtkvnc;
   inherit (pkgs.gnome2) ORBit2;
   libsoup = pkgs.libsoup.override { gnomeSupport = true; };
@@ -56,7 +56,7 @@ let
   gtkmm = gtkmm3;
   vala = pkgs.vala_0_32;
   gegl_0_3 = pkgs.gegl_0_3.override { inherit gtk; };
-  webkitgtk = webkitgtk214x;
+  webkitgtk = webkitgtk216x;
 
 # Simplify the nixos module and gnome packages
   defaultIconTheme = adwaita-icon-theme;
@@ -212,6 +212,10 @@ let
     inherit gnome3;
   };
 
+  networkmanager_fortisslvpn = pkgs.networkmanager_fortisslvpn.override {
+    inherit gnome3;
+  };
+
   networkmanager_l2tp = pkgs.networkmanager_l2tp.override {
     inherit gnome3;
   };
@@ -233,6 +237,8 @@ let
   vte = callPackage ./core/vte { };
 
   vte_290 = callPackage ./core/vte/2.90.nix { };
+
+  vte-ng = callPackage ./core/vte/ng.nix { };
 
   vino = callPackage ./core/vino { };
 

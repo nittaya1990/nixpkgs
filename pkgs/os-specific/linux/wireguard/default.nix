@@ -1,23 +1,23 @@
 { stdenv, fetchurl, libmnl, kernel ? null }:
 
-# module requires Linux >= 4.1 https://www.wireguard.io/install/#kernel-requirements
-assert kernel != null -> stdenv.lib.versionAtLeast kernel.version "4.1";
+# module requires Linux >= 3.10 https://www.wireguard.io/install/#kernel-requirements
+assert kernel != null -> stdenv.lib.versionAtLeast kernel.version "3.10";
 
 let
   name = "wireguard-${version}";
 
-  version = "0.0.20161230";
+  version = "0.0.20170531";
 
   src = fetchurl {
     url    = "https://git.zx2c4.com/WireGuard/snapshot/WireGuard-${version}.tar.xz";
-    sha256 = "15p3k8msk3agr0i96k12y5h4fxv0gc8zqjk15mizd3wwmw6pgjb9";
+    sha256 = "1k6asxx7qzmxasvdwkvlalvav643fqfbndv80vjkbjqxy6mdkdrf";
   };
 
   meta = with stdenv.lib; {
     homepage     = https://www.wireguard.io/;
     downloadPage = https://git.zx2c4.com/WireGuard/refs/;
-    description  = "Fast, modern, secure VPN tunnel";
-    maintainers  = with maintainers; [ ericsagnes ];
+    description  = "A prerelease of an experimental VPN tunnel which is not to be depended upon for security";
+    maintainers  = with maintainers; [ ericsagnes mic92 ];
     license      = licenses.gpl2;
     platforms    = platforms.linux;
   };
@@ -35,6 +35,8 @@ let
     KERNELDIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
     INSTALL_MOD_PATH = "\${out}";
 
+    NIX_CFLAGS = ["-Wno-error=cpp"];
+
     buildPhase = "make module";
   };
 
@@ -46,6 +48,9 @@ let
     buildInputs = [ libmnl ];
 
     makeFlags = [
+      "WITH_BASHCOMPLETION=yes"
+      "WITH_WGQUICK=yes"
+      "WITH_SYSTEMDUNITS=yes"
       "DESTDIR=$(out)"
       "PREFIX=/"
       "-C" "tools"

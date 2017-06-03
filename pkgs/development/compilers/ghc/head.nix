@@ -1,5 +1,10 @@
-{ stdenv, fetchgit, bootPkgs, perl, gmp, ncurses, libiconv, binutils, coreutils
-, autoconf, automake, happy, alex, python3, crossSystem, selfPkgs, cross ? null
+{ stdenv, lib, fetchgit, bootPkgs, perl, ncurses, libiconv, binutils, coreutils
+, autoconf, automake, happy, alex, python3, buildPlatform, targetPlatform
+, selfPkgs, cross ? null
+
+  # If enabled GHC will be build with the GPL-free but slower integer-simple
+  # library instead of the faster but GPLed integer-gmp library.
+, enableIntegerSimple ? false, gmp
 }:
 
 let
@@ -7,33 +12,34 @@ let
 
   commonBuildInputs = [ ghc perl autoconf automake happy alex python3 ];
 
-  version = "8.1.20161224";
+  version = "8.1.20170106";
+  rev = "b4f2afe70ddbd0576b4eba3f82ba1ddc52e9b3bd";
 
   commonPreConfigure =  ''
+    echo ${version} >VERSION
+    echo ${rev} >GIT_COMMIT_ID
+    ./boot
     sed -i -e 's|-isysroot /Developer/SDKs/MacOSX10.5.sdk||' configure
   '' + stdenv.lib.optionalString (!stdenv.isDarwin) ''
     export NIX_LDFLAGS="$NIX_LDFLAGS -rpath $out/lib/ghc-${version}"
   '' + stdenv.lib.optionalString stdenv.isDarwin ''
     export NIX_LDFLAGS+=" -no_dtrace_dof"
+  '' + stdenv.lib.optionalString enableIntegerSimple ''
+    echo "INTEGER_LIBRARY=integer-simple" > mk/build.mk
   '';
 in stdenv.mkDerivation (rec {
-  inherit version;
+  inherit version rev;
   name = "ghc-${version}";
-  rev = "2689a1692636521777f007861a484e7064b2d696";
 
   src = fetchgit {
     url = "git://git.haskell.org/ghc.git";
     inherit rev;
-    sha256 = "0rk6xy7kgxx849nprq1ji459p88nyy93236g841m5p6mdh7mmrcr";
+    sha256 = "1h064nikx5srsd7qvz19f6dxvnpfjp0b3b94xs1f4nar18hzf4j0";
   };
 
   postPatch = "patchShebangs .";
 
-  preConfigure = ''
-    echo ${version} >VERSION
-    echo ${rev} >GIT_COMMIT_ID
-    ./boot
-  '' + commonPreConfigure ;
+  preConfigure = commonPreConfigure;
 
   buildInputs = commonBuildInputs;
 
@@ -41,8 +47,9 @@ in stdenv.mkDerivation (rec {
 
   configureFlags = [
     "CC=${stdenv.cc}/bin/cc"
-    "--with-gmp-includes=${gmp.dev}/include" "--with-gmp-libraries=${gmp.out}/lib"
     "--with-curses-includes=${ncurses.dev}/include" "--with-curses-libraries=${ncurses.out}/lib"
+  ] ++ stdenv.lib.optional (! enableIntegerSimple) [
+    "--with-gmp-includes=${gmp.dev}/include" "--with-gmp-libraries=${gmp.out}/lib"
   ] ++ stdenv.lib.optional stdenv.isDarwin [
     "--with-iconv-includes=${libiconv}/include" "--with-iconv-libraries=${libiconv}/lib"
   ];
@@ -69,9 +76,9 @@ in stdenv.mkDerivation (rec {
 
   passthru = {
     inherit bootPkgs;
-  } // stdenv.lib.optionalAttrs (crossSystem != null) {
+  } // stdenv.lib.optionalAttrs (targetPlatform != buildPlatform) {
     crossCompiler = selfPkgs.ghc.override {
-      cross = crossSystem;
+      cross = targetPlatform;
       bootPkgs = selfPkgs;
     };
   };
@@ -86,24 +93,23 @@ in stdenv.mkDerivation (rec {
 } // stdenv.lib.optionalAttrs (cross != null) {
   name = "${cross.config}-ghc-${version}";
 
-  # Some fixes for cross-compilation to iOS. See https://phabricator.haskell.org/D2710 (D2711,D2712,D2713)
-  patches = [ ./D2710.patch ./D2711.patch ./D2712.patch ./D2713.patch ];
-
   preConfigure = commonPreConfigure + ''
     sed 's|#BuildFlavour  = quick-cross|BuildFlavour  = perf-cross|' mk/build.mk.sample > mk/build.mk
   '';
 
   configureFlags = [
     "CC=${stdenv.ccCross}/bin/${cross.config}-cc"
-    "LD=${stdenv.binutilsCross}/bin/${cross.config}-ld"
-    "AR=${stdenv.binutilsCross}/bin/${cross.config}-ar"
-    "NM=${stdenv.binutilsCross}/bin/${cross.config}-nm"
-    "RANLIB=${stdenv.binutilsCross}/bin/${cross.config}-ranlib"
+    "LD=${stdenv.binutils}/bin/${cross.config}-ld"
+    "AR=${stdenv.binutils}/bin/${cross.config}-ar"
+    "NM=${stdenv.binutils}/bin/${cross.config}-nm"
+    "RANLIB=${stdenv.binutils}/bin/${cross.config}-ranlib"
     "--target=${cross.config}"
     "--enable-bootstrap-with-devel-snapshot"
-  ];
+  ] ++
+    # fix for iOS: https://www.reddit.com/r/haskell/comments/4ttdz1/building_an_osxi386_to_iosarm64_cross_compiler/d5qvd67/
+    lib.optional (cross.config or null == "aarch64-apple-darwin14") "--disable-large-address-space";
 
-  buildInputs = commonBuildInputs ++ [ stdenv.ccCross stdenv.binutilsCross ];
+  buildInputs = commonBuildInputs ++ [ stdenv.ccCross stdenv.binutils ];
 
   dontSetConfigureCross = true;
 
@@ -112,6 +118,6 @@ in stdenv.mkDerivation (rec {
 
     cc = "${stdenv.ccCross}/bin/${cross.config}-cc";
 
-    ld = "${stdenv.binutilsCross}/bin/${cross.config}-ld";
+    ld = "${stdenv.binutils}/bin/${cross.config}-ld";
   };
 })

@@ -9,27 +9,41 @@
    $ nix-build pkgs/top-level/release.nix -A coreutils.x86_64-linux
 */
 
-{ nixpkgs ? { outPath = (import ../.. {}).lib.cleanSource ../..; revCount = 1234; shortRev = "abcdef"; }
+{ nixpkgs ? { outPath = (import ../../lib).cleanSource ../..; revCount = 1234; shortRev = "abcdef"; }
 , officialRelease ? false
-# The platforms for which we build Nixpkgs.
-, supportedSystems ? [ "x86_64-linux" "i686-linux" "x86_64-darwin" ]
-# Strip most of attributes when evaluating to spare memory usage
-, scrubJobs ? true
+, # The platforms for which we build Nixpkgs.
+  supportedSystems ? [ "x86_64-linux" "i686-linux" "x86_64-darwin" "aarch64-linux" ]
+, # Strip most of attributes when evaluating to spare memory usage
+  scrubJobs ? true
+, # Attributes passed to nixpkgs. Don't build packages marked as unfree.
+  nixpkgsArgs ? { config = { allowUnfree = false; inHydra = true; }; }
 }:
 
-with import ./release-lib.nix { inherit supportedSystems scrubJobs; };
+with import ./release-lib.nix { inherit supportedSystems scrubJobs nixpkgsArgs; };
 
 let
-
-  lib = pkgs.lib;
-
   jobs =
     { tarball = import ./make-tarball.nix { inherit pkgs nixpkgs officialRelease; };
 
       metrics = import ./metrics.nix { inherit pkgs nixpkgs; };
 
       manual = import ../../doc;
-      lib-tests = import ../../lib/tests/release.nix { inherit nixpkgs; };
+      lib-tests = import ../../lib/tests/release.nix { inherit pkgs; };
+
+      darwin-tested = pkgs.releaseTools.aggregate
+        { name = "nixpkgs-darwin-${jobs.tarball.version}";
+          meta.description = "Release-critical builds for the Nixpkgs darwin channel";
+          constituents =
+            [ jobs.tarball
+              jobs.stdenv.x86_64-darwin
+              jobs.ghc.x86_64-darwin
+              jobs.cabal2nix.x86_64-darwin
+              jobs.ruby.x86_64-darwin
+              jobs.python.x86_64-darwin
+              jobs.rustc.x86_64-darwin
+              jobs.go.x86_64-darwin
+            ];
+        };
 
       unstable = pkgs.releaseTools.aggregate
         { name = "nixpkgs-${jobs.tarball.version}";
@@ -67,13 +81,16 @@ let
               jobs.vim.x86_64-darwin
             ] ++ lib.collect lib.isDerivation jobs.stdenvBootstrapTools;
         };
-
+    } // (lib.optionalAttrs (builtins.elem "i686-linux" supportedSystems) {
       stdenvBootstrapTools.i686-linux =
         { inherit (import ../stdenv/linux/make-bootstrap-tools.nix { system = "i686-linux"; }) dist test; };
-
+    }) // (lib.optionalAttrs (builtins.elem "x86_64-linux" supportedSystems) {
       stdenvBootstrapTools.x86_64-linux =
         { inherit (import ../stdenv/linux/make-bootstrap-tools.nix { system = "x86_64-linux"; }) dist test; };
-
+    }) // (lib.optionalAttrs (builtins.elem "aarch64-linux" supportedSystems) {
+      stdenvBootstrapTools.aarch64-linux =
+        { inherit (import ../stdenv/linux/make-bootstrap-tools.nix { system = "aarch64-linux"; }) dist test; };
+    }) // (lib.optionalAttrs (builtins.elem "x86_64-darwin" supportedSystems) {
       stdenvBootstrapTools.x86_64-darwin =
         let
           bootstrap = import ../stdenv/darwin/make-bootstrap-tools.nix { system = "x86_64-darwin"; };
@@ -83,8 +100,7 @@ let
           # Test a full stdenv bootstrap from the bootstrap tools definition
           inherit (bootstrap.test-pkgs) stdenv;
         };
-
-    } // (mapTestOn ((packagePlatforms pkgs) // rec {
+    }) // (mapTestOn ((packagePlatforms pkgs) // rec {
       haskell.compiler = packagePlatforms pkgs.haskell.compiler;
       haskellPackages = packagePlatforms pkgs.haskellPackages;
 
@@ -95,6 +111,7 @@ let
       ocamlPackages = { };
       perlPackages = { };
       pythonPackages = {
+        blaze = unix;
         pandas = unix;
         scikitlearn = unix;
       };
@@ -106,6 +123,12 @@ let
         pandas = unix;
         scikitlearn = unix;
       };
+      python36Packages = {
+        blaze = unix;
+        pandas = unix;
+        scikitlearn = unix;
+      };
+
     } ));
 
 in jobs

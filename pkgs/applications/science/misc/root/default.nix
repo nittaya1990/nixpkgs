@@ -1,29 +1,33 @@
 { stdenv, fetchurl, fetchpatch, cmake, pcre, pkgconfig, python2
-, libX11, libXpm, libXft, libXext, zlib, lzma, gsl, Cocoa }:
+, libX11, libXpm, libXft, libXext, mesa, zlib, libxml2, lzma, gsl
+, Cocoa, OpenGL }:
 
 stdenv.mkDerivation rec {
   name = "root-${version}";
-  version = "6.04.18";
+  version = "6.09.02";
 
   src = fetchurl {
     url = "https://root.cern.ch/download/root_v${version}.source.tar.gz";
-    sha256 = "00f3v3l8nimfkcxpn9qpyh3h23na0mi4wkds2y5gwqh8wh3jryq9";
+    sha256 = "0fc6b0l7bw66cyckxs4ikvyzcv1zlfx88205jx153smdhih0jj2k";
   };
 
-  buildInputs = [ cmake pcre pkgconfig python2 zlib lzma gsl ]
-    ++ stdenv.lib.optionals (!stdenv.isDarwin) [ libX11 libXpm libXft libXext ]
-    ++ stdenv.lib.optionals (stdenv.isDarwin) [ Cocoa ]
+  buildInputs = [ cmake pcre pkgconfig python2 zlib libxml2 lzma gsl ]
+    ++ stdenv.lib.optionals (!stdenv.isDarwin) [ libX11 libXpm libXft libXext mesa ]
+    ++ stdenv.lib.optionals (stdenv.isDarwin) [ Cocoa OpenGL ]
     ;
 
   patches = [
-    (fetchpatch {
-      url = "https://github.com/root-mirror/root/commit/ee9964210c56e7c1868618a4434c5340fef38fe4.patch";
-      sha256 = "186i7ni75yvjydy6lpmaplqxfb5z2019bgpbhff1n6zn2qlrff2r";
-    })
     ./sw_vers.patch
 
     # this prevents thisroot.sh from setting $p, which interferes with stdenv setup
     ./thisroot.patch
+
+    # https://sft.its.cern.ch/jira/browse/ROOT-8728
+    (fetchpatch {
+      url = "https://sft.its.cern.ch/jira/secure/attachment/20025/0001-std-string_view-has-no-more-to_string.patch";
+      sha256 = "0ngyk960xfrcsj4vhr1ax8h85fx0g1cfycxi3k35a6ych2zmyg8q";
+    })
+    ./ROOT-8728-extra.patch
   ];
 
   preConfigure = ''
@@ -51,7 +55,7 @@ stdenv.mkDerivation rec {
     "-Dmonalisa=OFF"
     "-Dmysql=OFF"
     "-Dodbc=OFF"
-    "-Dopengl=OFF"
+    "-Dopengl=ON"
     "-Doracle=OFF"
     "-Dpgsql=OFF"
     "-Dpythia6=OFF"
@@ -59,7 +63,7 @@ stdenv.mkDerivation rec {
     "-Drfio=OFF"
     "-Dsqlite=OFF"
     "-Dssl=OFF"
-    "-Dxml=OFF"
+    "-Dxml=ON"
     "-Dxrootd=OFF"
   ]
   ++ stdenv.lib.optional (stdenv.cc.libc != null) "-DC_INCLUDE_DIRS=${stdenv.lib.getDev stdenv.cc.libc}/include";

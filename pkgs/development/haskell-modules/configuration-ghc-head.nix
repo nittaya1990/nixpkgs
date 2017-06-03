@@ -53,7 +53,7 @@ self: super: {
     postPatch = "sed -i -e 's|base < 4.8|base|' hspec-expectations.cabal";
   });
   utf8-string = overrideCabal super.utf8-string (drv: {
-    postPatch = "sed -i -e 's|base >= 3 && < 4.8|base|' utf8-string.cabal";
+    postPatch = "sed -i -e 's|base >= 4.3 && < 4.10|base|' utf8-string.cabal";
   });
 
   # bos/attoparsec#92
@@ -86,4 +86,12 @@ self: super: {
   # Won't work with LLVM 3.5.
   llvm-general = markBrokenVersion "3.4.5.3" super.llvm-general;
 
+  # A bunch of jailbreaks due to 'base' bump
+  old-time = doJailbreak super.old-time;
+  old-locale = doJailbreak super.old-locale;
+  primitive = doJailbreak super.primitive;
+  test-framework = doJailbreak super.test-framework;
+  atomic-primops = doJailbreak (appendPatch super.atomic-primops ./patches/atomic-primops-Cabal-1.25.patch);
+  hashable = doJailbreak super.hashable;
+  stm = doJailbreak super.stm;
 }

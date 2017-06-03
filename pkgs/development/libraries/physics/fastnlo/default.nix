@@ -11,10 +11,16 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ boost lhapdf root yoda ];
 
+  CXXFLAGS="-std=c++11"; # for yoda
+
+  configureFlags = [
+    "--with-yoda=${yoda}"
+  ];
+
   enableParallelBuilding = true;
 
   meta = {
-    descritption = "A computer code to create and evaluate fast interpolation tables of pre-computed coefficients in perturbation theory for observables in hadron-induced processes";
+    description = "A computer code to create and evaluate fast interpolation tables of pre-computed coefficients in perturbation theory for observables in hadron-induced processes";
     license      = stdenv.lib.licenses.gpl3;
     homepage     = http://fastnlo.hepforge.org;
     platforms    = stdenv.lib.platforms.unix;

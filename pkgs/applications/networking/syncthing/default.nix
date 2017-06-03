@@ -1,17 +1,17 @@
-{ stdenv, lib, fetchFromGitHub, go, pkgs }:
+{ stdenv, lib, fetchFromGitHub, go, pkgs, removeReferencesTo }:
 
 stdenv.mkDerivation rec {
-  version = "0.14.18";
+  version = "0.14.28";
   name = "syncthing-${version}";
 
   src = fetchFromGitHub {
     owner  = "syncthing";
     repo   = "syncthing";
     rev    = "v${version}";
-    sha256 = "099r1n9awznv17ac1fm4ff6az40bvk6xxwaw8x8fx7ikqi1wv8vp";
+    sha256 = "0bb4ccyb5rjga651z633abiwlps5gy9hpalr5gi0wlrfxwbdivrb";
   };
 
-  buildInputs = [ go ];
+  buildInputs = [ go removeReferencesTo ];
 
   buildPhase = ''
     mkdir -p src/github.com/syncthing
@@ -25,21 +25,25 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    mkdir -p $out/bin $out/etc/systemd/{system,user}
+    mkdir -p $out/bin $out/lib/systemd/{system,user}
 
     cp bin/* $out/bin
   '' + lib.optionalString (stdenv.isLinux) ''
     substitute etc/linux-systemd/system/syncthing-resume.service \
-               $out/etc/systemd/system/syncthing-resume.service \
+               $out/lib/systemd/system/syncthing-resume.service \
                --replace /usr/bin/pkill ${pkgs.procps}/bin/pkill
 
     substitute etc/linux-systemd/system/syncthing@.service \
-               $out/etc/systemd/system/syncthing@.service \
+               $out/lib/systemd/system/syncthing@.service \
                --replace /usr/bin/syncthing $out/bin/syncthing
 
     substitute etc/linux-systemd/user/syncthing.service \
-               $out/etc/systemd/user/syncthing.service \
+               $out/lib/systemd/user/syncthing.service \
                --replace /usr/bin/syncthing $out/bin/syncthing
+  '';
+
+  preFixup = ''
+    find $out/bin -type f -exec remove-references-to -t ${go} '{}' '+'
   '';
 
   meta = with stdenv.lib; {

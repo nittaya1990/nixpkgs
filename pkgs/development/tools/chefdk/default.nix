@@ -1,12 +1,10 @@
 { stdenv, lib, bundlerEnv, ruby, perl, autoconf }:
 
 bundlerEnv {
-  name = "chefdk-0.11.2";
+  name = "chefdk-1.3.40";
 
   inherit ruby;
-  gemfile = ./Gemfile;
-  lockfile = ./Gemfile.lock;
-  gemset = ./gemset.nix;
+  gemdir = ./.;
 
   buildInputs = [ perl autoconf ];
 

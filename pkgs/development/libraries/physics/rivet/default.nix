@@ -13,6 +13,10 @@ stdenv.mkDerivation rec {
 
   pythonPath = []; # python wrapper support
 
+  patches = [
+    ./darwin.patch # configure relies on impure sw_vers to -Dunix
+  ];
+
   latex = texlive.combine { inherit (texlive)
     scheme-basic
     collection-pstricks
@@ -24,8 +28,8 @@ stdenv.mkDerivation rec {
     xcolor
     xkeyval
     ;};
-  buildInputs = [ ghostscript hepmc imagemagick python2 latex makeWrapper ];
-  propagatedBuildInputs = [ fastjet gsl yoda ];
+  buildInputs = [ hepmc imagemagick python2 latex makeWrapper ];
+  propagatedBuildInputs = [ fastjet ghostscript gsl yoda ];
 
   preInstall = ''
     substituteInPlace bin/make-plots \

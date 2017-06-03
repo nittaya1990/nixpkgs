@@ -1,6 +1,7 @@
 { lib, stdenv, fetchurl, fetchpatch, pkgconfig, libtool
 , bzip2, zlib, libX11, libXext, libXt, fontconfig, freetype, ghostscript, libjpeg
 , lcms2, openexr, libpng, librsvg, libtiff, libxml2, openjpeg, libwebp
+, ApplicationServices
 }:
 
 let
@@ -11,8 +12,8 @@ let
     else throw "ImageMagick is not supported on this platform.";
 
   cfg = {
-    version = "7.0.4-0";
-    sha256 = "0hfkdvfl60f9ksh07c06cpq8ib05apczl767yyvc671gd90n11ds";
+    version = "7.0.5-7";
+    sha256 = "11k53193az0bvdhp4gz2g9p8fb6r5fr1h74dnfx6ijfnfj80hbgp";
     patches = [];
   };
 in
@@ -58,7 +59,7 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optionals (stdenv.cross.libc or null != "msvcrt")
       [ openexr librsvg openjpeg ]
-    ;
+    ++ lib.optional stdenv.isDarwin ApplicationServices;
 
   propagatedBuildInputs =
     [ bzip2 freetype libjpeg lcms2 ]
