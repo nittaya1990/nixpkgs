@@ -42,9 +42,9 @@ foreach my $vlan (split / /, $ENV{VLANS} || "") {
         dup2(fileno($stdoutW), 1);
         if (defined $taps{$vlan}) {
             my $tap = $taps{"$vlan"};
-            exec "vde_switch -s $socket --tap $tap" or _exit(1);
+            exec "vde_switch -s $socket --dirmode 0700 --tap $tap" or _exit(1);
         } else {
-            exec "vde_switch -s $socket" or _exit(1);
+            exec "vde_switch -s $socket --dirmode 0700" or _exit(1);
         }
     }
     close $stdoutW;
