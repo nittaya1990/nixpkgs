@@ -41,7 +41,7 @@ in
         strings.  The latter is concatenated, interspersed with colon
         characters.
       '';
-      type = types.attrsOf (types.loeOf types.str);
+      type = with types; attrsOf (either str (listOf str));
       apply = mapAttrs (n: v: if isList v then concatStringsSep ":" v else v);
     };
 
@@ -55,7 +55,7 @@ in
 
     environment.profileRelativeEnvVars = mkOption {
       type = types.attrsOf (types.listOf types.str);
-      example = { PATH = [ "/bin" "/sbin" ]; MANPATH = [ "/man" "/share/man" ]; };
+      example = { PATH = [ "/bin" ]; MANPATH = [ "/man" "/share/man" ]; };
       description = ''
         Attribute set of environment variable.  Each attribute maps to a list
         of relative paths.  Each relative path is appended to the each profile
@@ -167,9 +167,6 @@ in
          ${exportedEnvVars}
 
          ${cfg.extraInit}
-
-         # The setuid wrappers override other bin directories.
-         export PATH="${config.security.wrapperDir}:$PATH"
 
          # ~/bin if it exists overrides other bin directories.
          export PATH="$HOME/bin:$PATH"

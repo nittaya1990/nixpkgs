@@ -3,12 +3,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "tor-0.2.8.9";
+  name = "tor-0.3.0.8";
 
   src = fetchurl {
-    url = "https://archive.torproject.org/tor-package-archive/${name}.tar.gz";
-    sha256 = "3f5c273bb887be4aff11f4d99b9e2e52d293b81ff4f6302b730161ff16dc5316";
+    url = "https://dist.torproject.org/${name}.tar.gz";
+    sha256 = "0j0dhq1zp6w6zy7y4kiw7zg1imbgv8nsl7imlzwc0951p2kknfk6";
   };
+
+  outputs = [ "out" "geoip" ];
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ libevent openssl zlib ] ++
@@ -22,9 +24,13 @@ stdenv.mkDerivation rec {
       --replace 'exec torsocks' 'exec ${torsocks}/bin/torsocks'
   '';
 
-  # Fails in a sandboxed environment; at some point we want to disable
-  # just the tests that require networking.
-  doCheck = false;
+  postInstall = ''
+    mkdir -p $geoip/share/tor
+    mv $out/share/tor/geoip{,6} $geoip/share/tor
+    rm -rf $out/share/tor
+  '';
+
+  doCheck = true;
 
   meta = with stdenv.lib; {
     homepage = https://www.torproject.org/;

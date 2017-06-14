@@ -176,7 +176,7 @@ in
 
     boot.initrd.availableKernelModules =
       [ # Note: most of these (especially the SATA/PATA modules)
-        # shouldn't be included by default since nixos-hardware-scan
+        # shouldn't be included by default since nixos-generate-config
         # detects them, but I'm keeping them for now for backwards
         # compatibility.
 
@@ -214,8 +214,8 @@ in
         "hid_generic" "hid_lenovo"
         "hid_apple" "hid_logitech_dj" "hid_lenovo_tpkbd" "hid_roccat"
 
-        # Misc. stuff.
-        "pcips2" "atkbd"
+        # Misc. keyboard stuff.
+        "pcips2" "atkbd" "i8042"
 
         # Temporary fix for https://github.com/NixOS/nixpkgs/issues/18451
         # Remove as soon as upstream gets fixed - marking it:

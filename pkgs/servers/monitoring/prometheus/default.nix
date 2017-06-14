@@ -1,8 +1,8 @@
-{ stdenv, lib, go, buildGoPackage, fetchFromGitHub }:
+{ stdenv, go, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   name = "prometheus-${version}";
-  version = "1.1.2";
+  version = "1.5.2";
   rev = "v${version}";
 
   goPackagePath = "github.com/prometheus/prometheus";
@@ -11,7 +11,7 @@ buildGoPackage rec {
     inherit rev;
     owner = "prometheus";
     repo = "prometheus";
-    sha256 = "1k0lfmfkyibjan590wyswr65yr940w8d1zma6k3l2hc025xpi2i4";
+    sha256 = "1b24nx6gmx2c7fj92p2byla3i0zs6xwymxqji00gvgpxr8bsfhn1";
   };
 
   docheck = true;
@@ -36,7 +36,7 @@ buildGoPackage rec {
     description = "Service monitoring system and time series database";
     homepage = http://prometheus.io;
     license = licenses.asl20;
-    maintainers = with maintainers; [ benley ];
+    maintainers = with maintainers; [ benley fpletz ];
     platforms = platforms.unix;
   };
 }

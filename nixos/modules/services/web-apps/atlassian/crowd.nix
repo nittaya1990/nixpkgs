@@ -6,7 +6,12 @@ let
 
   cfg = config.services.crowd;
 
-  pkg = pkgs.atlassian-crowd;
+  pkg = pkgs.atlassian-crowd.override {
+    home = cfg.home;
+    port = cfg.listenPort;
+    proxyUrl = "${cfg.proxy.scheme}://${cfg.proxy.name}:${toString cfg.proxy.port}";
+    openidPassword = cfg.openidPassword;
+  };
 
 in
 
@@ -45,6 +50,11 @@ in
         description = "Port to listen on.";
       };
 
+      openidPassword = mkOption {
+        type = types.str;
+        description = "Application password for OpenID server.";
+      };
+
       catalinaOptions = mkOption {
         type = types.listOf types.str;
         default = [];
@@ -78,7 +88,6 @@ in
         secure = mkOption {
           type = types.bool;
           default = true;
-          example = false;
           description = "Whether the connections to the proxy should be considered secure.";
         };
       };
@@ -119,22 +128,21 @@ in
       };
 
       preStart = ''
-        mkdir -p ${cfg.home}/{logs,work}
+        mkdir -p ${cfg.home}/{logs,work,database}
 
         mkdir -p /run/atlassian-crowd
-        ln -sf ${cfg.home}/{work,server.xml} /run/atlassian-crowd
+        ln -sf ${cfg.home}/{database,work,server.xml} /run/atlassian-crowd
 
         chown -R ${cfg.user} ${cfg.home}
 
         sed -e 's,port="8095",port="${toString cfg.listenPort}" address="${cfg.listenAddress}",' \
         '' + (lib.optionalString cfg.proxy.enable ''
-          -e 's,compression="on",compression="off" protocol="HTTP/1.1" proxyName="${cfg.proxy.name}" proxyPort="${toString cfg.proxy.port}" scheme="${cfg.proxy.scheme}" secure="${toString cfg.proxy.secure}",' \
+          -e 's,compression="on",compression="off" protocol="HTTP/1.1" proxyName="${cfg.proxy.name}" proxyPort="${toString cfg.proxy.port}" scheme="${cfg.proxy.scheme}" secure="${boolToString cfg.proxy.secure}",' \
         '') + ''
           ${pkg}/apache-tomcat/conf/server.xml.dist > ${cfg.home}/server.xml
       '';
 
       script = "${pkg}/start_crowd.sh";
-      #stopScript  = "${pkg}/bin/stop_crowd.sh";
 
       serviceConfig = {
         User = cfg.user;

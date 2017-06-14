@@ -2,7 +2,6 @@
 
 # package customization
 , channel ? "stable"
-, enableSELinux ? false
 , enableNaCl ? false
 , enableHotwording ? false
 , gnomeSupport ? false, gnome ? null
@@ -12,7 +11,7 @@
 , enableWideVine ? false
 , cupsSupport ? true
 , pulseSupport ? false
-, hiDPISupport ? false
+, commandLineArgs ? ""
 }:
 
 let
@@ -22,9 +21,9 @@ let
     upstream-info = (callPackage ./update.nix {}).getChannel channel;
 
     mkChromiumDerivation = callPackage ./common.nix {
-      inherit enableSELinux enableNaCl enableHotwording gnomeSupport gnome
+      inherit enableNaCl enableHotwording gnomeSupport gnome
               gnomeKeyringSupport proprietaryCodecs cupsSupport pulseSupport
-              hiDPISupport;
+              enableWideVine;
     };
 
     browser = callPackage ./browser.nix { inherit channel; };
@@ -77,14 +76,15 @@ in stdenv.mkDerivation {
     mkdir -p "$out/bin"
 
     eval makeWrapper "${browserBinary}" "$out/bin/chromium" \
+      ${commandLineArgs} \
       ${concatMapStringsSep " " getWrapperFlags chromium.plugins.enabled}
 
     ed -v -s "$out/bin/chromium" << EOF
     2i
 
-    if [ -x "/var/setuid-wrappers/${sandboxExecutableName}" ]
+    if [ -x "/run/wrappers/bin/${sandboxExecutableName}" ]
     then
-      export CHROME_DEVEL_SANDBOX="/var/setuid-wrappers/${sandboxExecutableName}"
+      export CHROME_DEVEL_SANDBOX="/run/wrappers/bin/${sandboxExecutableName}"
     else
       export CHROME_DEVEL_SANDBOX="$sandbox/bin/${sandboxExecutableName}"
     fi
@@ -107,7 +107,7 @@ in stdenv.mkDerivation {
     cp -v "${desktopItem}/share/applications/"* "$out/share/applications"
   '';
 
-  inherit (chromium.browser) meta packageName;
+  inherit (chromium.browser) meta packageName version;
 
   passthru = {
     inherit (chromium) upstream-info browser;

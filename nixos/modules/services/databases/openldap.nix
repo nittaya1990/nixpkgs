@@ -25,7 +25,6 @@ in
         description = "
           Whether to enable the ldap server.
         ";
-        example = true;
       };
 
       user = mkOption {
@@ -53,6 +52,13 @@ in
         description = "The database directory.";
       };
 
+      configDir = mkOption {
+        type = types.nullOr types.path;
+        default = null;
+        description = "Use this optional config directory instead of using slapd.conf";
+        example = "/var/db/slapd.d";
+      };
+
       extraConfig = mkOption {
         type = types.lines;
         default = "";
@@ -61,10 +67,10 @@ in
         ";
         example = literalExample ''
             '''
-            include ${pkgs.openldap.out}/etc/openldap/schema/core.schema
-            include ${pkgs.openldap.out}/etc/openldap/schema/cosine.schema
-            include ${pkgs.openldap.out}/etc/openldap/schema/inetorgperson.schema
-            include ${pkgs.openldap.out}/etc/openldap/schema/nis.schema
+            include ${pkgs.openldap.out}/etc/schema/core.schema
+            include ${pkgs.openldap.out}/etc/schema/cosine.schema
+            include ${pkgs.openldap.out}/etc/schema/inetorgperson.schema
+            include ${pkgs.openldap.out}/etc/schema/nis.schema
 
             database bdb 
             suffix dc=example,dc=org 
@@ -96,7 +102,7 @@ in
         mkdir -p ${cfg.dataDir}
         chown -R ${cfg.user}:${cfg.group} ${cfg.dataDir}
       '';
-      serviceConfig.ExecStart = "${openldap.out}/libexec/slapd -u ${cfg.user} -g ${cfg.group} -d 0 -h \"${concatStringsSep " " cfg.urlList}\" -f ${configFile}";
+      serviceConfig.ExecStart = "${openldap.out}/libexec/slapd -u ${cfg.user} -g ${cfg.group} -d 0 -h \"${concatStringsSep " " cfg.urlList}\" ${if cfg.configDir == null then "-f "+configFile else "-F "+cfg.configDir}";
     };
 
     users.extraUsers.openldap =

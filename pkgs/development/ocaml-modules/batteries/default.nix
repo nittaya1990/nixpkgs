@@ -1,13 +1,13 @@
 { stdenv, fetchzip, ocaml, findlib, ocamlbuild, qtest }:
 
-let version = "2.5.2"; in
+let version = "2.6.0"; in
 
 stdenv.mkDerivation {
   name = "ocaml-batteries-${version}";
 
   src = fetchzip {
     url = "https://github.com/ocaml-batteries-team/batteries-included/archive/v${version}.tar.gz";
-    sha256 = "01v7sp8vsqlfrmpji5pkrsjl43r3q8hk1a4z4lmyy9y2i0fqwl07";
+    sha256 = "1nnypfxm3zkahjkzll5qn4ngpqvbxlwg9qdp8qdqvq2vl76w0672";
   };
 
   buildInputs = [ ocaml findlib ocamlbuild qtest ];

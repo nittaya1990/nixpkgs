@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   name    = "luajit-${version}";
-  version = "2.1.0-beta1";
+  version = "2.1.0-beta3";
   luaversion = "5.1";
 
   src = fetchurl {
     url    = "http://luajit.org/download/LuaJIT-${version}.tar.gz";
-    sha256 = "06170d38387c59d1292001a166e7f5524f5c5deafa8705a49a46fa42905668dd";
+    sha256 = "1hyrhpkwjqsv54hnnx4cl8vk44h9d6c9w0fz1jfjz00w255y7lhs";
   };
 
   enableParallelBuilding = true;

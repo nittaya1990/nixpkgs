@@ -1,11 +1,11 @@
 { stdenv, fetchurl, openssl, curl, coreutils, gawk, bash, which }:
 
-stdenv.mkDerivation {
-  name = "esniper-2.31.0";
+stdenv.mkDerivation rec {
+  name = "esniper-2.33.0";
 
   src = fetchurl {
-    url    = "mirror://sourceforge/esniper/esniper-2-31-0.tgz";
-    sha256 = "0xn6gdyr0c18khwcsi2brp49wkancrsrxxca7hvbawhbf263glih";
+    url    = "mirror://sourceforge/esniper/${stdenv.lib.replaceStrings ["."] ["-"] name}.tgz";
+    sha256 = "1pck2x7mp7ip0b21v2sjvq86fz12gzw6kig4vvbrghz5xw5b3f69";
   };
 
   buildInputs = [ openssl curl ];

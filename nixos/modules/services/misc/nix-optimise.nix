@@ -26,7 +26,7 @@ in
         description = ''
           Specification (in the format described by
           <citerefentry><refentrytitle>systemd.time</refentrytitle>
-          <manvolnum>5</manvolnum></citerefentry>) of the time at
+          <manvolnum>7</manvolnum></citerefentry>) of the time at
           which the optimiser will run.
         '';
       };
@@ -41,7 +41,7 @@ in
     systemd.services.nix-optimise =
       { description = "Nix Store Optimiser";
         serviceConfig.ExecStart = "${config.nix.package}/bin/nix-store --optimise";
-        startAt = optional cfg.automatic cfg.dates;
+        startAt = optionals cfg.automatic cfg.dates;
       };
 
   };

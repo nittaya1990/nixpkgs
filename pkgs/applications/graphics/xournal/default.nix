@@ -1,8 +1,13 @@
-{ stdenv, fetchurl
+{ stdenv, fetchurl, makeDesktopItem
 , ghostscript, atk, gtk2, glib, fontconfig, freetype
 , libgnomecanvas, libgnomeprint, libgnomeprintui
 , pango, libX11, xproto, zlib, poppler
 , autoconf, automake, libtool, pkgconfig}:
+
+let
+  isGdkQuartzBackend = (gtk2.gdktarget == "quartz");
+in
+
 stdenv.mkDerivation rec {
   version = "0.4.8";
   name = "xournal-" + version;
@@ -13,19 +18,52 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     ghostscript atk gtk2 glib fontconfig freetype
-    libgnomecanvas libgnomeprint libgnomeprintui
+    libgnomecanvas
     pango libX11 xproto zlib poppler
+  ] ++ stdenv.lib.optionals (!stdenv.isDarwin) [
+    libgnomeprint libgnomeprintui
   ];
 
   nativeBuildInputs = [ autoconf automake libtool pkgconfig ];
 
-  NIX_LDFLAGS = [ "-lX11" "-lz" ];
+  patches = stdenv.lib.optionals isGdkQuartzBackend [
+    ./gdk-quartz-backend.patch
+  ];
 
-  meta = {
+  NIX_LDFLAGS = [ "-lz" ]
+    ++ stdenv.lib.optionals (!isGdkQuartzBackend) [ "-lX11" ];
+
+  desktopItem = makeDesktopItem {
+    name = name;
+    exec = "xournal";
+    icon = "xournal";
+    desktopName = "Xournal";
+    comment = meta.description;
+    categories = "Office;Graphics;";
+    mimeType = "application/pdf;application/x-xoj";
+    genericName = "PDF Editor";
+  };
+
+  postInstall=''
+      mkdir --parents $out/share/mime/packages
+      cat << EOF > $out/share/mime/packages/xournal.xml
+      <mime-info xmlns='http://www.freedesktop.org/standards/shared-mime-info'>
+         <mime-type type="application/x-xoj">
+          <comment>Xournal Document</comment>
+          <glob pattern="*.xoj"/>
+         </mime-type>
+      </mime-info>
+      EOF
+      cp --recursive ${desktopItem}/share/applications $out/share
+      mkdir --parents $out/share/icons
+      cp $out/share/xournal/pixmaps/xournal.png $out/share/icons
+  '';
+
+  meta = with stdenv.lib; {
     homepage = http://xournal.sourceforge.net/;
     description = "Note-taking application (supposes stylus)";
-    maintainers = [ stdenv.lib.maintainers.guibert ];
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
+    maintainers = [ maintainers.guibert ];
+    license = licenses.gpl2;
+    platforms = with platforms; linux ++ darwin;
   };
 }

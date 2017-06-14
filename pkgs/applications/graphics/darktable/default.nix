@@ -11,12 +11,12 @@
 assert stdenv ? glibc;
 
 stdenv.mkDerivation rec {
-  version = "2.0.6";
+  version = "2.2.4";
   name = "darktable-${version}";
 
   src = fetchurl {
     url = "https://github.com/darktable-org/darktable/releases/download/release-${version}/darktable-${version}.tar.xz";
-    sha256 = "1h9qwxyvcv0fc6y5b6l2x4jd5mmw026blhjkcihj00r1aa3c2s13";
+    sha256 = "1n7rddkxwcifc3kcdlnar9w562xv4h78fqkkn27jihqzp3b4am5x";
   };
 
   buildInputs =
@@ -33,6 +33,16 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DBUILD_USERMANUAL=False"
   ];
+
+  # darktable changed its rpath handling in commit
+  # 83c70b876af6484506901e6b381304ae0d073d3c and as a result the
+  # binaries can't find libdarktable.so, so change LD_LIBRARY_PATH in
+  # the wrappers:
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --prefix LD_LIBRARY_PATH ":" "$out/lib/darktable"
+    )
+  '';
 
   meta = with stdenv.lib; {
     description = "Virtual lighttable and darkroom for photographers";

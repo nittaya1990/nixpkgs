@@ -1,18 +1,18 @@
 { stdenv, fetchurl, perl, buildLinux, ... } @ args:
 
 import ./generic.nix (args // rec {
-  mptcpVersion = "0.91";
-  modDirVersion = "4.1.26";
+  mptcpVersion = "0.91.3";
+  modDirVersion = "4.1.38";
   version = "${modDirVersion}-mptcp_v${mptcpVersion}";
 
   extraMeta = {
     branch = "4.1";
-    maintainers = stdenv.lib.maintainers.layus;
+    maintainers = [ stdenv.lib.maintainers.layus ];
   };
 
   src = fetchurl {
     url = "https://github.com/multipath-tcp/mptcp/archive/v${mptcpVersion}.tar.gz";
-    sha256 = "0rbvgz89j5wk781y201qdxy2kz4gmlamb72wdbxj8mxv92x56lh3";
+    sha256 = "0vqjnkzcbbvyq24w3cryfmw7hhws1xqkkxqcv71szkbqqs6mcr14";
   };
 
   kernelPatches = args.kernelPatches;
@@ -46,6 +46,5 @@ import ./generic.nix (args // rec {
   features.iwlwifi = true;
   features.efiBootStub = true;
   features.needsCifsUtils = true;
-  features.canDisableNetfilterConntrackHelpers = true;
   features.netfilterRPFilter = true;
 } // (args.argsOverride or {}))

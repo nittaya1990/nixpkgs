@@ -1,15 +1,13 @@
 { stdenv, fetchurl, kernel }:
 
-#assert stdenv.lib.versionOlder kernel.version "3.17";
-
-let base = "batman-adv-2016.3"; in
+let base = "batman-adv-2017.1"; in
 
 stdenv.mkDerivation rec {
   name = "${base}-${kernel.version}";
 
   src = fetchurl {
     url = "http://downloads.open-mesh.org/batman/releases/${base}/${base}.tar.gz";
-    sha256 = "0rzhgj0g2hwlrzr8l9ymj6s60vk2zpk1a8x1lm4lhnhsqs9qj4kf";
+    sha256 = "05cck0mlg8xsvbra69x6i25xclsq1xc49dggxq81gi086c14h67c";
   };
 
   hardeningDisable = [ "pic" ];
@@ -26,6 +24,5 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.gpl2;
     maintainers = with stdenv.lib.maintainers; [ viric fpletz ];
     platforms = with stdenv.lib.platforms; linux;
-    broken = (kernel.features.grsecurity or false);
   };
 }

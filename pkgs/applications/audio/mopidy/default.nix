@@ -5,24 +5,24 @@
 pythonPackages.buildPythonApplication rec {
   name = "mopidy-${version}";
 
-  version = "2.0.1";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "mopidy";
     repo = "mopidy";
     rev = "v${version}";
-    sha256 = "15i17rj2bh2kda6d6rwcjhs2m3nfsrcyq3lj9vbgmacg0cdb22pp";
+    sha256 = "0krq5fbscqxayyc4vxai7iwxm2kdbgs5jicrdb013v04phw2za06";
   };
 
   nativeBuildInputs = [ wrapGAppsHook ];
 
   buildInputs = with gst_all_1; [
-    gst-plugins-base gst-plugins-good gst-plugins-ugly
+    gst-plugins-base gst-plugins-good gst-plugins-ugly gst-plugins-bad
     glib_networking gobjectIntrospection
   ];
 
   propagatedBuildInputs = with pythonPackages; [
-    gst-python pygobject3 pykka tornado requests2 dbus-python
+    gst-python pygobject3 pykka tornado requests dbus-python
   ];
 
   # There are no tests

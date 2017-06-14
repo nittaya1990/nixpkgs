@@ -14,11 +14,11 @@ let
     (assertOnlyFields [
       "Boot" "ProcessTwo" "Parameters" "Environment" "User" "WorkingDirectory"
       "Capability" "DropCapability" "KillSignal" "Personality" "MachineId"
-      "PrivateUsers"
+      "PrivateUsers" "NotifyReady"
     ])
     (assertValueOneOf "Boot" boolValues)
     (assertValueOneOf "ProcessTwo" boolValues)
-    (assertValueOneOf "PrivateUsers" (boolValues ++ [ "pick" ]))
+    (assertValueOneOf "NotifyReady" boolValues)
   ];
 
   checkFiles = checkUnitConfig "Files" [
@@ -41,57 +41,60 @@ let
   ];
 
   instanceOptions = {
+    options = sharedOptions // {
+      execConfig = mkOption {
+        default = {};
+        example = { Parameters = "/bin/sh"; };
+        type = types.addCheck (types.attrsOf unitOption) checkExec;
+        description = ''
+          Each attribute in this set specifies an option in the
+          <literal>[Exec]</literal> section of this unit. See
+          <citerefentry><refentrytitle>systemd.nspawn</refentrytitle>
+          <manvolnum>5</manvolnum></citerefentry> for details.
+        '';
+      };
 
-    execConfig = mkOption {
-      default = {};
-      example = { Parameters = "/bin/sh"; };
-      type = types.addCheck (types.attrsOf unitOption) checkExec;
-      description = ''
-        Each attribute in this set specifies an option in the
-        <literal>[Exec]</literal> section of this unit. See
-        <citerefentry><refentrytitle>systemd.nspawn</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
-      '';
-    };
+      filesConfig = mkOption {
+        default = {};
+        example = { Bind = [ "/home/alice" ]; };
+        type = types.addCheck (types.attrsOf unitOption) checkFiles;
+        description = ''
+          Each attribute in this set specifies an option in the
+          <literal>[Files]</literal> section of this unit. See
+          <citerefentry><refentrytitle>systemd.nspawn</refentrytitle>
+          <manvolnum>5</manvolnum></citerefentry> for details.
+        '';
+      };
 
-    filesConfig = mkOption {
-      default = {};
-      example = { Bind = [ "/home/alice" ]; };
-      type = types.addCheck (types.attrsOf unitOption) checkFiles;
-      description = ''
-        Each attribute in this set specifies an option in the
-        <literal>[Files]</literal> section of this unit. See
-        <citerefentry><refentrytitle>systemd.nspawn</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
-      '';
-    };
-
-    networkConfig = mkOption {
-      default = {};
-      example = { Private = false; };
-      type = types.addCheck (types.attrsOf unitOption) checkNetwork;
-      description = ''
-        Each attribute in this set specifies an option in the
-        <literal>[Network]</literal> section of this unit. See
-        <citerefentry><refentrytitle>systemd.nspawn</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
-      '';
+      networkConfig = mkOption {
+        default = {};
+        example = { Private = false; };
+        type = types.addCheck (types.attrsOf unitOption) checkNetwork;
+        description = ''
+          Each attribute in this set specifies an option in the
+          <literal>[Network]</literal> section of this unit. See
+          <citerefentry><refentrytitle>systemd.nspawn</refentrytitle>
+          <manvolnum>5</manvolnum></citerefentry> for details.
+        '';
+      };
     };
 
   };
 
-  instanceToUnit = name: def: 
-    { text = ''
-      [Exec]
-      ${attrsToSection def.execConfig}
+  instanceToUnit = name: def:
+    let base = {
+      text = ''
+        [Exec]
+        ${attrsToSection def.execConfig}
 
-      [Files]
-      ${attrsToSection def.filesConfig}
+        [Files]
+        ${attrsToSection def.filesConfig}
 
-      [Network]
-      ${attrsToSection def.networkConfig}
-    '';
-    };
+        [Network]
+        ${attrsToSection def.networkConfig}
+      '';
+    } // def;
+    in base // { unit = makeUnit name base; };
 
 in {
 
@@ -99,8 +102,7 @@ in {
 
     systemd.nspawn = mkOption {
       default = {};
-      type = types.attrsOf types.optionSet;
-      options = [ instanceOptions ];
+      type = with types; attrsOf (submodule instanceOptions);
       description = "Definition of systemd-nspawn configurations.";
     };
 
@@ -108,7 +110,7 @@ in {
 
   config =
     let
-      units = mapAttrs' (n: v: nameValuePair "${n}.nspawn" (instanceToUnit n v)) cfg.instances;
+      units = mapAttrs' (n: v: nameValuePair "${n}.nspawn" (instanceToUnit n v)) cfg;
     in mkIf (cfg != {}) {
 
       environment.etc."systemd/nspawn".source = generateUnits "nspawn" units [] [];

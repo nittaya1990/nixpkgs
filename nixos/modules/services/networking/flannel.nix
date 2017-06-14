@@ -20,6 +20,7 @@ in {
       description = "Package to use for flannel";
       type = types.package;
       default = pkgs.flannel.bin;
+      defaultText = "pkgs.flannel.bin";
     };
 
     publicIp = mkOption {
@@ -148,6 +149,6 @@ in {
       serviceConfig.ExecStart = "${cfg.package}/bin/flannel";
     };
 
-    services.etcd.enable = mkDefault cfg.etcd.endpoints == ["http://127.0.0.1:2379"];
+    services.etcd.enable = mkDefault (cfg.etcd.endpoints == ["http://127.0.0.1:2379"]);
   };
 }

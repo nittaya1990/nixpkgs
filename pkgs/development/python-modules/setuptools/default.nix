@@ -1,17 +1,23 @@
-{ stdenv, lib, fetchurl, python, wrapPython }:
+{ stdenv
+, fetchPypi
+, python
+, wrapPython
+, unzip
+}:
 
+# Should use buildPythonPackage here somehow
 stdenv.mkDerivation rec {
-  shortName = "setuptools-${version}";
-  name = "${python.libPrefix}-${shortName}";
+  pname = "setuptools";
+  version = "36.0.1";
+  name = "${python.libPrefix}-${pname}-${version}";
 
-  version = "26.1.1";  # 18.4 and up breaks python34Packages.characteristic and many others
-
-  src = fetchurl {
-    url = "mirror://pypi/s/setuptools/${shortName}.tar.gz";
-    sha256 = "475ce28993d7cb75335942525b9fac79f7431a7f6e8a0079c0f2680641379481";
+  src = fetchPypi {
+    inherit pname version;
+    extension = "zip";
+    sha256 = "e17c4687fddd6d70a6604ac0ad25e33324cec71b5137267dd5c45e103c4b288a";
   };
 
-  buildInputs = [ python wrapPython ];
+  buildInputs = [ python wrapPython unzip ];
   doCheck = false;  # requires pytest
   installPhase = ''
       dst=$out/${python.sitePackages}
@@ -26,7 +32,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Utilities to facilitate the installation of Python packages";
     homepage = http://pypi.python.org/pypi/setuptools;
-    license = with lib.licenses; [ psfl zpt20 ];
+    license = with licenses; [ psfl zpt20 ];
     platforms = platforms.all;
     priority = 10;
   };

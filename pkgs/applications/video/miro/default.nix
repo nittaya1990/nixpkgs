@@ -2,7 +2,7 @@
 , pythonPackages, pyrex096, ffmpeg, boost, glib, gtk2, webkitgtk2, libsoup
 , taglib, sqlite
 , libtorrentRasterbar, glib_networking, gsettings_desktop_schemas
-, gst_python, gst_plugins_base, gst_plugins_good, gst_ffmpeg
+, gst-python, gst-plugins-base, gst-plugins-good, gst-ffmpeg
 , enableBonjour ? false, avahi ? null
 }:
 
@@ -75,9 +75,9 @@ in buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = with pythonPackages; [
-    pygobject2 pygtk pycurl sqlite3 mutagen pycairo dbus-python
+    pygobject2 pygtk pycurl mutagen pycairo dbus-python
     pywebkitgtk] ++ [ libtorrentRasterbar
-    gst_python gst_plugins_base gst_plugins_good gst_ffmpeg
+    gst-python gst-plugins-base gst-plugins-good gst-ffmpeg
   ] ++ optional enableBonjour avahi;
 
   meta = {

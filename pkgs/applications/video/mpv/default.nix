@@ -31,6 +31,7 @@
 , libpngSupport      ? true,  libpng        ? null
 , youtubeSupport     ? true,  youtube-dl    ? null
 , vaapiSupport       ? true,  libva         ? null
+, drmSupport         ? !stdenv.isDarwin,  libdrm        ? null
 , vapoursynthSupport ? false, vapoursynth   ? null
 , jackaudioSupport   ? false, libjack2      ? null
 
@@ -65,6 +66,7 @@ assert youtubeSupport     -> available youtube-dl;
 assert vapoursynthSupport -> available vapoursynth;
 assert jackaudioSupport   -> available libjack2;
 assert vaapiSupport       -> available libva;
+assert drmSupport         -> available libdrm;
 
 let
   # Purity: Waf is normally downloaded by bootstrap.py, but
@@ -77,13 +79,13 @@ let
   };
 in stdenv.mkDerivation rec {
   name = "mpv-${version}";
-  version = "0.20.0";
+  version = "0.25.0";
 
   src = fetchFromGitHub {
     owner = "mpv-player";
     repo  = "mpv";
     rev    = "v${version}";
-    sha256 = "0zp852b505lr2gllqylg2xrc8sgw9b1xjn1c7px36hzddny15c16";
+    sha256 = "16r3fyq472hzxnh6g3gm520pmw1ybslaki3pqjm2d9jnd2md1pa5";
   };
 
   patchPhase = ''
@@ -112,7 +114,9 @@ in stdenv.mkDerivation rec {
   buildInputs = [
     ffmpeg freetype libass libpthreadstubs
     lua lua5_sockets libuchardet
-  ] ++ optional alsaSupport        alsaLib
+  ] ++ optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+       libiconv Cocoa CoreAudio ])
+    ++ optional alsaSupport        alsaLib
     ++ optional xvSupport          libXv
     ++ optional theoraSupport      libtheora
     ++ optional xineramaSupport    libXinerama
@@ -120,9 +124,6 @@ in stdenv.mkDerivation rec {
     ++ optional bluraySupport      libbluray
     ++ optional jackaudioSupport   libjack2
     ++ optional pulseSupport       libpulseaudio
-    ++ optional stdenv.isDarwin    libiconv
-    ++ optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
-       Cocoa CoreAudio ])
     ++ optional rubberbandSupport  rubberband
     ++ optional screenSaverSupport libXScrnSaver
     ++ optional vdpauSupport       libvdpau
@@ -133,6 +134,7 @@ in stdenv.mkDerivation rec {
     ++ optional sdl2Support        SDL2
     ++ optional cacaSupport        libcaca
     ++ optional vaapiSupport       libva
+    ++ optional drmSupport         libdrm
     ++ optional vapoursynthSupport vapoursynth
     ++ optionals dvdnavSupport     [ libdvdnav libdvdnav.libdvdread ]
     ++ optionals x11Support        [ libX11 libXext mesa libXxf86vm ]
@@ -157,13 +159,18 @@ in stdenv.mkDerivation rec {
       --prefix PATH : "${youtube-dl}/bin" \
   '' + optionalString vapoursynthSupport ''
       --prefix PYTHONPATH : "$(toPythonPath ${vapoursynth}):$PYTHONPATH"
+  '' + ''
+
+    cp TOOLS/umpv $out/bin
+    wrapProgram $out/bin/umpv \
+      --set MPV "$out/bin/mpv"
   '';
 
   meta = with stdenv.lib; {
     description = "A media player that supports many video formats (MPlayer and mplayer2 fork)";
     homepage = http://mpv.io;
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ AndersonTorres fuuzetsu ];
+    maintainers = with maintainers; [ AndersonTorres fuuzetsu fpletz ];
     platforms = platforms.darwin ++ platforms.linux;
 
     longDescription = ''

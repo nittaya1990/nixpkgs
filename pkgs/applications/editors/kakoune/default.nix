@@ -3,24 +3,20 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "kakoune-nightly-${version}";
-  version = "2016-07-26";
+  name = "kakoune-unstable-${version}";
+  version = "2017-04-12";
   src = fetchFromGitHub {
     repo = "kakoune";
     owner = "mawww";
-    rev = "0d2c5072b083a893843e4fa87f9f702979069e14";
-    sha256 = "01qqs5yr9xvvklg3gg45lgnyh6gji28m854mi1snzvjd7fksf50n";
+    rev = "7482d117cc85523e840dff595134dcb9cdc62207";
+    sha256 = "08j611y192n9vln9i94ldlvz3k0sg79dkmfc0b1vczrmaxhpgpfh";
   };
   buildInputs = [ ncurses boost asciidoc docbook_xsl libxslt ];
 
-  buildPhase = ''
-    sed -ie 's#--no-xmllint#--no-xmllint --xsltproc-opts="--nonet"#g' src/Makefile
+  postPatch = ''
     export PREFIX=$out
-    (cd src && make )
-  '';
-
-  installPhase = ''
-    (cd src && make install)
+    cd src
+    sed -ie 's#--no-xmllint#--no-xmllint --xsltproc-opts="--nonet"#g' Makefile
   '';
 
   meta = {
@@ -28,6 +24,6 @@ stdenv.mkDerivation rec {
     description = "A vim inspired text editor";
     license = licenses.publicDomain;
     maintainers = with maintainers; [ vrthra ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

@@ -5,16 +5,19 @@ with lib;
 let
   cfg = config.services.matrix-synapse;
   logConfigFile = pkgs.writeText "log_config.yaml" cfg.logConfig;
-  mkResource = r: ''{names: ${builtins.toJSON r.names}, compress: ${fromBool r.compress}}'';
-  mkListener = l: ''{port: ${toString l.port}, bind_address: "${l.bind_address}", type: ${l.type}, tls: ${fromBool l.tls}, x_forwarded: ${fromBool l.x_forwarded}, resources: [${concatStringsSep "," (map mkResource l.resources)}]}'';
-  fromBool = x: if x then "true" else "false";
+  mkResource = r: ''{names: ${builtins.toJSON r.names}, compress: ${boolToString r.compress}}'';
+  mkListener = l: ''{port: ${toString l.port}, bind_address: "${l.bind_address}", type: ${l.type}, tls: ${boolToString l.tls}, x_forwarded: ${boolToString l.x_forwarded}, resources: [${concatStringsSep "," (map mkResource l.resources)}]}'';
   configFile = pkgs.writeText "homeserver.yaml" ''
+${optionalString (cfg.tls_certificate_path != null) ''
 tls_certificate_path: "${cfg.tls_certificate_path}"
+''}
 ${optionalString (cfg.tls_private_key_path != null) ''
 tls_private_key_path: "${cfg.tls_private_key_path}"
 ''}
+${optionalString (cfg.tls_dh_params_path != null) ''
 tls_dh_params_path: "${cfg.tls_dh_params_path}"
-no_tls: ${fromBool cfg.no_tls}
+''}
+no_tls: ${boolToString cfg.no_tls}
 ${optionalString (cfg.bind_port != null) ''
 bind_port: ${toString cfg.bind_port}
 ''}
@@ -26,7 +29,7 @@ bind_host: "${cfg.bind_host}"
 ''}
 server_name: "${cfg.server_name}"
 pid_file: "/var/run/matrix-synapse.pid"
-web_client: ${fromBool cfg.web_client}
+web_client: ${boolToString cfg.web_client}
 ${optionalString (cfg.public_baseurl != null) ''
 public_baseurl: "${cfg.public_baseurl}"
 ''}
@@ -54,14 +57,19 @@ media_store_path: "/var/lib/matrix-synapse/media"
 uploads_path: "/var/lib/matrix-synapse/uploads"
 max_upload_size: "${cfg.max_upload_size}"
 max_image_pixels: "${cfg.max_image_pixels}"
-dynamic_thumbnails: ${fromBool cfg.dynamic_thumbnails}
-url_preview_enabled: False
+dynamic_thumbnails: ${boolToString cfg.dynamic_thumbnails}
+url_preview_enabled: ${boolToString cfg.url_preview_enabled}
+${optionalString (cfg.url_preview_enabled == true) ''
+url_preview_ip_range_blacklist: ${builtins.toJSON cfg.url_preview_ip_range_blacklist}
+url_preview_ip_range_whitelist: ${builtins.toJSON cfg.url_preview_ip_range_whitelist}
+url_preview_url_blacklist: ${builtins.toJSON cfg.url_preview_url_blacklist}
+''}
 recaptcha_private_key: "${cfg.recaptcha_private_key}"
 recaptcha_public_key: "${cfg.recaptcha_public_key}"
-enable_registration_captcha: ${fromBool cfg.enable_registration_captcha}
+enable_registration_captcha: ${boolToString cfg.enable_registration_captcha}
 turn_uris: ${builtins.toJSON cfg.turn_uris}
 turn_shared_secret: "${cfg.turn_shared_secret}"
-enable_registration: ${fromBool cfg.enable_registration}
+enable_registration: ${boolToString cfg.enable_registration}
 ${optionalString (cfg.registration_shared_secret != null) ''
 registration_shared_secret: "${cfg.registration_shared_secret}"
 ''}
@@ -69,15 +77,15 @@ recaptcha_siteverify_api: "https://www.google.com/recaptcha/api/siteverify"
 turn_user_lifetime: "${cfg.turn_user_lifetime}"
 user_creation_max_duration: ${cfg.user_creation_max_duration}
 bcrypt_rounds: ${cfg.bcrypt_rounds}
-allow_guest_access: ${fromBool cfg.allow_guest_access}
+allow_guest_access: ${boolToString cfg.allow_guest_access}
 trusted_third_party_id_servers: ${builtins.toJSON cfg.trusted_third_party_id_servers}
 room_invite_state_types: ${builtins.toJSON cfg.room_invite_state_types}
 ${optionalString (cfg.macaroon_secret_key != null) ''
   macaroon_secret_key: "${cfg.macaroon_secret_key}"
 ''}
-expire_access_token: ${fromBool cfg.expire_access_token}
-enable_metrics: ${fromBool cfg.enable_metrics}
-report_stats: ${fromBool cfg.report_stats}
+expire_access_token: ${boolToString cfg.expire_access_token}
+enable_metrics: ${boolToString cfg.enable_metrics}
+report_stats: ${boolToString cfg.report_stats}
 signing_key_path: "/var/lib/matrix-synapse/homeserver.signing.key"
 key_refresh_interval: "${cfg.key_refresh_interval}"
 perspectives:
@@ -146,8 +154,9 @@ in {
         '';
       };
       tls_certificate_path = mkOption {
-        type = types.str;
-        default = "/var/lib/matrix-synapse/homeserver.tls.crt";
+        type = types.nullOr types.str;
+        default = null;
+        example = "/var/lib/matrix-synapse/homeserver.tls.crt";
         description = ''
           PEM encoded X509 certificate for TLS.
           You can replace the self-signed certificate that synapse
@@ -158,16 +167,17 @@ in {
       };
       tls_private_key_path = mkOption {
         type = types.nullOr types.str;
-        default = "/var/lib/matrix-synapse/homeserver.tls.key";
-        example = null;
+        default = null;
+        example = "/var/lib/matrix-synapse/homeserver.tls.key";
         description = ''
           PEM encoded private key for TLS. Specify null if synapse is not
           speaking TLS directly.
         '';
       };
       tls_dh_params_path = mkOption {
-        type = types.str;
-        default = "/var/lib/matrix-synapse/homeserver.tls.dh";
+        type = types.nullOr types.str;
+        default = null;
+        example = "/var/lib/matrix-synapse/homeserver.tls.dh";
         description = ''
           PEM dh parameters for ephemeral keys
         '';
@@ -348,6 +358,47 @@ in {
         type = types.str;
         default = "10K";
         description = "Number of events to cache in memory.";
+      };
+      url_preview_enabled = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Is the preview URL API enabled?  If enabled, you *must* specify an
+          explicit url_preview_ip_range_blacklist of IPs that the spider is
+          denied from accessing.
+        '';
+      };
+      url_preview_ip_range_blacklist = mkOption {
+        type = types.listOf types.str;
+        default = [];
+        description = ''
+          List of IP address CIDR ranges that the URL preview spider is denied
+          from accessing.
+        '';
+      };
+      url_preview_ip_range_whitelist = mkOption {
+        type = types.listOf types.str;
+        default = [];
+        description = ''
+          List of IP address CIDR ranges that the URL preview spider is allowed
+          to access even if they are specified in
+          url_preview_ip_range_blacklist.
+        '';
+      };
+      url_preview_url_blacklist = mkOption {
+        type = types.listOf types.str;
+        default = [
+          "127.0.0.0/8"
+          "10.0.0.0/8"
+          "172.16.0.0/12"
+          "192.168.0.0/16"
+          "100.64.0.0/10"
+          "169.254.0.0/16"
+        ];
+        description = ''
+          Optional list of URL matches that the URL preview spider is
+          denied from accessing.
+        '';
       };
       recaptcha_private_key = mkOption {
         type = types.str;
@@ -554,19 +605,14 @@ in {
       } ];
 
     systemd.services.matrix-synapse = {
+      description = "Synapse Matrix homeserver";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       preStart = ''
-        if ! test -e /var/lib/matrix-synapse; then
-          mkdir -p /var/lib/matrix-synapse
-          chmod 700 /var/lib/matrix-synapse
-          chown -R matrix-synapse:matrix-synapse /var/lib/matrix-synapse
-          ${cfg.package}/bin/homeserver \
-            --config-path ${configFile} \
-            --keys-directory /var/lib/matrix-synapse/ \
-            --generate-keys \
-            --report-stats ${if cfg.report_stats then "yes" else "no"}
-        fi
+        ${cfg.package}/bin/homeserver \
+          --config-path ${configFile} \
+          --keys-directory /var/lib/matrix-synapse \
+          --generate-keys
       '';
       serviceConfig = {
         Type = "simple";
@@ -574,7 +620,8 @@ in {
         Group = "matrix-synapse";
         WorkingDirectory = "/var/lib/matrix-synapse";
         PermissionsStartOnly = true;
-        ExecStart = "${cfg.package}/bin/homeserver --config-path ${configFile}";
+        ExecStart = "${cfg.package}/bin/homeserver --config-path ${configFile} --keys-directory /var/lib/matrix-synapse";
+        Restart = "on-failure";
       };
     };
   };

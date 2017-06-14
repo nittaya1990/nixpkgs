@@ -8,6 +8,7 @@ use IO::Pty;
 use Logger;
 use Cwd;
 use POSIX qw(_exit dup2);
+use Time::HiRes qw(clock_gettime CLOCK_MONOTONIC);
 
 $SIG{PIPE} = 'IGNORE'; # because Unix domain sockets may die unexpectedly
 
@@ -41,9 +42,9 @@ foreach my $vlan (split / /, $ENV{VLANS} || "") {
         dup2(fileno($stdoutW), 1);
         if (defined $taps{$vlan}) {
             my $tap = $taps{"$vlan"};
-            exec "vde_switch -s $socket --tap $tap" or _exit(1);
+            exec "vde_switch -s $socket --dirmode 0700 --tap $tap" or _exit(1);
         } else {
-            exec "vde_switch -s $socket" or _exit(1);
+            exec "vde_switch -s $socket --dirmode 0700" or _exit(1);
         }
     }
     close $stdoutW;
@@ -189,7 +190,12 @@ END {
     $log->close();
 }
 
+my $now1 = clock_gettime(CLOCK_MONOTONIC);
 
 runTests;
+
+my $now2 = clock_gettime(CLOCK_MONOTONIC);
+
+printf STDERR "test script finished in %.2fs\n", $now2 - $now1;
 
 exit ($nrSucceeded < $nrTests ? 1 : 0);

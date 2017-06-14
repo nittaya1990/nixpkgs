@@ -113,6 +113,7 @@ let
 
         configureFlags = ["--enable-shared" "--enable-pthread"]
           ++ op useRailsExpress "--with-baseruby=${baseruby}/bin/ruby"
+          ++ op (!docSupport) "--disable-install-doc"
           ++ ops stdenv.isDarwin [
             # on darwin, we have /usr/include/tk.h -- so the configure script detects
             # that tk is installed
@@ -128,6 +129,9 @@ let
           pushd rubygems
           $out/bin/ruby setup.rb
           popd
+
+          # Remove unnecessary groff reference from runtime closure, since it's big
+          sed -i '/NROFF/d' $out/lib/ruby/*/*/rbconfig.rb
 
           # Bundler tries to create this directory
           mkdir -pv $out/${passthru.gemPath}
@@ -151,7 +155,7 @@ let
           license = stdenv.lib.licenses.ruby;
           homepage = http://www.ruby-lang.org/en/;
           description = "The Ruby language";
-          maintainers = [ stdenv.lib.maintainers.vrthra ];
+          maintainers = with stdenv.lib.maintainers; [ vrthra manveru ];
           platforms = stdenv.lib.platforms.all;
         };
 
@@ -176,19 +180,11 @@ let
     ) args; in self;
 
 in {
-  ruby_1_9_3 = generic {
-    version = rubyVersion "1" "9" "3" "p551";
-    sha256 = {
-      src = "1s2ibg3s2iflzdv7rfxi1qqkvdbn2dq8gxdn0nxrb77ls5ffanxv";
-      git = "1r9xzzxmci2ajb34qb4y1w424mz878zdgzxkfp9w60agldxnb36s";
-    };
-  };
-
   ruby_2_0_0 = generic {
-    version = rubyVersion "2" "0" "0" "p647";
+    version = rubyVersion "2" "0" "0" "p648";
     sha256 = {
-      src = "1v2vbvydarcx5801gx9lc6gr6dfi0i7qbzwhsavjqbn79rdsz2n8";
-      git = "186pf4q9xymzn4zn1sjppl1skrl5f0159ixz5cz8g72dmmynq3g3";
+      src = "1y3n4c6xw2wki7pyjpq5zpbgxnw5i3jc8mcpj6rk7hs995mvv446";
+      git = "0ncjfq4hfqj9kcr8pbll6kypwnmcgs8w7l4466qqfyv7jj3yjd76";
     };
   };
 
@@ -200,19 +196,27 @@ in {
     };
   };
 
-  ruby_2_2_5 = generic {
-    version = rubyVersion "2" "2" "5" "";
+  ruby_2_2_7 = generic {
+    version = rubyVersion "2" "2" "7" "";
     sha256 = {
-      src = "1qrmlcyc0cy9hgafb1wny2h90rjyyh6d72nvr2h4xjm4jwbb7i1h";
-      git = "0k0av6ypyq08c9axm721f0xi2bcp1443l7ydbxv4v8x4vsxdkmq2";
+      src = "199xz5bvmp26c7vyzw47cpxkd8jk826kc8nlpavqzj5vqp388h9p";
+      git = "0i0nsm9ldjp39m9xq47v8w6wlg821ikczz530493cs150qkqa0a1";
     };
   };
 
-  ruby_2_3_1 = generic {
-    version = rubyVersion "2" "3" "1" "";
+  ruby_2_3_4 = generic {
+    version = rubyVersion "2" "3" "4" "";
     sha256 = {
-      src = "1kbxg72las93w0y553cxv3lymy2wvij3i3pg1y9g8aq3na676z5q";
-      git = "0dv1rf5f9lj3icqs51bq7ljdcf17sdclmxm9hilwxps5l69v5q9r";
+      src = "1hy0zr4vwkqcjbykh2hp0d6ifkrhgskaxlzy6878sc9kr4bqzqcq";
+      git = "0jjhgdjv3aayxb0flxjiny7xfzh3ggrqcpvgjv2ydm25padfbqmp";
+    };
+  };
+
+  ruby_2_4_1 = generic {
+    version = rubyVersion "2" "4" "1" "";
+    sha256 = {
+      src = "0l0201fqwzwygnrgxay469gbb2w865bnqckq00x3prdmbh6y2c53";
+      git = "1gjn31ymypzzcwkrjx62hqw59fywz1x3cyvmi1f2yb9bwb3659ss";
     };
   };
 }

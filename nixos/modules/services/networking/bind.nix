@@ -113,6 +113,7 @@ in
       };
 
       extraConfig = mkOption {
+        type = types.lines;
         default = "";
         description = "
           Extra lines to be added verbatim to the generated named configuration file.
@@ -154,7 +155,7 @@ in
         chown ${bindUser} /var/run/named
       '';
 
-      script = "${pkgs.bind.bin}/sbin/named -u ${bindUser} ${optionalString cfg.ipv4Only "-4"} -c ${cfg.configFile} -f";
+      script = "${pkgs.bind.out}/sbin/named -u ${bindUser} ${optionalString cfg.ipv4Only "-4"} -c ${cfg.configFile} -f";
       unitConfig.Documentation = "man:named(8)";
     };
   };

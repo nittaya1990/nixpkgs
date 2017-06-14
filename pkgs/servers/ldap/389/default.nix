@@ -1,15 +1,15 @@
-{ stdenv, fetchurl, pkgconfig, perl, pam, nspr, nss, openldap, db, cyrus_sasl
-, svrcore, icu, net_snmp, kerberos, pcre, perlPackages
+{ stdenv, fetchurl, fetchpatch, pkgconfig, perl, pam, nspr, nss, openldap
+, db, cyrus_sasl, svrcore, icu, net_snmp, kerberos, pcre, perlPackages
 }:
 let
-  version = "1.3.5.4";
+  version = "1.3.5.15";
 in
 stdenv.mkDerivation rec {
   name = "389-ds-base-${version}";
 
   src = fetchurl {
     url = "http://directory.fedoraproject.org/binaries/${name}.tar.bz2";
-    sha256 = "1f1r4wky8x39jdabnd277f6m0snnzh9f0wvsr8x4rnvkckjphbx8";
+    sha256 = "1z17nnr4axndjyp413kyxb6iwdfky7nlsjhlc0klvdi2ai983p91";
   };
 
   buildInputs = [
@@ -19,7 +19,8 @@ stdenv.mkDerivation rec {
 
   # TODO: Fix bin/ds-logpipe.py, bin/logconv, bin/cl-dump
 
-  patches = [ ./perl-path.patch ];
+  patches = [ ./perl-path.patch
+  ];
 
   preConfigure = ''
     # Create perl paths for library imports in perl scripts
@@ -38,7 +39,7 @@ stdenv.mkDerivation rec {
     "--with-sasl=${cyrus_sasl.dev}"
     "--with-netsnmp=${net_snmp}"
   ];
-  
+
   preInstall = ''
     # The makefile doesn't create this directory for whatever reason
     mkdir -p $out/lib/dirsrv

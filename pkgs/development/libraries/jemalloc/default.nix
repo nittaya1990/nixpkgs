@@ -1,11 +1,12 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "jemalloc-4.1.1";
+  name = "jemalloc-${version}";
+  version = "4.5.0";
 
   src = fetchurl {
-    url = "http://www.canonware.com/download/jemalloc/${name}.tar.bz2";
-    sha256 = "1bmdr51wxiir595k2r6z9a7rcgm42kkgnr586xir7vdcndr3pwf8";
+    url = "https://github.com/jemalloc/jemalloc/releases/download/${version}/${name}.tar.bz2";
+    sha256 = "9409d85664b4f135b77518b0b118c549009dc10f6cba14557d170476611f6780";
   };
 
   # By default, jemalloc puts a je_ prefix onto all its symbols on OSX, which
@@ -13,8 +14,11 @@ stdenv.mkDerivation rec {
   # option should remove the prefix and give us a working jemalloc.
   configureFlags = stdenv.lib.optional stdenv.isDarwin "--with-jemalloc-prefix=";
 
+  doCheck = true;
+
+
   meta = with stdenv.lib; {
-    homepage = http://www.canonware.com/jemalloc/index.html;
+    homepage = http://jemalloc.net;
     description = "General purpose malloc(3) implementation";
     longDescription = ''
       malloc(3)-compatible memory allocator that emphasizes fragmentation

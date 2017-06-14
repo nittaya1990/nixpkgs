@@ -15,6 +15,7 @@ import ./make-test.nix ({ pkgs, ... }: {
 
       services.dnscrypt-proxy.enable = true;
       services.dnscrypt-proxy.localPort = localProxyPort;
+      services.dnscrypt-proxy.extraArgs = [ "-X libdcplugin_example.so" ];
 
       services.dnsmasq.enable = true;
       services.dnsmasq.servers = [ "127.0.0.1#${toString localProxyPort}" ];
@@ -22,8 +23,6 @@ import ./make-test.nix ({ pkgs, ... }: {
   };
 
   testScript = ''
-    $client->start;
-    $client->waitForUnit("sockets.target");
     $client->waitForUnit("dnsmasq");
 
     # The daemon is socket activated; sending a single ping should activate it.

@@ -1,10 +1,11 @@
 { stdenv, fetchFromGitHub, cmake, gettext, libmsgpack, libtermkey
-, libtool, libuv, luajit, luaPackages, man, ncurses, perl, pkgconfig
-, unibilium, makeWrapper, vimUtils, xsel
+, libtool, libuv, luajit, luaPackages, ncurses, perl, pkgconfig
+, unibilium, makeWrapper, vimUtils, xsel, gperf
 
 , withPython ? true, pythonPackages, extraPythonPackages ? []
 , withPython3 ? true, python3Packages, extraPython3Packages ? []
 , withJemalloc ? true, jemalloc
+, withRuby ? true, bundlerEnv
 
 , withPyGUI ? false
 , vimAlias ? false
@@ -18,13 +19,13 @@ let
   # Note: this is NOT the libvterm already in nixpkgs, but some NIH silliness:
   neovimLibvterm = stdenv.mkDerivation rec {
     name = "neovim-libvterm-${version}";
-    version = "2015-11-06";
+    version = "2016-10-07";
 
     src = fetchFromGitHub {
       owner = "neovim";
       repo = "libvterm";
-      rev = "487f21dbf65f1c28962fef3f064603f415fbaeb2";
-      sha256 = "1fig6v0qk0ylr7lqqk0d6x5yywb9ymh85vay4spw5b5r5p0ky7yx";
+      rev = "5a748f97fbf27003e141002b58933a99f3addf8d";
+      sha256 = "1fnd57f5n9h7z50a4vj7g96k6ndsdknjqsibgnxi9ndhyz244qbx";
     };
 
     buildInputs = [ perl ];
@@ -44,29 +45,49 @@ let
     };
   };
 
+  rubyEnv = bundlerEnv {
+    name = "neovim-ruby-env";
+    gemdir = ./ruby_provider;
+  };
+
+  rubyWrapper = ''--suffix PATH : \"${rubyEnv}/bin\" '' +
+                ''--suffix GEM_HOME : \"${rubyEnv}/${rubyEnv.ruby.gemPath}\" '';
+
+  pluginPythonPackages = if configure == null then [] else builtins.concatLists
+    (map ({ pythonDependencies ? [], ...}: pythonDependencies)
+         (vimUtils.requiredPlugins configure));
   pythonEnv = pythonPackages.python.buildEnv.override {
     extraLibs = (
         if withPyGUI
           then [ pythonPackages.neovim_gui ]
           else [ pythonPackages.neovim ]
-      ) ++ extraPythonPackages;
+      ) ++ extraPythonPackages ++ pluginPythonPackages;
     ignoreCollisions = true;
   };
+  pythonWrapper = ''--cmd \"let g:python_host_prog='$out/bin/nvim-python'\" '';
 
+  pluginPython3Packages = if configure == null then [] else builtins.concatLists
+    (map ({ python3Dependencies ? [], ...}: python3Dependencies)
+         (vimUtils.requiredPlugins configure));
   python3Env = python3Packages.python.buildEnv.override {
-    extraLibs = [ python3Packages.neovim ] ++ extraPython3Packages;
+    extraLibs = [ python3Packages.neovim ] ++ extraPython3Packages ++ pluginPython3Packages;
     ignoreCollisions = true;
   };
+  python3Wrapper = ''--cmd \"let g:python3_host_prog='$out/bin/nvim-python3'\" '';
+  pythonFlags = optionalString (withPython || withPython3) ''--add-flags "${
+    (optionalString withPython pythonWrapper) +
+    (optionalString withPython3 python3Wrapper)
+  }"'';
 
   neovim = stdenv.mkDerivation rec {
     name = "neovim-${version}";
-    version = "0.1.5";
+    version = "0.2.0";
 
     src = fetchFromGitHub {
       owner = "neovim";
       repo = "neovim";
       rev = "v${version}";
-      sha256 = "1ihlgm2h7147xyd5wrwg61vsnmkqc9j3ghsida4g2ilr7gw9c85y";
+      sha256 = "0fhjkgjwqqmzbfn9wk10l2vq9v74zkriz5j12b1rx0gdwzlfybn8";
     };
 
     enableParallelBuilding = true;
@@ -80,6 +101,7 @@ let
       unibilium
       luajit
       luaPackages.lua
+      gperf
     ] ++ optional withJemalloc jemalloc
       ++ lualibs;
 
@@ -102,10 +124,7 @@ let
     # triggers on buffer overflow bug while running tests
     hardeningDisable = [ "fortify" ];
 
-    preConfigure = ''
-      substituteInPlace runtime/autoload/man.vim \
-        --replace /usr/bin/man ${man}/bin/man
-    '' + stdenv.lib.optionalString stdenv.isDarwin ''
+    preConfigure = stdenv.lib.optionalString stdenv.isDarwin ''
       export DYLD_LIBRARY_PATH=${jemalloc}/lib
       substituteInPlace src/nvim/CMakeLists.txt --replace "    util" ""
     '';
@@ -123,13 +142,8 @@ let
         --prefix PATH : "$out/bin"
     '' + optionalString withPython3 ''
       ln -s ${python3Env}/bin/python3 $out/bin/nvim-python3
-    '' + optionalString (withPython || withPython3) ''
-        wrapProgram $out/bin/nvim --add-flags "${
-          (optionalString withPython
-            ''--cmd \"let g:python_host_prog='$out/bin/nvim-python'\" '') +
-          (optionalString withPython3
-            ''--cmd \"let g:python3_host_prog='$out/bin/nvim-python3'\" '')
-        }"
+    '' + optionalString (withPython || withPython3 || withRuby) ''
+      wrapProgram $out/bin/nvim ${rubyWrapper + pythonFlags}
     '';
 
     meta = {
@@ -156,7 +170,7 @@ let
 
 in if (vimAlias == false && configure == null) then neovim else stdenv.mkDerivation {
   name = "neovim-${neovim.version}-configured";
-  inherit (neovim) version;
+  inherit (neovim) version meta;
 
   nativeBuildInputs = [ makeWrapper ];
 

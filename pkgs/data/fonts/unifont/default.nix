@@ -2,16 +2,16 @@
 
 stdenv.mkDerivation rec {
   name = "unifont-${version}";
-  version = "9.0.02";
+  version = "9.0.06";
 
   ttf = fetchurl {
-    url = "http://fossies.org/linux/unifont/font/precompiled/${name}.ttf";
-    sha256 = "14a254gpfyr2ssmbxqwfvh6166vc4klnx2vgz4nybx52bnr9qfkm";
+    url = "mirror://gnu/unifont/${name}/${name}.ttf";
+    sha256 = "0r96giih04din07wlmw8538izwr7dh5v6dyriq13zfn19brgn5z2";
   };
 
   pcf = fetchurl {
-    url = "http://fossies.org/linux/unifont/font/precompiled/${name}.pcf.gz";
-    sha256 = "07wn2hlx1x22d2nil0zgsrlgy9b2hdhwly37sr70shp8lkba7wn2";
+    url = "mirror://gnu/unifont/${name}/${name}.pcf.gz";
+    sha256 = "11ivfzpyz54rbz0cvd437abs6qlv28q0qp37kn27jggxlcpfh8vd";
   };
 
   buildInputs = [ mkfontscale mkfontdir ];

@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, pkgconfig, pango, glibmm, cairomm }:
+{ stdenv, fetchurl, pkgconfig, pango, glibmm, cairomm
+, ApplicationServices }:
 
 let
   ver_maj = "2.40";
@@ -12,7 +13,11 @@ stdenv.mkDerivation rec {
     sha256 = "9762ee2a2d5781be6797448d4dd2383ce14907159b30bc12bf6b08e7227be3af";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  outputs = [ "out" "dev" ];
+
+  nativeBuildInputs = [ pkgconfig ] ++ stdenv.lib.optional stdenv.isDarwin [
+    ApplicationServices
+  ];
   propagatedBuildInputs = [ pango glibmm cairomm ];
 
   doCheck = true;

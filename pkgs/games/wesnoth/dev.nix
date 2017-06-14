@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wesnoth";
-  version = "1.13.5";
+  version = "1.13.8";
 
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/sourceforge/${pname}/${name}.tar.bz2";
-    sha256 = "15hvf06r7086plwmagh89plcxal2zql8k4mg0yf1zgwjvdz284dx";
+    sha256 = "0snm4n7l21cr4443rk93wnaqdzr91pihn452w66344zqwf33xgfr";
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
       adventures.
     '';
 
-    homepage = http://www.wesnoth.org/;
+    homepage = "http://www.wesnoth.org/";
     license = licenses.gpl2;
     maintainers = with maintainers; [ abbradar ];
     platforms = platforms.linux;

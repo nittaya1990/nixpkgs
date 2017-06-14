@@ -5,14 +5,14 @@
 , glib, dbus_glib, gtkVersion
 , gtk2 ? null, libindicator-gtk2 ? null, libdbusmenu-gtk2 ? null
 , gtk3 ? null, libindicator-gtk3 ? null, libdbusmenu-gtk3 ? null
-, pythonPackages, gobjectIntrospection, vala_0_23
+, python2Packages, gobjectIntrospection, vala_0_23
 , monoSupport ? false, mono ? null, gtk-sharp-2_0 ? null
  }:
 
 with lib;
 
 let
-  inherit (pythonPackages) python pygobject2 pygtk;
+  inherit (python2Packages) python pygobject2 pygtk;
 in stdenv.mkDerivation rec {
   name = let postfix = if gtkVersion == "2" && monoSupport then "sharp" else "gtk${gtkVersion}";
           in "libappindicator-${postfix}-${version}";
@@ -27,12 +27,17 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig autoconf ];
 
+  propagatedBuildInputs =
+    if gtkVersion == "2"
+    then [ gtk2 libdbusmenu-gtk2 ]
+    else [ gtk3 libdbusmenu-gtk3 ];
+
   buildInputs = [
     glib dbus_glib
     python pygobject2 pygtk gobjectIntrospection vala_0_23
   ] ++ (if gtkVersion == "2"
-    then [ gtk2 libindicator-gtk2 libdbusmenu-gtk2 ] ++ optionals monoSupport [ mono gtk-sharp-2_0 ]
-    else [ gtk3 libindicator-gtk3 libdbusmenu-gtk3 ]);
+    then [ libindicator-gtk2 ] ++ optionals monoSupport [ mono gtk-sharp-2_0 ]
+    else [ libindicator-gtk3 ]);
 
   postPatch = ''
     substituteInPlace configure.ac \

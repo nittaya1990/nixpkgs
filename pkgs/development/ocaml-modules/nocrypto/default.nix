@@ -1,28 +1,38 @@
-{ stdenv, fetchzip, ocaml, findlib, cstruct, type_conv, zarith, ounit }:
+{ stdenv, fetchFromGitHub, ocaml, findlib, ocamlbuild, opam, topkg
+, cpuid, ocb-stubblr
+, cstruct, zarith, ocaml_oasis, ppx_sexp_conv, sexplib
+, lwt ? null
+}:
 
-assert stdenv.lib.versionAtLeast ocaml.version "4.01";
+with stdenv.lib;
+let withLwt = lwt != null; in
 
 stdenv.mkDerivation rec {
-  name = "ocaml-nocrypto-${version}";
-  version = "0.5.1";
+  name = "ocaml${ocaml.version}-nocrypto-${version}";
+  version = "0.5.4";
 
-  src = fetchzip {
-    url = "https://github.com/mirleft/ocaml-nocrypto/archive/${version}.tar.gz";
-    sha256 = "15gffvixk12ghsfra9amfszd473c8h188zfj03ngvblbdm0d80m0";
+  src = fetchFromGitHub {
+    owner  = "mirleft";
+    repo   = "ocaml-nocrypto";
+    rev    = "v${version}";
+    sha256 = "0nhnlpbqh3mf9y2cxivlvfb70yfbdpvg6jslzq64xblpgjyg443p";
   };
 
-  buildInputs = [ ocaml findlib type_conv ounit ];
-  propagatedBuildInputs = [ cstruct zarith ];
+  buildInputs = [ ocaml ocaml_oasis findlib ocamlbuild topkg opam cpuid ocb-stubblr
+    ppx_sexp_conv ];
+  propagatedBuildInputs = [ cstruct zarith sexplib ] ++ optional withLwt lwt;
 
-  configureFlags = "--enable-tests";
-  doCheck = true;
-  checkTarget = "test";
+  buildPhase = ''
+    LD_LIBRARY_PATH=${cpuid}/lib/ocaml/${ocaml.version}/site-lib/stubslibs/ \
+    ${topkg.buildPhase} --with-lwt ${boolToString withLwt}
+  '';
+  inherit (topkg) installPhase;
+
   createFindlibDestdir = true;
 
   meta = {
     homepage = https://github.com/mirleft/ocaml-nocrypto;
     description = "Simplest possible crypto to support TLS";
-    platforms = ocaml.meta.platforms or [];
     license = stdenv.lib.licenses.bsd2;
     maintainers = with stdenv.lib.maintainers; [ vbgl ];
   };

@@ -37,6 +37,9 @@
 # generated binaries.
 , makeWrapperArgs ? []
 
+# Skip wrapping of python programs altogether
+, dontWrapPythonPrograms ? false
+
 , meta ? {}
 
 , passthru ? {}
@@ -51,7 +54,7 @@ if disabled
 then throw "${name} not supported for interpreter ${python.executable}"
 else
 
-python.stdenv.mkDerivation (builtins.removeAttrs attrs ["disabled"] // {
+python.stdenv.mkDerivation (builtins.removeAttrs attrs ["disabled" "checkInputs"] // {
 
   name = namePrefix + name;
 
@@ -69,13 +72,14 @@ python.stdenv.mkDerivation (builtins.removeAttrs attrs ["disabled"] // {
   doCheck = false;
   doInstallCheck = doCheck;
 
-  postFixup = attrs.postFixup or ''
+  postFixup = lib.optionalString (!dontWrapPythonPrograms) ''
     wrapPythonPrograms
   '' + lib.optionalString catchConflicts ''
-    # check if we have two packages with the same name in closure and fail
-    # this shouldn't happen, something went wrong with dependencies specs
-    ${python.interpreter} ${./catch_conflicts.py}
-  '';
+    # Check if we have two packages with the same name in the closure and fail.
+    # If this happens, something went wrong with the dependencies specs.
+    # Intentionally kept in a subdirectory, see catch_conflicts/README.md.
+    ${python.interpreter} ${./catch_conflicts}/catch_conflicts.py
+  '' + attrs.postFixup or '''';
 
   passthru = {
     inherit python; # The python interpreter
@@ -86,10 +90,8 @@ python.stdenv.mkDerivation (builtins.removeAttrs attrs ["disabled"] // {
     platforms = python.meta.platforms;
   } // meta // {
     # add extra maintainer(s) to every package
-    maintainers = (meta.maintainers or []) ++ [ chaoflow domenkozar ];
+    maintainers = (meta.maintainers or []) ++ [ chaoflow ];
     # a marker for release utilities to discover python packages
     isBuildPythonPackage = python.meta.platforms;
   };
 })
-
-

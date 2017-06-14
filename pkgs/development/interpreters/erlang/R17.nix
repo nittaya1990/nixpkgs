@@ -6,6 +6,7 @@
 , javacSupport ? false, openjdk ? null
 , enableHipe ? true
 , enableDebugInfo ? false
+, enableDirtySchedulers ? false
 }:
 
 assert wxSupport -> (if stdenv.isDarwin
@@ -34,7 +35,12 @@ stdenv.mkDerivation rec {
       ++ optional javacSupport openjdk
       ++ stdenv.lib.optionals stdenv.isDarwin [ Carbon Cocoa ];
 
-  patchPhase = '' sed -i "s@/bin/rm@rm@" lib/odbc/configure erts/configure '';
+  patchPhase = ''
+    # Clang 4 (rightfully) thinks signed comparisons of pointers with NULL are nonsense
+    substituteInPlace lib/wx/c_src/wxe_impl.cpp --replace 'temp > NULL' 'temp != NULL'
+
+    sed -i "s@/bin/rm@rm@" lib/odbc/configure erts/configure
+  '';
 
   debugInfo = enableDebugInfo;
 
@@ -46,6 +52,7 @@ stdenv.mkDerivation rec {
   configureFlags= [
     "--with-ssl=${openssl.dev}"
   ] ++ optional enableHipe "--enable-hipe"
+    ++ optional enableDirtySchedulers "--enable-dirty-schedulers"
     ++ optional wxSupport "--enable-wx"
     ++ optional odbcSupport "--with-odbc=${unixODBC}"
     ++ optional javacSupport "--with-javac"

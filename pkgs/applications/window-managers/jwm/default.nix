@@ -1,15 +1,17 @@
-{ stdenv, fetchurl, pkgconfig, automake, autoconf, libtool, gettext, which,
-  xorg, libX11, libXext, libXinerama, libXpm, libXft, libXau, libXdmcp,
-  libXmu, libpng, libjpeg, expat, xproto, xextproto, xineramaproto, librsvg,
-  freetype, fontconfig }:
+{ stdenv, fetchFromGitHub, pkgconfig, automake, autoconf, libtool,
+  gettext, which, xorg, libX11, libXext, libXinerama, libXpm, libXft,
+  libXau, libXdmcp, libXmu, libpng, libjpeg, expat, xproto, xextproto,
+  xineramaproto, librsvg, freetype, fontconfig }:
 
 stdenv.mkDerivation rec {
   name = "jwm-${version}";
-  version = "1548";
+  version = "1582";
   
-  src = fetchurl {
-     url = "https://github.com/joewing/jwm/archive/s${version}.tar.gz";
-     sha256 = "1ih5y7567vwcbnkjwm3cc9iq4n9rzz818mkh6ryli9ld230hla5r";
+  src = fetchFromGitHub {
+    owner = "joewing";
+    repo = "jwm";
+    rev = "s${version}";
+    sha256 = "1z6cxf18n69sjd20bbyxrnd19hhy955ddvakgpfyhiprpfjkkv70";
   };
 
   nativeBuildInputs = [ pkgconfig automake autoconf libtool gettext which ];

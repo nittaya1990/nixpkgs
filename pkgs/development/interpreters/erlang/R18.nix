@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchFromGitHub, perl, gnum4, ncurses, openssl
+{ stdenv, fetchurl, fetchpatch, fetchFromGitHub, perl, gnum4, ncurses, openssl
 , gnused, gawk, autoconf, libxslt, libxml2, makeWrapper
 , Carbon, Cocoa
 , odbcSupport ? false, unixODBC ? null
@@ -6,6 +6,7 @@
 , javacSupport ? false, openjdk ? null
 , enableHipe ? true
 , enableDebugInfo ? false
+, enableDirtySchedulers ? false
 }:
 
 assert wxSupport -> (if stdenv.isDarwin
@@ -20,7 +21,7 @@ with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "erlang-" + version + "${optionalString odbcSupport "-odbc"}"
   + "${optionalString javacSupport "-javac"}";
-  version = "18.3.4";
+  version = "18.3.4.4";
 
   # Minor OTP releases are not always released as tarbals at
   # http://erlang.org/download/ So we have to download from
@@ -30,7 +31,7 @@ stdenv.mkDerivation rec {
     owner = "erlang";
     repo = "otp";
     rev = "OTP-${version}";
-    sha256 = "1f8nhybzsdmjvkmkzpjj3wj9jzx8mihlvi6gfp47fxkalansz39h";
+    sha256 = "0wilm21yi9m3v6j26vc04hsa58cxca5z4q9yxx71hm81cbm1xbwk";
   };
 
   buildInputs =
@@ -52,6 +53,11 @@ stdenv.mkDerivation rec {
      sha256 = "10h5348p6g279b4q01i5jdqlljww5chcvrx5b4b0dv79pk0p0m9f";
   };
 
+  # Clang 4 (rightfully) thinks signed comparisons of pointers with NULL are nonsense
+  prePatch = ''
+    substituteInPlace lib/wx/c_src/wxe_impl.cpp --replace 'temp > NULL' 'temp != NULL'
+  '';
+
   patches = [
     rmAndPwdPatch
     envAndCpPatch
@@ -64,6 +70,7 @@ stdenv.mkDerivation rec {
   configureFlags= [
     "--with-ssl=${openssl.dev}"
   ] ++ optional enableHipe "--enable-hipe"
+    ++ optional enableDirtySchedulers "--enable-dirty-schedulers"
     ++ optional wxSupport "--enable-wx"
     ++ optional odbcSupport "--with-odbc=${unixODBC}"
     ++ optional javacSupport "--with-javac"

@@ -1,7 +1,7 @@
 # idea: provide a build environments for your developement of preference
 /*
   #### examples of use: ####
-  # Add this to your ~/.nixpkgs/config.nix:
+  # Add this to your ~/.config/nixpkgs/config.nix:
   {
     packageOverrides = pkgs : with pkgs; {
       sdlEnv = pkgs.myEnvFun {
@@ -22,7 +22,7 @@
   ##### Another example, more complicated but achieving more: #######
   # Make an environment to build nix from source and create ctags (tagfiles can
   # be extracted from TAG_FILES) from every source package. Here would be a
-  # full ~/.nixpkgs/config.nix
+  # full ~/.config/nixpkgs/config.nix
   {
     packageOverrides = pkgs : with pkgs; with sourceAndTags;
     let complicatedMyEnv = { name, buildInputs ? [], cTags ? [], extraCmds ? ""}:
@@ -41,7 +41,7 @@
       # this is the example we will be using
       nixEnv = complicatedMyEnv {
         name = "nix";
-        buildInputs = [ libtool stdenv perl curl bzip2 openssl db45 autoconf automake zlib ];
+        buildInputs = [ libtool stdenv perl curl bzip2 openssl db5 autoconf automake zlib ];
       };
     };
   }

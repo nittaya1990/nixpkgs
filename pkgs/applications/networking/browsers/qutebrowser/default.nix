@@ -1,17 +1,19 @@
-{ stdenv, fetchurl, unzip, buildPythonApplication, makeQtWrapper, wrapGAppsHook
+{ stdenv, lib, fetchurl, unzip, buildPythonApplication, makeQtWrapper, wrapGAppsHook
 , qtbase, pyqt5, jinja2, pygments, pyyaml, pypeg2, cssutils, glib_networking
 , asciidoc, docbook_xml_dtd_45, docbook_xsl, libxml2, libxslt
 , gst-plugins-base, gst-plugins-good, gst-plugins-bad, gst-plugins-ugly, gst-libav
-, qtwebkit-plugins }:
+, qtwebkit-plugins
+, withWebEngineDefault ? false
+}:
 
 let
   pdfjs = stdenv.mkDerivation rec {
     name = "pdfjs-${version}";
-    version = "1.4.20";
+    version = "1.7.225";
 
     src = fetchurl {
       url = "https://github.com/mozilla/pdf.js/releases/download/v${version}/${name}-dist.zip";
-      sha256 = "1ca1fzyc5qnan6gavcd8bnfqriqqvgdsf4m8ka4nayf50k64xxj9";
+      sha256 = "1n8ylmv60r0qbw2vilp640a87l4lgnrsi15z3iihcs6dj1n1yy67";
     };
 
     nativeBuildInputs = [ unzip ];
@@ -24,12 +26,12 @@ let
 
 in buildPythonApplication rec {
   name = "qutebrowser-${version}";
-  version = "0.8.2";
+  version = "0.10.1";
   namePrefix = "";
 
   src = fetchurl {
     url = "https://github.com/The-Compiler/qutebrowser/releases/download/v${version}/${name}.tar.gz";
-    sha256 = "1kfxjdn1dqla8d8gcggp55zcgf4zb77knkfshd213my0iw2yzgcf";
+    sha256 = "57f4915f0f2b1509f3aa1cb9c47117fdaad35b4c895e9223c4eb0a6e8af51917";
   };
 
   # Needs tox
@@ -72,15 +74,12 @@ in buildPythonApplication rec {
   '';
 
   postFixup = ''
-    wrapPythonPrograms
-    mv $out/bin/qutebrowser $out/bin/.qutebrowser-noqtpath
-    makeQtWrapper $out/bin/.qutebrowser-noqtpath $out/bin/qutebrowser
-
-    sed -i 's/\.qutebrowser-wrapped/qutebrowser/g' $out/bin/..qutebrowser-wrapped-wrapped
+    wrapQtProgram $out/bin/qutebrowser \
+      ${lib.optionalString withWebEngineDefault ''--add-flags "--backend webengine"''}
   '';
 
   meta = {
-    homepage = https://github.com/The-Compiler/qutebrowser;
+    homepage = "https://github.com/The-Compiler/qutebrowser";
     description = "Keyboard-focused browser with a minimal GUI";
     license = stdenv.lib.licenses.gpl3Plus;
     maintainers = [ stdenv.lib.maintainers.jagajaga ];

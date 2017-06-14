@@ -1,17 +1,17 @@
-{ stdenv, ninja, which
+{ stdenv, ninja, which, nodejs
 
 # default dependencies
 , bzip2, flac, speex, libopus
 , libevent, expat, libjpeg, snappy
 , libpng, libxml2, libxslt, libcap
 , xdg_utils, yasm, minizip, libwebp
-, libusb1, pciutils, nss
+, libusb1, pciutils, nss, re2, zlib, libvpx
 
-, python, pythonPackages, perl, pkgconfig
+, python2Packages, perl, pkgconfig
 , nspr, systemd, kerberos
 , utillinux, alsaLib
 , bison, gperf
-, glib, gtk2, dbus_glib
+, glib, gtk2, gtk3, dbus_glib
 , libXScrnSaver, libXcursor, libXtst, mesa
 , protobuf, speechd, libXdamage, cups
 
@@ -20,15 +20,14 @@
 , libexif ? null # only needed for Chromium before version 51
 
 # package customization
-, enableSELinux ? false, libselinux ? null
 , enableNaCl ? false
 , enableHotwording ? false
+, enableWideVine ? false
 , gnomeSupport ? false, gnome ? null
 , gnomeKeyringSupport ? false, libgnome_keyring3 ? null
 , proprietaryCodecs ? true
 , cupsSupport ? true
 , pulseSupport ? false, libpulseaudio ? null
-, hiDPISupport ? false
 
 , upstream-info
 }:
@@ -42,41 +41,24 @@ let
   # source tree.
   extraAttrs = buildFun base;
 
-  mkGypFlags =
+  mkGnFlags =
     let
+      # Serialize Nix types into GN types according to this document:
+      # https://chromium.googlesource.com/chromium/src/+/master/tools/gn/docs/language.md
+      mkGnString = value: "\"${escape ["\"" "$" "\\"] value}\"";
       sanitize = value:
-        if value == true then "1"
-        else if value == false then "0"
-        else "${value}";
-      toFlag = key: value: "-D${key}=${sanitize value}";
+        if value == true then "true"
+        else if value == false then "false"
+        else if isList value then "[${concatMapStringsSep ", " sanitize value}]"
+        else if isInt value then toString value
+        else if isString value then mkGnString value
+        else throw "Unsupported type for GN value `${value}'.";
+      toFlag = key: value: "${key}=${sanitize value}";
     in attrs: concatStringsSep " " (attrValues (mapAttrs toFlag attrs));
 
-  gypFlagsUseSystemLibs = {
-    use_system_bzip2 = true;
-    use_system_flac = true;
-    use_system_libevent = true;
-    use_system_libexpat = true;
-    # XXX: System libjpeg fails to link for version 52.0.2743.10
-    use_system_libjpeg = versionOlder upstream-info.version "52.0.2743.10";
-    use_system_libpng = false;
-    use_system_libwebp = true;
-    use_system_libxml = true;
-    use_system_opus = true;
-    use_system_snappy = true;
-    use_system_speex = true;
-    use_system_stlport = true;
-    use_system_xdg_utils = true;
-    use_system_yasm = true;
-    use_system_zlib = false;
-    use_system_protobuf = false; # needs newer protobuf
-
-    use_system_harfbuzz = false;
-    use_system_icu = false; # Doesn't support ICU 52 yet.
-    use_system_libusb = false; # http://crbug.com/266149
-    use_system_skia = false;
-    use_system_sqlite = false; # http://crbug.com/22208
-    use_system_v8 = false;
-  };
+  gnSystemLibraries = [
+    "flac" "libwebp" "libxml" "libxslt" "snappy" "yasm"
+  ];
 
   opusWithCustomModes = libopus.override {
     withCustomModes = true;
@@ -87,7 +69,7 @@ let
     libevent expat libjpeg snappy
     libpng libxml2 libxslt libcap
     xdg_utils yasm minizip libwebp
-    libusb1
+    libusb1 re2 zlib
   ];
 
   # build paths and release info
@@ -103,36 +85,29 @@ let
 
     src = upstream-info.main;
 
-    unpackCmd = ''
-      tar xf "$src" \
-        --anchored \
-        --no-wildcards-match-slash \
-        --exclude='*/tools/gyp'
-    '';
+    nativeBuildInputs = [
+      ninja which python2Packages.python perl pkgconfig
+      python2Packages.ply python2Packages.jinja2 nodejs
+    ];
 
     buildInputs = defaultDependencies ++ [
-      which
-      python perl pkgconfig
       nspr nss systemd
       utillinux alsaLib
       bison gperf kerberos
       glib gtk2 dbus_glib
       libXScrnSaver libXcursor libXtst mesa
       pciutils protobuf speechd libXdamage
-      pythonPackages.gyp pythonPackages.ply pythonPackages.jinja2
     ] ++ optional gnomeKeyringSupport libgnome_keyring3
       ++ optionals gnomeSupport [ gnome.GConf libgcrypt ]
-      ++ optional enableSELinux libselinux
       ++ optionals cupsSupport [ libgcrypt cups ]
-      ++ optional pulseSupport libpulseaudio;
+      ++ optional pulseSupport libpulseaudio
+      ++ optional (versionAtLeast version "56.0.0.0") gtk3;
 
     patches = [
-      ./patches/widevine.patch
-      ./patches/glibc-2.24.patch
-      (if versionOlder version "52.0.0.0"
-       then ./patches/nix_plugin_paths_50.patch
-       else ./patches/nix_plugin_paths_52.patch)
-    ];
+      ./patches/nix_plugin_paths_52.patch
+      ./patches/fix-bootstrap-gn.patch
+    ] ++ optional (versionOlder version "57.0") ./patches/glibc-2.24.patch
+      ++ optional enableWideVine ./patches/widevine.patch;
 
     postPatch = ''
       # We want to be able to specify where the sandbox is via CHROME_DEVEL_SANDBOX
@@ -140,12 +115,6 @@ let
         --replace \
           'return sandbox_binary;' \
           'return base::FilePath(GetDevelSandboxPath());'
-
-      sed -i -r \
-        -e 's/-f(stack-protector)(-all)?/-fno-\1/' \
-        -e 's|/bin/echo|echo|' \
-        -e "/python_arch/s/: *'[^']*'/: '""'/" \
-        build/common.gypi chrome/chrome_tests.gypi
 
       sed -i -e '/lib_loader.*Load/s!"\(libudev\.so\)!"${systemd.lib}/lib/\1!' \
         device/udev_linux/udev?_loader.cc
@@ -155,31 +124,39 @@ let
 
       sed -i -re 's/([^:])\<(isnan *\()/\1std::\2/g' \
         chrome/browser/ui/webui/engagement/site_engagement_ui.cc
+
+      sed -i -e '/#include/ {
+        i #include <algorithm>
+        :l; n; bl
+      }' gpu/config/gpu_control_list.cc
+
+      patchShebangs .
+      # use our own nodejs
+      mkdir -p third_party/node/linux/node-linux-x64/bin
+      ln -s $(which node) third_party/node/linux/node-linux-x64/bin/node
     '' + optionalString (versionAtLeast version "52.0.0.0") ''
       sed -i -re 's/([^:])\<(isnan *\()/\1std::\2/g' \
         third_party/pdfium/xfa/fxbarcode/utils.h
     '';
 
-    gypFlags = mkGypFlags (gypFlagsUseSystemLibs // {
+    gnFlags = mkGnFlags ({
       linux_use_bundled_binutils = false;
-      linux_use_bundled_gold = false;
-      linux_use_gold_flags = true;
+      use_gold = true;
+      gold_path = "${stdenv.cc}/bin";
+      is_debug = false;
 
       proprietary_codecs = false;
       use_sysroot = false;
       use_gnome_keyring = gnomeKeyringSupport;
       use_gconf = gnomeSupport;
       use_gio = gnomeSupport;
-      use_pulseaudio = pulseSupport;
-      linux_link_pulseaudio = pulseSupport;
-      disable_nacl = !enableNaCl;
+      enable_nacl = enableNaCl;
       enable_hotwording = enableHotwording;
-      selinux = enableSELinux;
+      enable_widevine = enableWideVine;
       use_cups = cupsSupport;
     } // {
-      werror = "";
-      clang = false;
-      enable_hidpi = hiDPISupport;
+      treat_warnings_as_errors = false;
+      is_clang = false;
 
       # Google API keys, see:
       #   http://www.chromium.org/developers/how-tos/api-keys
@@ -193,27 +170,30 @@ let
       proprietary_codecs = true;
       enable_hangout_services_extension = true;
       ffmpeg_branding = "Chrome";
-    } // optionalAttrs (stdenv.system == "x86_64-linux") {
-      target_arch = "x64";
-      python_arch = "x86-64";
-    } // optionalAttrs (stdenv.system == "i686-linux") {
-      target_arch = "ia32";
-      python_arch = "ia32";
-    } // (extraAttrs.gypFlags or {}));
+    } // optionalAttrs pulseSupport {
+      use_pulseaudio = true;
+      link_pulseaudio = true;
+    } // (extraAttrs.gnFlags or {}));
 
     configurePhase = ''
-      echo "Precompiling .py files to prevent race conditions..." >&2
-      python -m compileall -q -f . > /dev/null 2>&1 || : # ignore errors
+      runHook preConfigure
+
+      # Build gn
+      python tools/gn/bootstrap/bootstrap.py -v -s --no-clean
+      PATH="$PWD/out/Release:$PATH"
 
       # This is to ensure expansion of $out.
       libExecPath="${libExecPath}"
-      python build/linux/unbundle/replace_gyp_files.py ${gypFlags}
-      python build/gyp_chromium -f ninja --depth . ${gypFlags}
+      python build/linux/unbundle/replace_gn_files.py \
+        --system-libraries ${toString gnSystemLibraries}
+      gn gen --args=${escapeShellArg gnFlags} out/Release
+
+      runHook postConfigure
     '';
 
     buildPhase = let
       buildCommand = target: ''
-        "${ninja}/bin/ninja" -C "${buildPath}"  \
+        ninja -C "${buildPath}"  \
           -j$NIX_BUILD_CORES -l$NIX_BUILD_CORES \
           "${target}"
       '' + optionalString (target == "mksnapshot" || target == "chrome") ''
@@ -226,5 +206,5 @@ let
 
 # Remove some extraAttrs we supplied to the base attributes already.
 in stdenv.mkDerivation (base // removeAttrs extraAttrs [
-  "name" "gypFlags" "buildTargets"
+  "name" "gnFlags" "buildTargets"
 ])

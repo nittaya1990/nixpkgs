@@ -11,7 +11,7 @@
 }:
 
 let
-  version = "2.10.1";
+  version = "2.13.1";
   svn = subversionClient.override { perlBindings = true; };
 in
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://www.kernel.org/pub/software/scm/git/git-${version}.tar.xz";
-    sha256 = "1ijd1b6szvfw0dmqa3dz1m5g5hbkl9xkb86a9qcjrz0w0vwjvhx9";
+    sha256 = "1zl88rlga9nhgaqc9d04vp1l1g4x6qj1d02698asnxrzk36vxh9v";
   };
 
   hardeningDisable = [ "format" ];
@@ -30,7 +30,6 @@ stdenv.mkDerivation {
     ./symlinks-in-bin.patch
     ./git-sh-i18n.patch
     ./ssh-path.patch
-    ./ssl-cert-file.patch
   ];
 
   postPatch = ''
@@ -93,6 +92,7 @@ stdenv.mkDerivation {
       # Install contrib stuff.
       mkdir -p $out/share/git
       mv contrib $out/share/git/
+      ln -s "$out/share/git/contrib/credential/netrc/git-credential-netrc" $out/bin/
       mkdir -p $out/share/emacs/site-lisp
       ln -s "$out/share/git/contrib/emacs/"*.el $out/share/emacs/site-lisp/
       mkdir -p $out/etc/bash_completion.d

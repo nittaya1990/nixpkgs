@@ -1,6 +1,8 @@
-{ stdenv, fetchurl, pythonPackages }:
+{ stdenv, fetchurl, python2Packages
+, withSFTP ? true
+ }:
 
-pythonPackages.buildPythonApplication rec {
+python2Packages.buildPythonApplication rec {
   version = "2.7";
   release = ".0";
   name = "bazaar-${version}${release}";
@@ -10,10 +12,10 @@ pythonPackages.buildPythonApplication rec {
     sha256 = "1cysix5k3wa6y7jjck3ckq3abls4gvz570s0v0hxv805nwki4i8d";
   };
 
-  # Readline support is needed by bzrtools.
-  propagatedBuildInputs = [ pythonPackages.python.modules.readline ];
-
   doCheck = false;
+
+  propagatedBuildInputs = []
+  ++ stdenv.lib.optionals withSFTP [ python2Packages.paramiko ];
 
   # Bazaar can't find the certificates alone
   patches = [ ./add_certificates.patch ];

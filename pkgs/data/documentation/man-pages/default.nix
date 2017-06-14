@@ -2,14 +2,19 @@
 
 stdenv.mkDerivation rec {
   name = "man-pages-${version}";
-  version = "4.07";
+  version = "4.11";
 
   src = fetchurl {
     url = "mirror://kernel/linux/docs/man-pages/${name}.tar.xz";
-    sha256 = "1vimj3va16plxmv46rw6nzw4m9l11hb7r1d217y1bjpd5q8nw8qz";
+    sha256 = "097m0gsbaz0gf9ir4lmph3h5jj6wmydk1rglfz82dysybx4q1pmd";
   };
 
   makeFlags = [ "MANDIR=$(out)/share/man" ];
+  postInstall = ''
+    # conflict with shadow-utils
+    rm $out/share/man/man5/passwd.5 \
+       $out/share/man/man3/getspnam.3
+  '';
   outputDocdev = "out";
 
   meta = with stdenv.lib; {

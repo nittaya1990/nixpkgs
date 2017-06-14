@@ -128,7 +128,7 @@ rec {
   ];
 
   samba = [
-    http://samba.org/ftp/
+    https://www.samba.org/ftp/
     http://ftp.riken.jp/net/samba
   ];
 
@@ -141,9 +141,11 @@ rec {
     http://bitlbee.intergenia.de/
   ];
 
-  # ImageMagick mirrors, see http://www.imagemagick.org/script/download.php.
+  # ImageMagick mirrors, see https://www.imagemagick.org/script/mirror.php
   imagemagick = [
-    http://www.imagemagick.org/download/
+    https://www.imagemagick.org/download/
+    https://mirror.checkdomain.de/imagemagick/
+    https://ftp.nluug.nl/ImageMagick/
     ftp://ftp.sunet.se/pub/multimedia/graphics/ImageMagick/ # also contains older versions removed from most mirrors
     http://ftp.sunet.se/pub/multimedia/graphics/ImageMagick/
     ftp://ftp.imagemagick.org/pub/ImageMagick/
@@ -387,6 +389,9 @@ rec {
 
   # Python PyPI mirrors
   pypi = [
+    https://files.pythonhosted.org/packages/source/
+    # pypi.io is a more semantic link, but atm it’s referencing
+    # files.pythonhosted.org over two redirects
     https://pypi.io/packages/source/
   ];
 
@@ -396,4 +401,9 @@ rec {
     https://archive.mozilla.org/pub/
   ];
 
+  # Maven Central
+  maven = [
+    http://repo1.maven.org/maven2/
+    http://central.maven.org/maven2/
+  ];
 }

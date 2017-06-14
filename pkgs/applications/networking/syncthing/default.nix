@@ -1,17 +1,17 @@
-{ stdenv, lib, fetchFromGitHub, go, pkgs }:
+{ stdenv, lib, fetchFromGitHub, go, pkgs, removeReferencesTo }:
 
 stdenv.mkDerivation rec {
-  version = "0.14.8";
+  version = "0.14.29";
   name = "syncthing-${version}";
 
   src = fetchFromGitHub {
     owner  = "syncthing";
     repo   = "syncthing";
     rev    = "v${version}";
-    sha256 = "0zhxgl6pgf60x99cappdfzk7h23g37hlanh72bwypx7pwbvhc91l";
+    sha256 = "01q0xlixjvmzs0acrg54b07fp68sa5axh1wb4lz25mmxfjl04v1d";
   };
 
-  buildInputs = [ go ];
+  buildInputs = [ go removeReferencesTo ];
 
   buildPhase = ''
     mkdir -p src/github.com/syncthing
@@ -25,28 +25,32 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    mkdir -p $out/bin $out/etc/systemd/{system,user}
+    mkdir -p $out/bin $out/lib/systemd/{system,user}
 
     cp bin/* $out/bin
   '' + lib.optionalString (stdenv.isLinux) ''
     substitute etc/linux-systemd/system/syncthing-resume.service \
-               $out/etc/systemd/system/syncthing-resume.service \
+               $out/lib/systemd/system/syncthing-resume.service \
                --replace /usr/bin/pkill ${pkgs.procps}/bin/pkill
 
     substitute etc/linux-systemd/system/syncthing@.service \
-               $out/etc/systemd/system/syncthing@.service \
+               $out/lib/systemd/system/syncthing@.service \
                --replace /usr/bin/syncthing $out/bin/syncthing
 
     substitute etc/linux-systemd/user/syncthing.service \
-               $out/etc/systemd/user/syncthing.service \
+               $out/lib/systemd/user/syncthing.service \
                --replace /usr/bin/syncthing $out/bin/syncthing
+  '';
+
+  preFixup = ''
+    find $out/bin -type f -exec remove-references-to -t ${go} '{}' '+'
   '';
 
   meta = with stdenv.lib; {
     homepage = https://www.syncthing.net/;
     description = "Open Source Continuous File Synchronization";
-    license = stdenv.lib.licenses.mpl20;
-    maintainers = with stdenv.lib.maintainers; [ pshendry joko peterhoeg ];
-    platforms = stdenv.lib.platforms.unix;
+    license = licenses.mpl20;
+    maintainers = with maintainers; [ pshendry joko peterhoeg ];
+    platforms = platforms.unix;
   };
 }

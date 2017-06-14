@@ -1,41 +1,53 @@
-{ stdenv, fetchurl, pythonPackages }:
+{ stdenv, fetchurl, python2Packages }:
 
-pythonPackages.buildPythonApplication rec {
+python2Packages.buildPythonApplication rec {
   name = "electrum-${version}";
-  version = "2.7.8";
+  version = "2.8.3";
 
   src = fetchurl {
     url = "https://download.electrum.org/${version}/Electrum-${version}.tar.gz";
-    sha256 = "0p4dx5fks68avzxkknawv094xxf7322hgm068js4v56qirvxm563";
+    sha256 = "04jswalydzwm16iismbq1h2shj17iq9sqm0mz8p98sh3dwkacvn1";
   };
 
-  propagatedBuildInputs = with pythonPackages; [
+  propagatedBuildInputs = with python2Packages; [
     dns
     ecdsa
     jsonrpclib
     pbkdf2
     protobuf3_0
-    pyasn1
-    pyasn1-modules
+    pyaes
     pycrypto
     pyqt4
+    pysocks
     qrcode
     requests
-    slowaes
     tlslite
 
     # plugins
-    trezor
     keepkey
+    trezor
+
     # TODO plugins
-    # matplotlib
-    # btchip
     # amodem
+    # btchip
+    # matplotlib
   ];
 
   preBuild = ''
     sed -i 's,usr_share = .*,usr_share = "'$out'/share",g' setup.py
     pyrcc4 icons.qrc -o gui/qt/icons_rc.py
+    # Recording the creation timestamps introduces indeterminism to the build
+    sed -i '/Created: .*/d' gui/qt/icons_rc.py
+  '';
+
+  postInstall = ''
+    # Despite setting usr_share above, these files are installed under
+    # $out/nix ...
+    mv $out/lib/python2.7/site-packages/nix/store"/"*/share $out
+    rm -rf $out/lib/python2.7/site-packages/nix
+
+    substituteInPlace $out/share/applications/electrum.desktop \
+      --replace "Exec=electrum %u" "Exec=$out/bin/electrum %u"
   '';
 
   doInstallCheck = true;

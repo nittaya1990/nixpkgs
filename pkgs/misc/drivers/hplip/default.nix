@@ -3,23 +3,23 @@
 , cups, zlib, libjpeg, libusb1, pythonPackages, sane-backends, dbus, usbutils
 , net_snmp, openssl, polkit
 , bash, coreutils, utillinux
-, qtSupport ? true, qt4
+, qtSupport ? true
 , withPlugin ? false
 }:
 
 let
 
   name = "hplip-${version}";
-  version = "3.16.5";
+  version = "3.16.11";
 
   src = fetchurl {
     url = "mirror://sourceforge/hplip/${name}.tar.gz";
-    sha256 = "1nay65q1zmx2jxiwn66n7mlr73azacz5097gw98kqqf90dh522f6";
+    sha256 = "094vkyr0rjng72m13dgr824cdl7q20x23qjxzih4w7l9njn0rqpn";
   };
 
   plugin = fetchurl {
     url = "http://www.openprinting.org/download/printdriver/auxfiles/HP/plugins/${name}-plugin.run";
-    sha256 = "15qrcd3ndnxri6pfdfmsjyv2f3zfkig80yghs76jbsm106rp8g3q";
+    sha256 = "1y3wdax2wb6kdd8bi40wl7v9s8ffyjz95bz42sjcpzzddmlhcaxg";
   };
 
   hplipState =
@@ -47,32 +47,28 @@ in
 assert withPlugin -> builtins.elem hplipArch pluginArches
   || throw "HPLIP plugin not supported on ${stdenv.system}";
 
-stdenv.mkDerivation {
+pythonPackages.buildPythonApplication {
   inherit name src;
+  format = "other";
 
   buildInputs = [
     libjpeg
     cups
     libusb1
-    pythonPackages.python
-    pythonPackages.wrapPython
     sane-backends
     dbus
     net_snmp
     openssl
-  ] ++ stdenv.lib.optionals qtSupport [
-    qt4
   ];
 
   nativeBuildInputs = [
     pkgconfig
   ];
 
-  pythonPath = with pythonPackages; [
+  propagatedBuildInputs = with pythonPackages; [
     dbus
     pillow
     pygobject2
-    recursivePthLoader
     reportlab
     usbutils
   ] ++ stdenv.lib.optionals qtSupport [
@@ -149,32 +145,7 @@ stdenv.mkDerivation {
     rm $out/etc/udev/rules.d/56-hpmud.rules
   '';
 
-  fixupPhase = ''
-    # Wrap the user-facing Python scripts in $out/bin without turning the
-    # ones in $out /share into shell scripts (they need to be importable).
-    # Note that $out/bin contains only symlinks to $out/share.
-    for bin in $out/bin/*; do
-      py=`readlink -m $bin`
-      rm $bin
-      cp $py $bin
-      wrapPythonProgramsIn $bin "$out $pythonPath"
-      sed -i "s@$(dirname $bin)/[^ ]*@$py@g" $bin
-    done
-
-    # Remove originals. Knows a little too much about wrapPythonProgramsIn.
-    rm -f $out/bin/.*-wrapped
-
-    # Merely patching shebangs in $out/share does not cause trouble.
-    for i in $out/share/hplip{,/*}/*.py; do
-      substituteInPlace $i \
-        --replace /usr/bin/python \
-        ${pythonPackages.python}/bin/${pythonPackages.python.executable} \
-        --replace "/usr/bin/env python" \
-        ${pythonPackages.python}/bin/${pythonPackages.python.executable}
-    done
-
-    wrapPythonProgramsIn $out/lib "$out $pythonPath"
-
+  postFixup = ''
     substituteInPlace $out/etc/hp/hplip.conf --replace /usr $out
   '' + stdenv.lib.optionalString (!withPlugin) ''
     # A udev rule to notify users that they need the binary plugin.

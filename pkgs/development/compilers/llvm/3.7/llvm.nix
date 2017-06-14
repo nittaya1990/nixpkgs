@@ -3,7 +3,7 @@
 , perl
 , groff
 , cmake
-, python
+, python2
 , libffi
 , binutils
 , libxml2
@@ -30,7 +30,7 @@ in stdenv.mkDerivation rec {
     mv compiler-rt-* $sourceRoot/projects/compiler-rt
   '';
 
-  buildInputs = [ perl groff cmake libxml2 python libffi ]
+  buildInputs = [ perl groff cmake libxml2 python2 libffi ]
     ++ stdenv.lib.optional stdenv.isDarwin libcxxabi;
 
   propagatedBuildInputs = [ ncurses zlib ];
@@ -83,7 +83,7 @@ in stdenv.mkDerivation rec {
   meta = {
     description = "Collection of modular and reusable compiler and toolchain technologies";
     homepage    = http://llvm.org/;
-    license     = stdenv.lib.licenses.bsd3;
+    license     = stdenv.lib.licenses.ncsa;
     maintainers = with stdenv.lib.maintainers; [ lovek323 raskin viric ];
     platforms   = stdenv.lib.platforms.all;
   };

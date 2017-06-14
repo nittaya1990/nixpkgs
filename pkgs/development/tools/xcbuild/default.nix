@@ -1,4 +1,4 @@
-{ stdenv, cmake, fetchFromGitHub, zlib, libxml2, libpng, CoreServices, CoreGraphics, ImageIO }:
+{ stdenv, cmake, fetchFromGitHub, zlib, libxml2, libpng, CoreServices, CoreGraphics, ImageIO, ninja }:
 
 let
   googletest = fetchFromGitHub {
@@ -15,20 +15,29 @@ let
     sha256 = "0wasql7ph5g473zxhc2z47z3pjp42q0dsn4gpijwzbxawid71b4w";
   };
 in stdenv.mkDerivation rec {
-  name    = "xcbuild-${stdenv.lib.substring 0 8 version}";
-  version = "49f8a5923f1381f87ac03ad4c1b138d1d2b74369";
+  name    = "xcbuild-${version}";
+  version = "0.1.1";
 
   src = fetchFromGitHub {
     owner  = "facebook";
     repo   = "xcbuild";
     rev    = version;
-    sha256 = "0l107xkh7dab2xc58dqyrrhpd1gp12cpzh0wrx0i9jbh0idbwnk0";
+    sha256 = "0i98c6lii8r3bgs5gj7div12pxyzjvm4qqzmmzgr7dyhj00qa8r5";
   };
 
   prePatch = ''
     rmdir ThirdParty/*
     cp -r --no-preserve=all ${googletest} ThirdParty/googletest
     cp -r --no-preserve=all ${linenoise} ThirdParty/linenoise
+  '';
+
+  # See https://github.com/facebook/xcbuild/issues/238 and remove once that's in
+  patches = [ ./return-false.patch ];
+
+  # Avoid a glibc >= 2.25 deprecation warning that gets fatal via -Werror.
+  postPatch = stdenv.lib.optionalString (!stdenv.isDarwin) ''
+    sed 1i'#include <sys/sysmacros.h>' \
+      -i Libraries/xcassets/Headers/xcassets/Slot/SystemVersion.h
   '';
 
   enableParallelBuilding = true;
@@ -39,5 +48,15 @@ in stdenv.mkDerivation rec {
     rmdir $out/usr
   '';
 
-  buildInputs = [ cmake zlib libxml2 libpng CoreServices CoreGraphics ImageIO ];
+  NIX_CFLAGS_COMPILE = "-Wno-error=strict-aliasing";
+
+  buildInputs = [ cmake zlib libxml2 libpng ninja ]
+    ++ stdenv.lib.optionals stdenv.isDarwin [ CoreServices CoreGraphics ImageIO ];
+
+  meta = with stdenv.lib; {
+    description = "Xcode-compatible build tool";
+    homepage = https://github.com/facebook/xcbuild;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ copumpkin matthewbauer ];
+  };
 }

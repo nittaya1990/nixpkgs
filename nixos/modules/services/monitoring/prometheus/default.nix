@@ -25,9 +25,16 @@ let
     scrape_configs = cfg.scrapeConfigs;
   };
 
+  generatedPrometheusYml = writePrettyJSON "prometheus.yml" promConfig;
+
+  prometheusYml =
+    if cfg.configText != null then
+      pkgs.writeText "prometheus.yml" cfg.configText
+    else generatedPrometheusYml;
+
   cmdlineArgs = cfg.extraFlags ++ [
     "-storage.local.path=${cfg.dataDir}/metrics"
-    "-config.file=${writePrettyJSON "prometheus.yml" promConfig}"
+    "-config.file=${prometheusYml}"
     "-web.listen-address=${cfg.listenAddress}"
     "-alertmanager.notification-queue-capacity=${toString cfg.alertmanagerNotificationQueueCapacity}"
     "-alertmanager.timeout=${toString cfg.alertmanagerTimeout}s"
@@ -109,6 +116,13 @@ let
           The URL scheme with which to fetch metrics from targets.
         '';
       };
+      params = mkOption {
+        type = types.attrsOf (types.listOf types.str);
+        default = {};
+        description = ''
+          Optional HTTP URL parameters.
+        '';
+      };
       basic_auth = mkOption {
         type = types.nullOr (types.submodule {
           options = {
@@ -127,6 +141,7 @@ let
           };
         });
         default = null;
+        apply = x: mapNullable _filter x;
         description = ''
           Optional http login credentials for metrics scraping.
         '';
@@ -184,6 +199,7 @@ let
       };
       labels = mkOption {
         type = types.attrsOf types.str;
+        default = {};
         description = ''
           Labels assigned to all metrics scraped from the targets.
         '';
@@ -356,6 +372,16 @@ in {
         default = [];
         description = ''
           Extra commandline options when launching Prometheus.
+        '';
+      };
+
+      configText = mkOption {
+        type = types.nullOr types.lines;
+        default = null;
+        description = ''
+          If non-null, this option defines the text that is written to
+          prometheus.yml. If null, the contents of prometheus.yml is generated
+          from the structured config options.
         '';
       };
 

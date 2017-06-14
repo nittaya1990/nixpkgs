@@ -15,12 +15,15 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  buildInputs = [ pkgconfig libbsd ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libbsd ];
+
   sourceRoot = name;
   patches = [ "../debian/patches/*.patch" ];
 
   installPhase = ''
     install -Dm0755 nc $out/bin/nc
+    install -Dm0644 nc.1 $out/share/man/man1/nc.1
   '';
 
   meta = {

@@ -2,31 +2,28 @@
 
 stdenv.mkDerivation rec {
   name = "multi-ghc-travis-${version}";
-  version = "git-2015-11-04";
+  version = "git-2017-05-24";
 
   buildInputs = [ ghc ];
 
   src = fetchFromGitHub {
     owner = "hvr";
     repo = "multi-ghc-travis";
-    rev = "4c288937ff8b80f6f1532609f9920912856dc3ee";
-    sha256 = "0978k81by403in7iq7ia4hsfwlvaalnjqyh3ihwyw8822a5gm8y9";
+    rev = "c1dcbcbcd3eadcc63adeac65d63497885b422a44";
+    sha256 = "12xss8wgsqs2fghrfl4h6g5wli6wn274zmdsq5zdcib2m7da5yw2";
   };
-
-  patchPhase = ''
-    substituteInPlace make_travis_yml.hs --replace "make_travis_yml.hs" "multi-ghc-travis"
-  '';
 
   installPhase = ''
     mkdir -p $out/bin
-    ghc -O --make make_travis_yml.hs -o $out/bin/multi-ghc-travis
+    ghc -O --make make_travis_yml.hs -o $out/bin/make-travis-yml
+    ghc -O --make make_travis_yml_2.hs -o $out/bin/make-travis-yml-2
   '';
 
   meta = with stdenv.lib; {
     description = "Generate .travis.yml for multiple ghc versions";
     homepage = "https://github.com/hvr/multi-ghc-travis";
-    license = licenses.free;
-    platforms = platforms.all;
+    license = licenses.bsd3;
+    platforms = ghc.meta.platforms;
     maintainers = with maintainers; [ jb55 ];
   };
 }

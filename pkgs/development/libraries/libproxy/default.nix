@@ -1,20 +1,33 @@
-{ stdenv, fetchurl, pkgconfig, cmake, zlib, glib }:
+{ stdenv, lib, fetchFromGitHub, pkgconfig, cmake
+, dbus, networkmanager, webkitgtk216x, pcre, python2 }:
 
 stdenv.mkDerivation rec {
-  name = "libproxy-0.4.11";
-  src = fetchurl {
-    url = "http://libproxy.googlecode.com/files/${name}.tar.gz";
-    sha256 = "0jw6454gxjykmbnbh544axi8hzz9gmm4jz1y5gw1hdqnakg36gyw";
+  name = "libproxy-${version}";
+  version = "0.4.13";
+
+  src = fetchFromGitHub {
+    owner = "libproxy";
+    repo = "libproxy";
+    rev = version;
+    sha256 = "0yg4wr44ync6x3p107ic00m1l04xqhni9jn1vzvkw3nfjd0k6f92";
   };
 
   outputs = [ "out" "dev" ]; # to deal with propagatedBuildInputs
 
   nativeBuildInputs = [ pkgconfig cmake ];
-  propagatedBuildInputs = [ zlib ]
-    # now some optional deps, but many more are possible
-    ++ [ glib ];
 
-  meta = {
-    platforms = stdenv.lib.platforms.linux;
+  buildInputs = [ dbus networkmanager webkitgtk216x pcre ];
+
+  cmakeFlags = [
+    "-DWITH_WEBKIT3=ON"
+    "-DWITH_MOZJS=OFF"
+    "-DPYTHON_SITEPKG_DIR=$(out)/${python2.sitePackages}"
+  ];
+
+  meta = with stdenv.lib; {
+    platforms = platforms.linux;
+    license = licenses.lgpl21;
+    homepage = "http://libproxy.github.io/libproxy/";
+    description = "A library that provides automatic proxy configuration management";
   };
 }

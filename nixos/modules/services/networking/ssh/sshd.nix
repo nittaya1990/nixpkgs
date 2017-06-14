@@ -228,8 +228,6 @@ in
 
   config = mkIf cfg.enable {
 
-    programs.ssh.setXAuthLocation = mkForce cfg.forwardX11;
-
     users.extraUsers.sshd =
       { isSystemUser = true;
         description = "SSH privilege separation user";
@@ -255,6 +253,10 @@ in
 
             preStart =
               ''
+                # Make sure we don't write to stdout, since in case of
+                # socket activation, it goes to the remote side (#19589).
+                exec >&2
+
                 mkdir -m 0755 -p /etc/ssh
 
                 ${flip concatMapStrings cfg.hostKeys (k: ''
@@ -272,10 +274,10 @@ in
                 KillMode = "process";
               } // (if cfg.startWhenNeeded then {
                 StandardInput = "socket";
+                StandardError = "journal";
               } else {
                 Restart = "always";
-                Type = "forking";
-                PIDFile = "/run/sshd.pid";
+                Type = "simple";
               });
           };
       in
@@ -310,13 +312,9 @@ in
 
     services.openssh.extraConfig = mkOrder 0
       ''
-        PidFile /run/sshd.pid
-
         Protocol 2
 
         UsePAM yes
-
-        UsePrivilegeSeparation sandbox
 
         AddressFamily ${if config.networking.enableIPv6 then "any" else "inet"}
         ${concatMapStrings (port: ''

@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, buildPythonApplication, makeWrapper, zip, ffmpeg, pandoc
-, atomicparsley
+{ stdenv, fetchurl, buildPythonApplication
+, zip, ffmpeg, rtmpdump, atomicparsley, pycryptodome, pandoc
 # Pandoc is required to build the package's man page. Release tarballs contain a
 # formatted man page already, though, it will still be installed. We keep the
 # manpage argument in place in case someone wants to use this derivation to
@@ -7,28 +7,35 @@
 # included.
 , generateManPage ? false
 , ffmpegSupport ? true
-}:
+, rtmpSupport ? true
+, hlsEncryptedSupport ? true
+, makeWrapper }:
 
 with stdenv.lib;
-
 buildPythonApplication rec {
 
   name = "youtube-dl-${version}";
-  version = "2016.10.19";
+  version = "2017.05.29";
 
   src = fetchurl {
     url = "https://yt-dl.org/downloads/${version}/${name}.tar.gz";
-    sha256 = "ed8d4a247c4cfffe2a1171b4f9c20be19e84d96bcf3716f46988c8503b1b7713";
+    sha256 = "11zh0h4hwwx39iv6qbkqbvf5a5mgj71ngj2kp7zmq7g0qh37x9rx";
   };
 
-  buildInputs = [ makeWrapper zip ] ++ optional generateManPage pandoc;
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ zip ] ++ optional generateManPage pandoc;
+  propagatedBuildInputs = optional hlsEncryptedSupport pycryptodome;
 
   # Ensure ffmpeg is available in $PATH for post-processing & transcoding support.
+  # rtmpdump is required to download files over RTMP
   # atomicparsley for embedding thumbnails
   postInstall = let
-    packagesthatwillbeusedbelow = [ atomicparsley ] ++ optional ffmpegSupport ffmpeg;
+    packagesToBinPath =
+    [ atomicparsley ]
+    ++ optional ffmpegSupport ffmpeg
+    ++ optional rtmpSupport rtmpdump;
   in ''
-    wrapProgram $out/bin/youtube-dl --prefix PATH : "${makeBinPath packagesthatwillbeusedbelow}"
+    wrapProgram $out/bin/youtube-dl --prefix PATH : "${makeBinPath packagesToBinPath}"
   '';
 
   # Requires network
@@ -46,6 +53,6 @@ buildPythonApplication rec {
     '';
     license = licenses.publicDomain;
     platforms = with platforms; linux ++ darwin;
-    maintainers = with maintainers; [ bluescreen303 phreedom AndersonTorres fuuzetsu ];
+    maintainers = with maintainers; [ bluescreen303 phreedom AndersonTorres fuuzetsu fpletz ];
   };
 }

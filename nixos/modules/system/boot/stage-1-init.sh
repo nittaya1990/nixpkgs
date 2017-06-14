@@ -8,6 +8,14 @@ export LD_LIBRARY_PATH=@extraUtils@/lib
 export PATH=@extraUtils@/bin
 ln -s @extraUtils@/bin /bin
 
+# Copy the secrets to their needed location
+if [ -d "@extraUtils@/secrets" ]; then
+    for secret in $(cd "@extraUtils@/secrets"; find . -type f); do
+        mkdir -p $(dirname "/$secret")
+        ln -s "@extraUtils@/secrets/$secret" "$secret"
+    done
+fi
+
 # Stop LVM complaining about fd3
 export LVM_SUPPRESS_FD_WARNINGS=true
 
@@ -145,6 +153,9 @@ for o in $(cat /proc/cmdline); do
                 root=$2
             fi
             ln -s "$root" /dev/root
+            ;;
+        copytoram)
+            copytoram=1
             ;;
     esac
 done
@@ -318,6 +329,8 @@ mountFS() {
     [ "$mountPoint" == "/" ] &&
         [ -f "/mnt-root/etc/NIXOS_LUSTRATE" ] &&
         lustrateRoot "/mnt-root"
+
+    true
 }
 
 lustrateRoot () {
@@ -464,6 +477,22 @@ while read -u 3 mountPoint; do
     # doing something with $device right now.
     udevadm settle
 
+    # If copytoram is enabled: skip mounting the ISO and copy its content to a tmpfs.
+    if [ -n "$copytoram" ] && [ "$device" = /dev/root ] && [ "$mountPoint" = /iso ]; then
+      fsType=$(blkid -o value -s TYPE "$device")
+      fsSize=$(blockdev --getsize64 "$device")
+
+      mkdir -p /tmp-iso
+      mount -t "$fsType" /dev/root /tmp-iso
+      mountFS tmpfs /iso size="$fsSize" tmpfs
+
+      cp -r /tmp-iso/* /mnt-root/iso/
+
+      umount /tmp-iso
+      rmdir /tmp-iso
+      continue
+    fi
+
     mountFS "$device" "$mountPoint" "$options" "$fsType"
 done
 
@@ -498,8 +527,7 @@ eval "exec $logOutFd>&- $logErrFd>&-"
 #
 # Storage daemons are distinguished by an @ in front of their command line:
 # https://www.freedesktop.org/wiki/Software/systemd/RootStorageDaemons/
-local pidsToKill="$(pgrep -v -f '^@')"
-for pid in $pidsToKill; do
+for pid in $(pgrep -v -f '^@'); do
     # Make sure we don't kill kernel processes, see #15226 and:
     # http://stackoverflow.com/questions/12213445/identifying-kernel-threads
     readlink "/proc/$pid/exe" &> /dev/null || continue

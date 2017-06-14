@@ -3,16 +3,16 @@
 let arch =
   if stdenv.isi686 then "i386"
   else if stdenv.isx86_64 then "x86_64"
-  else abort "Unknown architecture";
+  else throw "Unknown architecture";
 in stdenv.mkDerivation rec {
   name = "grub4dos-${version}";
-  version = "0.4.6a-2016-08-06";
+  version = "0.4.6a-2016-12-24";
 
   src = fetchFromGitHub {
     owner = "chenall";
     repo = "grub4dos";
-    rev = "99d6ddbe7611f942d2708d77a620d6aa94a284d1";
-    sha256 = "0gnllk0qkx6d0azf7v9cr0b23gp577avksz0f4dl3v3ldgi0dksq";
+    rev = "ca0371bb1e2365bfe4e44031a3b8b59e8c58ce0d";
+    sha256 = "0a9m7n5la3dmbfx6n5iqlfbm607r1mww0wkimn29mlsc30d8aamr";
   };
 
   nativeBuildInputs = [ nasm ];

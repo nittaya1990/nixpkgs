@@ -1,10 +1,10 @@
 { stdenv, lib, fetchurl, ncurses, xlibsWrapper, libXaw, libXpm, Xaw3d
 , pkgconfig, gettext, libXft, dbus, libpng, libjpeg, libungif
-, libtiff, librsvg, gconf, libxml2, imagemagick, gnutls
+, libtiff, librsvg, gconf, libxml2, imagemagick, gnutls, libselinux
 , alsaLib, cairo, acl, gpm, AppKit, CoreWLAN, Kerberos, GSS, ImageIO
 , withX ? !stdenv.isDarwin
-, withGTK2 ? true, gtk2 ? null
-, withGTK3 ? false, gtk3 ? null
+, withGTK2 ? false, gtk2 ? null
+, withGTK3 ? true, gtk3 ? null, gsettings_desktop_schemas ? null
 , withXwidgets ? false, webkitgtk24x ? null, wrapGAppsHook ? null, glib_networking ? null
 , withCsrc ? true
 , srcRepo ? false, autoconf ? null, automake ? null, texinfo ? null
@@ -26,29 +26,30 @@ let
 in
 stdenv.mkDerivation rec {
   name = "emacs-${version}${versionModifier}";
-  version = "25.1";
+  version = "25.2";
   versionModifier = "";
 
   src = fetchurl {
-    url = "mirror://gnu//emacs/${name}.tar.xz";
-    sha256 = "0cwgyiyymnx4xdg99dm2drfxcyhy2jmyf0rkr9fwj9mwwf77kwhr";
+    url = "mirror://gnu/emacs/${name}.tar.xz";
+    sha256 = "1ykkq0xl28ljdg61bm6gzy04ww86ajms98gix72qg6cpr6a53dar";
   };
 
-  patches = lib.optional stdenv.isDarwin ./at-fdcwd.patch;
+  patches = (lib.optional stdenv.isDarwin ./at-fdcwd.patch);
 
   nativeBuildInputs = [ pkgconfig ]
-    ++ lib.optionals srcRepo [ autoconf automake texinfo ];
+    ++ lib.optionals srcRepo [ autoconf automake texinfo ]
+    ++ lib.optional (withX && (withGTK3 || withXwidgets)) wrapGAppsHook;
 
   buildInputs =
     [ ncurses gconf libxml2 gnutls alsaLib acl gpm gettext ]
-    ++ lib.optional stdenv.isLinux dbus
+    ++ lib.optionals stdenv.isLinux [ dbus libselinux ]
     ++ lib.optionals withX
       [ xlibsWrapper libXaw Xaw3d libXpm libpng libjpeg libungif libtiff librsvg libXft
         imagemagick gconf ]
     ++ lib.optional (withX && withGTK2) gtk2
-    ++ lib.optional (withX && withGTK3) gtk3
+    ++ lib.optionals (withX && withGTK3) [ gtk3 gsettings_desktop_schemas ]
     ++ lib.optional (stdenv.isDarwin && withX) cairo
-    ++ lib.optionals withXwidgets [ webkitgtk24x wrapGAppsHook glib_networking ];
+    ++ lib.optionals (withX && withXwidgets) [ webkitgtk24x glib_networking ];
 
   propagatedBuildInputs = lib.optionals stdenv.isDarwin [ AppKit GSS ImageIO ];
 

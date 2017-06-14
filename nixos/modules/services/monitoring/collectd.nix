@@ -8,8 +8,8 @@ let
   conf = pkgs.writeText "collectd.conf" ''
     BaseDir "${cfg.dataDir}"
     PIDFile "${cfg.pidFile}"
-    AutoLoadPlugin ${if cfg.autoLoadPlugin then "true" else "false"}
-    Hostname ${config.networking.hostName}
+    AutoLoadPlugin ${boolToString cfg.autoLoadPlugin}
+    Hostname "${config.networking.hostName}"
 
     LoadPlugin syslog
     <Plugin "syslog">
@@ -108,7 +108,8 @@ in {
       };
 
       preStart = ''
-        mkdir -m 0700 -p ${cfg.dataDir}
+        mkdir -p ${cfg.dataDir}
+        chmod 755 ${cfg.dataDir}
         install -D /dev/null ${cfg.pidFile}
         if [ "$(id -u)" = 0 ]; then
           chown -R ${cfg.user} ${cfg.dataDir};

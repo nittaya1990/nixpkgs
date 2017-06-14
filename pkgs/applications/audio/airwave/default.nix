@@ -1,16 +1,16 @@
 { stdenv, cmake, fetchFromGitHub, file, gcc_multi, libX11, makeWrapper
-, overrideCC, qt5, requireFile, unzip, wineStable
+, overrideCC, qt5, requireFile, unzip, wine
 }:
 
 let
 
-  version = "1.3.2";
+  version = "1.3.3";
 
   airwave-src = fetchFromGitHub {
     owner = "phantom-code";
     repo = "airwave";
     rev = version;
-    sha256 = "053kkx5yq1vas0qisidkgq0h6hzfwy3677jprjkcrwc4hp2i2v12";
+    sha256 = "1ban59skw422mak3cp57lj27hgq5d3a4f6y79ysjnamf8rpz9x4s";
   };
 
   stdenv_multi = overrideCC stdenv gcc_multi;
@@ -26,7 +26,8 @@ let
     installPhase = "cp -r . $out";
   };
 
-  wine-wow64 = wineStable.override {
+  wine-wow64 = wine.override {
+    wineRelease = "stable";
     wineBuild = "wineWow";
   };
 
@@ -59,6 +60,9 @@ stdenv_multi.mkDerivation {
   # libstdc++.so link gets lost in 64-bit executables during
   # shrinking.
   dontPatchELF = true;
+
+  # Cf. https://github.com/phantom-code/airwave/issues/57
+  hardeningDisable = [ "format" ];
 
   cmakeFlags = "-DVSTSDK_PATH=${vst-sdk}";
 

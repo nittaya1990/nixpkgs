@@ -12,20 +12,26 @@ rec {
 
   # Bring in a path as a source, filtering out all Subversion and CVS
   # directories, as well as backup files (*~).
-  cleanSource =
-    let filter = name: type: let baseName = baseNameOf (toString name); in ! (
-      # Filter out Subversion and CVS directories.
-      (type == "directory" && (baseName == ".git" || baseName == ".svn" || baseName == "CVS" || baseName == ".hg")) ||
-      # Filter out backup files.
-      lib.hasSuffix "~" baseName ||
-      # Filter out generates files.
-      lib.hasSuffix ".o" baseName ||
-      lib.hasSuffix ".so" baseName ||
-      # Filter out nix-build result symlinks
-      (type == "symlink" && lib.hasPrefix "result" baseName)
-    );
-    in src: builtins.filterSource filter src;
+  cleanSourceFilter = name: type: let baseName = baseNameOf (toString name); in ! (
+    # Filter out Subversion and CVS directories.
+    (type == "directory" && (baseName == ".git" || baseName == ".svn" || baseName == "CVS" || baseName == ".hg")) ||
+    # Filter out backup files.
+    lib.hasSuffix "~" baseName ||
+    # Filter out generates files.
+    lib.hasSuffix ".o" baseName ||
+    lib.hasSuffix ".so" baseName ||
+    # Filter out nix-build result symlinks
+    (type == "symlink" && lib.hasPrefix "result" baseName)
+  );
 
+  cleanSource = builtins.filterSource cleanSourceFilter;
+
+  # Filter sources by a list of regular expressions.
+  #
+  # E.g. `src = sourceByRegex ./my-subproject [".*\.py$" "^database.sql$"]`
+  sourceByRegex = src: regexes: builtins.filterSource (path: type:
+    let relPath = lib.removePrefix (toString src + "/") (toString path);
+    in lib.any (re: builtins.match re relPath != null) regexes) src;
 
   # Get all files ending with the specified suffices from the given
   # directory or its descendants.  E.g. `sourceFilesBySuffices ./dir

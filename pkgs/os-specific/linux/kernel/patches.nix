@@ -17,30 +17,24 @@ let
         '';
       };
     };
-
-  grsecPatch = { grbranch ? "test", grver ? "3.1", kver, grrev, sha256 }: rec {
-    name = "grsecurity-${grver}-${kver}-${grrev}";
-
-    # Pass these along to allow the caller to determine compatibility
-    inherit grver kver grrev;
-
-    patch = fetchurl {
-      # When updating versions/hashes, ALWAYS use the official version; we use
-      # this mirror only because upstream removes sources files immediately upon
-      # releasing a new version ...
-      url = "https://raw.githubusercontent.com/slashbeast/grsecurity-scrape/master/${grbranch}/${name}.patch";
-      inherit sha256;
-    };
-
-    features.grsecurity = true;
-  };
 in
 
 rec {
 
+  multithreaded_rsapubkey =
+    {
+      name = "multithreaded-rsapubkey-asn1.patch";
+      patch = ./multithreaded-rsapubkey-asn1.patch;
+    };
+
   bridge_stp_helper =
     { name = "bridge-stp-helper";
       patch = ./bridge-stp-helper.patch;
+    };
+
+  p9_fixes =
+    { name = "p9-fixes";
+      patch = ./p9-fixes.patch;
     };
 
   no_xsave =
@@ -85,19 +79,13 @@ rec {
     sha256 = "00b1rqgd4yr206dxp4mcymr56ymbjcjfa4m82pxw73khj032qw3j";
   };
 
-  grsecurity_testing = grsecPatch
-    { kver   = "4.7.7";
-      grrev  = "201610101902";
-      sha256 = "18x8grxj03bh9gqlm3sfgjl8vy5gpyrjr8nmdnrnas6ycmbvyjx4";
-    };
+  grsecurity_testing = throw ''
+    Upstream has ceased free support for grsecurity/PaX.
 
-  # This patch relaxes grsec constraints on the location of usermode helpers,
-  # e.g., modprobe, to allow calling into the Nix store.
-  grsecurity_nixos_kmod =
-    {
-      name  = "grsecurity-nixos-kmod";
-      patch = ./grsecurity-nixos-kmod.patch;
-    };
+    See https://grsecurity.net/passing_the_baton.php
+    and https://grsecurity.net/passing_the_baton_faq.php
+    for more information.
+  '';
 
   crc_regression =
     { name = "crc-backport-regression";
@@ -107,12 +95,6 @@ rec {
   genksyms_fix_segfault =
     { name = "genksyms-fix-segfault";
       patch = ./genksyms-fix-segfault.patch;
-    };
-
-
-  chromiumos_Kconfig_fix_entries_3_14 =
-    { name = "Kconfig_fix_entries_3_14";
-      patch = ./chromiumos-patches/fix-double-Kconfig-entry-3.14.patch;
     };
 
   chromiumos_Kconfig_fix_entries_3_18 =
@@ -146,6 +128,32 @@ rec {
         url = "https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git"
             + "/patch/drivers/lguest/x86/core.c?id=cdd77e87eae52";
         sha256 = "04xlx6al10cw039av6jkby7gx64zayj8m1k9iza40sw0fydcfqhc";
+      };
     };
-  };
+
+  packet_fix_race_condition_CVE_2016_8655 =
+    { name = "packet_fix_race_condition_CVE_2016_8655.patch";
+      patch = fetchpatch {
+        url = "https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/patch/?id=84ac7260236a49c79eede91617700174c2c19b0c";
+        sha256 = "19viqjjgq8j8jiz5yhgmzwhqvhwv175q645qdazd1k69d25nv2ki";
+      };
+    };
+
+  panic_on_icmp6_frag_CVE_2016_9919 = rec
+    { name = "panic_on_icmp6_frag_CVE_2016_9919.patch";
+      patch = fetchpatch {
+        inherit name;
+        url = "https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/patch/?id=79dc7e3f1cd323be4c81aa1a94faa1b3ed987fb2";
+        sha256 = "0mps33r4mnwiy0bmgrzgqkrk59yya17v6kzpv9024g4xlz61rk8p";
+      };
+    };
+
+  DCCP_double_free_vulnerability_CVE-2017-6074 = rec
+    { name = "DCCP_double_free_vulnerability_CVE-2017-6074.patch";
+      patch = fetchpatch {
+        inherit name;
+        url = "https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/patch/?id=5edabca9d4cff7f1f2b68f0bac55ef99d9798ba4";
+        sha256 = "10dmv3d3gj8rvj9h40js4jh8xbr5wyaqiy0kd819mya441mj8ll2";
+      };
+    };
 }

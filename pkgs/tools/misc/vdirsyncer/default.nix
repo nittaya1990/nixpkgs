@@ -6,18 +6,18 @@ let
   pythonPackages = python3Packages;
 in
 pythonPackages.buildPythonApplication rec {
-  version = "0.13.1";
+  version = "0.15.0";
   name = "vdirsyncer-${version}";
 
   src = fetchurl {
     url = "mirror://pypi/v/vdirsyncer/${name}.tar.gz";
-    sha256 = "1c4kipcc7dx1rn5j1a1x7wckz09mm9ihwakf3ramwn1y78q5zanb";
+    sha256 = "08aa5yxcj7ziz2r0hz4p554q8hgpfl2bh8r6r85f4g24mg6arxsj";
   };
 
   propagatedBuildInputs = with pythonPackages; [
     click click-log click-threading
     requests_toolbelt
-    requests2
+    requests
     atomicwrites
   ];
 
@@ -32,7 +32,7 @@ pythonPackages.buildPythonApplication rec {
   meta = with stdenv.lib; {
     homepage = https://github.com/pimutils/vdirsyncer;
     description = "Synchronize calendars and contacts";
-    maintainers = with maintainers; [ matthiasbeyer jgeerds DamienCassou ];
+    maintainers = with maintainers; [ matthiasbeyer jgeerds ];
     platforms = platforms.all;
     license = licenses.mit;
   };

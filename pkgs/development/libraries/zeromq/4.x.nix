@@ -1,11 +1,12 @@
 { stdenv, fetchurl, libuuid, pkgconfig, libsodium }:
 
 stdenv.mkDerivation rec {
-  name = "zeromq-4.1.4";
+  name = "zeromq-${version}";
+  version = "4.2.2";
 
   src = fetchurl {
-    url = "http://download.zeromq.org/${name}.tar.gz";
-    sha256 = "0y73dxgf4kaysmkvrkxqq9qk5znklxyghh749jw4qbjwwbyl97z9";
+    url = "https://github.com/zeromq/libzmq/releases/download/v${version}/${name}.tar.gz";
+    sha256 = "0syzwsiqblimfjb32fr6hswhdvp3cmbk0pgm7ayxaigmkv5g88sv";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -17,6 +18,6 @@ stdenv.mkDerivation rec {
     description = "The Intelligent Transport Layer";
     license = licenses.gpl3;
     platforms = platforms.all;
-    maintainers = with maintainers; [ wkennington ];
+    maintainers = with maintainers; [ wkennington fpletz ];
   };
 }

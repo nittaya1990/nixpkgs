@@ -10,11 +10,11 @@ assert xarSupport -> libxml2 != null;
 
 stdenv.mkDerivation rec {
   name = "libarchive-${version}";
-  version = "3.2.1";
+  version = "3.3.1";
 
   src = fetchurl {
     url = "${meta.homepage}/downloads/${name}.tar.gz";
-    sha256 = "1lngng84k1kkljl74q0cdqc3s82vn2kimfm02dgm4d6m7x71mvkj";
+    sha256 = "1rr40hxlm9vy5z2zb5w7pyfkgd1a4s061qapm83s19accb8mpji9";
   };
 
   outputs = [ "out" "lib" "dev" ];

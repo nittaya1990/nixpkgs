@@ -1,20 +1,22 @@
 { stdenv, pythonPackages, fetchFromGitHub,
 }:
 
-pythonPackages.buildPythonApplication rec {
-  version = "2.4";
+with pythonPackages; buildPythonApplication rec {
+  version = "2.9";
   name = "buku-${version}";
 
   src = fetchFromGitHub {
     owner = "jarun";
     repo = "buku";
     rev = "v${version}";
-    sha256 = "0rmvlpp1pzzgn1hf87ksigj9kp60gfwkvxymb4wiz7dqa57b1q0n";
+    sha256 = "0ylq0j5w8jvzys4bj9m08bfr1sgf8h2b4fiax6hs6lcwn2882jbr";
   };
 
-  buildInputs = [
-    pythonPackages.cryptography
-    pythonPackages.beautifulsoup4
+  propagatedBuildInputs = [
+    cryptography
+    beautifulsoup4
+    requests
+    urllib3
   ];
 
   phases = [ "unpackPhase" "installPhase" "fixupPhase" ];
@@ -30,7 +32,7 @@ pythonPackages.buildPythonApplication rec {
     homepage = https://github.com/jarun/Buku;
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ matthiasbeyer ];
+    maintainers = with maintainers; [ matthiasbeyer infinisil ];
   };
 }
 

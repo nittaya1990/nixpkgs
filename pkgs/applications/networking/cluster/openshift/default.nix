@@ -1,11 +1,12 @@
-{ stdenv, fetchFromGitHub, go, which }:
+{ stdenv, fetchFromGitHub, which, buildGoPackage }:
 
 let
-  version = "1.3.0";
-  versionMajor = "1";
-  versionMinor = "3";
-in
-stdenv.mkDerivation rec {
+  version = "1.5.0";
+  ver = stdenv.lib.elemAt (stdenv.lib.splitString "." version);
+  versionMajor = ver 0;
+  versionMinor = ver 1;
+  versionPatch = ver 2;
+in buildGoPackage rec {
   name = "openshift-origin-${version}";
   inherit version;
 
@@ -13,17 +14,18 @@ stdenv.mkDerivation rec {
     owner = "openshift";
     repo = "origin";
     rev = "v${version}";
-    sha256 = "07s7xv8x8pch68j7lsw29im0axi07x32ag9wh9aqa0y570q9xgxy";
+    sha256 = "0qvyxcyca3888nkgvyvqcmybm95ncwxb3zvrzbg2gz8kx6g6350v";
   };
 
-  buildInputs = [ go which ];
+  buildInputs = [ which ];
 
+  goPackagePath = null;
   patchPhase = ''
     patchShebangs ./hack
   '';
 
   buildPhase = ''
-    export GOPATH=$(pwd)
+    cd go/src/origin-v${version}-src
     # Openshift build require this variables to be set
     # unless there is a .git folder which is not the case with fetchFromGitHub
     export OS_GIT_VERSION=${version}
@@ -33,17 +35,15 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    export GOOS=$(go env GOOS)
-    export GOARCH=$(go env GOARCH)
-    mkdir -p "$out/bin"
-    mv _output/local/bin/$GOOS/$GOARCH/* "$out/bin/"
+    mkdir -p "$bin/bin"
+    cp -a "_output/local/bin/$(go env GOOS)/$(go env GOARCH)/"* "$bin/bin/"
   '';
 
   meta = with stdenv.lib; {
     description = "Build, deploy, and manage your applications with Docker and Kubernetes";
     license = licenses.asl20;
     homepage = http://www.openshift.org;
-    maintainers = with maintainers; [offline];
-    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [offline bachp];
+    platforms = platforms.linux;
   };
 }

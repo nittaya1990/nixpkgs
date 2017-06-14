@@ -53,7 +53,6 @@ in {
     services.xserver.desktopManager.gnome3 = {
       enable = mkOption {
         default = false;
-        example = true;
         description = "Enable Gnome 3 desktop manager.";
       };
 
@@ -78,15 +77,15 @@ in {
       };
 
       debug = mkEnableOption "gnome-session debug messages";
-    };  
+    };
 
     environment.gnome3.packageSet = mkOption {
       default = null;
-      example = literalExample "pkgs.gnome3_20";
+      example = literalExample "pkgs.gnome3_22";
       description = "Which GNOME 3 package set to use.";
       apply = p: if p == null then pkgs.gnome3 else p;
     };
-    
+
     environment.gnome3.excludePackages = mkOption {
       default = [];
       example = literalExample "[ pkgs.gnome3.totem ]";
@@ -105,9 +104,11 @@ in {
     services.geoclue2.enable = mkDefault true;
     services.gnome3.at-spi2-core.enable = true;
     services.gnome3.evolution-data-server.enable = true;
+    services.gnome3.gnome-disks.enable = mkDefault true;
     services.gnome3.gnome-documents.enable = mkDefault true;
     services.gnome3.gnome-keyring.enable = true;
     services.gnome3.gnome-online-accounts.enable = mkDefault true;
+    services.gnome3.gnome-terminal-server.enable = mkDefault true;
     services.gnome3.gnome-user-share.enable = mkDefault true;
     services.gnome3.gvfs.enable = true;
     services.gnome3.seahorse.enable = mkDefault true;
@@ -122,6 +123,11 @@ in {
     services.packagekit.enable = mkDefault true;
     hardware.bluetooth.enable = mkDefault true;
     services.xserver.libinput.enable = mkDefault true; # for controlling touchpad settings via gnome control center
+    services.udev.packages = [ pkgs.gnome3.gnome_settings_daemon ];
+    systemd.packages = [ pkgs.gnome3.vino ];
+
+    # If gnome3 is installed, build vim for gtk3 too.
+    nixpkgs.config.vim.gui = "gtk3";
 
     fonts.fonts = [ pkgs.dejavu_fonts pkgs.cantarell_fonts ];
 
@@ -180,7 +186,7 @@ in {
     networking.networkmanager.basePackages =
       { inherit (pkgs) networkmanager modemmanager wpa_supplicant;
         inherit (gnome3) networkmanager_openvpn networkmanager_vpnc
-                         networkmanager_openconnect networkmanager_pptp
+                         networkmanager_openconnect networkmanager_fortisslvpn networkmanager_pptp
                          networkmanager_l2tp; };
 
     # Needed for themes and backgrounds

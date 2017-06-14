@@ -1,23 +1,23 @@
-{lib, fetchurl, mercurial, pythonPackages}:
+{lib, fetchurl, mercurial, python2Packages}:
 
-pythonPackages.buildPythonApplication rec {
+python2Packages.buildPythonApplication rec {
     name = "tortoisehg-${version}";
-    version = "3.9.1";
+    version = "4.1.1";
 
     src = fetchurl {
       url = "https://bitbucket.org/tortoisehg/targz/downloads/${name}.tar.gz";
-      sha256 = "12bqvkkwkb6m5hls7gipkxbnspfrk1k6l9l0fff0wp1zajnp4pnn";
+      sha256 = "14fy5p5hx4iij5kyma9679nrprd9lsjr6j047bfyfrwa3l4knj2g";
     };
 
-    pythonPath = with pythonPackages; [ pyqt4 mercurial qscintilla iniparse ];
+    pythonPath = with python2Packages; [ pyqt4 mercurial qscintilla iniparse ];
 
-    propagatedBuildInputs = with pythonPackages; [ qscintilla iniparse ];
+    propagatedBuildInputs = with python2Packages; [ qscintilla iniparse ];
 
     doCheck = false;
     dontStrip = true;
     buildPhase = "";
     installPhase = ''
-      ${pythonPackages.python.executable} setup.py install --prefix=$out
+      ${python2Packages.python.executable} setup.py install --prefix=$out
       ln -s $out/bin/thg $out/bin/tortoisehg     #convenient alias
     '';
 
@@ -26,6 +26,6 @@ pythonPackages.buildPythonApplication rec {
       homepage = http://tortoisehg.bitbucket.org/;
       license = lib.licenses.gpl2;
       platforms = lib.platforms.linux;
-      maintainers = [ "abcz2.uprola@gmail.com" ];
+      maintainers = with lib.maintainers; [ danbst ];
     };
 }

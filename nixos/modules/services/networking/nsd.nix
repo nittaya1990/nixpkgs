@@ -30,6 +30,7 @@ let
       cd $out/zones
 
       for zoneFile in *; do
+        echo "|- checking zone '$out/zones/$zoneFile'"
         ${nsdPkg}/sbin/nsd-checkzone "$zoneFile" "$zoneFile" || {
           if grep -q \\\\\\$ "$zoneFile"; then
             echo zone "$zoneFile" contains escaped dollar signes \\\$
@@ -118,8 +119,8 @@ let
   '';
 
   yesOrNo = b: if b then "yes" else "no";
-  maybeString = prefix: x: if x == null then "" else ''${prefix} "${s}"'';
-  maybeToString = prefix: x: if x == null then "" else ''${prefix} ${toString s}'';
+  maybeString = prefix: x: if x == null then "" else ''${prefix} "${x}"'';
+  maybeToString = prefix: x: if x == null then "" else ''${prefix} ${toString x}'';
   forEach = pre: l: concatMapStrings (x: pre + x + "\n") l;
 
 
@@ -345,12 +346,10 @@ let
       };
 
       rrlWhitelist = mkOption {
-        type = types.listOf types.str;
+        type = with types; listOf (enum [ "nxdomain" "error" "referral" "any" "rrsig" "wildcard" "nodata" "dnskey" "positive" "all" ]);
         default = [];
         description = ''
           Whitelists the given rrl-types.
-          The RRL classification types are:  nxdomain,  error, referral, any,
-          rrsig, wildcard, nodata, dnskey, positive, all
         '';
       };
 

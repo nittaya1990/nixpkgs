@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, fetchFromGitHub, pkgconfig, libiconv, libintlOrEmpty
-, expat, zlib, libpng, pixman, fontconfig, freetype, xorg
+{ stdenv, fetchurl, fetchFromGitHub, fetchpatch, pkgconfig, libiconv
+, libintlOrEmpty, expat, zlib, libpng, pixman, fontconfig, freetype, xorg
 , gobjectSupport ? true, glib
 , xcbSupport ? true # no longer experimental since 1.12
 , glSupport ? true, mesa_noglu ? null # mesa is no longer a big dependency
@@ -9,26 +9,24 @@
 
 assert glSupport -> mesa_noglu != null;
 
-with { inherit (stdenv.lib) optional optionals; };
+let inherit (stdenv.lib) optional optionals; in
 
 stdenv.mkDerivation rec {
-  name = "cairo-1.14.6";
+  name = "cairo-1.14.8";
 
   src = fetchurl {
     url = "http://cairographics.org/releases/${name}.tar.xz";
-    sha256 = "0lmjlzmghmr27y615px9hkm552x7ap6pmq9mfbzr6smp8y2b6g31";
+    sha1 = "c6f7b99986f93c9df78653c3e6a3b5043f65145e";
   };
 
-  infinality = fetchFromGitHub {
-    owner = "bohoomil";
-    repo = "fontconfig-ultimate";
-    rev = "730f5e77580677e86522c1f2119aa78803741759";
-    sha256 = "1hbrdpm6xcczs2c2iid7by8h7dsd0jcf7an88s150njyqnjzxjg7";
-  };
-
-  prePatch = ''
-    patches="$patches $(echo $infinality/*_cairo-iu/*.patch)"
-  '';
+  patches = [
+    # from https://bugs.freedesktop.org/show_bug.cgi?id=98165
+    (fetchpatch {
+      name = "cairo-CVE-2016-9082.patch";
+      url = "https://bugs.freedesktop.org/attachment.cgi?id=127421";
+      sha256 = "03sfyaclzlglip4pvfjb4zj4dmm8mlphhxl30mb6giinkc74bfri";
+    })
+  ];
 
   outputs = [ "out" "dev" "devdoc" ];
   outputBin = "dev"; # very small
@@ -38,6 +36,7 @@ stdenv.mkDerivation rec {
     libiconv
   ] ++ libintlOrEmpty ++ optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
     CoreGraphics
+    CoreText
     ApplicationServices
     Carbon
   ]);
