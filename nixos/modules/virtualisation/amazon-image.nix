@@ -72,6 +72,7 @@ let cfg = config.ec2; in
         mkdir -m 0755 -p "$metaDir"
 
         echo "getting EC2 instance metadata..."
+        set -x
 
         if ! [ -e "$metaDir/ami-manifest-path" ]; then
           wget -q -O "$metaDir/ami-manifest-path" http://169.254.169.254/1.0/meta-data/ami-manifest-path
@@ -88,6 +89,8 @@ let cfg = config.ec2; in
         if ! [ -e "$metaDir/public-keys-0-openssh-key" ]; then
           wget -q -O "$metaDir/public-keys-0-openssh-key" http://169.254.169.254/1.0/meta-data/public-keys/0/openssh-key
         fi
+
+        set +x
 
         diskNr=0
         diskForUnionfs=

@@ -20,24 +20,27 @@ with lib;
         script =
           ''
             if ! [ -d /etc/ec2-metadata ]; then
+              echo "No EC2 Data" > /dev/console
               exit 0
             fi
 
             ${optionalString (config.networking.hostName == "") ''
-              echo "setting host name..."
+              echo "setting host name..." > /dev/console
               if [ -s /etc/ec2-metadata/hostname ]; then
                   ${pkgs.nettools}/bin/hostname $(cat /etc/ec2-metadata/hostname)
               fi
             ''}
 
             if ! [ -e /root/.ssh/authorized_keys ]; then
-                echo "obtaining SSH key..."
+                echo "obtaining SSH key..." > /dev/console
                 mkdir -m 0700 -p /root/.ssh
                 if [ -s /etc/ec2-metadata/public-keys-0-openssh-key ]; then
                     cat /etc/ec2-metadata/public-keys-0-openssh-key >> /root/.ssh/authorized_keys
-                    echo "new key added to authorized_keys"
+                    echo "new key added to authorized_keys" > /dev/console
                     chmod 600 /root/.ssh/authorized_keys
                 fi
+            else
+              echo "root authorized_keys already initialized" > /dev/console
             fi
 
             # Extract the intended SSH host key for this machine from

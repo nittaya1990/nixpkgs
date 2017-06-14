@@ -4,7 +4,7 @@ let
   script = ''
     #!${pkgs.stdenv.shell} -eu
 
-    echo "attempting to fetch configuration from EC2 user data..."
+    echo "attempting to fetch configuration from EC2 user data..." > /dev/console
 
     export HOME=/root
     export PATH=${pkgs.lib.makeBinPath [ config.nix.package pkgs.systemd pkgs.gnugrep pkgs.gnused config.system.build.nixos-rebuild]}:$PATH
@@ -30,11 +30,11 @@ let
         echo "setting configuration from EC2 user data"
         cp "$userData" /etc/nixos/configuration.nix
       else
-        echo "user data does not appear to be a Nix expression; ignoring"
+        echo "user data does not appear to be a Nix expression; ignoring" > /dev/console
         exit
       fi
     else
-      echo "no user data is available"
+      echo "no user data is available" > /dev/console
       exit
     fi
 
@@ -48,7 +48,7 @@ in {
     wantedBy = [ "multi-user.target" ];
     after = [ "multi-user.target" ];
     requires = [ "network-online.target" ];
- 
+
     restartIfChanged = false;
     unitConfig.X-StopOnRemoval = false;
 
@@ -58,4 +58,3 @@ in {
     };
   };
 }
-
