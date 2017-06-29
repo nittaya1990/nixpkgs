@@ -11944,7 +11944,6 @@ with pkgs;
       [ kernelPatches.bridge_stp_helper
         kernelPatches.p9_fixes
         kernelPatches.cpu-cgroup-v2."4.4"
-        kernelPatches.xen_XSA_216_4-4
       ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
       [ kernelPatches.mips_fpureg_emu
@@ -11959,7 +11958,6 @@ with pkgs;
         kernelPatches.p9_fixes
         kernelPatches.cpu-cgroup-v2."4.9"
         kernelPatches.modinst_arg_list_too_long
-        kernelPatches.xen_XSA_216
       ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
       [ kernelPatches.mips_fpureg_emu
@@ -11976,7 +11974,6 @@ with pkgs;
         # when adding a new linux version
         kernelPatches.cpu-cgroup-v2."4.11"
         kernelPatches.modinst_arg_list_too_long
-        kernelPatches.xen_XSA_216
       ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
       [ kernelPatches.mips_fpureg_emu
@@ -11990,7 +11987,6 @@ with pkgs;
       kernelPatches.bridge_stp_helper
       kernelPatches.p9_fixes
       kernelPatches.modinst_arg_list_too_long
-      kernelPatches.xen_XSA_216
     ] ++ lib.optionals ((platform.kernelArch or null) == "mips") [
       kernelPatches.mips_fpureg_emu
       kernelPatches.mips_fpu_sigill
@@ -13624,7 +13620,7 @@ with pkgs;
   doodle = callPackage ../applications/search/doodle { };
 
   draftsight = callPackage ../applications/graphics/draftsight { };
-  
+
   droopy = callPackage ../applications/networking/droopy {
     inherit (python3Packages) wrapPython;
   };
