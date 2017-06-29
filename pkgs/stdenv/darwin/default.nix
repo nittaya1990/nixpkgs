@@ -73,6 +73,8 @@ in rec {
           nativeTools  = true;
           nativePrefix = bootstrapTools;
           nativeLibc   = false;
+          hostPlatform = localSystem;
+          targetPlatform = localSystem;
           libc         = last.pkgs.darwin.Libsystem;
           isClang      = true;
           cc           = { name = "clang-9.9.9"; outPath = bootstrapTools; };
@@ -233,11 +235,11 @@ in rec {
       libcxxabi libcxx ncurses libffi zlib gmp pcre gnugrep
       coreutils findutils diffutils patchutils;
 
-    llvmPackages = let llvmOverride = llvmPackages.llvm.override { inherit libcxxabi; };
-    in super.llvmPackages // {
-      llvm = llvmOverride;
-      clang-unwrapped = llvmPackages.clang-unwrapped.override { llvm = llvmOverride; };
-    };
+    llvmPackages = let llvmOverride = llvmPackages.llvm.override { enableManpages = false; inherit libcxxabi; }; in
+      super.llvmPackages // {
+        llvm = llvmOverride;
+        clang-unwrapped = llvmPackages.clang-unwrapped.override { enableManpages = false; llvm = llvmOverride; };
+      };
 
     darwin = super.darwin // {
       inherit (darwin) dyld Libsystem libiconv locale;
@@ -295,6 +297,8 @@ in rec {
       inherit shell;
       nativeTools = false;
       nativeLibc  = false;
+      hostPlatform = localSystem;
+      targetPlatform = localSystem;
       inherit (pkgs) coreutils binutils gnugrep;
       inherit (pkgs.darwin) dyld;
       cc   = pkgs.llvmPackages.clang-unwrapped;
@@ -313,7 +317,7 @@ in rec {
       xz.out xz.bin libcxx libcxxabi gmp.out gnumake findutils bzip2.out
       bzip2.bin llvmPackages.llvm llvmPackages.llvm.lib zlib.out zlib.dev libffi.out coreutils ed diffutils gnutar
       gzip ncurses.out ncurses.dev ncurses.man gnused bash gawk
-      gnugrep llvmPackages.clang-unwrapped llvmPackages.clang-unwrapped.man patch pcre.out binutils-raw.out
+      gnugrep llvmPackages.clang-unwrapped patch pcre.out binutils-raw.out
       binutils-raw.dev binutils gettext
     ]) ++ (with pkgs.darwin; [
       dyld Libsystem CF cctools ICU libiconv locale

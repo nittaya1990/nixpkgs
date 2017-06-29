@@ -2,6 +2,7 @@
 , pkgconfig, boehmgc, perlPackages, libsodium, aws-sdk-cpp, brotli, readline
 , autoreconfHook, autoconf-archive, bison, flex, libxml2, libxslt, docbook5, docbook5_xsl
 , libseccomp, busybox
+, hostPlatform
 , storeDir ? "/nix/store"
 , stateDir ? "/nix/var"
 , confDir ? "/etc"
@@ -39,7 +40,7 @@ let
     buildInputs = [ curl openssl sqlite xz ]
       ++ lib.optional (stdenv.isLinux || stdenv.isDarwin) libsodium
       ++ lib.optionals fromGit [ brotli readline ] # Since 1.12
-      ++ lib.optional (stdenv.isLinux && is112) libseccomp
+      ++ lib.optional stdenv.isLinux libseccomp
       ++ lib.optional ((stdenv.isLinux || stdenv.isDarwin) && is112)
           (aws-sdk-cpp.override {
             apis = ["s3"];
@@ -95,8 +96,8 @@ let
           --disable-init-state
           --enable-gc
         '' + stdenv.lib.optionalString (
-            stdenv.cross ? nix && stdenv.cross.nix ? system
-        ) ''--with-system=${stdenv.cross.nix.system}'';
+            hostPlatform ? nix && hostPlatform.nix ? system
+        ) ''--with-system=${hostPlatform.nix.system}'';
 
       doInstallCheck = false;
     };
@@ -148,10 +149,10 @@ in rec {
   nix = nixStable;
 
   nixStable = (common rec {
-    name = "nix-1.11.9";
+    name = "nix-1.11.11";
     src = fetchurl {
       url = "http://nixos.org/releases/nix/${name}/${name}.tar.xz";
-      sha256 = "0e943e277f37843f9196b0293cc31d828613ad7a328ee77cd5be01935dc6e7e1";
+      sha256 = "f5b9da21fb412e4c35b6e2bc771cfbf4ca44746be5d99868ff29d6e7604760e5";
     };
   }) // { perl-bindings = nixStable; };
 

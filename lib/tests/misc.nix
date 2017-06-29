@@ -90,7 +90,7 @@ runTests {
   testIsStorePath =  {
     expr =
       let goodPath =
-            "/nix/store/d945ibfx9x185xf04b890y4f9g3cbb63-python-2.7.11";
+            "${builtins.storeDir}/d945ibfx9x185xf04b890y4f9g3cbb63-python-2.7.11";
       in {
         storePath = isStorePath goodPath;
         storePathAppendix = isStorePath
@@ -284,6 +284,38 @@ runTests {
       # trivial implementation
       expected = builtins.toJSON val;
   };
+
+  testToPretty = {
+    expr = mapAttrs (const (generators.toPretty {})) rec {
+      int = 42;
+      bool = true;
+      string = "fnord";
+      null_ = null;
+      function = x: x;
+      functionArgs = { arg ? 4, foo }: arg;
+      list = [ 3 4 function [ false ] ];
+      attrs = { foo = null; "foo bar" = "baz"; };
+      drv = derivation { name = "test"; system = builtins.currentSystem; };
+    };
+    expected = rec {
+      int = "42";
+      bool = "true";
+      string = "\"fnord\"";
+      null_ = "null";
+      function = "<λ>";
+      functionArgs = "<λ:{(arg),foo}>";
+      list = "[ 3 4 ${function} [ false ] ]";
+      attrs = "{ \"foo\" = null; \"foo bar\" = \"baz\"; }";
+      drv = "<δ>";
+    };
+  };
+
+  testToPrettyAllowPrettyValues = {
+    expr = generators.toPretty { allowPrettyValues = true; }
+             { __pretty = v: "«" + v + "»"; val = "foo"; };
+    expected  = "«foo»";
+  };
+
 
 # MISC
 
