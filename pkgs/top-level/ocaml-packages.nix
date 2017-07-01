@@ -172,6 +172,8 @@ let
 
     ctypes = callPackage ../development/ocaml-modules/ctypes { };
 
+    decompress =  callPackage ../development/ocaml-modules/decompress { };
+
     dolmen =  callPackage ../development/ocaml-modules/dolmen { };
 
     dolog = callPackage ../development/ocaml-modules/dolog { };
@@ -244,6 +246,8 @@ let
     gapi_ocaml = callPackage ../development/ocaml-modules/gapi-ocaml { };
 
     gg = callPackage ../development/ocaml-modules/gg { };
+
+    git = callPackage ../development/ocaml-modules/git { };
 
     gmetadom = callPackage ../development/ocaml-modules/gmetadom { };
 
