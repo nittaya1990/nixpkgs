@@ -114,10 +114,6 @@ let
     };
     camlimages = camlimages_4_1;
 
-    conduit = callPackage ../development/ocaml-modules/conduit {
-       lwt = ocaml_lwt;
-    };
-
     biniou = callPackage ../development/ocaml-modules/biniou { };
 
     bin_prot_p4 = callPackage ../development/ocaml-modules/bin_prot { };
@@ -132,9 +128,23 @@ let
 
     cmdliner_1_0 = callPackage ../development/ocaml-modules/cmdliner/1.0.nix { };
 
-    cohttp = callPackage ../development/ocaml-modules/cohttp {
+    cohttp_p4 = callPackage ../development/ocaml-modules/cohttp/0.19.3.nix {
       lwt = ocaml_lwt;
     };
+
+    cohttp =
+      if lib.versionOlder "4.03" ocaml.version
+      then callPackage ../development/ocaml-modules/cohttp { }
+      else cohttp_p4;
+
+    conduit_p4 = callPackage ../development/ocaml-modules/conduit/0.10.0.nix {
+       lwt = ocaml_lwt;
+    };
+
+    conduit =
+      if lib.versionOlder "4.03" ocaml.version
+      then callPackage ../development/ocaml-modules/conduit { }
+      else conduit_p4;
 
     config-file = callPackage ../development/ocaml-modules/config-file { };
 
@@ -305,6 +315,8 @@ let
     mlgmpidl =  callPackage ../development/ocaml-modules/mlgmpidl { };
 
     mparser =  callPackage ../development/ocaml-modules/mparser { };
+
+    mstruct =  callPackage ../development/ocaml-modules/mstruct { };
 
     mtime =  callPackage ../development/ocaml-modules/mtime { };
 
