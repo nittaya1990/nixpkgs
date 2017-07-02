@@ -249,6 +249,10 @@ let
 
     git = callPackage ../development/ocaml-modules/git { };
 
+    git-http = callPackage ../development/ocaml-modules/git-http { };
+
+    git-unix = callPackage ../development/ocaml-modules/git-unix { };
+
     gmetadom = callPackage ../development/ocaml-modules/gmetadom { };
 
     gtktop = callPackage ../development/ocaml-modules/gtktop { };
@@ -286,7 +290,7 @@ let
 
     lambdaTerm-1_6 = callPackage ../development/ocaml-modules/lambda-term/1.6.nix { };
     lambdaTerm =
-      if lib.versionOlder "4.01" ocaml.version
+      if lib.versionOlder "4.02" ocaml.version
       then callPackage ../development/ocaml-modules/lambda-term { }
       else lambdaTerm-1_6;
 
@@ -296,6 +300,16 @@ let
 
     logs = callPackage ../development/ocaml-modules/logs {
       lwt = ocaml_lwt;
+    };
+
+    lwt3 = if lib.versionOlder "4.02" ocaml.version
+      then callPackage ../development/ocaml-modules/lwt {
+        version = "3.0.0";
+      }
+      else throw "lwt3 is not available for OCaml ${ocaml.version}";
+
+    lwt_react = callPackage ../development/ocaml-modules/lwt_react {
+      lwt = lwt3;
     };
 
     macaque = callPackage ../development/ocaml-modules/macaque { };
