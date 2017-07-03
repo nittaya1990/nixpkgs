@@ -13231,7 +13231,7 @@ with pkgs;
   audio-recorder = callPackage ../applications/audio/audio-recorder { };
 
   autotrace = callPackage ../applications/graphics/autotrace {};
-  
+
   milkytracker = callPackage ../applications/audio/milkytracker { };
 
   schismtracker = callPackage ../applications/audio/schismtracker { };
@@ -18893,6 +18893,8 @@ with pkgs;
   wxsqliteplus = callPackage ../development/libraries/wxsqliteplus {
     wxGTK = wxGTK30;
   };
+
+  x11idle = callPackage ../tools/misc/x11idle {};
 
   x2x = callPackage ../tools/X11/x2x { };
 
