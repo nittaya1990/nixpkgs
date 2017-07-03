@@ -3809,6 +3809,8 @@ in {
     };
   };
 
+  codecov = callPackage ../development/python-modules/codecov {};
+
   cogapp = buildPythonPackage rec {
     version = "2.3";
     name    = "cogapp-${version}";
@@ -13406,6 +13408,8 @@ in {
       homepage = http://www.freewisdom.org/projects/python-markdown;
     };
   };
+
+  markdownsuperscript = callPackage ../development/python-modules/markdownsuperscript {};
 
   markdown-macros = buildPythonPackage rec {
     name = "markdown-macros-${version}";
