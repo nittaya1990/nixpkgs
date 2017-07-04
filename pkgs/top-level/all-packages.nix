@@ -12981,6 +12981,8 @@ with pkgs;
 
   paper-icon-theme = callPackage ../data/icons/paper-icon-theme { };
 
+  papirus-icon-theme = callPackage ../data/icons/papirus-icon-theme { };
+
   pecita = callPackage ../data/fonts/pecita {};
 
   paratype-pt-mono = callPackage ../data/fonts/paratype-pt/mono.nix {};
