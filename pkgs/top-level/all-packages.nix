@@ -13657,6 +13657,8 @@ with pkgs;
 
   doodle = callPackage ../applications/search/doodle { };
 
+  dr14_tmeter = callPackage ../applications/audio/dr14_tmeter { };
+
   draftsight = callPackage ../applications/graphics/draftsight { };
 
   droopy = callPackage ../applications/networking/droopy {
