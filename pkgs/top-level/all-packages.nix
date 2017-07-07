@@ -2067,6 +2067,8 @@ with pkgs;
 
   git-lfs = callPackage ../applications/version-management/git-lfs { };
 
+  git-ftp = callPackage ../development/tools/git-ftp { };
+
   git-series = callPackage ../development/tools/git-series { };
 
   git-up = callPackage ../applications/version-management/git-up { };
@@ -6572,7 +6574,7 @@ with pkgs;
     pythonPackages = python2Packages;
   };
   buildbot-ui = buildbot.withPlugins (with self.buildbot-plugins; [ www ]);
-  buildbot-full = buildbot.withPlugins (with self.buildbot-plugins; [ www console-view waterfall-view ]);
+  buildbot-full = buildbot.withPlugins (with self.buildbot-plugins; [ www console-view waterfall-view grid-view ]);
 
   buildkite-agent = callPackage ../development/tools/continuous-integration/buildkite-agent { };
 
