@@ -17941,6 +17941,10 @@ with pkgs;
 
   abella = callPackage ../applications/science/logic/abella {};
 
+  acgtk = callPackage ../applications/science/logic/acgtk {
+    ocamlPackages = ocamlPackages_4_03;
+  };
+
   alt-ergo = callPackage ../applications/science/logic/alt-ergo {
     ocamlPackages = ocamlPackages_4_02;
   };
