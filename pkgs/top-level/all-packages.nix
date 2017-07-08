@@ -185,8 +185,10 @@ with pkgs;
 
   fetchzip = callPackage ../build-support/fetchzip { };
 
+  gitRepoToName = callPackage ../build-support/fetchgit/gitrepotoname.nix { };
+
   fetchFromGitHub = {
-    owner, repo, rev, name ? "${repo}-${rev}-src",
+    owner, repo, rev, name ? gitRepoToName repo rev,
     fetchSubmodules ? false, private ? false,
     githubBase ? "github.com", varPrefix ? null,
     ... # For hash agility
@@ -223,7 +225,7 @@ with pkgs;
     } // passthruAttrs) // { inherit rev; };
 
   fetchFromBitbucket = {
-    owner, repo, rev, name ? "${repo}-${rev}-src",
+    owner, repo, rev, name ? gitRepoToName repo rev,
     ... # For hash agility
   }@args: fetchzip ({
     inherit name;
@@ -234,7 +236,7 @@ with pkgs;
 
   # cgit example, snapshot support is optional in cgit
   fetchFromSavannah = {
-    repo, rev, name ? "${repo}-${rev}-src",
+    repo, rev, name ? gitRepoToName repo rev,
     ... # For hash agility
   }@args: fetchzip ({
     inherit name;
@@ -244,7 +246,7 @@ with pkgs;
 
   # gitlab example
   fetchFromGitLab = {
-    owner, repo, rev, name ? "${repo}-${rev}-src",
+    owner, repo, rev, name ? gitRepoToName repo rev,
     ... # For hash agility
   }@args: fetchzip ({
     inherit name;
@@ -254,7 +256,7 @@ with pkgs;
 
   # gitweb example, snapshot support is optional in gitweb
   fetchFromRepoOrCz = {
-    repo, rev, name ? "${repo}-${rev}-src",
+    repo, rev, name ? gitRepoToName repo rev,
     ... # For hash agility
   }@args: fetchzip ({
     inherit name;
@@ -18112,6 +18114,8 @@ with pkgs;
   otter = callPackage ../applications/science/logic/otter {};
 
   picosat = callPackage ../applications/science/logic/picosat {};
+
+  libpoly = callPackage ../applications/science/logic/poly/default.nix {};
 
   prooftree = (with ocamlPackages_4_01_0;
     callPackage  ../applications/science/logic/prooftree {
