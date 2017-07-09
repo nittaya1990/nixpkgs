@@ -2430,6 +2430,8 @@ with pkgs;
 
   host = bind.host;
 
+  hotspot = libsForQt56.callPackage ../development/tools/analysis/hotspot { };
+
   hping = callPackage ../tools/networking/hping { };
 
   htpdate = callPackage ../tools/networking/htpdate { };
@@ -17706,6 +17708,8 @@ with pkgs;
   albatross = callPackage ../misc/themes/albatross { };
 
   gtk_engines = callPackage ../misc/themes/gtk2/gtk-engines { };
+
+  gtk-engine-bluecurve = callPackage ../misc/themes/gtk2/gtk-engine-bluecurve { };
 
   gtk-engine-murrine = callPackage ../misc/themes/gtk2/gtk-engine-murrine { };
 
