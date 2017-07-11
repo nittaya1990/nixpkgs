@@ -13620,7 +13620,7 @@ with pkgs;
 
   cuneiform = callPackage ../tools/graphics/cuneiform {};
 
-  cutecom = callPackage ../tools/misc/cutecom { };
+  cutecom = libsForQt5.callPackage ../tools/misc/cutecom { };
 
   cutegram =
     let callpkg = libsForQt56.callPackage;
