@@ -15981,6 +15981,8 @@ with pkgs;
     patches = config.st.patches or null;
   };
 
+  xst = callPackage ../applications/misc/st/xst.nix { };
+
   stag = callPackage ../applications/misc/stag {
     curses = ncurses;
   };
