@@ -16725,6 +16725,8 @@ with pkgs;
     inherit (xorg) libXt;
   };
 
+  xautomation = callPackage ../tools/X11/xautomation { };
+
   xawtv = callPackage ../applications/video/xawtv { };
 
   xbindkeys = callPackage ../tools/X11/xbindkeys { };
