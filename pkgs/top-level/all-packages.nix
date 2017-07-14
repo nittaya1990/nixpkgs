@@ -3393,6 +3393,8 @@ with pkgs;
     graphicalSupport = true;
   };
 
+  nnn = callPackage ../applications/misc/nnn { };
+
   notify-osd = callPackage ../applications/misc/notify-osd { };
 
   nox = callPackage ../tools/package-management/nox {
@@ -13349,6 +13351,7 @@ with pkgs;
   ethabi = self.altcoins.ethabi;
   ethrun = self.altcoins.ethrun;
   seth = self.altcoins.seth;
+  hsevm = self.altcoins.hsevm;
 
   stellar-core = self.altcoins.stellar-core;
 
