@@ -7663,6 +7663,8 @@ with pkgs;
 
   vmmlib = callPackage ../development/libraries/vmmlib {};
 
+  elastix = callPackage ../development/libraries/science/biology/elastix { };
+
   enchant = callPackage ../development/libraries/enchant { };
 
   enet = callPackage ../development/libraries/enet { };
