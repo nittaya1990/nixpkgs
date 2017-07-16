@@ -13413,6 +13413,8 @@ with pkgs;
     libgpod = pkgs.libgpod.override { monoSupport = true; };
   };
 
+  bashSnippets = callPackage ../applications/misc/bashSnippets { };
+
   batik = callPackage ../applications/graphics/batik { };
 
   batti = callPackage ../applications/misc/batti { };
