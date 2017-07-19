@@ -535,6 +535,8 @@ with pkgs;
 
   bonnie = callPackage ../tools/filesystems/bonnie { };
 
+  container-linux-config-transpiler = callPackage ../development/tools/container-linux-config-transpiler { };
+
   djmount = callPackage ../tools/filesystems/djmount { };
 
   dgsh = callPackage ../shells/dgsh { };
@@ -2196,6 +2198,8 @@ with pkgs;
   google-cloud-sdk = callPackage ../tools/admin/google-cloud-sdk { };
 
   google-fonts = callPackage ../data/fonts/google-fonts { };
+
+  google-compute-engine = callPackage ../tools/virtualization/google-compute-engine {  };
 
   gource = callPackage ../applications/version-management/gource { };
 
@@ -18009,6 +18013,10 @@ with pkgs;
     fftw = fftw;
     cmake = cmakeCurses;
   });
+
+  ### SCIENCE/MEDICINE
+
+  aliza = callPackage ../applications/science/medicine/aliza { };
 
   ### PHYSICS
 
