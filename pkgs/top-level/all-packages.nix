@@ -1934,6 +1934,8 @@ with pkgs;
 
   fdk_aac = callPackage ../development/libraries/fdk-aac { };
 
+  flac123 = callPackage ../applications/audio/flac123 { };
+
   flamegraph = callPackage ../development/tools/flamegraph { };
 
   # Awkward historical capitalization for flamegraph. Remove eventually
@@ -9645,14 +9647,11 @@ with pkgs;
 
   openslp = callPackage ../development/libraries/openslp {};
 
-  libressl = libressl_2_5;
-  libressl_2_4 = callPackage ../development/libraries/libressl/2.4.nix {
-    fetchurl = fetchurlBoot;
-  };
-  libressl_2_5 = callPackage ../development/libraries/libressl/2.5.nix {
-    fetchurl = fetchurlBoot;
-  };
+  inherit (callPackages ../development/libraries/libressl { })
+    libressl_2_5
+    libressl_2_6;
 
+  libressl = libressl_2_5;
 
   boringssl = callPackage ../development/libraries/boringssl { };
 
