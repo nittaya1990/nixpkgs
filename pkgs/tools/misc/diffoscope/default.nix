@@ -5,13 +5,7 @@
 , enableBloat ? false
 }:
 
-    # Still missing these tools: enjarify, otool & lipo (maybe OS X only), showttf
-    # Also these libraries: python3-guestfs
-    # FIXME: move xxd into a separate package so we don't have to pull in all of vim.
-let tools = [ acl binutils bzip2 cbfstool cdrkit cpio diffutils e2fsprogs file gettext
-              gzip libcaca poppler_utils sng sqlite squashfsTools unzip vim xz colordiff
-            ] ++ lib.optionals enableBloat [ colord fpc ghc gnupg1 jdk mono pdftk ];
-in python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "diffoscope";
   name = "${pname}-${version}";
   version = "77";
@@ -32,14 +26,19 @@ in python3.pkgs.buildPythonApplication rec {
     sed -i setup.py -e "/'rpm-python',/d"
   '';
 
-  pythonPath = with python3.pkgs; [ debian libarchive-c python_magic tlsh rpm ];
+  # Still missing these tools: enjarify, otool & lipo (maybe OS X only), showttf
+  # Also these libraries: python3-guestfs
+  # FIXME: move xxd into a separate package so we don't have to pull in all of vim.
+  pythonPath = with python3.pkgs;
+    [ debian libarchive-c python_magic tlsh rpm cdrkit acl binutils bzip2 cbfstool cpio diffutils e2fsprogs file gettext
+      gzip libcaca poppler_utils sng sqlite squashfsTools unzip vim xz colordiff
+    ] ++ lib.optionals enableBloat [ colord fpc ghc gnupg1 jdk mono pdftk ];
 
   doCheck = false; # Calls 'mknod' in squashfs tests, which needs root
 
   postInstall = ''
     mkdir -p $out/share/man/man1
     ${docutils}/bin/rst2man.py debian/diffoscope.1.rst $out/share/man/man1/diffoscope.1
-    wrapProgram $out/bin/diffoscope --prefix PATH : ${lib.makeBinPath tools}
   '';
 
   meta = with stdenv.lib; {
