@@ -13481,6 +13481,8 @@ with pkgs;
     inherit (gnome2) zenity;
   };
 
+  blackbox = callPackage ../applications/version-management/blackbox { };
+
   bleachbit = callPackage ../applications/misc/bleachbit { };
 
   blender = callPackage  ../applications/misc/blender {
