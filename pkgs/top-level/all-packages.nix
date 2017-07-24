@@ -16457,6 +16457,8 @@ with pkgs;
     flags = [ "python" "X11" ]; # only flag "X11" by now
   });
 
+  xxd = callPackage ../tools/misc/xxd { };
+
   vimNox = lowPrio (vim_configurable.override { source = "vim-nox"; });
 
   qpdfview = callPackage ../applications/misc/qpdfview {};
@@ -18689,6 +18691,8 @@ with pkgs;
   nixui = callPackage ../tools/package-management/nixui { node_webkit = nwjs_0_12; };
 
   nix-bundle = callPackage ../tools/package-management/nix-bundle { nix = nixUnstable; };
+
+  nix-index = callPackage ../tools/package-management/nix-index { };
 
   inherit (callPackages ../tools/package-management/nix-prefetch-scripts { })
     nix-prefetch-bzr
