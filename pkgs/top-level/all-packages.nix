@@ -531,6 +531,10 @@ with pkgs;
 
   apg = callPackage ../tools/security/apg { };
 
+  apt = callPackage ../tools/package-management/apt {
+    inherit (perlPackages) Po4a;
+  };
+
   autorevision = callPackage ../tools/misc/autorevision { };
 
   bcachefs-tools = callPackage ../tools/filesystems/bcachefs-tools { };
@@ -9358,6 +9362,8 @@ with pkgs;
 
   linenoise = callPackage ../development/libraries/linenoise { };
 
+  linenoise-ng = callPackage ../development/libraries/linenoise-ng { };
+
   lirc = callPackage ../development/libraries/lirc { };
 
   liquid-dsp = callPackage ../development/libraries/liquid-dsp { };
@@ -10096,6 +10102,8 @@ with pkgs;
   rlog = callPackage ../development/libraries/rlog { };
 
   rocksdb = callPackage ../development/libraries/rocksdb { };
+
+  rocksdb_lite = rocksdb.override { enableLite = true; };
 
   rote = callPackage ../development/libraries/rote { };
 
@@ -15524,6 +15532,8 @@ with pkgs;
   orpie = callPackage ../applications/misc/orpie { gsl = gsl_1; };
 
   osmo = callPackage ../applications/office/osmo { };
+
+  osquery = callPackage ../tools/system/osquery { };
 
   palemoon = callPackage ../applications/networking/browsers/palemoon {
     # https://forum.palemoon.org/viewtopic.php?f=57&t=15296#p111146
