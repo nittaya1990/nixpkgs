@@ -3923,6 +3923,8 @@ with pkgs;
 
   quilt = callPackage ../development/tools/quilt { };
 
+  quota = callPackage ../tools/misc/quota { };
+
   wiggle = callPackage ../development/tools/wiggle { };
 
   radamsa = callPackage ../tools/security/radamsa { };
@@ -7378,8 +7380,6 @@ with pkgs;
   aacskeys = callPackage ../development/libraries/aacskeys { };
 
   aalib = callPackage ../development/libraries/aalib { };
-
-  accelio = callPackage ../development/libraries/accelio { stdenv = overrideCC stdenv gcc5; };
 
   accountsservice = callPackage ../development/libraries/accountsservice { };
 
@@ -12156,8 +12156,6 @@ with pkgs;
     callPackage = newScope self;
 
     inherit kernel;
-
-    accelio = callPackage ../development/libraries/accelio { };
 
     acpi_call = callPackage ../os-specific/linux/acpi-call {};
 
