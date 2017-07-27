@@ -8201,11 +8201,11 @@ in {
 
   python-axolotl = buildPythonPackage rec {
     name = "python-axolotl-${version}";
-    version = "0.1.35";
+    version = "0.1.39";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/python-axolotl/${name}.tar.gz";
-      sha256 = "0ch2d5wqfgxy22dkbxwzilq91wkqy9ficrjy39qhal8g8rdc4jr0";
+      sha256 = "09bf5gfip9x2wr0ij43p39ac6z2iqzn7kgpi2jjbwpnhs0vwkycs";
     };
 
     propagatedBuildInputs = with self; [ python-axolotl-curve25519 protobuf3_0 pycrypto ];
@@ -8231,7 +8231,7 @@ in {
     };
 
     meta = {
-      homepage = "https://github.com/tgalal/python-axolotl";
+      homepage = "https://github.com/tgalal/python-axolotl-curve25519";
       description = "Curve25519 with ed25519 signatures";
       maintainers = with maintainers; [ abbradar ];
       license = licenses.gpl3;
@@ -8241,15 +8241,16 @@ in {
 
   pypolicyd-spf = buildPythonPackage rec {
     name = "pypolicyd-spf-${version}";
-    majorVersion = "1.3";
-    version = "${majorVersion}.2";
+    majorVersion = "2.0";
+    version = "${majorVersion}.1";
+    disabled = !isPy3k;
 
     src = pkgs.fetchurl {
       url = "https://launchpad.net/pypolicyd-spf/${majorVersion}/${version}/+download/${name}.tar.gz";
-      sha256 = "0ri9bdwn1k8xlyfhrgzns7wjvp5h08dq5fnxcq6mphy94rmc8x3i";
+      sha256 = "09yi8y7pij5vzzrkc9sdw01x8w5n758d0qg7wv5hxd1l6if8c94i";
     };
 
-    propagatedBuildInputs = with self; [ pyspf pydns ipaddr ];
+    propagatedBuildInputs = with self; [ pyspf ];
 
     preBuild = ''
       substituteInPlace setup.py --replace "'/etc'" "'$out/etc'"
@@ -8458,6 +8459,8 @@ in {
       url = "mirror://sourceforge/pymilter/pyspf/${name}/${name}.tar.gz";
       sha256 = "18j1rmbmhih7q6y12grcj169q7sx1986qn4gmpla9y5gwfh1p8la";
     };
+
+    propagatedBuildInputs = with self; [ pydns ];
 
     meta = {
       homepage = "http://bmsi.com/python/milter.html";
@@ -11846,12 +11849,13 @@ in {
   ipywidgets = callPackage ../development/python-modules/ipywidgets { };
 
   ipaddr = buildPythonPackage rec {
-    name = "ipaddr-2.1.10";
+    name = "ipaddr-${version}";
+    version = "2.1.11";
     disabled = isPy3k;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/i/ipaddr/${name}.tar.gz";
-      sha256 = "18ycwkfk3ypb1yd09wg20r7j7zq2a73d7j6j10qpgra7a7abzhyj";
+      sha256 = "1dwq3ngsapjc93fw61rp17fvzggmab5x1drjzvd4y4q0i255nm8v";
     };
 
     meta = {
@@ -14219,12 +14223,12 @@ in {
   };
 
   netifaces = buildPythonPackage rec {
-    version = "0.10.5";
+    version = "0.10.6";
     name = "netifaces-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/n/netifaces/${name}.tar.gz";
-      sha256 = "12v2bm77dgaqjm9vmb8in0zpip2hn98mf5sycfvgq5iivm9avn2r";
+      sha256 = "1q7bi5k2r955rlcpspx4salvkkpk28jky67fjbpz2dkdycisak8c";
     };
 
     meta = {
@@ -22220,18 +22224,41 @@ in {
     doCheck = false;
   };
 
-  pydns = buildPythonPackage rec {
-    name = "pydns-2.3.6";
-    disabled = isPy3k;
+  pydns =
+    let
+      py3 = buildPythonPackage rec {
+        name = "${pname}-${version}";
+        pname = "py3dns";
+        version = "3.1.1a";
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pydns/${name}.tar.gz";
-      sha256 = "0qnv7i9824nb5h9psj0rwzjyprwgfiwh5s5raa9avbqazy5hv5pi";
-    };
+        src = fetchPypi {
+          inherit pname version;
+          sha256 = "0z0qmx9j1ivpgg54gqqmh42ljnzxaychc5inz2gbgv0vls765smz";
+        };
 
-    doCheck = false;
+        preConfigure = ''
+          sed -i \
+            -e '/import DNS/d' \
+            -e 's/DNS.__version__/"${version}"/g' \
+            setup.py
+        '';
 
-  };
+        doCheck = false;
+      };
+
+      py2 = buildPythonPackage rec {
+        name = "${pname}-${version}";
+        pname = "pydns";
+        version = "2.3.6";
+
+        src = fetchPypi {
+          inherit pname version;
+          sha256 = "0qnv7i9824nb5h9psj0rwzjyprwgfiwh5s5raa9avbqazy5hv5pi";
+        };
+
+        doCheck = false;
+      };
+    in if isPy3k then py3 else py2;
 
   pythondaemon = buildPythonPackage rec {
     name = "python-daemon-${version}";
