@@ -3292,6 +3292,8 @@ with pkgs;
 
   nasty = callPackage ../tools/security/nasty { };
 
+  nawk = callPackage ../tools/text/nawk { };
+
   nbd = callPackage ../tools/networking/nbd { };
 
   ndjbdns = callPackage ../tools/networking/ndjbdns { };
@@ -12262,12 +12264,10 @@ with pkgs;
 
     sch_cake = callPackage ../os-specific/linux/sch_cake { };
 
-    inherit (callPackage ../os-specific/linux/spl {
+    spl = callPackage ../os-specific/linux/spl {
       configFile = "kernel";
       inherit kernel;
-    }) splStable splUnstable;
-
-    spl = splStable;
+    };
 
     sysdig = callPackage ../os-specific/linux/sysdig {};
 
@@ -12291,12 +12291,10 @@ with pkgs;
 
     x86_energy_perf_policy = callPackage ../os-specific/linux/x86_energy_perf_policy { };
 
-    inherit (callPackage ../os-specific/linux/zfs {
+    zfs = callPackage ../os-specific/linux/zfs {
       configFile = "kernel";
       inherit kernel spl;
-    }) zfsStable zfsUnstable;
-
-    zfs = zfsStable;
+    };
   });
 
   # The current default kernel / kernel modules.
@@ -12605,11 +12603,9 @@ with pkgs;
 
   statifier = callPackage ../os-specific/linux/statifier { };
 
-  inherit (callPackage ../os-specific/linux/spl {
+  spl = callPackage ../os-specific/linux/spl {
     configFile = "user";
-  }) splStable splUnstable;
-
-  spl = splStable;
+  };
 
   sysdig = callPackage ../os-specific/linux/sysdig {
     kernel = null;
@@ -12814,11 +12810,9 @@ with pkgs;
 
   zd1211fw = callPackage ../os-specific/linux/firmware/zd1211 { };
 
-  inherit (callPackage ../os-specific/linux/zfs {
+  zfs = callPackage ../os-specific/linux/zfs {
     configFile = "user";
-  }) zfsStable zfsUnstable;
-
-  zfs = zfsStable;
+  };
 
   ### DATA
 
