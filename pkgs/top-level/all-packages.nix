@@ -989,6 +989,8 @@ with pkgs;
 
   esptool-ck = callPackage ../tools/misc/esptool-ck { };
 
+  ephemeralpg = callPackage ../applications/misc/ephemeralpg {};
+
   f3 = callPackage ../tools/filesystems/f3 { };
 
   facter = callPackage ../tools/system/facter {
@@ -4809,6 +4811,8 @@ with pkgs;
   xbanish = callPackage ../tools/X11/xbanish { };
 
   xbrightness = callPackage ../tools/X11/xbrightness { };
+
+  xkbvalidate = callPackage ../tools/X11/xkbvalidate { };
 
   xfstests = callPackage ../tools/misc/xfstests { };
 
@@ -18553,6 +18557,7 @@ with pkgs;
   dell-530cdn = callPackage ../misc/drivers/dell-530cdn {};
 
   dosbox = callPackage ../misc/emulators/dosbox { };
+  dosbox-unstable = callPackage ../misc/emulators/dosbox/unstable.nix { };
 
   dpkg = callPackage ../tools/package-management/dpkg { };
 
