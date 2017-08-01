@@ -11589,6 +11589,8 @@ with pkgs;
 
   tt-rss = callPackage ../servers/tt-rss { };
 
+  searx = callPackages ../servers/web-apps/searx { };
+
   selfoss = callPackage ../servers/web-apps/selfoss { };
 
   shaarli = callPackage ../servers/web-apps/shaarli { };
