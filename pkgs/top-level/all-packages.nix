@@ -6007,7 +6007,9 @@ with pkgs;
   tbb = callPackage ../development/libraries/tbb { };
 
   terra = callPackage ../development/compilers/terra {
-    llvmPackages = llvmPackages_38;
+    llvmPackages = llvmPackages_38 // {
+      llvm = llvmPackages_38.llvm.override { enableSharedLibraries = false; };
+    };
     lua = lua5_1;
   };
 
@@ -17391,6 +17393,10 @@ with pkgs;
   openclonk = callPackage ../games/openclonk { };
 
   openmw = callPackage ../games/openmw { };
+
+  openmw-tes3mp = libsForQt5.callPackage ../games/openmw/tes3mp.nix {
+    stdenv = overrideCC stdenv gcc7;
+  };
 
   openra = callPackage ../games/openra { lua = lua5_1; };
 
