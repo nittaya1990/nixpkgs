@@ -9050,8 +9050,6 @@ with pkgs;
 
   libmrss = callPackage ../development/libraries/libmrss { };
 
-  libmsn = callPackage ../development/libraries/libmsn { };
-
   libmspack = callPackage ../development/libraries/libmspack { };
 
   libmusicbrainz2 = callPackage ../development/libraries/libmusicbrainz/2.x.nix { };
@@ -10596,8 +10594,6 @@ with pkgs;
 
   wt = callPackage ../development/libraries/wt { };
 
-  wvstreams = callPackage ../development/libraries/wvstreams { };
-
   wxGTK = wxGTK28;
 
   wxGTK28 = callPackage ../development/libraries/wxwidgets/2.8 {
@@ -11453,6 +11449,7 @@ with pkgs;
   prometheus-mysqld-exporter = callPackage ../servers/monitoring/prometheus/mysqld-exporter.nix { };
   prometheus-nginx-exporter = callPackage ../servers/monitoring/prometheus/nginx-exporter.nix { };
   prometheus-node-exporter = callPackage ../servers/monitoring/prometheus/node-exporter.nix { };
+  prometheus-openvpn-exporter = callPackage ../servers/monitoring/prometheus/openvpn-exporter.nix { };
   prometheus-pushgateway = callPackage ../servers/monitoring/prometheus/pushgateway.nix { };
   prometheus-snmp-exporter = callPackage ../servers/monitoring/prometheus/snmp-exporter.nix { };
   prometheus-statsd-bridge = callPackage ../servers/monitoring/prometheus/statsd-bridge.nix { };
