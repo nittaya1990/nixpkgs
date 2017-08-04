@@ -1051,6 +1051,8 @@ with pkgs;
 
   glock = callPackage ../development/tools/glock { };
 
+  glslviewer = callPackage ../development/tools/glslviewer { };
+  
   gmic = callPackage ../tools/graphics/gmic { };
 
   goa = callPackage ../development/tools/goa { };
@@ -1815,6 +1817,8 @@ with pkgs;
   enscript = callPackage ../tools/text/enscript { };
 
   entr = callPackage ../tools/misc/entr { };
+
+  envoy = callPackage ../tools/networking/envoy { };
 
   eot_utilities = callPackage ../tools/misc/eot-utilities { };
 
@@ -2962,8 +2966,6 @@ with pkgs;
 
   libevdev = callPackage ../development/libraries/libevdev { };
 
-  libevhtp = callPackage ../development/libraries/libevhtp { };
-
   libfann = callPackage ../development/libraries/libfann { };
 
   libircclient = callPackage ../development/libraries/libircclient { };
@@ -3505,6 +3507,8 @@ with pkgs;
 
   oh-my-zsh = callPackage ../shells/oh-my-zsh { };
 
+  ola = callPackage ../applications/misc/ola { };
+
   opencc = callPackage ../tools/text/opencc { };
 
   opencl-info = callPackage ../tools/system/opencl-info { };
@@ -3911,7 +3915,9 @@ with pkgs;
 
   qarte = callPackage ../applications/video/qarte { };
 
-  qnial = callPackage ../development/interpreters/qnial {};
+  qlcplus = libsForQt5.callPackage ../applications/misc/qlcplus { };
+
+  qnial = callPackage ../development/interpreters/qnial { };
 
   ocz-ssd-guru = callPackage ../tools/misc/ocz-ssd-guru { };
 
@@ -4476,8 +4482,6 @@ with pkgs;
   tinc_pre = callPackage ../tools/networking/tinc/pre.nix { };
 
   tiny8086 = callPackage ../applications/virtualization/8086tiny { };
-
-  tlsdate = callPackage ../tools/networking/tlsdate { };
 
   tldr = callPackage ../tools/misc/tldr { };
 
@@ -5187,6 +5191,11 @@ with pkgs;
 
   clang = llvmPackages.clang;
 
+  clang-sierraHack = clang.override {
+    name = "clang-wrapper-with-reexport-hack";
+    useMacosReexportHack = true;
+  };
+
   clang_4  = llvmPackages_4.clang;
   clang_39 = llvmPackages_39.clang;
   clang_38 = llvmPackages_38.clang;
@@ -5214,6 +5223,7 @@ with pkgs;
 
   #Use this instead of stdenv to build with clang
   clangStdenv = if stdenv.isDarwin then stdenv else lowPrio llvmPackages.stdenv;
+  clang-sierraHack-stdenv = overrideCC stdenv clang-sierraHack;
   libcxxStdenv = lowPrio llvmPackages.libcxxStdenv;
 
   clean = callPackage ../development/compilers/clean { };
@@ -7478,6 +7488,8 @@ with pkgs;
 
   babl = callPackage ../development/libraries/babl { };
 
+  backward-cpp = callPackage ../development/libraries/backward-cpp { };
+
   bctoolbox = callPackage ../development/libraries/bctoolbox {
     mbedtls = mbedtls_1_3;
   };
@@ -7525,8 +7537,6 @@ with pkgs;
   c-blosc = callPackage ../development/libraries/c-blosc { };
 
   capnproto = callPackage ../development/libraries/capnproto { };
-
-  ccnx = callPackage ../development/libraries/ccnx { };
 
   ndn-cxx = callPackage ../development/libraries/ndn-cxx { };
 
@@ -8758,10 +8768,6 @@ with pkgs;
 
   libexosip = callPackage ../development/libraries/exosip {};
 
-  libexosip_3 = callPackage ../development/libraries/exosip/3.x.nix {
-    libosip = libosip_3;
-  };
-
   libextractor = callPackage ../development/libraries/libextractor {
     libmpeg2 = mpeg2dec;
   };
@@ -9387,6 +9393,8 @@ with pkgs;
   lightning = callPackage ../development/libraries/lightning { };
 
   lightlocker = callPackage ../misc/screensavers/light-locker { };
+
+  lightstep-tracer-cpp = callPackage ../development/libraries/lightstep-tracer-cpp { };
 
   linenoise = callPackage ../development/libraries/linenoise { };
 
@@ -10070,6 +10078,8 @@ with pkgs;
 
   rabbitmq-java-client = callPackage ../development/libraries/rabbitmq-java-client {};
 
+  rapidjson = callPackage ../development/libraries/rapidjson {};
+
   raul = callPackage ../development/libraries/audio/raul { };
 
   readline = readline6;
@@ -10086,7 +10096,7 @@ with pkgs;
   readosm = callPackage ../development/libraries/readosm { };
 
   lambdabot = callPackage ../development/tools/haskell/lambdabot {
-    haskell-lib = haskell.lib;
+    haskellLib = haskell.lib;
   };
 
   lambda-mod-zsh-theme = callPackage ../shells/lambda-mod-zsh-theme/default.nix { };
@@ -14254,8 +14264,6 @@ with pkgs;
   wireshark-qt = wireshark-cli.override { withQt = true; };
   wireshark = wireshark-qt;
 
-  wvdial = callPackage ../os-specific/linux/wvdial { };
-
   fbida = callPackage ../applications/graphics/fbida { };
 
   fdupes = callPackage ../tools/misc/fdupes { };
@@ -14974,10 +14982,6 @@ with pkgs;
   lbzip2 = callPackage ../tools/compression/lbzip2 { };
 
   lci = callPackage ../applications/science/logic/lci {};
-
-  ldcpp = callPackage ../applications/networking/p2p/ldcpp {
-    inherit (gnome2) libglade;
-  };
 
   lemonbar = callPackage ../applications/window-managers/lemonbar { };
 
@@ -15902,9 +15906,8 @@ with pkgs;
 
   remotebox = callPackage ../applications/virtualization/remotebox { };
 
-  retroshare = callPackage ../applications/networking/p2p/retroshare { };
-
-  retroshare06 = lowPrio (callPackage ../applications/networking/p2p/retroshare/0.6.nix { });
+  retroshare = libsForQt5.callPackage ../applications/networking/p2p/retroshare { };
+  retroshare06 = retroshare;
 
   ricochet = libsForQt56.callPackage ../applications/networking/instant-messengers/ricochet { };
 
@@ -16444,8 +16447,6 @@ with pkgs;
   };
 
   utox = callPackage ../applications/networking/instant-messengers/utox { };
-
-  vanitygen = callPackage ../applications/misc/vanitygen { };
 
   vanubi = callPackage ../applications/editors/vanubi { };
 
@@ -17819,6 +17820,8 @@ with pkgs;
 
   numix-gtk-theme = callPackage ../misc/themes/numix { };
 
+  numix-sx-gtk-theme = callPackage ../misc/themes/numix-sx { };
+
   theme-vertex = callPackage ../misc/themes/vertex { };
 
   rox-filer = callPackage ../desktops/rox/rox-filer {
@@ -18631,8 +18634,6 @@ with pkgs;
 
   gajim = callPackage ../applications/networking/instant-messengers/gajim { };
 
-  gale = callPackage ../applications/networking/instant-messengers/gale { };
-
   gammu = callPackage ../applications/misc/gammu { };
 
   gensgs = callPackage_i686 ../misc/emulators/gens-gs { };
@@ -18924,11 +18925,13 @@ with pkgs;
   inherit (callPackage ../applications/networking/cluster/terraform {})
     terraform_0_8_5
     terraform_0_8_8
-    terraform_0_9_11;
+    terraform_0_9_11
+    terraform_0_10_0;
 
   terraform_0_8 = terraform_0_8_8;
   terraform_0_9 = terraform_0_9_11;
-  terraform = terraform_0_9;
+  terraform_0_10 = terraform_0_10_0;
+  terraform = terraform_0_10;
 
   terraform-inventory = callPackage ../applications/networking/cluster/terraform-inventory {};
 
@@ -19258,4 +19261,9 @@ with pkgs;
   houdini = callPackage ../applications/misc/houdini {};
 
   xtermcontrol = callPackage ../applications/misc/xtermcontrol {};
+
+  # `recurseIntoAttrs` for sake of hydra, not nix-env
+  tests = recurseIntoAttrs {
+    macOSSierraShared = callPackage ../test/macos-sierra-shared {};
+  };
 }
