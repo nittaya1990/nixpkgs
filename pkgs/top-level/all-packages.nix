@@ -13059,6 +13059,8 @@ with pkgs;
 
   man-pages = callPackage ../data/documentation/man-pages { };
 
+  material-icons = callPackage ../data/fonts/material-icons { };
+
   meslo-lg = callPackage ../data/fonts/meslo-lg {};
 
   miscfiles = callPackage ../data/misc/miscfiles { };
