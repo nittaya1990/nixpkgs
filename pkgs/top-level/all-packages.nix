@@ -8048,6 +8048,7 @@ with pkgs;
   mpir = callPackage ../development/libraries/mpir {};
 
   gns3-gui = callPackage ../applications/networking/gns3/gui.nix { };
+  gns3-server = callPackage ../applications/networking/gns3/server.nix { };
 
   gobjectIntrospection = callPackage ../development/libraries/gobject-introspection {
     nixStoreDir = config.nix.storeDir or builtins.storeDir;
