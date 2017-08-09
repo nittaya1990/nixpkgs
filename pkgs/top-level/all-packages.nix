@@ -17459,6 +17459,8 @@ with pkgs;
     openglSupport = mesaSupported;
   };
 
+  rftg = callPackage ../games/rftg { };
+
   rigsofrods = callPackage ../games/rigsofrods {
     angelscript = angelscript_2_22;
     mygui = mygui.override {
