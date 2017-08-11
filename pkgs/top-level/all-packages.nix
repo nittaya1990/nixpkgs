@@ -11957,7 +11957,6 @@ with pkgs;
   iproute = callPackage ../os-specific/linux/iproute { };
 
   iputils = callPackage ../os-specific/linux/iputils {
-    sp = spCompat;
     inherit (perlPackages) SGMLSpm;
   };
 
@@ -16409,8 +16408,6 @@ with pkgs;
   tree = callPackage ../tools/system/tree {};
 
   treesheets = callPackage ../applications/office/treesheets { wxGTK = wxGTK30; };
-
-  trezor-bridge = callPackage ../applications/networking/browsers/mozilla-plugins/trezor { };
 
   tribler = callPackage ../applications/networking/p2p/tribler { };
 
