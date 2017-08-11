@@ -3563,8 +3563,6 @@ with pkgs;
 
   opensp = callPackage ../tools/text/sgml/opensp { };
 
-  spCompat = callPackage ../tools/text/sgml/opensp/compat.nix { };
-
   opentracker = callPackage ../applications/networking/p2p/opentracker { };
 
   opentsdb = callPackage ../tools/misc/opentsdb {};
@@ -16408,6 +16406,8 @@ with pkgs;
   tree = callPackage ../tools/system/tree {};
 
   treesheets = callPackage ../applications/office/treesheets { wxGTK = wxGTK30; };
+
+  trezor-bridge = callPackage ../applications/networking/browsers/mozilla-plugins/trezor { };
 
   tribler = callPackage ../applications/networking/p2p/tribler { };
 
