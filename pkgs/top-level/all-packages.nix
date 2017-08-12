@@ -11497,8 +11497,6 @@ with pkgs;
 
   restic = callPackage ../tools/backup/restic { };
 
-  restund = callPackage ../servers/restund {};
-
   rethinkdb = callPackage ../servers/nosql/rethinkdb {
     libtool = darwin.cctools;
   };
@@ -11506,8 +11504,6 @@ with pkgs;
   rippled = callPackage ../servers/rippled {
     boost = boost159;
   };
-
-  #ripple-rest = callPackage ../servers/rippled/ripple-rest.nix { };
 
   s6 = callPackage ../tools/system/s6 { };
 
@@ -17587,14 +17583,7 @@ with pkgs;
 
   ultrastar-manager = libsForQt5.callPackage ../tools/misc/ultrastar-manager { };
 
-  ultrastardx = callPackage ../games/ultrastardx/1.1.nix {
-    ffmpeg = ffmpeg_0;
-    lua = lua5;
-  };
-  ultrastardx-beta = callPackage ../games/ultrastardx/1.3-beta.nix {
-    ffmpeg = ffmpeg_0;
-    lua = lua5;
-  };
+  ultrastardx = callPackage ../games/ultrastardx/default.nix { };
 
   unnethack = callPackage ../games/unnethack { };
 
@@ -18611,8 +18600,6 @@ with pkgs;
   foo2zjs = callPackage ../misc/drivers/foo2zjs {};
 
   foomatic-filters = callPackage ../misc/drivers/foomatic-filters {};
-
-  freestyle = callPackage ../misc/freestyle { };
 
   gajim = callPackage ../applications/networking/instant-messengers/gajim { };
 
