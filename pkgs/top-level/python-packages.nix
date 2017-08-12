@@ -709,24 +709,7 @@ in {
     };
    });
 
-  audioread = buildPythonPackage rec {
-    name = "audioread-${version}";
-    version = "2.1.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/a/audioread/${name}.tar.gz";
-      sha256 = "ffb601de7a9e40850d4ec3256a3a6bbe8fa40466dafb5c65f41b08e4bb963f1e";
-    };
-
-    # No tests, need to disable or py3k breaks
-    doCheck = false;
-
-    meta = {
-      description = "Cross-platform audio decoding";
-      homepage = "https://github.com/sampsyo/audioread";
-      license = licenses.mit;
-    };
-  };
+  audioread = callPackage ../development/python-modules/audioread { };
 
   audiotools = buildPythonPackage rec {
     name = "audiotools-${version}";
@@ -16032,23 +16015,7 @@ in {
 
   };
 
-  bottleneck = buildPythonPackage rec {
-    name = "Bottleneck-${version}";
-    version = "1.2.0";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/B/Bottleneck/Bottleneck-${version}.tar.gz";
-      sha256 = "3bec84564a4adbe97c24e875749b949a19cfba4e4588be495cc441db7c6b05e8";
-    };
-
-    buildInputs = with self; [ nose ];
-    propagatedBuildInputs = [self.numpy];
-    checkPhase = ''
-      nosetests -v $out/${python.sitePackages}
-    '';
-    postPatch = ''
-      substituteInPlace setup.py --replace "__builtins__.__NUMPY_SETUP__ = False" ""
-    '';
-  };
+  bottleneck = callPackage ../development/python-modules/bottleneck { };
 
   paho-mqtt = buildPythonPackage rec {
     name = "paho-mqtt-${version}";
