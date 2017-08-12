@@ -11848,7 +11848,7 @@ in {
 
   konfig = buildPythonPackage rec {
     name = "konfig-${version}";
-    version = "0.9";
+    version = "1.1";
 
     # konfig unconditionaly depend on configparser, even if it is part of
     # the standard library in python 3.2 or above.
@@ -11857,10 +11857,26 @@ in {
     src = pkgs.fetchgit {
       url = https://github.com/mozilla-services/konfig.git;
       rev = "refs/tags/${version}";
-      sha256 = "1kc5iy61ckbmf65d9ssyqiyb25lnxjvr7c2vcsdl9wx4n6fhwzx3";
+      sha256 = "1h780fbrv275dcik4cs3rincza805z6q726b48r4a0qmh5d8160c";
     };
 
-    propagatedBuildInputs = with self; [ configparser argparse ];
+    propagatedBuildInputs = with self; [ configparser six ];
+
+    patches = [ (pkgs.writeText "konfig.patch" ''
+      diff --git a/setup.py b/setup.py
+      index 96fd858..bb4db06 100644
+      --- a/setup.py
+      +++ b/setup.py
+      @@ -20,7 +20,7 @@ setup(name='konfig',
+             author_email="tarek@mozilla.com",
+             include_package_data=True,
+             install_requires = [
+      -        'configparser', 'argparse', 'six'
+      +        'configparser', 'six'
+             ],
+             zip_safe=False,
+             classifiers=classifiers,
+    '') ];
 
     meta = {
       description = "Yet Another Config Parser";
@@ -23652,11 +23668,12 @@ in {
       sha256 = "211031a03576b7796bf277dbc9c9e3e754ba066bbb7fb601ab5c6291b8ec1918";
     };
 
+    hardeningDisable = [ "format" ];
+
     meta = {
       description = "Ultra fast memcache client written in highly optimized C++ with Python bindings";
       homepage = https://github.com/esnme/ultramemcache;
       license = licenses.bsdOriginal;
-      broken = true;
     };
   };
 
