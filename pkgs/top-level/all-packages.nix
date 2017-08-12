@@ -6610,8 +6610,6 @@ with pkgs;
 
   automake111x = callPackage ../development/tools/misc/automake/automake-1.11.x.nix { };
 
-  automake112x = callPackage ../development/tools/misc/automake/automake-1.12.x.nix { };
-
   automake113x = callPackage ../development/tools/misc/automake/automake-1.13.x.nix { };
 
   automake114x = callPackage ../development/tools/misc/automake/automake-1.14.x.nix { };
@@ -13469,6 +13467,8 @@ with pkgs;
   bevelbar = callPackage ../applications/window-managers/bevelbar { };
 
   bibletime = callPackage ../applications/misc/bibletime { };
+
+  bitcoinarmory = callPackage ../applications/misc/bitcoinarmory { pythonPackages = python2Packages; };
 
   bitkeeper = callPackage ../applications/version-management/bitkeeper {
     gperf = gperf_3_0;
