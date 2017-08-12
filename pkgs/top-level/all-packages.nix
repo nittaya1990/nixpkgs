@@ -3832,9 +3832,7 @@ with pkgs;
 
   postscript-lexmark = callPackage ../misc/drivers/postscript-lexmark { };
 
-  povray = callPackage ../tools/graphics/povray {
-    automake = automake113x; # fails with 14
-  };
+  povray = callPackage ../tools/graphics/povray { };
 
   ppl = callPackage ../development/libraries/ppl { };
 
@@ -6609,8 +6607,6 @@ with pkgs;
   automake = automake115x;
 
   automake111x = callPackage ../development/tools/misc/automake/automake-1.11.x.nix { };
-
-  automake113x = callPackage ../development/tools/misc/automake/automake-1.13.x.nix { };
 
   automake115x = callPackage ../development/tools/misc/automake/automake-1.15.x.nix { };
 
@@ -18749,7 +18745,6 @@ with pkgs;
   mnemonicode = callPackage ../misc/mnemonicode { };
 
   mysql-workbench = newScope gnome2 ../applications/misc/mysql-workbench (let mysql = mysql57; in {
-    automake = automake113x;
     gdal = gdal.override {mysql = mysql // {lib = {dev = mysql;};};};
     mysql = mysql;
     pcre = pcre-cpp;
@@ -19143,8 +19138,6 @@ with pkgs;
   higan = callPackage ../misc/emulators/higan {
     inherit (gnome2) gtksourceview;
   };
-
-  misc = callPackage ../misc/misc.nix { };
 
   bullet = callPackage ../development/libraries/bullet {};
   bullet283 = callPackage ../development/libraries/bullet/bullet283.nix {};
