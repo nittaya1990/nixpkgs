@@ -6341,6 +6341,7 @@ with pkgs;
   python = python2;
   python2 = python27;
   python3 = python36;
+  pypy = pypy27;
 
   # Python interpreter that is build with all modules, including tkinter.
   # These are for compatibility and should not be used inside Nixpkgs.
@@ -6374,16 +6375,21 @@ with pkgs;
     self = python36;
   };
 
-  # Should eventually be moved inside Python interpreters.
-  python-setup-hook = callPackage ../development/interpreters/python/setup-hook.nix { };
-
-  pypy = pypy27;
-
   pypy27 = callPackage ../development/interpreters/python/pypy/2.7 {
     self = pypy27;
     python = python27.override{x11Support=true;};
     db = db.override { dbmSupport = true; };
   };
+
+  # Python package sets.
+  python27Packages = lib.hiPrioSet (recurseIntoAttrs python27.pkgs);
+  python34Packages = python34.pkgs;
+  python35Packages = python35.pkgs;
+  python36Packages = recurseIntoAttrs python36.pkgs;
+  pypyPackages = pypy.pkgs;
+
+  # Should eventually be moved inside Python interpreters.
+  python-setup-hook = callPackage ../development/interpreters/python/setup-hook.nix { };
 
   python2nix = callPackage ../tools/package-management/python2nix { };
 
@@ -10922,20 +10928,6 @@ with pkgs;
     databaseModule = perlPackages.DBDPg;
     sqitchModule = perlPackages.AppSqitch;
   };
-
-  ### DEVELOPMENT / PYTHON MODULES
-
-  # Python package sets.
-
-  python27Packages = lib.hiPrioSet (recurseIntoAttrs python27.pkgs);
-
-  python34Packages = python34.pkgs;
-
-  python35Packages = python35.pkgs;
-
-  python36Packages = recurseIntoAttrs python36.pkgs;
-
-  pypyPackages = pypy.pkgs;
 
   ### DEVELOPMENT / R MODULES
 
