@@ -28715,6 +28715,19 @@ EOF
 
   gensim = callPackage  ../development/python-modules/gensim { };
 
+  cymem = callPackage ../development/python-modules/cymem { };
+
+  ftfy = callPackage ../development/python-modules/ftfy { };    
+
+  murmurhash = callPackage ../development/python-modules/murmurhash { };      
+
+  plac = callPackage ../development/python-modules/plac { };        
+  
+  preshed = callPackage ../development/python-modules/preshed { };
+
+  thinc = callPackage ../development/python-modules/thinc { };  
+
+  spacy = callPackage ../development/python-modules/spacy { };  
 });
 
 in fix' (extends overrides packages)
