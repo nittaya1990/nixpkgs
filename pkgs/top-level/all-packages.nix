@@ -5546,7 +5546,8 @@ with pkgs;
     sha256 = "1r0rqbnw7rf94f5bsa3gi8bick4xb7qnp1dkvdjfbvqjvysvc44r";
     ncurses = pkgsi686Linux.ncurses5;
   };
-  gcc-arm-embedded = gcc-arm-embedded-5;
+  gcc-arm-embedded-6 = callPackage ../development/compilers/gcc-arm-embedded/6 {};
+  gcc-arm-embedded = gcc-arm-embedded-6;
 
   gforth = callPackage ../development/compilers/gforth {};
 
