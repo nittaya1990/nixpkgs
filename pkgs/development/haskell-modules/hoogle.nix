@@ -74,7 +74,7 @@ stdenv.mkDerivation {
     mkdir -p $out/share/doc/hoogle
 
     echo importing builtin packages
-    for docdir in ${ghcDocLibDir}/*; do
+    for docdir in ${ghcDocLibDir}"/"*; do
       name="$(basename $docdir)"
       ${opts isGhcjs ''docdir="$docdir/html"''}
       if [[ -d $docdir ]]; then
@@ -87,7 +87,7 @@ stdenv.mkDerivation {
         ln -sfn ${el.haddockDir} "$out/share/doc/hoogle/${el.name}"
       '')
       (lib.filter (el: el.haddockDir != null)
-        (builtins.map (p: { haddockDir = p.haddockDir p;
+        (builtins.map (p: { haddockDir = if p ? haddockDir then p.haddockDir p else null;
                             name = p.pname; })
           docPackages))}
 
@@ -99,8 +99,7 @@ stdenv.mkDerivation {
     cd $out/share/doc/hoogle
 
     args=
-    for hdfile in `ls -1 */*.haddock | grep -v '/ghc\.haddock' | sort`
-    do
+    for hdfile in $(ls -1 *"/"*.haddock | grep -v '/ghc\.haddock' | sort); do
         name_version=`echo "$hdfile" | sed 's#/.*##'`
         args="$args --read-interface=$name_version,$hdfile"
     done
