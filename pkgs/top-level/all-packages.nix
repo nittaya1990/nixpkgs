@@ -3834,6 +3834,8 @@ with pkgs;
 
   popfile = callPackage ../tools/text/popfile { };
 
+  poretools = callPackage ../applications/science/biology/poretools { };
+
   postscript-lexmark = callPackage ../misc/drivers/postscript-lexmark { };
 
   povray = callPackage ../tools/graphics/povray { };
