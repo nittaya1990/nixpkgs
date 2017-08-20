@@ -19113,6 +19113,8 @@ with pkgs;
     };
   };
 
+  xzoom = callPackage ../tools/X11/xzoom {};
+
   yabause = callPackage ../misc/emulators/yabause {
     qt = qt4;
   };
