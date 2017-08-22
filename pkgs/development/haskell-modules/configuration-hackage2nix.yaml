@@ -786,7 +786,6 @@ default-package-overrides:
   - gio ==0.13.3.1
   - giphy-api ==0.5.2.0
   - git ==0.2.0
-  - git-annex ==6.20170520
   - github ==0.16.0
   - github-release ==1.0.5
   - github-types ==0.2.1
@@ -2514,6 +2513,7 @@ extra-packages:
   - aeson < 1                           # required by liquidhaskell-0.8.0.0
   - aeson-pretty < 0.8                  # required by elm compiler
   - apply-refact < 0.4                  # newer versions don't work with GHC 8.0.x
+  - base-orphans < 0.6                  # required by liquidhaskell-0.8.0.0
   - binary > 0.7 && < 0.8               # keep a 7.x major release around for older compilers
   - binary > 0.8 && < 0.9               # keep a 8.x major release around for older compilers
   - Cabal == 1.18.*                     # required for cabal-install et al on old GHC versions
@@ -2594,8 +2594,6 @@ package-maintainers:
   abbradar:
     - Agda
     - lambdabot
-  alunduil:
-    - collection-json
 
 dont-distribute-packages:
   # hard restrictions that really belong into meta.platforms
