@@ -2472,6 +2472,14 @@ with pkgs;
     inherit gfortran;
   });
 
+  hdfview = callPackage ../tools/misc/hdfview {
+    javac = jdk;
+  };
+
+  hdf_java = callPackage ../tools/misc/hdfjava {
+    javac = jdk;
+  };
+
   hecate = callPackage ../applications/editors/hecate { };
 
   heaptrack = libsForQt5.callPackage ../development/tools/profiling/heaptrack {};
@@ -17278,7 +17286,9 @@ with pkgs;
 
   garden-of-coloured-lights = callPackage ../games/garden-of-coloured-lights { allegro = allegro4; };
 
-  gargoyle = callPackage ../games/gargoyle { };
+  gargoyle = callPackage ../games/gargoyle {
+    libtool = darwin.cctools;
+  };
 
   gav = callPackage ../games/gav { };
 
