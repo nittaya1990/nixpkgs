@@ -4308,6 +4308,8 @@ with pkgs;
 
   sqliteman = callPackage ../applications/misc/sqliteman { };
 
+  sqlmap = callPackage ../applications/misc/sqlmap { };
+
   stdman = callPackage ../data/documentation/stdman { };
 
   storebrowse = callPackage ../tools/system/storebrowse { };
