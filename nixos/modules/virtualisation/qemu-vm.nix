@@ -123,6 +123,7 @@ let
             ''
               mkdir $out
               diskImage=$out/disk.img
+              diskImageFormat=qcow2
               bootFlash=$out/bios.bin
               ${qemu}/bin/qemu-img create -f qcow2 $diskImage "40M"
               ${if cfg.useEFIBoot then ''

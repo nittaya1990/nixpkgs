@@ -223,7 +223,7 @@ rec {
       -device virtio-rng-pci \
       -virtfs local,path=${storeDir},security_model=none,mount_tag=store \
       -virtfs local,path=$TMPDIR/xchg,security_model=none,mount_tag=xchg \
-      -drive file=$diskImage,if=virtio,cache=unsafe,werror=report,format=raw \
+      -drive file=$diskImage,if=virtio,cache=unsafe,werror=report,format=$diskImageFormat \
       -kernel ${kernel}/${img} \
       -initrd ${initrd}/initrd \
       -append "console=ttyS0 panic=1 command=${stage2Init} out=$out mountDisk=$mountDisk loglevel=4" \
@@ -239,6 +239,7 @@ rec {
     mv saved-env xchg/
 
     diskImage=''${diskImage:-/dev/null}
+    diskImageFormat=''${diskImageFormat:-qcow2}
 
     eval "$preVM"
 
@@ -256,6 +257,7 @@ rec {
     cat > ./run-vm <<EOF
     #! ${bash}/bin/sh
     diskImage=$diskImage
+    diskImageFormat=$diskImageFormat
     TMPDIR=$TMPDIR
     cd $TMPDIR
     ${qemuCommand}
@@ -283,6 +285,7 @@ rec {
   createEmptyImage = {size, fullName}: ''
     mkdir $out
     diskImage=$out/disk-image.qcow2
+    diskImageFormat=qcow2
     ${qemu}/bin/qemu-img create -f qcow2 $diskImage "${toString size}M"
 
     mkdir $out/nix-support
@@ -402,6 +405,7 @@ rec {
        image since we don't want to (and can't) write to `image'. */
     preVM = ''
       diskImage=$(pwd)/disk-image.qcow2
+      diskImageFormat=qcow2
       origImage=${attrs.diskImage}
       if test -d "$origImage"; then origImage="$origImage/disk-image.qcow2"; fi
       ${qemu}/bin/qemu-img create -b "$origImage" -f qcow2 $diskImage
@@ -501,6 +505,8 @@ rec {
       exit 1
     fi
     diskImage="$1"
+    diskImageFormat=qcow2
+
     if ! test -e "$diskImage"; then
       ${qemu}/bin/qemu-img create -b ${image}/disk-image.qcow2 -f qcow2 "$diskImage"
     fi

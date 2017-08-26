@@ -89,6 +89,7 @@ let
 
     mkdir $out
     diskImage=nixos.raw
+    diskImageFormat=raw
     truncate -s ${toString diskSize}M $diskImage
 
     ${if partitioned then ''
@@ -99,7 +100,7 @@ let
     ''}
 
     mkfs.${fsType} -F -L nixos -E offset=$offset $diskImage
-  
+
     root="$PWD/root"
     mkdir -p $root
 
@@ -141,6 +142,7 @@ let
 in pkgs.vmTools.runInLinuxVM (
   pkgs.runCommand name
     { preVM = prepareImage;
+      diskImageFormat = "raw";
       buildInputs = with pkgs; [ utillinux e2fsprogs ];
       exportReferencesGraph = [ "closure" metaClosure ];
       postVM = ''

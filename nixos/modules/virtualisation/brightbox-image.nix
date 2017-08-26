@@ -14,6 +14,7 @@ in
             ''
               mkdir $out
               diskImage=$out/$diskImageBase
+              diskImageFormat=raw
               truncate $diskImage --size ${diskSize}
               mv closure xchg/
             '';

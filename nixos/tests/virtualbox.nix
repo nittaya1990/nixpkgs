@@ -96,6 +96,7 @@ let
     preVM = ''
       mkdir -p "$out"
       diskImage="$(pwd)/qimage"
+      diskImageFormat=raw
       ${pkgs.vmTools.qemu}/bin/qemu-img create -f raw "$diskImage" 100M
     '';
 
