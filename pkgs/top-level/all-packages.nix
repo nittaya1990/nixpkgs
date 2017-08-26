@@ -9103,8 +9103,6 @@ with pkgs;
 
   libmspack = callPackage ../development/libraries/libmspack { };
 
-  libmusicbrainz2 = callPackage ../development/libraries/libmusicbrainz/2.x.nix { };
-
   libmusicbrainz3 = callPackage ../development/libraries/libmusicbrainz { };
 
   libmusicbrainz5 = callPackage ../development/libraries/libmusicbrainz/5.x.nix { };
@@ -9285,8 +9283,6 @@ with pkgs;
   libtap = callPackage ../development/libraries/libtap { };
 
   libtsm = callPackage ../development/libraries/libtsm { };
-
-  libtunepimp = callPackage ../development/libraries/libtunepimp { };
 
   libtxc_dxtn = callPackage ../development/libraries/libtxc_dxtn { };
 
@@ -11117,7 +11113,7 @@ with pkgs;
   dex-oidc = callPackage ../servers/dex { };
 
   dgraph = callPackage ../servers/dgraph { };
-    
+
   dico = callPackage ../servers/dico { };
 
   dict = callPackage ../servers/dict {
@@ -18717,7 +18713,7 @@ with pkgs;
   hplip_3_15_9 = callPackage ../misc/drivers/hplip/3.15.9.nix { };
 
   hplipWithPlugin_3_15_9 = hplip_3_15_9.override { withPlugin = true; };
-  
+
   epkowa = callPackage ../misc/drivers/epkowa { };
 
   illum = callPackage ../tools/system/illum { };
