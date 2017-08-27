@@ -3643,6 +3643,8 @@ with pkgs;
 
   packetdrill = callPackage ../tools/networking/packetdrill { };
 
+  padthv1 = callPackage ../applications/audio/padthv1 { };
+
   pakcs = callPackage ../development/compilers/pakcs {};
 
   pal = callPackage ../tools/misc/pal { };
