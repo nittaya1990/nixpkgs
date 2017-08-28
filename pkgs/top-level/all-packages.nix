@@ -3416,6 +3416,8 @@ with pkgs;
 
   nextcloud = callPackage ../servers/nextcloud { };
 
+  nextcloud-client = libsForQt56.callPackage ../applications/networking/nextcloud-client { };
+
   nextcloud-news-updater = callPackage ../servers/nextcloud/news-updater.nix { };
 
   ngrep = callPackage ../tools/networking/ngrep { };
@@ -7452,7 +7454,7 @@ with pkgs;
   xxdiff = callPackage ../development/tools/misc/xxdiff {
     bison = bison2;
   };
-  xxdiff-tip = callPackage ../development/tools/misc/xxdiff/tip.nix { };
+  xxdiff-tip = qt56.callPackage ../development/tools/misc/xxdiff/tip.nix { };
 
   yacc = bison;
 
