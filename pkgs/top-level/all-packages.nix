@@ -571,6 +571,8 @@ with pkgs;
 
   genymotion = callPackage ../development/mobile/genymotion { };
 
+  git-fire = callPackage ../tools/misc/git-fire { };
+
   grc = callPackage ../tools/misc/grc { };
 
   green-pdfviewer = callPackage ../applications/misc/green-pdfviewer {
@@ -17020,6 +17022,8 @@ with pkgs;
   };
 
   xss-lock = callPackage ../misc/screensavers/xss-lock { };
+
+  xssproxy = callPackage ../misc/screensavers/xssproxy { };
 
   xsynth_dssi = callPackage ../applications/audio/xsynth-dssi { };
 
