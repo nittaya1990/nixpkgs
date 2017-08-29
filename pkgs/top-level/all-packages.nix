@@ -7413,8 +7413,6 @@ with pkgs;
     inherit (gnu) mig;
   };
 
-  gdbGuile = lowPrio (gdb.override { inherit guile; });
-
   gdb-multitarget = lowPrio (gdb.override { multitarget = true; });
 
   valgrind = callPackage ../development/tools/analysis/valgrind {
