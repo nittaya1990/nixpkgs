@@ -19259,6 +19259,8 @@ with pkgs;
 
   httrack = callPackage ../tools/backup/httrack { };
 
+  httraqt = libsForQt5.callPackage ../tools/backup/httrack/qt.nix { };
+
   mg = callPackage ../applications/editors/mg { };
 
   mpvc = callPackage ../applications/misc/mpvc { };
