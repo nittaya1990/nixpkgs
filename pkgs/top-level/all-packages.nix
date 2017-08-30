@@ -7829,8 +7829,6 @@ with pkgs;
 
   farbfeld = callPackage ../development/libraries/farbfeld { };
 
-  farsight2 = callPackage ../development/libraries/farsight2 { };
-
   farstream = callPackage ../development/libraries/farstream {
     inherit (gst_all_1)
       gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad
@@ -12263,8 +12261,6 @@ with pkgs;
     ena = callPackage ../os-specific/linux/ena {};
 
     v4l2loopback = callPackage ../os-specific/linux/v4l2loopback { };
-
-    frandom = callPackage ../os-specific/linux/frandom { };
 
     fusionio-vsl = callPackage ../os-specific/linux/fusionio/vsl.nix { };
 
