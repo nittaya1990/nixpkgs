@@ -2217,10 +2217,10 @@ with pkgs;
   gnupg20 = callPackage ../tools/security/gnupg/20.nix {
     pinentry = if stdenv.isDarwin then pinentry_mac else pinentry;
   };
-  gnupg21 = callPackage ../tools/security/gnupg/21.nix {
+  gnupg22 = callPackage ../tools/security/gnupg/22.nix {
     pinentry = if stdenv.isDarwin then pinentry_mac else pinentry;
   };
-  gnupg = gnupg21;
+  gnupg = gnupg22;
 
   gnuplot = callPackage ../tools/graphics/gnuplot { qt = qt4; };
 
@@ -13704,10 +13704,6 @@ with pkgs;
 
   communi = libsForQt5.callPackage ../applications/networking/irc/communi { };
 
-  compiz = callPackage ../applications/window-managers/compiz {
-    inherit (gnome2) GConf ORBit2 metacity;
-  };
-
   confclerk = callPackage ../applications/misc/confclerk { };
 
   copyq = callPackage ../applications/misc/copyq { };
@@ -13833,10 +13829,11 @@ with pkgs;
   };
 
   inherit (callPackage ../applications/virtualization/docker { })
-    docker_17_06;
+    docker_17_06
+    docker_17_07;
 
   docker = docker_17_06;
-  docker-edge = docker_17_06;
+  docker-edge = docker_17_07;
 
   docker-proxy = callPackage ../applications/virtualization/docker/proxy.nix { };
 
