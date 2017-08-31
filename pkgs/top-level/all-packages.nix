@@ -9507,6 +9507,8 @@ with pkgs;
 
   luabind_luajit = callPackage ../development/libraries/luabind { lua = luajit; };
 
+  luaffi = callPackage ../development/libraries/luaffi { lua = lua5_1; };
+
   lzo = callPackage ../development/libraries/lzo { };
 
   mapnik = callPackage ../development/libraries/mapnik { };
@@ -16724,6 +16726,10 @@ with pkgs;
     inherit (darwin) libobjc;
     inherit (darwin) libresolv;
     guile = guile_2_0;
+  };
+
+  weechat-matrix-bridge = callPackage ../applications/networking/instant-messengers/weechat-matrix-bridge {
+    inherit (luaPackages) cjson;
   };
 
   westonLite = callPackage ../applications/window-managers/weston {
