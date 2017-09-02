@@ -15052,6 +15052,8 @@ with pkgs;
     go = go_1_7;
   };
 
+  kupfer = callPackage ../applications/misc/kupfer { };
+
   lame = callPackage ../development/libraries/lame { };
 
   larswm = callPackage ../applications/window-managers/larswm { };
