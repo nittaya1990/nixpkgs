@@ -13184,6 +13184,8 @@ with pkgs;
 
   numix-icon-theme-square = callPackage ../data/icons/numix-icon-theme-square { };
 
+  numix-cursor-theme = callPackage ../data/icons/numix-cursor-theme { };
+
   oldstandard = callPackage ../data/fonts/oldstandard { };
 
   oldsindhi = callPackage ../data/fonts/oldsindhi { };
