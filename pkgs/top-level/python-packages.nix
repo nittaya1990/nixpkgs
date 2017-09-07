@@ -1565,6 +1565,13 @@ in {
     };
   };
 
+  caffe = pkgs.caffe.override {
+    python = self.python;
+    boost = self.boost;
+    numpy = self.numpy;
+    pythonSupport = true;
+  };
+
   capstone = buildPythonPackage rec {
     name = "capstone-3.0.4";
     src = pkgs.fetchurl {
@@ -1745,6 +1752,12 @@ in {
   };
 
   cycler = callPackage ../development/python-modules/cycler { };
+
+  dlib = buildPythonPackage rec {
+    inherit (pkgs.dlib) name src nativeBuildInputs meta;
+
+    buildInputs = pkgs.dlib.buildInputs ++ [ self.boost ];
+  };
 
   datadog = buildPythonPackage rec {
     name = "${pname}-${version}";
