@@ -105,6 +105,8 @@ with pkgs;
 
   docker_compose = pythonPackages.docker_compose;
 
+  dotfiles = callPackage ../applications/misc/dotfiles { };
+
   dotnetenv = callPackage ../build-support/dotnetenv {
     dotnetfx = dotnetfx40;
   };
@@ -1296,7 +1298,9 @@ with pkgs;
 
   atool = callPackage ../tools/archivers/atool { };
 
-  bsc = callPackage ../tools/compression/bsc { };
+  bsc = callPackage ../tools/compression/bsc {
+    inherit (llvmPackages) openmp;
+  };
 
   bzip2 = callPackage ../tools/compression/bzip2 { };
 
