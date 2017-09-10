@@ -2048,7 +2048,9 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
 
-  fox_1_6 = callPackage ../development/libraries/fox/fox-1.6.nix { };
+  fox_1_6 = callPackage ../development/libraries/fox/fox-1.6.nix {
+    inherit (darwin.apple_sdk.frameworks) CoreServices;
+  };
 
   fping = callPackage ../tools/networking/fping {};
 
@@ -10649,10 +10651,12 @@ with pkgs;
   v8_3_16_14 = callPackage ../development/libraries/v8/3.16.14.nix {
     inherit (python2Packages) python gyp;
     cctools = darwin.cctools;
+    stdenv = overrideCC stdenv gcc5;
   };
 
   v8_3_24_10 = callPackage ../development/libraries/v8/3.24.10.nix {
     inherit (python2Packages) python gyp;
+    stdenv = overrideCC stdenv gcc5;
   };
 
   v8 = callPackage ../development/libraries/v8 {
