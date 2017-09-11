@@ -13963,6 +13963,8 @@ with pkgs;
     patches = config.dwm.patches or [];
   };
 
+  dynamips = callPackage ../applications/virtualization/dynamips { };
+
   evilwm = callPackage ../applications/window-managers/evilwm {
     patches = config.evilwm.patches or [];
   };
