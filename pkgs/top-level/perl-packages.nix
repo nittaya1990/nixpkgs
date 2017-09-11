@@ -2958,10 +2958,14 @@ let self = _self // overrides; _self = with self; {
   };
 
   DataDumperConcise = buildPerlPackage rec {
-    name = "Data-Dumper-Concise-2.022";
+    name = "Data-Dumper-Concise-2.023";
     src = fetchurl {
-      url = "mirror://cpan/modules/by-module/Data/${name}.tar.gz";
-      sha256 = "0z7vxgk1f2kw2zpiimdsyf7jq9f4s5dhh3dlimq5yrirypnk03sc";
+      url = "mirror://cpan/authors/id/E/ET/ETHER/${name}.tar.gz";
+      sha256 = "a6c22f113caf31137590def1b7028a7e718eface3228272d0672c25e035d5853";
+    };
+    meta = {
+      description = "Less indentation and newlines plus sub deparsing";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
@@ -7914,18 +7918,18 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  LogContextual = buildPerlPackage {
-    name = "Log-Contextual-0.006003";
+  LogContextual = buildPerlPackage rec {
+    name = "Log-Contextual-0.007001";
     src = fetchurl {
-      url = mirror://cpan/authors/id/F/FR/FREW/Log-Contextual-0.006003.tar.gz;
-      sha256 = "0940s910n67arqvz7aji4z6vgzzl52aq3l3jg8vq4ygnkn7c9k21";
+      url = "mirror://cpan/authors/id/F/FR/FREW/${name}.tar.gz";
+      sha256 = "163c46f9cf4ed921356d300925a1c3ec4d7e0d20d1c678ade9ccc24efd990cd6";
     };
     buildInputs = [ TestFatal ];
     propagatedBuildInputs = [ DataDumperConcise ExporterDeclare Moo ];
     meta = {
+      homepage = https://github.com/frioux/Log-Contextual;
       description = "Simple logging interface with a contextual log";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
