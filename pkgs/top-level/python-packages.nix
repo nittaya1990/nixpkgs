@@ -435,6 +435,7 @@ in {
     meta = {
       homepage = https://github.com/pazz/alot;
       description = "Terminal MUA using notmuch mail";
+      platforms = platforms.linux;
       maintainers = with maintainers; [ garbas profpatsch ];
     };
   };
@@ -675,6 +676,7 @@ in {
     meta = {
       description = "Utilities and Python modules for handling audio";
       homepage = "http://audiotools.sourceforge.net/";
+      platforms = platforms.linux;
       license = licenses.gpl2Plus;
     };
   };
@@ -18184,21 +18186,17 @@ in {
 
   pyopenssl = buildPythonPackage rec {
     name = "pyopenssl-${version}";
-    version = "17.0.0";
+    version = "17.2.0";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pyOpenSSL/pyOpenSSL-${version}.tar.gz";
-      sha256 = "1pdg1gpmkzj8yasg6cmkhcivxcdp4c12nif88y4qvsxq5ffzxas8";
-    };
-
-    patches = pkgs.fetchpatch {
-      url = "https://github.com/pyca/pyopenssl/commit/"
-          + "a40898b5f1d472f9449a344f703fa7f90cddc21d.patch";
-      sha256 = "0bdfrhfvdfxhfknn46s4db23i3hww6ami2r1l5rfrri0pn8b8mh7";
+      sha256 = "0d283g4zi0hr9papd24mjl70mi15gyzq6fx618rizi87dgipqqax";
     };
 
     preCheck = ''
       sed -i 's/test_set_default_verify_paths/noop/' tests/test_ssl.py
+      # https://github.com/pyca/pyopenssl/issues/692
+      sed -i 's/test_fallback_default_verify_paths/noop/' tests/test_ssl.py
     '';
 
     checkPhase = ''
@@ -18212,7 +18210,7 @@ in {
     # for one example, but I've also seen ContextTests.test_set_verify_callback_exception fail.
     doCheck = !stdenv.isDarwin;
 
-    buildInputs = [ pkgs.openssl self.pytest pkgs.glibcLocales ];
+    buildInputs = [ pkgs.openssl self.pytest pkgs.glibcLocales self.pretend self.flaky ];
     propagatedBuildInputs = [ self.cryptography self.pyasn1 self.idna ];
   };
 
