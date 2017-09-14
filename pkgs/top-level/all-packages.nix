@@ -19417,4 +19417,6 @@ with pkgs;
 
     macOSSierraShared = callPackage ../test/macos-sierra-shared {};
   };
+
+  duti = callPackage ../os-specific/darwin/duti {};
 }
