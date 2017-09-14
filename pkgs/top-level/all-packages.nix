@@ -14977,8 +14977,6 @@ with pkgs;
 
   kanboard = callPackage ../applications/misc/kanboard { };
 
-  kde-telepathy = kde4.callPackage ../applications/networking/instant-messengers/telepathy/kde {};
-
   kdeApplications =
     let
       mkApplications = import ../applications/kde;
