@@ -99,7 +99,9 @@ in {
 
   acoustics = callPackage ../development/python-modules/acoustics { };
 
-  "3to2" = callPackage ../development/python-modules/3to2 { };
+  py3to2 = callPackage ../development/python-modules/3to2 { };
+  # Left for backwards compatibility
+  "3to2" = self.py3to2;
 
   aenum = callPackage ../development/python-modules/aenum { };
 
@@ -1704,29 +1706,7 @@ in {
 
   csvkit =  callPackage ../development/python-modules/csvkit { };
 
-  cx_Freeze = buildPythonPackage rec {
-    name = "cx_freeze-${version}";
-    version = "4.3.4";
-
-    # build failures
-    disabled = isPyPy || isPy35;
-
-    # timestamp need to come after 1980 for zipfiles and nix store is set to epoch
-    prePatch = ''
-      substituteInPlace cx_Freeze/freezer.py --replace "os.stat(module.file).st_mtime" "time.time()"
-    '';
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/c/cx_Freeze/cx_Freeze-${version}.tar.gz";
-      sha256 = "1qhv0gq3ggr06k8cvzphma29zfqdajkx2yfzbw89s4vy23xbpis0";
-    };
-
-    meta = {
-      description = "A set of scripts and modules for freezing Python scripts into executables";
-      homepage = "http://cx-freeze.sourceforge.net/";
-      license = licenses.psfl;
-    };
-  };
+  cx_Freeze = callPackage ../development/python-modules/cx_freeze {};
 
   cvxopt = buildPythonPackage rec {
     name = "${pname}-${version}";
@@ -3624,27 +3604,7 @@ in {
     };
   };
 
-  MDP = buildPythonPackage rec {
-    version = "3.5";
-    name = "MDP-${version}";
-
-    src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/M/MDP/${name}.tar.gz";
-      sha256 = "0aw1zxmyvx6gfmmnixbqmdaah28jl7rmqkzhxv53091asc23iw9k";
-    };
-
-    buildInputs = with self; [ pytest_29 ];
-    propagatedBuildInputs = with self; [ future numpy ];
-
-    doCheck = true;
-
-    meta = {
-      description = "Library for building complex data processing software by combining widely used machine learning algorithms";
-      homepage = http://mdp-toolkit.sourceforge.net;
-      license = licenses.bsd3;
-      maintainers = with maintainers; [ nico202 ];
-    };
-  };
+  MDP = callPackage ../development/python-modules/mdp {};
 
   minidb = buildPythonPackage rec {
     name = "minidb-2.0.1";
@@ -20268,12 +20228,17 @@ in {
 
   sqlmap = callPackage ../development/python-modules/sqlmap { };
   pgpdump = self.buildPythonPackage rec {
-    name = "pgpdump-1.5";
+    pname = "pgpdump";
+    version = "1.5";
+    name = "${pname}-${version}";
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pgpdump/pgpdump-1.5.tar.gz";
-      sha256 = "1c4700857bf7ba735b08cfe4101aa3a4f5fd839657af249c17b2697c20829668";
+    src = fetchPypi {
+      inherit pname version;
+      sha256 = "0s4nh8h7qsdj2yf29bspjs1zvxd4lcd11r6g11dp7fppgf2h0iqw";
     };
+
+    # Disabling check because of: https://github.com/toofishes/python-pgpdump/issues/18
+    doCheck = false;
 
     meta = {
       description = "Python library for parsing PGP packets";
