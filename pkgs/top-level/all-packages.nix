@@ -362,6 +362,8 @@ with pkgs;
 
   a2ps = callPackage ../tools/text/a2ps { };
 
+  abcmidi = callPackage ../tools/audio/abcmidi { };
+
   abduco = callPackage ../tools/misc/abduco { };
 
   acbuild = callPackage ../applications/misc/acbuild { };
@@ -1702,7 +1704,14 @@ with pkgs;
 
   disper = callPackage ../tools/misc/disper { };
 
-  dmd_2_067_1 = callPackage ../development/compilers/dmd/2.067.1.nix { };
+  dmd_2_067_1 = callPackage ../development/compilers/dmd/2.067.1.nix {
+    stdenv = if stdenv.hostPlatform.isDarwin then
+               stdenv
+             else
+               # Doesn't build with gcc6 on linux
+               overrideCC stdenv gcc5;
+  };
+
   dmd = callPackage ../development/compilers/dmd {
     bootstrapDmd = dmd_2_067_1;
   };
@@ -2828,6 +2837,8 @@ with pkgs;
   kst = libsForQt5.callPackage ../tools/graphics/kst { gsl = gsl_1; };
 
   kytea = callPackage ../tools/text/kytea { };
+
+  ldc = callPackage ../development/compilers/ldc { };
 
   lbreakout2 = callPackage ../games/lbreakout2 { };
 
