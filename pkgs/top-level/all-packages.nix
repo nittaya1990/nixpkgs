@@ -9921,6 +9921,7 @@ with pkgs;
   };
 
   opensubdiv = callPackage ../development/libraries/opensubdiv {
+    stdenv_gcc5 = overrideCC stdenv gcc5;
     cmake = cmake_2_8;
   };
 
@@ -13633,6 +13634,7 @@ with pkgs;
   bleachbit = callPackage ../applications/misc/bleachbit { };
 
   blender = callPackage  ../applications/misc/blender {
+    stdenv_gcc5 = overrideCC stdenv gcc5;
     python = python35;
   };
 
