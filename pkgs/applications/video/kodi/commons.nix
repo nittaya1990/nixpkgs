@@ -22,7 +22,7 @@ rec {
 
   };
 
-  mkKodiAPIPlugin = { plugin, namespace, version, src, meta, sourceDir ? null, ... }:
+  mkKodiAPIPlugin = { plugin, namespace, version, src, meta, sourceDir ? null, runtimeDependencies ? [], ... }:
   stdenv.lib.makeOverridable stdenv.mkDerivation rec {
 
     inherit src meta sourceDir;
@@ -32,6 +32,7 @@ rec {
     passthru = {
       kodiPlugin = pluginDir;
       namespace = namespace;
+      runtimeDependencies = runtimeDependencies;
     };
 
     dontStrip = true;

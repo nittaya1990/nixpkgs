@@ -1,5 +1,5 @@
 { stdenv, lib, callPackage, fetchurl, fetchFromGitHub, unzip
-, steam, libusb, pcre-cpp, jsoncpp, libhdhomerun }:
+, steam, libusb, pcre-cpp, jsoncpp, libhdhomerun, wmctrl }:
 
 with (callPackage ./commons.nix {});
 
@@ -220,7 +220,7 @@ rec {
 
   };
 
-  steam-launcher = (mkKodiPlugin rec {
+  steam-launcher = mkKodiPlugin rec {
 
     plugin = "steam-launcher";
     namespace = "script.steam.launcher";
@@ -232,6 +232,8 @@ rec {
       rev = "db67704c3e16bdcdd3bdfe2926c609f1f6bdc4fb";
       sha256 = "001a7zs3a4jfzj8ylxv2klc33mipmqsd5aqax7q81fbgwdlndvbm";
     };
+
+    runtimeDependencies = [ steam wmctrl ];
 
     meta = with stdenv.lib; {
       homepage = https://forum.kodi.tv/showthread.php?tid=157499;
@@ -245,8 +247,6 @@ rec {
       '';
       maintainers = with maintainers; [ edwtjo ];
     };
-  }).override {
-    propagatedBuildinputs = [ steam ];
   };
 
   pdfreader = mkKodiPlugin rec {

@@ -85,6 +85,7 @@ in buildFHSUserEnv rec {
   profile = ''
     export STEAM_RUNTIME=/steamrt
     export TZDIR=/etc/zoneinfo
+    export LD_LIBRARY_PATH=/run/opengl-driver/lib:/run/opengl-driver-32/lib
   '';
 
   runScript = "steam";
@@ -106,7 +107,7 @@ in buildFHSUserEnv rec {
           exit 1
         fi
         shift
-        export LD_LIBRARY_PATH=${lib.concatStringsSep ":" ldPath}:$LD_LIBRARY_PATH
+        export LD_LIBRARY_PATH=${lib.concatStringsSep ":" ldPath}:/run/opengl-driver/lib:/run/opengl-driver-32/lib:$LD_LIBRARY_PATH
         exec "$run" "$@"
       '';
   };

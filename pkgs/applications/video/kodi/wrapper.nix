@@ -1,8 +1,11 @@
 { stdenv, lib, makeWrapper, kodi, plugins }:
+with lib;
 
 let
 
   p = builtins.parseDrvName kodi.name;
+
+  allRuntimeDependencies = concatMap (plugin: plugin.runtimeDependencies) plugins;
 
 in
 
@@ -35,6 +38,8 @@ stdenv.mkDerivation {
     $(for exe in kodi{,-standalone}
     do
     makeWrapper ${kodi}/bin/$exe $out/bin/$exe \
+      --prefix PATH ":" "${lib.makeBinPath allRuntimeDependencies}" \
+      --prefix LD_LIBRARY_PATH ":" "${lib.makeLibraryPath allRuntimeDependencies}" \
       --prefix KODI_HOME : $out/share/kodi;
     done)
   '';
