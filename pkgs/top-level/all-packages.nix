@@ -4536,6 +4536,8 @@ with pkgs;
 
   telegraf = callPackage ../servers/monitoring/telegraf { };
 
+  telepresence = callPackage ../tools/networking/telepresence { };
+
   texmacs = callPackage ../applications/editors/texmacs {
     tex = texlive.combined.scheme-small;
     extraFonts = true;
