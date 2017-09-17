@@ -133,6 +133,8 @@ in {
 
   # packages defined elsewhere
 
+  backports_csv = callPackage ../development/python-modules/backports_csv {};
+
   bap = callPackage ../development/python-modules/bap {
     bap = pkgs.ocamlPackages_4_02.bap;
   };
@@ -2551,6 +2553,8 @@ in {
     };
   };
 
+  cccolutils = callPackage ../development/python-modules/cccolutils/default.nix {};
+
   CDDB = buildPythonPackage rec {
     name = "CDDB-1.4";
 
@@ -3488,6 +3492,8 @@ in {
     enablePython = true;
     pythonPackages = self;
   };
+
+  openidc-client = callPackage ../development/python-modules/openidc-client/default.nix {};
 
   openstackclient = buildPythonPackage rec {
     name = "openstackclient-${version}";
@@ -5535,33 +5541,7 @@ in {
     buildInputs = with self; [ fudge_9 nose ];
   };
 
-  fedora_cert = buildPythonPackage rec {
-    name = "fedora-cert-0.5.9.2";
-    meta.maintainers = with maintainers; [ mornfall ];
-    format = "other";
-
-    src = pkgs.fetchurl {
-      url = "https://fedorahosted.org/releases/f/e/fedora-packager/fedora-packager-0.5.9.2.tar.bz2";
-      sha256 = "105swvzshgn3g6bjwk67xd8pslnhpxwa63mdsw6cl4c7cjp2blx9";
-    };
-
-    propagatedBuildInputs = with self; [ python_fedora pyopenssl ];
-    postInstall = "mv $out/bin/fedpkg $out/bin/fedora-cert-fedpkg";
-    doCheck = false;
-  };
-
-  fedpkg = buildPythonPackage (rec {
-    name = "fedpkg-1.14";
-    meta.maintainers = with maintainers; [ mornfall ];
-
-    src = pkgs.fetchurl {
-      url = "https://fedorahosted.org/releases/f/e/fedpkg/${name}.tar.bz2";
-      sha256 = "0rj60525f2sv34g5llafnkmpvbwrfbmfajxjc14ldwzymp8clc02";
-    };
-
-    patches = [ ../development/python-modules/fedpkg-buildfix.diff ];
-    propagatedBuildInputs = with self; [ rpkg offtrac urlgrabber fedora_cert ];
-  });
+  fedpkg = callPackage ../development/python-modules/fedpkg { };
 
   flit = callPackage ../development/python-modules/flit { };
 
@@ -6378,27 +6358,7 @@ in {
     };
   };
 
-  internetarchive = let ver = "0.8.3"; in buildPythonPackage rec {
-    name = "internetarchive-${ver}";
-
-    src = pkgs.fetchurl {
-      url = "https://github.com/jjjake/internetarchive/archive/v${ver}.tar.gz";
-      sha256 = "0j3l13zvbx50j66l6pnf8y8y8m6gk1sc3yssvfd2scvmv4gnmm8n";
-    };
-
-    # It is hardcoded to specific versions, I don't know why.
-    preConfigure = ''
-        sed 's/==/>=/' -i setup.py
-    '';
-
-    buildInputs = with self; [ pytest ];
-    propagatedBuildInputs = with self; [ six clint pyyaml docopt requests jsonpatch args ];
-
-    meta = with stdenv.lib; {
-      description = "A python wrapper for the various Internet Archive APIs";
-      homepage = "https://github.com/jjjake/internetarchive";
-    };
-  };
+  internetarchive = callPackage ../development/python-modules/internetarchive {};
 
   jsbeautifier = callPackage ../development/python-modules/jsbeautifier {};
 
@@ -8004,6 +7964,8 @@ in {
       license = licenses.mit;
     };
   };
+
+  schema = callPackage ../development/python-modules/schema {};
 
   svg-path = buildPythonPackage rec {
     name = "svg.path-${version}";
@@ -17538,24 +17500,7 @@ in {
     };
   };
 
-  python_fedora = buildPythonPackage (rec {
-    version = "0.5.5";
-    name = "python-fedora-${version}";
-    meta.maintainers = with maintainers; [ mornfall ];
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/python-fedora/${name}.tar.gz";
-      sha256 = "15m8lvbb5q4rg508i4ah8my872qrq5xjwgcgca4d3kzjv2x6fhim";
-    };
-    propagatedBuildInputs = with self; [ kitchen requests bunch paver six munch urllib3
-      beautifulsoup4 ];
-    doCheck = false;
-
-    # https://github.com/fedora-infra/python-fedora/issues/140
-    preBuild = ''
-      sed -i '4,15d' setup.py
-    '';
-  });
+  python_fedora = callPackage ../development/python-modules/python_fedora/default.nix {};
 
   python-simple-hipchat = callPackage ../development/python-modules/python-simple-hipchat {};
   python_simple_hipchat = self.python-simple-hipchat;
@@ -19229,22 +19174,7 @@ in {
     };
   };
 
-  rpkg = buildPythonPackage (rec {
-    name = "rpkg-1.14";
-    disabled = !isPy27; # error: invalid command 'bdist_wheel'
-    meta.maintainers = with maintainers; [ mornfall ];
-
-    src = pkgs.fetchurl {
-      url = "https://fedorahosted.org/releases/r/p/rpkg/rpkg-1.14.tar.gz";
-      sha256 = "0d053hdjz87aym1sfm6c4cxmzmy5g0gkrmrczly86skj957r77a7";
-    };
-
-    patches = [ ../development/python-modules/rpkg-buildfix.diff ];
-
-    propagatedBuildInputs = with self; [ pycurl koji GitPython pkgs.git
-      rpm pyopenssl ];
-
-  });
+  rpkg = callPackage ../development/python-modules/rpkg/default.nix {};
 
   rply = buildPythonPackage rec {
     name = "rply-${version}";
@@ -19266,6 +19196,8 @@ in {
   };
 
   rpm = (pkgs.rpm.override{inherit python;});
+
+  rpmfluff = callPackage ../development/python-modules/rpmfluff {};
 
   rpy2 = buildPythonPackage rec {
     name = "rpy2-2.8.2";
@@ -22326,28 +22258,7 @@ in {
     };
   };
 
-  urlgrabber =  buildPythonPackage rec {
-    name = "urlgrabber-3.9.1";
-    disabled = isPy3k;
-
-    src = pkgs.fetchurl {
-      url = "http://urlgrabber.baseurl.org/download/${name}.tar.gz";
-      sha256 = "4437076c8708e5754ea04540e46c7f4f233734ee3590bb8a96389264fb0650d0";
-    };
-
-    # error: invalid command 'test'
-    doCheck = false;
-
-    propagatedBuildInputs = with self; [ pycurl ];
-
-    meta = {
-      homepage = "urlgrabber.baseurl.org";
-      license = licenses.lgpl2Plus;
-      description = "Python module for downloading files";
-      maintainers = with maintainers; [ qknight ];
-    };
-  };
-
+  urlgrabber = callPackage ../development/python-modules/urlgrabber {};
 
   urwid = buildPythonPackage (rec {
     name = "urwid-1.3.1";
