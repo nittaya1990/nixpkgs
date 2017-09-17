@@ -3501,6 +3501,8 @@ with pkgs;
     wxGTK = wxGTK30;
   };
 
+  niff = callPackage ../tools/package-management/niff { };
+
   nifskope = callPackage ../tools/graphics/nifskope { };
 
   nilfs-utils = callPackage ../tools/filesystems/nilfs-utils {};
@@ -3637,7 +3639,9 @@ with pkgs;
 
   openresolv = callPackage ../tools/networking/openresolv { };
 
-  opensc = callPackage ../tools/security/opensc { };
+  opensc = callPackage ../tools/security/opensc {
+    inherit (darwin.apple_sdk.frameworks) Carbon;
+  };
 
   openssh =
     callPackage ../tools/networking/openssh {
