@@ -1,6 +1,5 @@
+{ lib }:
 let
-
-  lib = import ./default.nix;
 
   spdx = lic: lic // {
     url = "http://spdx.org/licenses/${lic.spdxId}";
@@ -293,9 +292,10 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     fullName = "Independent JPEG Group License";
   };
 
-  inria = {
-    fullName  = "INRIA Non-Commercial License Agreement";
+  inria-compcert = {
+    fullName  = "INRIA Non-Commercial License Agreement for the CompCert verified compiler";
     url       = "http://compcert.inria.fr/doc/LICENSE";
+    free      = false;
   };
 
   ipa = spdx {
@@ -419,7 +419,7 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     url = "https://raw.githubusercontent.com/raboof/notion/master/LICENSE";
     fullName = "Notion modified LGPL";
   };
-  
+
   ofl = spdx {
     spdxId = "OFL-1.1";
     fullName = "SIL Open Font License 1.1";
