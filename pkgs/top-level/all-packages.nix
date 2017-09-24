@@ -14808,8 +14808,6 @@ with pkgs;
 
   hello = callPackage ../applications/misc/hello { };
 
-  kubernetes-helm = callPackage ../applications/networking/cluster/helm { };
-
   helmholtz = callPackage ../applications/audio/pd-plugins/helmholtz { };
 
   heme = callPackage ../applications/editors/heme { };
@@ -15134,6 +15132,8 @@ with pkgs;
   ktorrent = libsForQt5.callPackage ../applications/networking/p2p/ktorrent { };
 
   kubernetes = callPackage ../applications/networking/cluster/kubernetes {  };
+
+  kubernetes-helm = callPackage ../applications/networking/cluster/helm { };
 
   kupfer = callPackage ../applications/misc/kupfer { };
 
