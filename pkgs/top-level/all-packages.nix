@@ -11382,6 +11382,8 @@ with pkgs;
     openssl = openssl_1_0_2;
   };
 
+  fusionInventory = callPackage ../servers/monitoring/fusion-inventory { };
+
   gatling = callPackage ../servers/http/gatling { };
 
   glabels = callPackage ../applications/graphics/glabels { };
@@ -16628,6 +16630,8 @@ with pkgs;
   };
 
   twmn = libsForQt5.callPackage ../applications/misc/twmn { };
+
+  testssl = callPackage ../applications/networking/testssl { };
 
   umurmur = callPackage ../applications/networking/umurmur { };
 
