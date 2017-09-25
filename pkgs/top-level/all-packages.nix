@@ -14401,6 +14401,8 @@ with pkgs;
 
   gqrx = qt5.callPackage ../applications/misc/gqrx { };
 
+  gpx-viewer = callPackage ../applications/misc/gpx-viewer { };
+
   grass = callPackage ../applications/gis/grass { };
 
   grepm = callPackage ../applications/search/grepm { };
@@ -17252,6 +17254,8 @@ with pkgs;
   inherit (python3Packages) you-get;
 
   inherit (pythonPackages) youtube-dl;
+
+  youtube-viewer = perlPackages.WWWYoutubeViewer;
 
   zam-plugins = callPackage ../applications/audio/zam-plugins { };
 
