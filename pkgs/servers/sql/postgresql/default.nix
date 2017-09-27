@@ -11,7 +11,7 @@ let
       inherit sha256;
     };
 
-    outputs = [ "out" "dev" "lib" "doc" "man" ];
+    outputs = [ "out" "lib" "doc" "man" ];
     setOutputFlags = false; # $out retains configureFlags :-/
 
     buildInputs =
@@ -51,10 +51,12 @@ let
 
     postInstall =
       ''
-        moveToOutput "bin/pg_config" "$dev"
-        moveToOutput "lib/pgxs" "$dev" # looks strange, but not deleting it
+        moveToOutput "lib/pgxs" "$out" # looks strange, but not deleting it
         moveToOutput "lib/*.a" "$out"
         moveToOutput "lib/libecpg*" "$out"
+
+        # Prevent a retained dependency on gcc-wrapper.
+        substituteInPlace "$out/lib/pgxs/src/Makefile.global" --replace ${stdenv.cc}/bin/ld ld
 
         # Remove static libraries in case dynamic are available.
         for i in $out/lib/*.a; do
