@@ -19112,6 +19112,10 @@ with pkgs;
 
   retrofe = callPackage ../misc/emulators/retrofe { };
 
+  rpl = callPackage ../tools/text/rpl {
+    pythonPackages = python3Packages;
+  };
+
   rss-glx = callPackage ../misc/screensavers/rss-glx { };
 
   runit = callPackage ../tools/system/runit { };
