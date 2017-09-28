@@ -5713,9 +5713,7 @@ with pkgs;
 
   haskell = callPackage ./haskell-packages.nix { };
 
-  haskellPackages = haskell.packages.ghc802.override {
-    overrides = config.haskellPackageOverrides or (self: super: {});
-  };
+  haskellPackages = haskell.packages.ghc802.extend (config.haskellPackageOverrides or (self: super: {}));
 
   inherit (haskellPackages) ghc;
 
@@ -13850,6 +13848,8 @@ with pkgs;
 
   cloud-print-connector = callPackage ../servers/cloud-print-connector { };
 
+  clp = callPackage ../applications/science/math/clp { };
+
   cmatrix = callPackage ../applications/misc/cmatrix { };
 
   cmus = callPackage ../applications/audio/cmus {
@@ -16764,6 +16764,8 @@ with pkgs;
   virt-top = callPackage ../applications/virtualization/virt-top {
     ocamlPackages = ocamlPackages_4_01_0;
   };
+
+  virt-what = callPackage ../applications/virtualization/virt-what { };
 
   virtmanager = callPackage ../applications/virtualization/virt-manager {
     vte = gnome3.vte;
