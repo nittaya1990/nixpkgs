@@ -19240,6 +19240,8 @@ with pkgs;
 
   utf8proc = callPackage ../development/libraries/utf8proc { };
 
+  unicode-paracode = callPackage ../tools/misc/unicode { };
+
   valauncher = callPackage ../applications/misc/valauncher { };
 
   vault = callPackage ../tools/security/vault { };
