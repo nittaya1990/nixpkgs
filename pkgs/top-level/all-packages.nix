@@ -18476,6 +18476,9 @@ with pkgs;
 
   gfan = callPackage ../applications/science/math/gfan {};
 
+  giac = callPackage ../applications/science/math/giac { };
+  giac-with-xcas = giac.override { enableGUI = true; };
+
   ginac = callPackage ../applications/science/math/ginac { };
 
   glucose = callPackage ../applications/science/logic/glucose { };
