@@ -4786,6 +4786,8 @@ with pkgs;
     inherit (perlPackages) ShellCommand TestMost;
   };
 
+  vcstool = callPackage ../development/tools/vcstool { };
+
   verilator = callPackage ../applications/science/electronics/verilator {};
 
   verilog = callPackage ../applications/science/electronics/verilog {};
@@ -18100,6 +18102,8 @@ with pkgs;
   latte-dock = libsForQt5.callPackage ../applications/misc/latte-dock { };
 
   orion = callPackage ../misc/themes/orion {};
+
+  deepin-gtk-theme = callPackage ../misc/themes/deepin { };
 
   albatross = callPackage ../misc/themes/albatross { };
 
