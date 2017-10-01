@@ -14454,6 +14454,10 @@ with pkgs;
 
   google-musicmanager = callPackage ../applications/audio/google-musicmanager { };
 
+  googler = callPackage ../applications/misc/googler {
+    python = python3;
+  };
+
   gopher = callPackage ../applications/networking/gopher/gopher { };
 
   gopherclient = libsForQt5.callPackage ../applications/networking/gopher/gopherclient { };
