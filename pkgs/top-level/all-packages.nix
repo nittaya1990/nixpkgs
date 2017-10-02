@@ -4766,6 +4766,8 @@ with pkgs;
 
   upx = callPackage ../tools/compression/upx { };
 
+  uqmi = callPackage ../tools/networking/uqmi { };
+
   uriparser = callPackage ../development/libraries/uriparser {};
 
   urlscan = callPackage ../applications/misc/urlscan { };
@@ -9549,6 +9551,8 @@ with pkgs;
   libu2f-host = callPackage ../development/libraries/libu2f-host { };
 
   libu2f-server = callPackage ../development/libraries/libu2f-server { };
+
+  libubox = callPackage ../development/libraries/libubox { };
 
   libuecc = callPackage ../development/libraries/libuecc { };
 
