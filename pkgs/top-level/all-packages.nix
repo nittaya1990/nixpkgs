@@ -1953,6 +1953,8 @@ with pkgs;
 
     unikey = callPackage ../tools/inputmethods/fcitx-engines/fcitx-unikey { };
 
+    rime = callPackage ../tools/inputmethods/fcitx-engines/fcitx-rime { };
+
     m17n = callPackage ../tools/inputmethods/fcitx-engines/fcitx-m17n { };
 
     mozc = callPackage ../tools/inputmethods/fcitx-engines/fcitx-mozc rec {
@@ -9227,6 +9229,8 @@ with pkgs;
 
   librevisa = callPackage ../development/libraries/librevisa { };
 
+  librime = callPackage ../development/libraries/librime {};
+
   libsamplerate = callPackage ../development/libraries/libsamplerate {
     inherit (darwin.apple_sdk.frameworks) ApplicationServices Carbon CoreServices;
   };
@@ -9756,6 +9760,8 @@ with pkgs;
   lzo = callPackage ../development/libraries/lzo { };
 
   mapnik = callPackage ../development/libraries/mapnik { };
+
+  marisa = callPackage ../development/libraries/marisa {};
 
   matio = callPackage ../development/libraries/matio { };
 
@@ -13091,6 +13097,8 @@ with pkgs;
   bakoma_ttf = callPackage ../data/fonts/bakoma-ttf { };
 
   bgnet = callPackage ../data/documentation/bgnet { };
+
+  brise = callPackage ../data/misc/brise { };
 
   inherit (kdeFrameworks) breeze-icons;
 
