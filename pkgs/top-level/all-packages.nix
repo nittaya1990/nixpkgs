@@ -14685,6 +14685,8 @@ with pkgs;
 
   gcolor2 = callPackage ../applications/graphics/gcolor2 { };
 
+  gcolor3 = callPackage ../applications/graphics/gcolor3 { };
+
   get_iplayer = callPackage ../applications/misc/get_iplayer {};
 
   getxbook = callPackage ../applications/misc/getxbook {};
@@ -18646,7 +18648,7 @@ with pkgs;
 
   eagle = callPackage ../applications/science/electronics/eagle { };
 
-  caneda = callPackage ../applications/science/electronics/caneda { };
+  caneda = libsForQt5.callPackage ../applications/science/electronics/caneda { };
 
   geda = callPackage ../applications/science/electronics/geda {
     guile = guile_2_0;
