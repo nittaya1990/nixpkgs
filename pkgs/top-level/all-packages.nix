@@ -16738,6 +16738,8 @@ with pkgs;
 
   toxic = callPackage ../applications/networking/instant-messengers/toxic { };
 
+  tqsl = callPackage ../applications/misc/tqsl { };
+
   transcode = callPackage ../applications/audio/transcode { };
 
   transcribe = callPackage ../applications/audio/transcribe { };
