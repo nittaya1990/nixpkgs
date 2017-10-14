@@ -153,6 +153,7 @@ rec {
           { key = "run-in-machine";
             networking.hostName = "client";
             nix.readOnlyStore = false;
+            virtualisation.writableStore = false;
           }
         ];
 

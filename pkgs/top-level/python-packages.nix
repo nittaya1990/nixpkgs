@@ -291,6 +291,8 @@ in {
 
   sip = callPackage ../development/python-modules/sip { };
 
+  supervise_api = callPackage ../development/python-modules/supervise_api { };
+
   tables = callPackage ../development/python-modules/tables {
     hdf5 = pkgs.hdf5.override { zlib = pkgs.zlib; };
   };
@@ -2091,7 +2093,8 @@ in {
     buildInputs = [ pkgs.db ];
 
     # Judging from SyntaxError in test
-    disabled = isPy3k;
+#    disabled = isPy3k;
+    doCheck = false; # test suite breaks python3 compatibility
 
     # Path to database need to be set.
     # Somehow the setup.py flag is not propagated.
@@ -6161,13 +6164,13 @@ in {
       sha256 = "0i14bc67200zhzxc41g5dfp2m0pr1zaa2gv59p2va1xw0ji2dc0f";
     };
 
+    nativeBuildInputs = [ pkgs.pkgconfig ];
     buildInputs = with self; [
       nose
       pkgs.libjpeg
       pkgs.libpng
       pkgs.libtiff
       pkgs.libwebp
-      pkgs.pkgconfig
     ];
     propagatedBuildInputs = with self; [ numpy ];
 
@@ -7203,7 +7206,8 @@ in {
     };
 
     NIX_CFLAGS_COMPILE="-I${pkgs.poppler.dev}/include/poppler/";
-    buildInputs = [ pkgs.pkgconfig pkgs.poppler.dev ];
+    nativeBuildInputs = [ pkgs.pkgconfig ];
+    buildInputs = [ pkgs.poppler.dev ];
     propagatedBuildInputs = with self; [ pycairo pygobject2 ];
 
     patches = [
@@ -9471,7 +9475,8 @@ in {
       sha256 = "06rmp1ap6flh64m81j0n3a357ij2vj9zwcvvw0p31y6hz1id9shi";
     };
 
-    buildInputs = with self; [ pkgs.pkgconfig pkgs.fuse ];
+    nativeBuildInputs = [ pkgs.pkgconfig ];
+    buildInputs = with self; [ pkgs.fuse ];
 
     meta = {
       description = "Python bindings for FUSE";
@@ -11217,7 +11222,8 @@ in {
       sha256 = "1li7q04ljrvwharw4fblcbfhvk6s0l3lnv8yqb4c22lcgbkiqlps";
     };
 
-    buildInputs = with self; [ pytest pkgs.pkgconfig pkgs.fuse pkgs.attr pkgs.which ];
+    nativeBuildInputs = [ pkgs.pkgconfig ];
+    buildInputs = with self; [ pytest pkgs.fuse pkgs.attr pkgs.which ];
 
     propagatedBuildInputs = with self; [ contextlib2 ];
 
@@ -13163,7 +13169,8 @@ in {
         configure
     '';
 
-    buildInputs = with self; [ python pkgs.pkgconfig pkgs.libnotify pygobject2 pygtk pkgs.glib pkgs.gtk2 pkgs.dbus_glib ];
+    nativeBuildInputs = [ pkgs.pkgconfig ];
+    buildInputs = with self; [ python pkgs.libnotify pygobject2 pygtk pkgs.glib pkgs.gtk2 pkgs.dbus_glib ];
 
     postInstall = "cd $out/lib/python*/site-packages && ln -s gtk-*/pynotify .";
 
@@ -14990,58 +14997,7 @@ in {
 
   pandas = callPackage ../development/python-modules/pandas { };
 
-  pandas_17 = let
-    inherit (pkgs.stdenv.lib) optional optionalString;
-    inherit (pkgs.stdenv) isDarwin;
-  in buildPythonPackage rec {
-    name = "pandas-${version}";
-    version = "0.17.1";
-
-    src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/p/pandas/${name}.tar.gz";
-      sha256 = "cfd7214a7223703fe6999fbe34837749540efee1c985e6aee9933f30e3f72837";
-    };
-
-    buildInputs = with self; [ nose ] ++ optional isDarwin pkgs.libcxx;
-    propagatedBuildInputs = with self; [
-      dateutil
-      scipy_0_17
-      numexpr
-      pytz
-      xlrd
-      bottleneck
-      sqlalchemy
-      lxml
-      html5lib
-#      modules.sqlite3
-      beautifulsoup4
-    ] ++ optional isDarwin pkgs.darwin.locale; # provides the locale command
-
-    # For OSX, we need to add a dependency on libcxx, which provides
-    # `complex.h` and other libraries that pandas depends on to build.
-    patchPhase = optionalString isDarwin ''
-      cpp_sdk="${pkgs.libcxx}/include/c++/v1";
-      echo "Adding $cpp_sdk to the setup.py common_include variable"
-      substituteInPlace setup.py \
-        --replace "['pandas/src/klib', 'pandas/src']" \
-                  "['pandas/src/klib', 'pandas/src', '$cpp_sdk']"
-
-      # disable clipboard tests since pbcopy/pbpaste are not open source
-      substituteInPlace pandas/io/tests/test_clipboard.py \
-        --replace pandas.util.clipboard no_such_module \
-        --replace OSError ImportError
-    '';
-
-    doCheck = false;
-
-    meta = {
-      homepage = "http://pandas.pydata.org/";
-      description = "Python Data Analysis Library";
-      license = licenses.bsd3;
-      maintainers = with maintainers; [ raskin fridh ];
-      platforms = platforms.unix;
-    };
-  };
+  pandas_0_17_1 = callPackage ../development/python-modules/pandas/0.17.1.nix { };
 
   xlrd = buildPythonPackage rec {
     name = "xlrd-${version}";
@@ -15647,6 +15603,8 @@ in {
 
   pika-pool = callPackage ../development/python-modules/pika-pool { };
   platformio = callPackage ../development/python-modules/platformio { };
+
+  kmsxx = callPackage ../development/libraries/kmsxx { };
 
   pylibconfig2 = buildPythonPackage rec {
     name = "pylibconfig2-${version}";
@@ -16495,7 +16453,8 @@ in {
       patchShebangs .
     '';
 
-    buildInputs = [ self.setuptools self.nose pkgs.pkgconfig pkgs.swig pkgs.libcdio ]
+    nativeBuildInputs = [ pkgs.pkgconfig ];
+    buildInputs = [ self.setuptools self.nose pkgs.swig pkgs.libcdio ]
       ++ stdenv.lib.optional stdenv.isDarwin pkgs.libiconv;
 
     patches = [ ../development/python-modules/pycdio/add-cdtext-toc.patch ];
@@ -17199,7 +17158,7 @@ in {
       PATH="${pkgs.parted}/sbin:$PATH"
     '';
 
-    buildInputs = with self; [ pkgs.pkgconfig ];
+    nativeBuildInputs = [ pkgs.pkgconfig ];
 
     propagatedBuildInputs = with self; [ pkgs.parted ];
 
@@ -17638,6 +17597,8 @@ in {
       maintainers = with maintainers; [ goibhniu ];
     };
   };
+
+  pypcap = callPackage ../development/python-modules/pypcap {};
 
   pyplatec = buildPythonPackage rec {
     name = "PyPlatec-${version}";
@@ -18167,8 +18128,9 @@ in {
       sha256 = "1svlwyl61rvbqbcbalkg6pbf38yjyv7qkq9sx4x35yk69lscaac2";
     };
 
+    nativeBuildInputs = [ pkgs.pkgconfig ];
     buildInputs = [
-      pkgs.pkgconfig pkgs.gtk2 self.pygtk pkgs.libxml2
+      pkgs.gtk2 self.pygtk pkgs.libxml2
       pkgs.libxslt pkgs.libsoup pkgs.webkitgtk24x-gtk2 pkgs.icu
     ];
 
@@ -19402,8 +19364,6 @@ in {
 
   scipy = callPackage ../development/python-modules/scipy { };
 
-  scipy_0_17 = callPackage ../development/python-modules/scipy/0.17.1.nix { };
-
   scikitimage = buildPythonPackage rec {
     name = "scikit-image-${version}";
     version = "0.12.3";
@@ -19876,21 +19836,7 @@ in {
     };
   };
 
-  spambayes = buildPythonPackage rec {
-    name = "spambayes-1.1b1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://sourceforge/spambayes/${name}.tar.gz";
-      sha256 = "0kqvjb89b02wp41p650ydfspi1s8d7akx1igcrw62diidqbxp04n";
-    };
-
-    propagatedBuildInputs = with self; [ bsddb3 pydns lockfile ];
-
-    meta = {
-      description = "Statistical anti-spam filter, initially based on the work of Paul Graham";
-      homepage = http://spambayes.sourceforge.net/;
-    };
-  };
+  spambayes = callPackage ../development/python-modules/spambayes { };
 
   shapely = callPackage ../development/python-modules/shapely { };
 
@@ -20334,7 +20280,8 @@ in {
       sha256 = "0zrjxvzxqm4bz2jcy8sras8jircgbs6dkrw8j3nc6jhvzlikwwxl";
     };
 
-    buildInputs = [ pkgs.pkgconfig self.pytest_28 self.pytestrunner ];
+    nativeBuildInputs = [ pkgs.pkgconfig ];
+    buildInputs = [ self.pytest_28 self.pytestrunner ];
     propagatedBuildInputs = [ self.cffi pkgs.secp256k1 ];
 
     # Tests are not included in archive
@@ -20404,8 +20351,9 @@ in {
       sha256 = "1q35kgz151rr99240jq55rs39y741m8shh9yihl3x95rkjxchji4";
     };
 
+    nativeBuildInputs = [ pkgs.pkgconfig ];
+    buildInputs = with pkgs; [ alsaLib ffmpeg libv4l sqlite libvpx ];
     propagatedBuildInputs = with self; [ cython pkgs.openssl dns dateutil xcaplib msrplib lxml python-otr ];
-    buildInputs = with pkgs; [ alsaLib ffmpeg libv4l pkgconfig sqlite libvpx ];
   };
 
 
@@ -20609,6 +20557,8 @@ in {
       platforms = platforms.unix;
     };
   });
+
+  guzzle_sphinx_theme = callPackage ../development/python-modules/guzzle_sphinx_theme { };
 
   sphinx-testing = callPackage ../development/python-modules/sphinx-testing { };
 
@@ -20968,7 +20918,8 @@ in {
     src = pkgs.subunit.src;
 
     propagatedBuildInputs = with self; [ testtools testscenarios ];
-    buildInputs = [ pkgs.pkgconfig pkgs.check pkgs.cppunit ];
+    nativeBuildInputs = [ pkgs.pkgconfig ];
+    buildInputs = [ pkgs.check pkgs.cppunit ];
 
     patchPhase = ''
       sed -i 's/version=VERSION/version="${pkgs.subunit.version}"/' setup.py
@@ -24094,7 +24045,8 @@ EOF
       sha256 = "1l0s9cx38qb6x5xj32r531xap11m93c3gag30idj8fzkn74cpfgc";
     };
 
-    buildInputs = with self; [ python pkgs.pkgconfig pkgs.libvirt lxml ];
+    nativeBuildInputs = [ pkgs.pkgconfig ];
+    buildInputs = with self; [ python pkgs.libvirt lxml ];
 
     buildPhase = "${python.interpreter} setup.py build";
 
@@ -24233,7 +24185,8 @@ EOF
     preBuild = "${python}/bin/${python.executable} setup.py build_ext";
     installPhase= "${python}/bin/${python.executable} setup.py install --prefix=$out";
 
-    buildInputs = with self; [ pkgs.pkgconfig pkgs.enlightenment.efl ];
+    nativeBuildInputs = [ pkgs.pkgconfig ];
+    buildInputs = with self; [ pkgs.enlightenment.efl ];
     doCheck = false;
 
     meta = {
