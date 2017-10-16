@@ -17956,6 +17956,9 @@ with pkgs;
   };
 
   steam-run = steam.run;
+  steam-run-native = (steam.override {
+    nativeOnly = true;
+  }).run;
 
   stepmania = callPackage ../games/stepmania {
     ffmpeg = ffmpeg_2;
