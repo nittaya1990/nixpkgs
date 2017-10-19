@@ -10044,6 +10044,8 @@ with pkgs;
 
   openexr = callPackage ../development/libraries/openexr { };
 
+  openexrid-unstable = callPackage ../development/libraries/openexrid-unstable { };
+
   openldap = callPackage ../development/libraries/openldap { };
 
   opencolorio = callPackage ../development/libraries/opencolorio { };
@@ -10067,6 +10069,8 @@ with pkgs;
   openscenegraph = callPackage ../development/libraries/openscenegraph { };
 
   openslp = callPackage ../development/libraries/openslp {};
+
+  openvdb = callPackage ../development/libraries/openvdb {};
 
   inherit (callPackages ../development/libraries/libressl { })
     libressl_2_5
@@ -13639,6 +13643,8 @@ with pkgs;
 
   airwave = callPackage ../applications/audio/airwave/default.nix { };
 
+  alembic = callPackage ../development/libraries/alembic {};
+
   alchemy = callPackage ../applications/graphics/alchemy { };
 
   alock = callPackage ../misc/screensavers/alock { };
@@ -15740,6 +15746,8 @@ with pkgs;
     ruby = ruby_2_1;
   };
 
+  partio = callPackage ../development/libraries/partio {};
+
   pcmanfm = callPackage ../applications/misc/pcmanfm { };
 
   pcmanfm-qt = lxqt.pcmanfm-qt;
@@ -15757,6 +15765,8 @@ with pkgs;
   };
 
   polybar = callPackage ../applications/misc/polybar { };
+
+  ptex = callPackage ../development/libraries/ptex {};
 
   rssguard = libsForQt5.callPackage ../applications/networking/feedreaders/rssguard { };
 
@@ -15901,6 +15911,8 @@ with pkgs;
   openbrf = libsForQt5.callPackage ../applications/misc/openbrf { };
 
   opencpn = callPackage ../applications/misc/opencpn { };
+
+  openfx = callPackage ../development/libraries/openfx {};
 
   openimageio = callPackage ../applications/graphics/openimageio { };
 
