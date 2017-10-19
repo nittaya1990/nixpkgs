@@ -2578,6 +2578,27 @@ in {
     };
   };
 
+  cntk = buildPythonPackage rec {
+    inherit (pkgs.cntk) name version src meta;
+
+    buildInputs = [ pkgs.cntk pkgs.swig pkgs.openmpi ];
+    propagatedBuildInputs = with self; [ numpy scipy enum34 protobuf pip ];
+
+    CNTK_LIB_PATH = "${pkgs.cntk}/lib";
+    CNTK_COMPONENT_VERSION = pkgs.cntk.version;
+
+    postPatch = ''
+      cd bindings/python
+    '';
+
+    postInstall = ''
+      rm -rf $out/${python.sitePackages}/cntk/libs
+      ln -s ${pkgs.cntk}/lib $out/${python.sitePackages}/cntk/libs
+      # It's not installed for some reason.
+      cp cntk/cntk_py.py $out/${python.sitePackages}/cntk
+    '';
+  };
+
   celery = buildPythonPackage rec {
     name = "celery-${version}";
     version = "4.0.2";
@@ -25974,8 +25995,12 @@ EOF
 
   tensorflow-tensorboard = callPackage ../development/python-modules/tensorflow-tensorboard { };
 
-  tensorflow = callPackage ../development/python-modules/tensorflow {
+  tensorflow = callPackage ../development/python-modules/tensorflow rec {
+    bazel = pkgs.bazel_0_4;
     cudaSupport = pkgs.config.cudaSupport or false;
+    inherit (pkgs.linuxPackages) nvidia_x11;
+    cudatoolkit = pkgs.cudatoolkit8;
+    cudnn = pkgs.cudnn6_cudatoolkit8;
   };
 
   tensorflowWithoutCuda = self.tensorflow.override {
@@ -26498,6 +26523,8 @@ EOF
   typed-ast = callPackage ../development/python-modules/typed-ast { };
 
   stripe = callPackage ../development/python-modules/stripe { };
+
+  twilio = callPackage ../development/python-modules/twilio { };
 
   uranium = callPackage ../development/python-modules/uranium { };
 
