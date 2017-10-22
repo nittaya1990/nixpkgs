@@ -256,6 +256,10 @@ in {
     pythonPackages = self;
   };
 
+  pyqt56 = pkgs.libsForQt56.callPackage ../development/python-modules/pyqt/5.x.nix {
+    pythonPackages = self;
+  };
+
   pyqt5 = pkgs.libsForQt5.callPackage ../development/python-modules/pyqt/5.x.nix {
     pythonPackages = self;
   };
@@ -277,6 +281,8 @@ in {
   python-sql = callPackage ../development/python-modules/python-sql { };
 
   python-stdnum = callPackage ../development/python-modules/python-stdnum { };
+
+  python-utils = callPackage ../development/python-modules/python-utils { };
 
   pytimeparse =  callPackage ../development/python-modules/pytimeparse { };
 
@@ -13341,6 +13347,8 @@ in {
       license = licenses.free;
     };
   };
+
+  numpy-stl = callPackage ../development/python-modules/numpy-stl { };
 
   numtraits = buildPythonPackage rec {
     pname = "numtraits";
@@ -26536,7 +26544,10 @@ EOF
 
   twilio = callPackage ../development/python-modules/twilio { };
 
-  uranium = callPackage ../development/python-modules/uranium { };
+  uranium = callPackage ../development/python-modules/uranium {
+    # https://github.com/Ultimaker/Cura/issues/2596
+    pyqt5 = self.pyqt56;
+  };
 
   vine = callPackage ../development/python-modules/vine { };
 
