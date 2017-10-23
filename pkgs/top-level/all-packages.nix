@@ -7756,7 +7756,9 @@ with pkgs;
 
   aspellDicts = recurseIntoAttrs (callPackages ../development/libraries/aspell/dictionaries.nix {});
 
-  aspellWithDicts = callPackage ../development/libraries/aspell/aspell-with-dicts.nix { };
+  aspellWithDicts = callPackage ../development/libraries/aspell/aspell-with-dicts.nix {
+    aspell = aspell.override { searchNixProfiles = false; };
+  };
 
   attica = callPackage ../development/libraries/attica { };
 
@@ -8606,6 +8608,9 @@ with pkgs;
   harfbuzz-icu = callPackage ../development/libraries/harfbuzz {
     withIcu = true;
     withGraphite2 = true;
+  };
+  harfbuzz-icu-58 = harfbuzz-icu.override {
+    icu = icu58;
   };
 
   hawknl = callPackage ../development/libraries/hawknl { };
@@ -10938,7 +10943,7 @@ with pkgs;
   webkitgtk = webkitgtk216x;
 
   webkitgtk24x-gtk3 = callPackage ../development/libraries/webkitgtk/2.4.nix {
-    harfbuzz = harfbuzz-icu;
+    harfbuzz = harfbuzz-icu-58;
     gst-plugins-base = gst_all_1.gst-plugins-base;
     inherit (darwin) libobjc;
   };
