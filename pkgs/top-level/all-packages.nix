@@ -7827,7 +7827,6 @@ with pkgs;
 
   botan = callPackage ../development/libraries/botan { };
   botan2 = callPackage ../development/libraries/botan/2.0.nix { };
-  botanUnstable = callPackage ../development/libraries/botan/unstable.nix { };
 
   box2d = callPackage ../development/libraries/box2d { };
 
@@ -10961,11 +10960,6 @@ with pkgs;
   };
 
   webkitgtk216x = callPackage ../development/libraries/webkitgtk/2.16.nix {
-    harfbuzz = harfbuzz-icu;
-    gst-plugins-base = gst_all_1.gst-plugins-base;
-  };
-
-  webkitgtk217x = callPackage ../development/libraries/webkitgtk/2.17.nix {
     harfbuzz = harfbuzz-icu;
     gst-plugins-base = gst_all_1.gst-plugins-base;
   };
