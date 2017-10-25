@@ -4509,6 +4509,8 @@ with pkgs;
 
   super-user-spark = haskellPackages.callPackage ../applications/misc/super_user_spark { };
 
+  svgcleaner = callPackage ../tools/graphics/svgcleaner { };
+
   ssdeep = callPackage ../tools/security/ssdeep { };
 
   ssh-ident = callPackage ../tools/networking/ssh-ident { };
