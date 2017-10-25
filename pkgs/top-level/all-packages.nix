@@ -17093,6 +17093,8 @@ with pkgs;
     inherit (luaPackages) cjson;
   };
 
+  weechat-xmpp = callPackage ../applications/networking/instant-messengers/weechat-xmpp {};
+
   westonLite = callPackage ../applications/window-managers/weston {
     pango = null;
     freerdp = null;
