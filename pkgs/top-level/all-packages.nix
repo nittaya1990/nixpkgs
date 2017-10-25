@@ -13723,6 +13723,8 @@ with pkgs;
 
   aseprite = callPackage ../applications/editors/aseprite { };
 
+  astah-community = callPackage ../applications/graphics/astah-community { };
+
   astroid = callPackage ../applications/networking/mailreaders/astroid { };
 
   audacious = callPackage ../applications/audio/audacious { };
