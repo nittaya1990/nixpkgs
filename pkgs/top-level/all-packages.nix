@@ -3559,6 +3559,8 @@ with pkgs;
 
   pnmixer = callPackage ../tools/audio/pnmixer { };
 
+  pulsemixer = callPackage ../tools/audio/pulsemixer { };
+
   pwsafe = callPackage ../applications/misc/pwsafe {
     wxGTK = wxGTK30;
   };
@@ -17036,6 +17038,8 @@ with pkgs;
   vscode-extensions = recurseIntoAttrs (callPackage ../misc/vscode-extensions {});
 
   vue = callPackage ../applications/misc/vue { };
+
+  vuze = callPackage ../applications/networking/p2p/vuze { };
 
   vwm = callPackage ../applications/window-managers/vwm { };
 
