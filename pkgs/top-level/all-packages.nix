@@ -4491,6 +4491,8 @@ with pkgs;
 
   sshfs-fuse = callPackage ../tools/filesystems/sshfs-fuse { };
 
+  sshlatex = callPackage ../tools/typesetting/sshlatex { };
+
   sshuttle = callPackage ../tools/security/sshuttle { };
 
   ssldump = callPackage ../tools/networking/ssldump { };
@@ -17650,7 +17652,6 @@ with pkgs;
   digikam = libsForQt5.callPackage ../applications/graphics/digikam {
     inherit (plasma5) oxygen;
     inherit (kdeApplications) kcalcore;
-    boost = boost160;
   };
 
   displaycal = (newScope pythonPackages) ../applications/graphics/displaycal {};
