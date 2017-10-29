@@ -892,6 +892,8 @@ with pkgs;
 
   colord-kde = libsForQt5.callPackage ../tools/misc/colord-kde {};
 
+  colpack = callPackage ../applications/science/math/colpack { };
+
   consul = callPackage ../servers/consul { };
 
   consul-ui = callPackage ../servers/consul/ui.nix { };
@@ -15819,6 +15821,8 @@ with pkgs;
   shotcut = libsForQt5.callPackage ../applications/video/shotcut {
     libmlt = mlt;
   };
+
+  shogun = callPackage ../applications/science/machine-learning/shogun { };
 
   smplayer = libsForQt5.callPackage ../applications/video/smplayer { };
 
