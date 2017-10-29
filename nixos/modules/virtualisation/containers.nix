@@ -254,6 +254,8 @@ let
     DeviceAllow = map (d: "${d.node} ${d.modifier}") cfg.allowedDevices;
   };
 
+  requiresMountsFor = config:
+    mapAttrsToList (containerPath: bindMount: bindMount.hostPath) config.bindMounts;
 
   system = config.nixpkgs.system;
 
@@ -348,7 +350,7 @@ let
         List of forwarded ports from host to container. Each forwarded port
         is specified by protocol, hostPort and containerPort. By default,
         protocol is tcp and hostPort and containerPort are assumed to be
-        the same if containerPort is not explicitly given. 
+        the same if containerPort is not explicitly given.
       '';
     };
 
@@ -664,6 +666,7 @@ in
             script = startScript config;
             postStart = postStartScript config;
             serviceConfig = serviceDirectives config;
+            unitConfig.RequiresMountsFor = unit.unitConfig.RequiresMountsFor ++ requiresMountsFor config;
           } // (
           if config.autoStart then
             {
@@ -681,7 +684,7 @@ in
     # container so that container@.target can get the container
     # configuration.
     environment.etc =
-      let mkPortStr = p: p.protocol + ":" + (toString p.hostPort) + ":" + (if p.containerPort == null then toString p.hostPort else toString p.containerPort); 
+      let mkPortStr = p: p.protocol + ":" + (toString p.hostPort) + ":" + (if p.containerPort == null then toString p.hostPort else toString p.containerPort);
       in mapAttrs' (name: cfg: nameValuePair "containers/${name}.conf"
       { text =
           ''
