@@ -17171,6 +17171,8 @@ with pkgs;
 
   wordnet = callPackage ../applications/misc/wordnet { };
 
+  wordgrinder = callPackage ../applications/office/wordgrinder { };
+
   worker = callPackage ../applications/misc/worker { };
 
   workrave = callPackage ../applications/misc/workrave {
