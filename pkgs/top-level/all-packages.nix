@@ -18575,9 +18575,7 @@ with pkgs;
 
   acgtk = callPackage ../applications/science/logic/acgtk { };
 
-  alt-ergo = callPackage ../applications/science/logic/alt-ergo {
-    ocamlPackages = ocamlPackages_4_02;
-  };
+  alt-ergo = callPackage ../applications/science/logic/alt-ergo { };
 
   aspino = callPackage ../applications/science/logic/aspino {};
 
