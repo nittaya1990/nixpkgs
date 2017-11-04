@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper cmake flex bison ];
 
+  cmakeFlags="-DBCC_KERNEL_MODULES_DIR=${kernel.dev}/lib/modules";
+
   postInstall = ''
     mkdir -p $out/bin $out/share
     rm -r $out/share/bcc/tools/old
@@ -39,6 +41,6 @@ stdenv.mkDerivation rec {
     description = "Dynamic Tracing Tools for Linux";
     homepage = https://iovisor.github.io/bcc/;
     license = licenses.asl20;
-    maintainers = with maintainers; [ ragge ];
+    maintainers = with maintainers; [ ragge mic92 ];
   };
 }
