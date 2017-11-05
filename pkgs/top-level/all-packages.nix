@@ -10925,6 +10925,8 @@ with pkgs;
 
   vmime = callPackage ../development/libraries/vmime { };
 
+  vrb = callPackage ../development/libraries/vrb { };
+
   vrpn = callPackage ../development/libraries/vrpn { };
 
   vsqlite = callPackage ../development/libraries/vsqlite { };
@@ -18642,6 +18644,7 @@ with pkgs;
     coqPackages = self;
 
     autosubst = callPackage ../development/coq-modules/autosubst {};
+    bignums = callPackage ../development/coq-modules/bignums {};
     coq-ext-lib = callPackage ../development/coq-modules/coq-ext-lib {};
     coquelicot = callPackage ../development/coq-modules/coquelicot {};
     dpdgraph = callPackage ../development/coq-modules/dpdgraph {};
