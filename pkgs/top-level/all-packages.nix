@@ -13016,9 +13016,6 @@ with pkgs;
 
   tunctl = callPackage ../os-specific/linux/tunctl { };
 
-  # TODO(dezgeg): either refactor & use ubootTools directly, or remove completely
-  ubootChooser = name: ubootTools;
-
   # Upstream U-Boots:
   inherit (callPackage ../misc/uboot {})
     buildUBoot
