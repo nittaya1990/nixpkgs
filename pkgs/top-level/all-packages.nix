@@ -1080,6 +1080,8 @@ with pkgs;
 
   go-dependency-manager = callPackage ../development/tools/gdm { };
 
+  geckodriver = callPackage ../development/tools/geckodriver { };
+
   geekbench = callPackage ../tools/misc/geekbench { };
 
   gencfsm = callPackage ../tools/security/gencfsm { };
@@ -7488,6 +7490,8 @@ with pkgs;
   };
 
   premake = premake4;
+
+  procodile = callPackage ../tools/system/procodile { };
 
   qtcreator = libsForQt5.callPackage ../development/qtcreator { };
 
