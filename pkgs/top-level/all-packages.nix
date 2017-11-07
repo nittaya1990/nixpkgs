@@ -9272,6 +9272,8 @@ with pkgs;
 
   libnice = callPackage ../development/libraries/libnice { };
 
+  libnsl = callPackage ../development/libraries/libnsl { };
+
   liboping = callPackage ../development/libraries/liboping { };
 
   libplist = callPackage ../development/libraries/libplist { };
