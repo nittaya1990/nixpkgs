@@ -4837,6 +4837,8 @@ with pkgs;
 
   usbmuxd = callPackage ../tools/misc/usbmuxd {};
 
+  usync = callPackage ../applications/misc/usync { };
+
   uwsgi = callPackage ../servers/uwsgi {
     plugins = [];
     withPAM = stdenv.isLinux;
@@ -13647,6 +13649,8 @@ with pkgs;
   vanilla-dmz = callPackage ../data/icons/vanilla-dmz { };
 
   vistafonts = callPackage ../data/fonts/vista-fonts { };
+
+  vistafonts-chs = callPackage ../data/fonts/vista-fonts-chs { };
 
   wireless-regdb = callPackage ../data/misc/wireless-regdb { };
 
