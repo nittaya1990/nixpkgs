@@ -12826,8 +12826,6 @@ with pkgs;
     python3 = null; # Currently not using the python3 bindings
   };
 
-  libnscd = callPackage ../os-specific/linux/libnscd { };
-
   libnotify = callPackage ../development/libraries/libnotify { };
 
   libvolume_id = callPackage ../os-specific/linux/libvolume_id { };
