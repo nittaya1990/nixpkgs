@@ -17873,7 +17873,9 @@ with pkgs;
 
   gogui = callPackage ../games/gogui {};
 
-  gtetrinet = callPackage ../games/gtetrinet { };
+  gtetrinet = callPackage ../games/gtetrinet {
+    inherit (gnome2) GConf libgnome libgnomeui;
+  };
 
   gtypist = callPackage ../games/gtypist { };
 
