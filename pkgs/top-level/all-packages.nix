@@ -1749,6 +1749,14 @@ with pkgs;
 
   disper = callPackage ../tools/misc/disper { };
 
+  dleyna-connector-dbus = callPackage ../development/libraries/dleyna-connector-dbus { };
+
+  dleyna-core = callPackage ../development/libraries/dleyna-core { };
+
+  dleyna-renderer = callPackage ../development/libraries/dleyna-renderer { };
+
+  dleyna-server = callPackage ../development/libraries/dleyna-server { };
+
   dmd_2_067_1 = callPackage ../development/compilers/dmd/2.067.1.nix {
     stdenv = if stdenv.hostPlatform.isDarwin then
                stdenv
@@ -2495,6 +2503,8 @@ with pkgs;
   };
 
   gupnp_av = callPackage ../development/libraries/gupnp-av {};
+
+  gupnp_dlna = callPackage ../development/libraries/gupnp-dlna {};
 
   gupnp_igd = callPackage ../development/libraries/gupnp-igd {};
 
@@ -13760,6 +13770,8 @@ with pkgs;
     stdenv = overrideCC stdenv gcc5;
   };
 
+  amarok-kf5 = libsForQt5.callPackage ../applications/audio/amarok/kf5.nix { };
+
   AMB-plugins = callPackage ../applications/audio/AMB-plugins { };
 
   ams-lv2 = callPackage ../applications/audio/ams-lv2 { };
@@ -15312,6 +15324,8 @@ with pkgs;
   jdupes = callPackage ../tools/misc/jdupes { };
 
   jedit = callPackage ../applications/editors/jedit { };
+
+  jgmenu = callPackage ../applications/misc/jgmenu { };
 
   jigdo = callPackage ../applications/misc/jigdo { };
 
