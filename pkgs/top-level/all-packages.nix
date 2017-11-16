@@ -4865,6 +4865,8 @@ with pkgs;
 
   vboot_reference = callPackage ../tools/system/vboot_reference { };
 
+  vcftools = callPackage ../applications/science/biology/vcftools { };
+
   vcsh = callPackage ../applications/version-management/vcsh {
     inherit (perlPackages) ShellCommand TestMost;
   };
