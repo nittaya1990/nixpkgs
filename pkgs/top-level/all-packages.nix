@@ -7874,8 +7874,6 @@ with pkgs;
 
   box2d = callPackage ../development/libraries/box2d { };
 
-  breakpad = callPackage ../development/libraries/breakpad { };
-
   buddy = callPackage ../development/libraries/buddy { };
 
   bwidget = callPackage ../development/libraries/bwidget { };
