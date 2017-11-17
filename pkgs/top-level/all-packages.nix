@@ -19956,4 +19956,6 @@ with pkgs;
   dnstracer = callPackage ../tools/networking/dnstracer {
     inherit (darwin) libresolv;
   };
+
+  wal-g = callPackage ../tools/backup/wal-g {};
 }
