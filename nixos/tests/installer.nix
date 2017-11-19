@@ -307,11 +307,11 @@ in {
     { createPartitions =
         ''
           $machine->succeed(
-              "parted /dev/vda mklabel gpt",
-              "parted -s /dev/vda -- mkpart ESP fat32 1M 50MiB", # /boot
-              "parted -s /dev/vda -- set 1 boot on",
-              "parted -s /dev/vda -- mkpart primary linux-swap 50MiB 1024MiB",
-              "parted -s /dev/vda -- mkpart primary ext2 1024MiB -1MiB", # /
+              "parted --script /dev/vda mklabel gpt",
+              "parted --script /dev/vda -- mkpart ESP fat32 1M 50MiB", # /boot
+              "parted --script /dev/vda -- set 1 boot on",
+              "parted --script /dev/vda -- mkpart primary linux-swap 50MiB 1024MiB",
+              "parted --script /dev/vda -- mkpart primary ext2 1024MiB -1MiB", # /
               "udevadm settle",
               "mkswap /dev/vda2 -L swap",
               "swapon -L swap",
@@ -467,11 +467,11 @@ in {
   filesystemEncryptedWithKeyfile = makeInstallerTest "filesystemEncryptedWithKeyfile"
     { createPartitions = ''
        $machine->succeed(
-          "parted /dev/vda mklabel msdos",
-          "parted /dev/vda -- mkpart primary ext2 1M 50MB", # /boot
-          "parted /dev/vda -- mkpart primary linux-swap 50M 1024M",
-          "parted /dev/vda -- mkpart primary 1024M 1280M", # LUKS with keyfile
-          "parted /dev/vda -- mkpart primary 1280M -1s",
+          "parted --script /dev/vda mklabel msdos",
+          "parted --script /dev/vda -- mkpart primary ext2 1M 50MB", # /boot
+          "parted --script /dev/vda -- mkpart primary linux-swap 50M 1024M",
+          "parted --script /dev/vda -- mkpart primary 1024M 1280M", # LUKS with keyfile
+          "parted --script /dev/vda -- mkpart primary 1280M -1s",
           "udevadm settle",
           "mkswap /dev/vda2 -L swap",
           "swapon -L swap",
