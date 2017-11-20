@@ -9730,6 +9730,8 @@ with pkgs;
 
   libvorbis = callPackage ../development/libraries/libvorbis { };
 
+  libwebcam = callPackage ../os-specific/linux/libwebcam { };
+
   libwebp = callPackage ../development/libraries/libwebp { };
 
   libwmf = callPackage ../development/libraries/libwmf { };
@@ -16454,6 +16456,8 @@ with pkgs;
   rcs = callPackage ../applications/version-management/rcs { };
 
   rdesktop = callPackage ../applications/networking/remote/rdesktop { };
+
+  rdedup = callPackage ../tools/backup/rdedup { };
 
   rdup = callPackage ../tools/backup/rdup { };
 
