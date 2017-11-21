@@ -13485,6 +13485,8 @@ with pkgs;
 
   meslo-lg = callPackage ../data/fonts/meslo-lg {};
 
+  migmix = callPackage ../data/fonts/migmix {};
+
   miscfiles = callPackage ../data/misc/miscfiles { };
 
   media-player-info = callPackage ../data/misc/media-player-info {};
