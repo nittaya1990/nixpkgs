@@ -3,7 +3,7 @@
   src, patches, version, qtCompatVersion,
 
   coreutils, bison, flex, gdb, gperf, lndir, patchelf, perl, pkgconfig, python2,
-  ruby,
+  ruby, which,
   # darwin support
   darwin, libiconv, libcxx,
 
@@ -80,11 +80,11 @@ stdenv.mkDerivation {
     )
     ++ lib.optional developerBuild gdb
     ++ lib.optional (cups != null) cups
-    ++ lib.optional (mysql != null) mysql.lib
+    ++ lib.optional (mysql != null) mysql.connector-c
     ++ lib.optional (postgresql != null) postgresql;
 
   nativeBuildInputs =
-    [ bison flex gperf lndir perl pkgconfig python2 ]
+    [ bison flex gperf lndir perl pkgconfig python2 which ]
     ++ lib.optional (!stdenv.isDarwin) patchelf;
 
   propagatedNativeBuildInputs = [ lndir ];

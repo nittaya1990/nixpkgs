@@ -32,9 +32,16 @@ let
     setOutputFlags = false;
 
     patches =
-      [ # Do not look in /usr etc. for dependencies.
-        ./no-sys-dirs.patch
-      ]
+      [ ]
+      # Do not look in /usr etc. for dependencies.
+      ++ optional (versionOlder version "5.26") ./no-sys-dirs.patch
+      ++ optional (versionAtLeast version "5.26") ./no-sys-dirs-5.26.patch
+      ++ optional (versionAtLeast version "5.24") (
+        # Fix parallel building: https://rt.perl.org/Public/Bug/Display.html?id=132360
+        fetchurlBoot {
+          url = "https://rt.perl.org/Public/Ticket/Attachment/1502646/807252/0001-Fix-missing-build-dependency-for-pods.patch";
+          sha256 = "1bb4mldfp8kq1scv480wm64n2jdsqa3ar46cjp1mjpby8h5dr2r0";
+        })
       ++ optional stdenv.isSunOS ./ld-shared.patch
       ++ optional stdenv.isDarwin ./cpp-precomp.patch
       ++ optional (stdenv.isDarwin && versionAtLeast version "5.24") ./sw_vers.patch;
@@ -44,7 +51,6 @@ let
       substituteInPlace dist/PathTools/Cwd.pm \
         --replace "/bin/pwd" "$pwd"
     '';
-    sandboxProfile = sandbox.allow "ipc-sysv-sem";
 
     # Build a thread-safe Perl with a dynamic libperls.o.  We need the
     # "installstyle" option to ensure that modules are put under
@@ -127,5 +133,10 @@ in rec {
   perl524 = common {
     version = "5.24.3";
     sha256 = "1m2px85kq2fyp2d4rx3bw9kg3car67qfqwrs5vlv96dx0x8rl06b";
+  };
+
+  perl526 = common {
+    version = "5.26.1";
+    sha256 = "1p81wwvr5jb81m41d07kfywk5gvbk0axdrnvhc2aghcdbr4alqz7";
   };
 }

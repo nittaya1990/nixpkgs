@@ -22,11 +22,11 @@ let
   wrapperTool = if enableGTK3 then wrapGAppsHook else makeWrapper;
 in stdenv.mkDerivation rec {
   name = "thunderbird-${version}";
-  version = "52.4.0";
+  version = "52.5.2";
 
   src = fetchurl {
     url = "mirror://mozilla/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.xz";
-    sha512 = "6ac39cecca9e53b51754d7a8bd7cae228d197eb234b03a2386c16fd665f4f7a67f10bbdf981c20b3f7a21a5ef67e2771154a3dd9f249c6a884c48a9e59bcfc78";
+    sha512 = "d626d3d37959539b15b5d2ae4a580fcc160380974bfc1a69a1fc8ff2435932e90a69fa386d5ecb6721d9154603c6b7d063e3368f6f995fea057eb593c06ef4ff";
   };
 
   # New sed no longer tolerates this mistake.
@@ -72,7 +72,6 @@ in stdenv.mkDerivation rec {
       "--enable-system-sqlite"
       #"--enable-system-cairo"
       "--enable-startup-notification"
-      "--enable-content-sandbox"            # available since 26.0, but not much info available
       "--disable-crashreporter"
       "--disable-tests"
       "--disable-necko-wifi" # maybe we want to enable this at some point

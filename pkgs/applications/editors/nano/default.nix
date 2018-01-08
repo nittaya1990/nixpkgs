@@ -20,11 +20,11 @@ let
 
 in stdenv.mkDerivation rec {
   name = "nano-${version}";
-  version = "2.9.0";
+  version = "2.9.2";
 
   src = fetchurl {
     url = "mirror://gnu/nano/${name}.tar.xz";
-    sha256 = "17hjgvig59a2ha2b0494bprrci3d33sayjqvxjhsnlzgr8whrlyj";
+    sha256 = "0m9xm085pi0fhmmshgppipjimr1jkxksbyg8pa5cwaap3d2vgk2f";
   };
 
   nativeBuildInputs = [ texinfo ] ++ optional enableNls gettext;
@@ -41,6 +41,8 @@ in stdenv.mkDerivation rec {
   postInstall = ''
     cp ${nixSyntaxHighlight}/nix.nanorc $out/share/nano/
   '';
+
+  enableParallelBuilding = true;
 
   meta = {
     homepage = https://www.nano-editor.org/;

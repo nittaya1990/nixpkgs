@@ -3,13 +3,13 @@
 
 buildOcaml rec {
   name = "reason";
-  version = "3.0.2";
+  version = "3.0.4";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "reason";
-    rev = "v${version}";
-    sha256 = "1rpaazy0m76qidxwdr51qrgs3ryyz875rndwp9p30siqd04raswq";
+    rev = version;
+    sha256 = "15qhx85him5rr4j0ygj3jh3qv9ijrn82ibr9scbn0qrnn43kj047";
   };
 
   propagatedBuildInputs = [ menhir merlin_extend ppx_tools_versioned ];
@@ -34,7 +34,7 @@ buildOcaml rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://facebook.github.io/reason/;
+    homepage = https://reasonml.github.io/;
     description = "Facebook's friendly syntax to OCaml";
     license = licenses.bsd3;
     maintainers = [ maintainers.volth ];
