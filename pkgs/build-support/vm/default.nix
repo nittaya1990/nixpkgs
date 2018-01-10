@@ -208,7 +208,7 @@ rec {
       -device virtio-rng-pci \
       -virtfs local,path=${storeDir},security_model=none,mount_tag=store \
       -virtfs local,path=$TMPDIR/xchg,security_model=none,mount_tag=xchg \
-      -drive file=$diskImage,if=virtio,cache=unsafe,werror=report,format=$diskImageFormat \
+      ''${diskImage:+-drive file=$diskImage,if=virtio,cache=unsafe,werror=report,format=$diskImageFormat} \
       -kernel ${kernel}/${img} \
       -initrd ${initrd}/initrd \
       -append "console=ttyS0 panic=1 command=${stage2Init} out=$out mountDisk=$mountDisk loglevel=4" \
@@ -241,7 +241,7 @@ rec {
     # the -K option to preserve the temporary build directory).
     cat > ./run-vm <<EOF
     #! ${bash}/bin/sh
-    diskImage=$diskImage
+    ''${diskImage:+diskImage=$diskImage}
     diskImageFormat=$diskImageFormat
     TMPDIR=$TMPDIR
     cd $TMPDIR
