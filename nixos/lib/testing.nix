@@ -89,8 +89,6 @@ rec {
         then testScript { inherit nodes; }
         else testScript;
 
-      taps = lib.optionalString (t ? taps) t.taps;
-
       vlans = map (m: m.config.virtualisation.vlans) (lib.attrValues nodes);
 
       vms = map (m: m.config.system.build.vm) (lib.attrValues nodes);
@@ -116,16 +114,13 @@ rec {
             ${lib.optionalString enableOCR
               "--prefix PATH : '${ocrProg}/bin:${imagemagick}/bin'"} \
             --run "export testScript=\"\$(cat $out/test-script)\"" \
-            --set testScript '$testScript' \
-            --set VLANS '${toString vlans}' \
-            --set TAPS  '${toString taps}'
+            --set VLANS '${toString vlans}'
           ln -s ${testDriver}/bin/nixos-test-driver $out/bin/nixos-run-vms
           wrapProgram $out/bin/nixos-run-vms \
             --add-flags "''${vms[*]}" \
             ${lib.optionalString enableOCR "--prefix PATH : '${ocrProg}/bin'"} \
             --set tests 'startAll; joinAll;' \
             --set VLANS '${toString vlans}' \
-            --set TAPS  '${toString taps}' \
             ${lib.optionalString (builtins.length vms == 1) "--set USE_SERIAL 1"}
         ''; # "
 
