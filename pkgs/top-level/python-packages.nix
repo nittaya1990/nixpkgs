@@ -175,6 +175,10 @@ in {
 
   aws-xray-sdk = callPackage ../development/python-modules/aws-xray-sdk { };
 
+  awscli = callPackage ../tools/admin/awscli { };
+
+  aws_shell = callPackage ../tools/admin/aws_shell { };
+
   # packages defined elsewhere
 
   backports_csv = callPackage ../development/python-modules/backports_csv {};
@@ -358,7 +362,7 @@ in {
 
   rhpl = disabledIf isPy3k (callPackage ../development/python-modules/rhpl {});
 
-  salmon = callPackage ../development/python-modules/salmon { };
+  salmon-mail = callPackage ../development/python-modules/salmon-mail { };
 
   simpleeval = callPackage ../development/python-modules/simpleeval { };
 
@@ -3391,30 +3395,7 @@ in {
 
   pytest-forked = callPackage ../development/python-modules/pytest-forked { };
 
-  pytest-rerunfailures = buildPythonPackage rec {
-    name = "${pname}-${version}";
-    pname = "pytest-rerunfailures";
-    version = "2.0.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/${pname}/${name}.tar.gz";
-      sha256 = "1zzxlswbny8dp3c1sbhpyms1xkknxb6qfji3y3azc7gc95324xsv";
-    };
-
-    buildInputs = with self; [ pytest ];
-
-    checkPhase = ''
-      py.test
-    '';
-
-    meta = {
-      description = "pytest plugin to re-run tests to eliminate flaky failures.";
-      homepage = https://github.com/pytest-dev/pytest-rerunfailures;
-      license = licenses.mpl20;
-      maintainers = with maintainers; [ jgeerds ];
-      platforms = platforms.all;
-    };
-  };
+  pytest-rerunfailures = callPackage ../development/python-modules/pytest-rerunfailures { };
 
   pytest-flake8 = callPackage ../development/python-modules/pytest-flake8 { };
 
@@ -9992,7 +9973,7 @@ in {
     };
   });
 
-  ltc_scrypt = callPackage ../development/python-modules/ltc_scrypt/default.nix { };
+  py_scrypt = callPackage ../development/python-modules/py_scrypt/default.nix { };
 
   python_magic = buildPythonPackage rec {
     name = "python-magic-0.4.10";
@@ -20782,7 +20763,6 @@ EOF
 
   datadiff = buildPythonPackage rec {
     name = "datadiff-1.1.6";
-    disabled = ! isPy27;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/d/datadiff/datadiff-1.1.6.zip";

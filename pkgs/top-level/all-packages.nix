@@ -180,10 +180,10 @@ with pkgs;
 
   # `fetchurl' downloads a file from the network.
   fetchurl = import ../build-support/fetchurl {
-    inherit stdenv;
+    inherit stdenvNoCC;
     # On darwin, libkrb5 needs bootstrap_cmds which would require
     # converting many packages to fetchurl_boot to avoid evaluation cycles.
-    curl = curl.override (lib.optionalAttrs stdenv.isDarwin { gssSupport = false; });
+    curl = buildPackages.curl.override (lib.optionalAttrs stdenv.isDarwin { gssSupport = false; });
   };
 
   fetchRepoProject = callPackage ../build-support/fetchrepoproject { };
@@ -533,13 +533,13 @@ with pkgs;
 
   avfs = callPackage ../tools/filesystems/avfs { };
 
-  awscli = pythonPackages.callPackage ../tools/admin/awscli { };
+  awscli = pythonPackages.awscli;
 
   awsebcli = callPackage ../tools/virtualization/awsebcli {};
 
   awslogs = callPackage ../tools/admin/awslogs { };
 
-  aws_shell = pythonPackages.callPackage ../tools/admin/aws_shell { };
+  aws_shell = pythonPackages.aws_shell;
 
   azure-cli = nodePackages.azure-cli;
 
@@ -667,6 +667,8 @@ with pkgs;
   androidsdk_extras = self.androidenv.androidsdk_8_0_extras;
 
   arc-theme = callPackage ../misc/themes/arc { };
+
+  arc-kde-theme = callPackage ../misc/themes/arc-kde { };
 
   adapta-gtk-theme = callPackage ../misc/themes/adapta { };
 
@@ -973,6 +975,8 @@ with pkgs;
 
   coursier = callPackage ../development/tools/coursier {};
 
+  cri-tools = callPackage ../tools/virtualization/cri-tools {};
+
   crunch = callPackage ../tools/security/crunch { };
 
   crudini = callPackage ../tools/misc/crudini { };
@@ -1103,6 +1107,8 @@ with pkgs;
   fd = callPackage ../tools/misc/fd { };
 
   filebench = callPackage ../tools/misc/filebench { };
+
+  fileshelter = callPackage ../servers/web-apps/fileshelter { };
 
   fsmon = callPackage ../tools/misc/fsmon { };
 
@@ -1725,6 +1731,8 @@ with pkgs;
   darkstat = callPackage ../tools/networking/darkstat { };
 
   davfs2 = callPackage ../tools/filesystems/davfs2 { };
+
+  dbeaver = callPackage ../applications/misc/dbeaver { };
 
   dbench = callPackage ../development/tools/misc/dbench { };
 
@@ -7897,9 +7905,7 @@ with pkgs;
 
   universal-ctags = callPackage ../development/tools/misc/universal-ctags { };
 
-  vagrant = callPackage ../development/tools/vagrant {
-    ruby = ruby_2_4;
-  };
+  vagrant = callPackage ../development/tools/vagrant {};
 
   vagrant-libvirt = callPackage ../development/tools/vagrant/libvirt.nix {
     ruby = ruby_2_2;
@@ -8528,6 +8534,8 @@ with pkgs;
 
   gettext = callPackage ../development/libraries/gettext { };
 
+  gflags = callPackage ../development/libraries/gflags { };
+
   gf2x = callPackage ../development/libraries/gf2x {};
 
   gd = callPackage ../development/libraries/gd {
@@ -8670,6 +8678,8 @@ with pkgs;
   gperftools = callPackage ../development/libraries/gperftools { };
 
   grib-api = callPackage ../development/libraries/grib-api { };
+
+  grpc = callPackage ../development/libraries/grpc { };
 
   gst_all_1 = recurseIntoAttrs(callPackage ../development/libraries/gstreamer {
     callPackage = pkgs.newScope (pkgs // { libav = pkgs.ffmpeg; });
@@ -10204,7 +10214,9 @@ with pkgs;
 
   mygpoclient = pythonPackages.mygpoclient;
 
-  mygui = callPackage ../development/libraries/mygui {};
+  mygui = callPackage ../development/libraries/mygui {
+    ogre = ogre1_9;
+  };
 
   mysocketw = callPackage ../development/libraries/mysocketw { };
 
@@ -10279,6 +10291,7 @@ with pkgs;
   ode = callPackage ../development/libraries/ode { };
 
   ogre = callPackage ../development/libraries/ogre {};
+  ogre1_9 = callPackage ../development/libraries/ogre/1.9.x.nix {};
 
   ogrepaged = callPackage ../development/libraries/ogrepaged { };
 
@@ -11281,7 +11294,10 @@ with pkgs;
 
   wiredtiger = callPackage ../development/libraries/wiredtiger { };
 
-  wt = callPackage ../development/libraries/wt { };
+  wt = wt4;
+  inherit (callPackages ../development/libraries/wt {})
+    wt3
+    wt4;
 
   wxGTK = wxGTK28;
 
@@ -12304,7 +12320,7 @@ with pkgs;
     tomcat7
     tomcat8
     tomcat85
-    tomcatUnstable;
+    tomcat9;
 
   tomcat_mysql_jdbc = callPackage ../servers/http/tomcat/jdbc/mysql { };
 
@@ -18085,6 +18101,7 @@ with pkgs;
   digikam = libsForQt5.callPackage ../applications/graphics/digikam {
     inherit (plasma5) oxygen;
     inherit (kdeApplications) kcalcore;
+    opencv3 = opencv3.override { enableContrib = true; };
   };
 
   displaycal = (newScope pythonPackages) ../applications/graphics/displaycal {};
@@ -18300,7 +18317,9 @@ with pkgs;
 
   openarena = callPackage ../games/openarena { };
 
-  opendungeons = callPackage ../games/opendungeons { };
+  opendungeons = callPackage ../games/opendungeons {
+    ogre = ogre1_9;
+  };
 
   openlierox = callPackage ../games/openlierox { };
 
@@ -18384,6 +18403,10 @@ with pkgs;
 
   rigsofrods = callPackage ../games/rigsofrods {
     angelscript = angelscript_2_22;
+    ogre = ogre1_9;
+    ogrepaged = ogrepaged.override {
+      ogre = ogre1_9;
+    };
     mygui = mygui.override {
       withOgre = true;
     };
@@ -18478,6 +18501,7 @@ with pkgs;
   };
 
   stuntrally = callPackage ../games/stuntrally {
+    ogre = ogre1_9;
     mygui = mygui.override {
       withOgre = true;
     };
@@ -19840,14 +19864,13 @@ with pkgs;
     terraform_0_8
     terraform_0_9
     terraform_0_10
+    terraform_0_10-full
     terraform_0_11
+    terraform_0_11-full
     ;
 
-  # Terraform with all the plugins, both to get Hydra to build all plugins for us and for
-  # convenience if someone doesn't want to have to think about which plugins to use.
-  terraform_0_10-full = terraform_0_10.withPlugins lib.attrValues;
-
   terraform = terraform_0_11;
+  terraform-full = terraform_0_11-full;
 
   terraform-inventory = callPackage ../applications/networking/cluster/terraform-inventory {};
 

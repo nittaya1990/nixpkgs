@@ -127,7 +127,7 @@
   ciil = "Simon Lackerbauer <simon@lackerbauer.com>";
   ck3d = "Christian Kögler <ck3d@gmx.de>";
   ckampka = "Christian Kampka <christian@kampka.net>";
-  ckauhaus = "Christian Kauhaus <christian@kauhaus.de>";
+  ckauhaus = "Christian Kauhaus <kc@flyingcircus.io>";
   cko = "Christine Koppelt <christine.koppelt@gmail.com>";
   cleverca22 = "Michael Bishop <cleverca22@gmail.com>";
   cmcdragonkai = "Roger Qiu <roger.qiu@matrix.ai>";
@@ -593,6 +593,7 @@
   rzetterberg = "Richard Zetterberg <richard.zetterberg@gmail.com>";
   s1lvester = "Markus Silvester <s1lvester@bockhacker.me>";
   samdroid-apps = "Sam Parkinson <sam@sam.today>";
+  samueldr = "Samuel Dionne-Riel <samuel@dionne-riel.com>";
   samuelrivas = "Samuel Rivas <samuelrivas@gmail.com>";
   sander = "Sander van der Burg <s.vanderburg@tudelft.nl>";
   sargon = "Daniel Ehlers <danielehlers@mindeye.net>";
