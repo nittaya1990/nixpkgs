@@ -20253,4 +20253,6 @@ with pkgs;
   wal-g = callPackage ../tools/backup/wal-g {};
 
   tlwg = callPackage ../data/fonts/tlwg { };
+
+  safeDiscardStringContext = callPackage ../build-support/safe-discard-string-context.nix { };
 }
