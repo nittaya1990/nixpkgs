@@ -320,10 +320,6 @@ in {
     pythonPackages = self;
   };
 
-  pyqt56 = pkgs.libsForQt56.callPackage ../development/python-modules/pyqt/5.x.nix {
-    pythonPackages = self;
-  };
-
   pyqt5 = pkgs.libsForQt5.callPackage ../development/python-modules/pyqt/5.x.nix {
     pythonPackages = self;
   };
@@ -17779,6 +17775,8 @@ in {
 
   tiros = callPackage ../development/python-modules/tiros { };
 
+  tifffile = callPackage ../development/python-modules/tifffile { };
+    
   # Tkinter/tkinter is part of the Python standard library.
   # The Python interpreters in Nixpkgs come without tkinter by default.
   # To make the module available, we make it available as any other
@@ -22541,10 +22539,7 @@ EOF
 
   twilio = callPackage ../development/python-modules/twilio { };
 
-  uranium = callPackage ../development/python-modules/uranium {
-    # https://github.com/Ultimaker/Cura/issues/2596
-    pyqt5 = self.pyqt56;
-  };
+  uranium = callPackage ../development/python-modules/uranium { };
 
   vine = callPackage ../development/python-modules/vine { };
 
