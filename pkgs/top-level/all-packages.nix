@@ -7971,7 +7971,7 @@ with pkgs;
   xxdiff = callPackage ../development/tools/misc/xxdiff {
     bison = bison2;
   };
-  xxdiff-tip = qt56.callPackage ../development/tools/misc/xxdiff/tip.nix { };
+  xxdiff-tip = libsForQt5.callPackage ../development/tools/misc/xxdiff/tip.nix { };
 
   yacc = bison;
 
@@ -16324,6 +16324,8 @@ with pkgs;
   nomacs = libsForQt5.callPackage ../applications/graphics/nomacs { };
 
   notepadqq = libsForQt5.callPackage ../applications/editors/notepadqq { };
+
+  notbit = callPackage ../applications/networking/mailreaders/notbit { };
 
   notmuch = callPackage ../applications/networking/mailreaders/notmuch {
     gmime = gmime3;
