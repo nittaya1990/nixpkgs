@@ -4427,29 +4427,7 @@ in {
 
   edward = callPackage ../development/python-modules/edward { };
 
-  elasticsearch = buildPythonPackage (rec {
-    pname = "elasticsearch";
-    version = "6.0.0";
-    name = "${pname}-${version}";
-
-    src = fetchPypi {
-      inherit pname version;
-      sha256 = "029q603g95fzkh87xkbxxmjfq5s9xkr9y27nfik6d4prsl0zxmlz";
-    };
-
-    # Check is disabled because running them destroy the content of the local cluster!
-    # https://github.com/elasticsearch/elasticsearch-py/tree/master/test_elasticsearch
-    doCheck = false;
-    propagatedBuildInputs = with self; [ urllib3 requests ];
-    buildInputs = with self; [ nosexcover mock ];
-
-    meta = {
-      description = "Official low-level client for Elasticsearch";
-      homepage = https://github.com/elasticsearch/elasticsearch-py;
-      license = licenses.asl20;
-      maintainers = with maintainers; [ desiderius ];
-    };
-  });
+  elasticsearch = callPackage ../development/python-modules/elasticsearch { };
 
   elasticsearchdsl = buildPythonPackage (rec {
     name = "elasticsearch-dsl-0.0.9";
@@ -18134,6 +18112,8 @@ in {
 
   u-msgpack-python = callPackage ../development/python-modules/u-msgpack-python { };
 
+  ua-parser = callPackage ../development/python-modules/ua-parser { };
+
   ukpostcodeparser = callPackage ../development/python-modules/ukpostcodeparser { };
 
   umalqurra = buildPythonPackage rec {
@@ -18353,6 +18333,8 @@ in {
       maintainers = with maintainers; [ profpatsch ];
     };
   };
+
+  user-agents = callPackage ../development/python-modules/user-agents { };
 
   pyuv = buildPythonPackage rec {
     name = "pyuv-1.2.0";
@@ -22540,6 +22522,8 @@ EOF
   twilio = callPackage ../development/python-modules/twilio { };
 
   uranium = callPackage ../development/python-modules/uranium { };
+
+  versioneer = callPackage ../development/python-modules/versioneer { };
 
   vine = callPackage ../development/python-modules/vine { };
 
