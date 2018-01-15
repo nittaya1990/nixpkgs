@@ -10541,6 +10541,13 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) AudioToolbox AudioUnit CoreAudio CoreServices Carbon;
   };
 
+  portaudio2014 = portaudio.overrideAttrs (oldAttrs: {
+    src = fetchurl {
+      url = http://www.portaudio.com/archives/pa_stable_v19_20140130.tgz;
+      sha256 = "0mwddk4qzybaf85wqfhxqlf0c5im9il8z03rd4n127k8y2jj9q4g";
+    };
+  });
+
   portmidi = callPackage ../development/libraries/portmidi {};
 
   prison = callPackage ../development/libraries/prison { };
@@ -15882,7 +15889,9 @@ with pkgs;
     inherit (gnome3) libpeas gsettings_desktop_schemas dconf;
   };
 
-  lightworks = callPackage ../applications/video/lightworks { };
+  lightworks = callPackage ../applications/video/lightworks {
+    portaudio = portaudio2014;
+  };
 
   lingot = callPackage ../applications/audio/lingot {
     inherit (gnome2) libglade;
@@ -18857,6 +18866,8 @@ with pkgs;
   bedtools = callPackage ../applications/science/biology/bedtools/default.nix { };
 
   bcftools = callPackage ../applications/science/biology/bcftools { };
+
+  dcm2niix = callPackage ../applications/science/biology/dcm2niix { };
 
   diamond = callPackage ../applications/science/biology/diamond { };
 
