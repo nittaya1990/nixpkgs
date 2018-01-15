@@ -533,13 +533,13 @@ with pkgs;
 
   avfs = callPackage ../tools/filesystems/avfs { };
 
-  awscli = pythonPackages.awscli;
+  awscli = pythonPackages.callPackage ../tools/admin/awscli { };
 
   awsebcli = callPackage ../tools/virtualization/awsebcli {};
 
   awslogs = callPackage ../tools/admin/awslogs { };
 
-  aws_shell = pythonPackages.aws_shell;
+  aws_shell = pythonPackages.callPackage ../tools/admin/aws_shell { };
 
   aws-vault = callPackage ../tools/admin/aws-vault { };
 
