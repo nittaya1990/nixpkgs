@@ -11330,6 +11330,8 @@ in {
 
   nilearn = callPackage ../development/python-modules/nilearn {};
 
+  nimfa = callPackage ../development/python-modules/nimfa {};
+
   nipy = buildPythonPackage rec {
     version = "0.4.0";
     name = "nipy-${version}";
@@ -14565,6 +14567,8 @@ in {
       maintainers = with maintainers; [ domenkozar ];
     };
   });
+
+  progressbar2 = callPackage ../development/python-modules/progressbar2 { };
 
   ldap = callPackage ../development/python-modules/ldap {
     inherit (pkgs) openldap cyrus_sasl openssl;
