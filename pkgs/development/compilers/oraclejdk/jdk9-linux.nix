@@ -7,7 +7,6 @@
 , xorg ? null
 , packageType ? "JDK" # JDK, JRE, or ServerJRE
 , pluginSupport ? true
-, installjce ? false
 , glib
 , libxml2
 , ffmpeg_2
@@ -30,19 +29,9 @@ assert stdenv.system == "x86_64-linux";
 assert swingSupport -> xorg != null;
 
 let
-  version = "9.0.1";
+  version = "9.0.4";
 
   downloadUrlBase = http://www.oracle.com/technetwork/java/javase/downloads;
-
-  jce =
-    if installjce then
-      requireFile {
-        name = "jce_policy-8.zip";
-        url = "${downloadUrlBase}/jce8-download-2133166.html";
-        sha256 = "0n8b6b8qmwb14lllk2lk1q1ahd3za9fnjigz5xn65mpg48whl0pk";
-      }
-    else
-      "";
 
   rSubPaths = [
     "lib/jli"
@@ -63,7 +52,7 @@ let result = stdenv.mkDerivation rec {
       requireFile {
         name = "jdk-${version}_linux-x64_bin.tar.gz";
         url =  "${downloadUrlBase}/jdk9-downloads-3848520.html";
-        sha256 = "0560dc3icrwb0ifykshvzkr04b1jr153m26x1r8rp0nhjbzz1nic";
+        sha256 = "18nsjn64wkfmyb09wf2k7lvhazf83cs3dyichr038vl1gs3ymi4h";
       }
     else if packageType == "JRE" then
       requireFile {
@@ -79,8 +68,7 @@ let result = stdenv.mkDerivation rec {
       }
     else abort "unknown package Type ${packageType}";
 
-  nativeBuildInputs = [ file ]
-    ++ stdenv.lib.optional installjce unzip;
+  nativeBuildInputs = [ file ];
 
   buildInputs = [ makeWrapper ];
 
@@ -107,11 +95,6 @@ let result = stdenv.mkDerivation rec {
         rm $file
       fi
     done
-
-    if test -n "${jce}"; then
-      unzip ${jce}
-      cp -v UnlimitedJCEPolicy*/*.jar $out/lib/security
-    fi
 
     if test -z "$pluginSupport"; then
       rm -f $out/bin/javaws
