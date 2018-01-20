@@ -104,7 +104,6 @@ in buildFHSUserEnv rec {
   profile = ''
     export STEAM_RUNTIME=/steamrt
     export TZDIR=/etc/zoneinfo
-    export LD_LIBRARY_PATH=/run/opengl-driver/lib:/run/opengl-driver-32/lib
   '';
 
   runScript = writeScript "steam-wrapper.sh" ''
