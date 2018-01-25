@@ -414,6 +414,8 @@ with pkgs;
 
   aescrypt = callPackage ../tools/misc/aescrypt { };
 
+  afew = callPackage ../applications/networking/mailreaders/afew { pythonPackages = python3Packages; };
+
   afio = callPackage ../tools/archivers/afio { };
 
   afl = callPackage ../tools/security/afl {
@@ -17228,7 +17230,7 @@ with pkgs;
     gconf = gnome2.GConf;
   };
 
-  teamspeak_client = libsForQt56.callPackage ../applications/networking/instant-messengers/teamspeak/client.nix { };
+  teamspeak_client = libsForQt5.callPackage ../applications/networking/instant-messengers/teamspeak/client.nix { };
   teamspeak_server = callPackage ../applications/networking/instant-messengers/teamspeak/server.nix { };
 
   taskjuggler = callPackage ../applications/misc/taskjuggler { ruby = ruby_2_0; };
@@ -17940,6 +17942,8 @@ with pkgs;
 
   xkblayout-state = callPackage ../applications/misc/xkblayout-state { };
 
+  xmonad-log = callPackage ../tools/misc/xmonad-log { };
+
   xmonad-with-packages = callPackage ../applications/window-managers/xmonad/wrapper.nix {
     inherit (haskellPackages) ghcWithPackages;
     packages = self: [];
@@ -18158,9 +18162,13 @@ with pkgs;
 
   bzflag = callPackage ../games/bzflag { };
 
-  cataclysm-dda = callPackage ../games/cataclysm-dda { };
+  cataclysm-dda = callPackage ../games/cataclysm-dda {
+    inherit (darwin.apple_sdk.frameworks) Cocoa;
+  };
 
-  cataclysm-dda-git = callPackage ../games/cataclysm-dda/git.nix { };
+  cataclysm-dda-git = callPackage ../games/cataclysm-dda/git.nix {
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation Cocoa;
+  };
 
   chessdb = callPackage ../games/chessdb { };
 
@@ -18820,6 +18828,8 @@ with pkgs;
     dash-to-dock = callPackage ../desktops/gnome-3/extensions/dash-to-dock { };
     dash-to-panel = callPackage ../desktops/gnome-3/extensions/dash-to-panel { };
     mediaplayer = callPackage ../desktops/gnome-3/extensions/mediaplayer { };
+    nohotcorner = callPackage ../desktops/gnome-3/extensions/nohotcorner { };
+    pixel-saver = callPackage ../desktops/gnome-3/extensions/pixel-saver { };
     topicons-plus = callPackage ../desktops/gnome-3/extensions/topicons-plus { };
   };
 
@@ -18990,6 +19000,8 @@ with pkgs;
   };
 
   ### SCIENCE/MATH
+
+  almonds = pythonPackages.callPackage ../applications/science/math/almonds { };
 
   arpack = callPackage ../development/libraries/science/math/arpack { };
 
@@ -19627,7 +19639,7 @@ with pkgs;
   faust1 = callPackage ../applications/audio/faust/faust1.nix { };
 
   faust2 = callPackage ../applications/audio/faust/faust2.nix {
-    llvm = llvm_38;
+    llvm = llvm_4;
   };
 
   faust2alqt = callPackage ../applications/audio/faust/faust2alqt.nix { };
