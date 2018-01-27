@@ -1205,6 +1205,8 @@ with pkgs;
 
   hr = callPackage ../applications/misc/hr { };
 
+  hyx = callPackage ../tools/text/hyx { };
+
   icdiff = callPackage ../tools/text/icdiff {};
 
   interlock = callPackage ../servers/interlock {};
@@ -18732,6 +18734,9 @@ with pkgs;
   vassal = callPackage ../games/vassal { };
 
   vdrift = callPackage ../games/vdrift { };
+
+  # To ensure vdrift's code is built on hydra
+  vdrift-bin = vdrift.bin;
 
   vectoroids = callPackage ../games/vectoroids { };
 
