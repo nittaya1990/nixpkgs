@@ -16058,6 +16058,8 @@ with pkgs;
 
   meld = callPackage ../applications/version-management/meld { };
 
+  meme = callPackage ../applications/graphics/meme { };
+
   mcomix = callPackage ../applications/graphics/mcomix { };
 
   mendeley = libsForQt5.callPackage ../applications/office/mendeley {
