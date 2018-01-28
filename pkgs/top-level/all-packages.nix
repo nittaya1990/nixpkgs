@@ -1227,6 +1227,8 @@ with pkgs;
 
   iio-sensor-proxy = callPackage ../os-specific/linux/iio-sensor-proxy { };
 
+  ipvsadm = callPackage ../os-specific/linux/ipvsadm { };
+
   lynis = callPackage ../tools/security/lynis { };
 
   mathics = pythonPackages.mathics;
@@ -17120,6 +17122,8 @@ with pkgs;
   curaLulzbot = callPackage ../applications/misc/cura/lulzbot.nix { };
 
   peru = callPackage ../applications/version-management/peru {};
+
+  pmidi = callPackage ../applications/audio/pmidi { };
 
   printrun = callPackage ../applications/misc/printrun { };
 
