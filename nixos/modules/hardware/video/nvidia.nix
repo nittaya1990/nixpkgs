@@ -71,10 +71,7 @@ in
       source = "${nvidia_x11.bin}/share/nvidia/nvidia-application-profiles-rc";
     };
 
-    hardware.opengl = if (!optimus) then {
-      inherit package package32;
-    } else {
-      useGLVND = true;
+    hardware.opengl = {
       extraPackages = singleton package;
       extraPackages32 = singleton package32;
     };
