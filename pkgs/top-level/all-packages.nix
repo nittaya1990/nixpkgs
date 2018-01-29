@@ -17244,6 +17244,8 @@ with pkgs;
 
   syncthing013 = callPackage ../applications/networking/syncthing013 { };
 
+  syncthing-gtk = python2Packages.callPackage ../applications/networking/syncthing-gtk { };
+
   syncthing-inotify = callPackage ../applications/networking/syncthing/inotify.nix { };
 
   syncthing-tray = callPackage ../applications/misc/syncthing-tray { };
