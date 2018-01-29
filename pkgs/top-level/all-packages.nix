@@ -7813,6 +7813,8 @@ with pkgs;
 
   pup = callPackage ../development/tools/pup { };
 
+  pyrseas = callPackage ../development/tools/database/pyrseas { };
+
   qtcreator = libsForQt5.callPackage ../development/qtcreator { };
 
   r10k = callPackage ../tools/system/r10k { };
