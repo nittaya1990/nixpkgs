@@ -13117,8 +13117,6 @@ with pkgs;
 
     prl-tools = callPackage ../os-specific/linux/prl-tools { };
 
-    seturgent = callPackage ../os-specific/linux/seturgent { };
-
     sch_cake = callPackage ../os-specific/linux/sch_cake { };
 
     inherit (callPackage ../os-specific/linux/spl {})
@@ -13444,6 +13442,8 @@ with pkgs;
   sepolgen = callPackage ../os-specific/linux/sepolgen { };
 
   setools = callPackage ../os-specific/linux/setools { };
+
+  seturgent = callPackage ../os-specific/linux/seturgent { };
 
   shadow = callPackage ../os-specific/linux/shadow { };
 
