@@ -53,7 +53,7 @@ stdenv.mkDerivation ((lib.optionalAttrs (! isNull buildScript) {
   ++ lib.optionals openclSupport [ pkgs.opencl-headers pkgs.ocl-icd ]
   ++ lib.optionals xmlSupport    [ pkgs.libxml2 pkgs.libxslt ]
   ++ lib.optionals tlsSupport    [ pkgs.openssl pkgs.gnutls ]
-  ++ lib.optionals openglSupport [ pkgs.mesa pkgs.mesa_noglu.osmesa pkgs.libdrm ]
+  ++ lib.optionals openglSupport [ pkgs.mesa_noglu_glvnd pkgs.mesa_noglu_glvnd.osmesa pkgs.libdrm ]
   ++ (with pkgs.xorg; [
     libX11  libXi libXcursor libXrandr libXrender libXxf86vm libXcomposite libXext
   ])));
@@ -83,7 +83,7 @@ stdenv.mkDerivation ((lib.optionalAttrs (! isNull buildScript) {
   # Add capability to ignore known failing tests
   # and enable doCheck
   doCheck = false;
-  
+
   postInstall = let
     links = prefix: pkg: "ln -s ${pkg} $out/${prefix}/${pkg.name}";
   in ''
@@ -91,16 +91,8 @@ stdenv.mkDerivation ((lib.optionalAttrs (! isNull buildScript) {
     ${lib.strings.concatStringsSep "\n"
           ((map (links "share/wine/gecko") geckos)
         ++ (map (links "share/wine/mono")  monos))}
-  '' + lib.optionalString supportFlags.gstreamerSupport ''
-    for i in wine ; do
-      if [ -e "$out/bin/$i" ]; then
-        wrapProgram "$out/bin/$i" \
-          --argv0 "" \
-          --prefix GST_PLUGIN_SYSTEM_PATH_1_0 ":" "$GST_PLUGIN_SYSTEM_PATH_1_0"
-      fi
-    done
   '';
-  
+
   enableParallelBuilding = true;
 
   passthru = { inherit pkgArches; };

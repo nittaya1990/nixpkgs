@@ -10206,6 +10206,13 @@ with pkgs;
 
     llvmPackages = llvmPackages_5;
   });
+  mesa_noglu_glvnd = mesaDarwinOr (
+    mesa_noglu.override {
+      grsecEnabled = config.grsecurity or false;
+      enableTextureFloats = true;
+      useGLVND = true;
+    }
+  );
 
   mesa_glu =  mesaDarwinOr (callPackage ../development/libraries/mesa-glu { });
   mesa_drivers = mesaDarwinOr (
@@ -10223,6 +10230,8 @@ with pkgs;
     };
     in mo.drivers
   );
+
+  libgl = mesa_noglu_glvnd;
 
   # Please, avoid using this attribute.  It was meant as transitional hack
   # for packages that assume that libGLU and libGL live in the same prefix.
