@@ -19,17 +19,17 @@ let
         [ mesa_drivers
           mesa_drivers.out # mainly for libGL
           (if cfg.s3tcSupport then p.libtxc_dxtn else p.libtxc_dxtn_s2tc)
-        ] ++ optional cfg.useGLVND p.libglvnd;
+        ];
     };
 
   package = pkgs.buildEnv {
     name = "opengl-drivers";
-    paths = [ cfg.package ] ++ cfg.extraPackages;
+    paths = [ cfg.package ] ++ cfg.extraPackages ++ optional cfg.useGLVND pkgs.libglvnd;
   };
 
   package32 = pkgs.buildEnv {
     name = "opengl-drivers-32bit";
-    paths = [ cfg.package32 ] ++ cfg.extraPackages32;
+    paths = [ cfg.package32 ] ++ cfg.extraPackages32 ++ optional cfg.useGLVND pkgs_i686.libglvnd;
   };
 
 in
@@ -58,7 +58,7 @@ in
       description = ''
         On 64-bit systems, whether to support Direct Rendering for
         32-bit applications (such as Wine).  This is currently only
-        supported for the <literal>nvidia</literal> and 
+        supported for the <literal>nvidia</literal> and
         <literal>ati_unfree</literal> drivers, as well as
         <literal>Mesa</literal>.
       '';

@@ -32,7 +32,7 @@ in
   ###### implementation
 
   config = lib.mkIf (cfg.disable || cfg.enable) {
-    boot.blacklistedKernelModules = ["nouveau" "nvidia" "nvidia-drm"];
+    boot.blacklistedKernelModules = ["nouveau" "nvidia" "nvidiafb" "nvidia-drm"];
     boot.kernelModules = [ "bbswitch" ];
     boot.extraModulePackages = [ kernel.bbswitch ];
 

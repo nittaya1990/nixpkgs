@@ -10235,8 +10235,6 @@ with pkgs;
     in mo.drivers
   );
 
-  libgl = mesa_noglu_glvnd;
-
   # Please, avoid using this attribute.  It was meant as transitional hack
   # for packages that assume that libGLU and libGL live in the same prefix.
   # Otherwise it's better to use mesa_glu or mesa_noglu, depending on whether
@@ -15040,7 +15038,7 @@ with pkgs;
   inherit (gnome3) evince;
   evolution_data_server = gnome3.evolution_data_server;
 
-  keepass = callPackage ../applications/misc/keepass { 
+  keepass = callPackage ../applications/misc/keepass {
     buildDotnetPackage = buildDotnetPackage.override { mono = mono54; };
   };
 

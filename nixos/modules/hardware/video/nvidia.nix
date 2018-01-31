@@ -26,6 +26,7 @@ let
   nvidia_libs32 = (nvidiaForKernel pkgs_i686.linuxPackages).override { libsOnly = true; kernel = null; };
 
   nvidiaPackage = nvidia: pkgs:
+    assert config.hardware.opengl.useGLVND -> nvidia.useGLVND;
     if !nvidia.useGLVND || config.hardware.opengl.useGLVND then nvidia.out
     else pkgs.buildEnv {
       name = "nvidia-libs";
@@ -71,7 +72,10 @@ in
       source = "${nvidia_x11.bin}/share/nvidia/nvidia-application-profiles-rc";
     };
 
-    hardware.opengl = {
+    hardware.opengl = if (!optimus) then {
+      inherit package package32;
+    } else {
+      useGLVND = true;
       extraPackages = singleton package;
       extraPackages32 = singleton package32;
     };
