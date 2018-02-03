@@ -7870,6 +7870,9 @@ with pkgs;
   remake = callPackage ../development/tools/build-managers/remake { };
 
   retdec = callPackage ../development/tools/analysis/retdec { };
+  retdec-full = callPackage ../development/tools/analysis/retdec {
+    withPEPatterns = true;
+  };
 
   rhc = callPackage ../development/tools/rhc { };
 
@@ -8097,6 +8100,8 @@ with pkgs;
   amrnb = callPackage ../development/libraries/amrnb { };
 
   amrwb = callPackage ../development/libraries/amrwb { };
+
+  anttweakbar = callPackage ../development/libraries/AntTweakBar { };
 
   appstream = callPackage ../development/libraries/appstream { };
 
