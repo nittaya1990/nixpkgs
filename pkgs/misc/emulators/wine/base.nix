@@ -95,6 +95,8 @@ stdenv.mkDerivation ((lib.optionalAttrs (! isNull buildScript) {
 
   enableParallelBuilding = true;
 
+  patches = [ ./disable-i386-preloader.patch ];
+
   passthru = { inherit pkgArches; };
   meta = {
     inherit version platforms;
