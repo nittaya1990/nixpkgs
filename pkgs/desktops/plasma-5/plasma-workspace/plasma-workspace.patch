@@ -828,7 +828,7 @@ index 8ac47aa..49970ef 100644
 +unset DYLD_FORCE_FLAT_NAMESPACE
 +
 +export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
-+_MKDIR@ -p "$XDG_CONFIG_HOME"
++@NIXPKGS_MKDIR@ -p "$XDG_CONFIG_HOME"
 +
 +# The KDE icon cache is supposed to update itself
 +# automatically, but it uses the timestamp on the icon
@@ -880,7 +880,7 @@ index 8ac47aa..49970ef 100644
 -# We need to create config folder so we can write startupconfigkeys
 -mkdir -p $configDir
 +# Set the default GTK 3 theme
-+_settings="$XDG_CONFIG_HOME/gtk-3.0/settings.ini"
++gtk3_settings="$XDG_CONFIG_HOME/gtk-3.0/settings.ini"
 +breeze_gtk3="/run/current-system/sw/share/themes/Breeze/gtk-3.0"
 +if ! [ -e "$gtk3_settings" ] && [ -e "$breeze_gtk" ]; then
 +    mkdir -p $(dirname "$gtk3_settings")
@@ -1033,7 +1033,7 @@ index 8ac47aa..49970ef 100644
 -        XCURSOR_THEME="$kcminputrc_mouse_cursortheme"
 -        export XCURSOR_THEME
 +if [ -n "$kcminputrc_mouse_cursortheme" -o -n "$kcminputrc_mouse_cursorsize" ]; then
-+    kapplymousetheme "$kcminputrc_mouse_cursortheme" "$kcminputrc_mouse_cursorsize"
++    #kapplymousetheme "$kcminputrc_mouse_cursortheme" "$kcminputrc_mouse_cursorsize"
 +    if [ $? -eq 10 ]; then
 +        export XCURSOR_THEME=breeze_cursors
 +    elif [ -n "$kcminputrc_mouse_cursortheme" ]; then
@@ -1106,7 +1106,7 @@ index 8ac47aa..49970ef 100644
 -
  # Make sure that D-Bus is running
 -if qdbus >/dev/null 2>/dev/null; then
-+if ! @NIXPKGS_QDBUS@ >/dev/null 2>/dev/null; then
++if @NIXPKGS_QDBUS@ >/dev/null 2>/dev/null; then
      : # ok
  else
      echo 'startplasmacompositor: Could not start D-Bus. Can you call qdbus?'  1>&2
