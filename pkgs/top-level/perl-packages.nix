@@ -2722,10 +2722,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   CryptJWT = buildPerlPackage rec {
-    name = "Crypt-JWT-0.019";
+    name = "Crypt-JWT-0.020";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MI/MIK/${name}.tar.gz";
-      sha256 = "26aaaaedc153b04bdaaba7df7ac2f7ce3bdf672c8d7111d09347a8d0c794725c";
+      sha256 = "0587fc11435aecbbdc19b33f774d05ff31f19750b26a3588af93f33e8000d464";
     };
     propagatedBuildInputs = [ CryptX JSONMaybeXS ];
     meta = {
@@ -4834,10 +4834,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   Encode = buildPerlPackage rec {
-    name = "Encode-2.93";
+    name = "Encode-2.95";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DA/DANKOGAI/${name}.tar.gz";
-      sha256 = "2d06b0375c84a75cf3762685e6d94c3aef25833fd0427daa0ae87b04ae6f739c";
+      sha256 = "d662794c6f834382527f67ca62e1715887f504cfd09e119a1302e584dd3cdcde";
     };
     meta = {
       description = "Character encodings in Perl";
@@ -12859,10 +12859,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   SubQuote = buildPerlPackage rec {
-    name = "Sub-Quote-2.003001";
+    name = "Sub-Quote-2.005000";
     src = fetchurl {
       url = "mirror://cpan/authors/id/H/HA/HAARG/${name}.tar.gz";
-      sha256 = "9d471d8e13e7ce4793d5a5ec04a60fface14dd53be78dd94d228871915cfd1f9";
+      sha256 = "44b145111bee7b0001818e77f7ce587153232dbc97351f4c5ed34522372b64ff";
     };
     buildInputs = [ TestFatal ];
     meta = {
