@@ -2866,6 +2866,8 @@ with pkgs;
 
   inform7 = callPackage ../development/compilers/inform7 { };
 
+  infamousPlugins = callPackage ../applications/audio/infamousPlugins { };
+
   innoextract = callPackage ../tools/archivers/innoextract { };
 
   intecture-agent = callPackage ../tools/admin/intecture/agent.nix { };
@@ -7449,6 +7451,8 @@ with pkgs;
 
   libcxx = llvmPackages.libcxx;
   libcxxabi = llvmPackages.libcxxabi;
+
+  librarian-puppet-go = callPackage ../development/tools/librarian-puppet-go { };
 
   libstdcxx5 = callPackage ../development/libraries/libstdc++5 { };
 
