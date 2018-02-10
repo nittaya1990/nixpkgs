@@ -13357,6 +13357,8 @@ with pkgs;
 
   go-protobuf = callPackage ../development/tools/go-protobuf { };
 
+  go-symbols = callPackage ../development/tools/go-symbols { };
+
   gocode = callPackage ../development/tools/gocode { };
 
   goconvey = callPackage ../development/tools/goconvey { };
@@ -14016,6 +14018,8 @@ with pkgs;
   paper-icon-theme = callPackage ../data/icons/paper-icon-theme { };
 
   papirus-icon-theme = callPackage ../data/icons/papirus-icon-theme { };
+
+  papis = python3Packages.callPackage ../tools/misc/papis { };
 
   pecita = callPackage ../data/fonts/pecita {};
 
@@ -19137,7 +19141,14 @@ with pkgs;
 
   plink-ng = callPackage ../applications/science/biology/plink-ng/default.nix { };
 
+  raxml = callPackage ../applications/science/biology/raxml { };
+
+  raxml-mpi = appendToName "mpi" (raxml.override {
+    mpi = true;
+  });
+
   samtools = callPackage ../applications/science/biology/samtools/default.nix { };
+  samtools_0_1_19 = callPackage ../applications/science/biology/samtools/samtools_0_1_19.nix { };
 
   snpeff = callPackage ../applications/science/biology/snpeff/default.nix { };
 
