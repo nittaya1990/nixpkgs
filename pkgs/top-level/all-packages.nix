@@ -16851,6 +16851,8 @@ with pkgs;
 
   qmapshack = libsForQt5.callPackage ../applications/misc/qmapshack { };
 
+  qmediathekview = libsForQt5.callPackage ../applications/video/qmediathekview { };
+
   qmetro = callPackage ../applications/misc/qmetro { };
 
   qmidinet = callPackage ../applications/audio/qmidinet { };
