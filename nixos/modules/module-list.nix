@@ -157,6 +157,7 @@
   ./services/backup/almir.nix
   ./services/backup/bacula.nix
   ./services/backup/crashplan.nix
+  ./services/backup/crashplan-small-business.nix
   ./services/backup/mysql-backup.nix
   ./services/backup/postgresql-backup.nix
   ./services/backup/rsnapshot.nix
@@ -341,6 +342,7 @@
   ./services/misc/nix-optimise.nix
   ./services/misc/nixos-manual.nix
   ./services/misc/nix-ssh-serve.nix
+  ./services/misc/novacomd.nix
   ./services/misc/nzbget.nix
   ./services/misc/octoprint.nix
   ./services/misc/osrm.nix
