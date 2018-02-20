@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python3
+{ lib, fetchFromGitHub, python3
 , extraComponents ? []
 , extraPackages ? ps: []
 , skipPip ? true }:
@@ -8,17 +8,17 @@ let
   py = python3.override {
     packageOverrides = self: super: {
       yarl = super.yarl.overridePythonAttrs (oldAttrs: rec {
-        version = "0.18.0";
+        version = "1.1.0";
         src = oldAttrs.src.override {
           inherit version;
-          sha256 = "11j8symkxh0ngvpddqpj85qmk6p70p20jca3alxc181gk3vx785s";
+          sha256 = "162630v7f98l27h11msk9416lqwm2mpgxh4s636594nlbfs9by3a";
         };
       });
       aiohttp = super.aiohttp.overridePythonAttrs (oldAttrs: rec {
-        version = "2.3.7";
+        version = "2.3.10";
         src = oldAttrs.src.override {
           inherit version;
-          sha256 = "0fzfpx5ny7559xrxaawnylq20dvrkjiag0ypcd13frwwivrlsagy";
+          sha256 = "8adda6583ba438a4c70693374e10b60168663ffa6564c5c75d3c7a9055290964";
         };
       });
       pytest = super.pytest.overridePythonAttrs (oldAttrs: rec {
@@ -44,7 +44,7 @@ let
   extraBuildInputs = extraPackages py.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "0.62.1";
+  hassVersion = "0.63.3";
 
 in with py.pkgs; buildPythonApplication rec {
   pname = "homeassistant";
@@ -57,14 +57,14 @@ in with py.pkgs; buildPythonApplication rec {
     owner = "home-assistant";
     repo = "home-assistant";
     rev = version;
-    sha256 = "0151prwk2ci6bih0mdmc3r328nrvazn9jwk0w26wmd4cpvnb5h26";
+    sha256 = "1lrdrn0x8i81vbqxziv5fgcc8ldz7x5r62kfz3nyg4g43rk3dqq8";
   };
 
   propagatedBuildInputs = [
     # From setup.py
-    requests pyyaml pytz pip jinja2 voluptuous typing aiohttp yarl async-timeout chardet astral certifi
-    # From the components that are part of the default configuration.yaml
-    sqlalchemy aiohttp-cors hass-frontend user-agents distro mutagen xmltodict netdisco
+    requests pyyaml pytz pip jinja2 voluptuous typing aiohttp yarl async-timeout chardet astral certifi attrs
+    # From http, frontend and recorder components
+    sqlalchemy aiohttp-cors hass-frontend user-agents
   ] ++ componentBuildInputs ++ extraBuildInputs;
 
   checkInputs = [
@@ -80,9 +80,9 @@ in with py.pkgs; buildPythonApplication rec {
       tests/components/test_{api,configurator,demo,discovery,frontend,init,introduction,logger,script,shell_command,system_log,websocket_api}.py
   '';
 
-  makeWrapperArgs = [] ++ stdenv.lib.optional skipPip [ "--add-flags --skip-pip" ];
+  makeWrapperArgs = lib.optional skipPip "--add-flags --skip-pip";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = https://home-assistant.io/;
     description = "Open-source home automation platform running on Python 3";
     license = licenses.asl20;

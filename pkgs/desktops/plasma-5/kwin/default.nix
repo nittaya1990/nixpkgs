@@ -11,7 +11,7 @@
   kcoreaddons, kcrash, kdeclarative, kdecoration, kglobalaccel, ki18n,
   kiconthemes, kidletime, kinit, kio, knewstuff, knotifications, kpackage,
   kscreenlocker, kservice, kwayland, kwidgetsaddons, kwindowsystem, kxmlgui,
-  plasma-framework, qtsensors
+  plasma-framework, qtsensors, libcap
 }:
 
 mkDerivation {
@@ -27,11 +27,13 @@ mkDerivation {
     kcoreaddons kcrash kdeclarative kdecoration kglobalaccel ki18n kiconthemes
     kidletime kinit kio knewstuff knotifications kpackage kscreenlocker kservice
     kwayland kwidgetsaddons kwindowsystem kxmlgui plasma-framework
+    libcap
   ];
   outputs = [ "bin" "dev" "out" ];
   patches = copyPathsToStore (lib.readPathsFromFile ./. ./series) ++ [
+    # This patch should be removed in 5.12.2
     (fetchpatch {
-      url = "https://phabricator.kde.org/file/data/ojbvgljuhqxztrdcicoy/PHID-FILE-6wvjkli2blrgw7jei3qg/D26720.diff";
+      url = "https://github.com/KDE/kwin/commit/6e5f5d92daab4c60f7bf241d90a91b3bea27acfd.patch";
       sha256 = "1yq9wjvch46z7qx051s0ws0gyqbqhkvx7xl4pymd97vz8v6gnx4x";
     })
   ];

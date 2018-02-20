@@ -607,7 +607,7 @@ self: super: {
   };
 
   # Need newer versions of their dependencies than the ones we have in LTS-10.x.
-  cabal2nix = super.cabal2nix.override { hpack = self.hpack_0_24_0; };
+  cabal2nix = super.cabal2nix.override { hpack = self.hpack_0_27_0; };
   hlint = super.hlint.overrideScope (self: super: { haskell-src-exts = self.haskell-src-exts_1_20_1; });
 
   # https://github.com/bos/configurator/issues/22
@@ -950,7 +950,7 @@ self: super: {
   ChasingBottoms = dontCheck super.ChasingBottoms;
 
   # Add support for https://github.com/haskell-hvr/multi-ghc-travis.
-  multi-ghc-travis = self.callPackage ../tools/haskell/multi-ghc-travis { ShellCheck = self.ShellCheck_0_4_6; };
+  multi-ghc-travis = self.callPackage ../tools/haskell/multi-ghc-travis {};
 
   # https://github.com/yesodweb/Shelly.hs/issues/162
   shelly = dontCheck super.shelly;
@@ -999,5 +999,11 @@ self: super: {
       cp $data/share/${self.ghc.name}/*-${self.ghc.name}/*/*.info $out/share/info/
     '';
   });
+
+  # https://github.com/nick8325/twee/pull/1
+  twee-lib = dontHaddock super.twee-lib;
+
+  # Needs older hlint
+  hpio = dontCheck super.hpio;
 
 }

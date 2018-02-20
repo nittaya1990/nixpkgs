@@ -2,7 +2,7 @@
 let
 
   spdx = lic: lic // {
-    url = "http://spdx.org/licenses/${lic.spdxId}";
+    url = "http://spdx.org/licenses/${lic.spdxId}.html";
   };
 
 in
@@ -77,6 +77,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
   beerware = spdx {
     spdxId = "Beerware";
     fullName = ''Beerware License'';
+  };
+
+  bsd0 = spdx {
+    spdxId = "0BSD";
+    fullName = "BSD Zero Clause License";
   };
 
   bsd2 = spdx {
@@ -482,6 +487,12 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     fullName = "PostgreSQL License";
   };
 
+  postman = {
+    fullName = "Postman EULA";
+    url = https://www.getpostman.com/licenses/postman_base_app;
+    free = false;
+  };
+
   psfl = spdx {
     spdxId = "Python-2.0";
     fullName = "Python Software Foundation License version 2";
@@ -569,6 +580,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     fullName = "Vovida Software License v1.0";
   };
 
+  watcom = spdx {
+    spdxId = "Watcom-1.0";
+    fullName = "Sybase Open Watcom Public License 1.0";
+  };
+
   w3c = spdx {
     spdxId = "W3C";
     fullName = "W3C Software Notice and License";
@@ -603,5 +619,4 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     spdxId = "ZPL-2.1";
     fullName = "Zope Public License 2.1";
   };
-
 }
