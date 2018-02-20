@@ -1040,6 +1040,8 @@ with pkgs;
 
   dateutils = callPackage ../tools/misc/dateutils { };
 
+  ddar = pythonPackages.callPackage ../tools/backup/ddar { };
+
   ddate = callPackage ../tools/misc/ddate { };
 
   dehydrated = callPackage ../tools/admin/dehydrated { };
@@ -4512,6 +4514,8 @@ with pkgs;
 
   rnv = callPackage ../tools/text/xml/rnv { };
 
+  roundup = callPackage ../tools/misc/roundup { };
+
   routino = callPackage ../tools/misc/routino { };
 
   rq = callPackage ../development/tools/rq {
@@ -4641,6 +4645,8 @@ with pkgs;
   shadowsocks-libev = callPackage ../tools/networking/shadowsocks-libev { };
 
   sharutils = callPackage ../tools/archivers/sharutils { };
+
+  shocco = callPackage ../tools/text/shocco { };
 
   shotwell = callPackage ../applications/graphics/shotwell { };
 
@@ -5769,7 +5775,7 @@ with pkgs;
   compcert = callPackage ../development/compilers/compcert { };
 
   cpp-gsl = callPackage ../development/libraries/cpp-gsl { };
-  
+
   # Users installing via `nix-env` will likely be using the REPL,
   # which has a hard dependency on Z3, so make sure it is available.
   cryptol = haskellPackages.cryptol.overrideDerivation (oldAttrs: {
@@ -19158,6 +19164,7 @@ with pkgs;
 
   gnomeExtensions = {
     appindicator = callPackage ../desktops/gnome-3/extensions/appindicator { };
+    battery-status = callPackage ../desktops/gnome-3/extensions/battery-status { };
     caffeine = callPackage ../desktops/gnome-3/extensions/caffeine { };
     clipboard-indicator = callPackage ../desktops/gnome-3/extensions/clipboard-indicator { };
     dash-to-dock = callPackage ../desktops/gnome-3/extensions/dash-to-dock { };
@@ -19167,6 +19174,7 @@ with pkgs;
     nohotcorner = callPackage ../desktops/gnome-3/extensions/nohotcorner { };
     pixel-saver = callPackage ../desktops/gnome-3/extensions/pixel-saver { };
     remove-dropdown-arrows = callPackage ../desktops/gnome-3/extensions/remove-dropdown-arrows { };
+    taskwhisperer = callPackage ../desktops/gnome-3/extensions/taskwhisperer { };
     topicons-plus = callPackage ../desktops/gnome-3/extensions/topicons-plus { };
   };
 
