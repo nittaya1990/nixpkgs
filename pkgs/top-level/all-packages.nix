@@ -8127,9 +8127,7 @@ with pkgs;
 
   vagrant = callPackage ../development/tools/vagrant {};
 
-  vagrant-libvirt = callPackage ../development/tools/vagrant/libvirt.nix {
-    ruby = ruby_2_2;
-  };
+  vagrant-libvirt = callPackage ../development/tools/vagrant/libvirt.nix { };
 
   bashdb = callPackage ../development/tools/misc/bashdb { };
 
