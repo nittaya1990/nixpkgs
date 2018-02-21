@@ -18607,6 +18607,8 @@ with pkgs;
 
   flightgear = libsForQt5.callPackage ../games/flightgear { };
 
+  flock = callPackages ../development/tools/flock { };
+
   freecell-solver = callPackage ../games/freecell-solver { };
 
   freeciv = callPackage ../games/freeciv { };
