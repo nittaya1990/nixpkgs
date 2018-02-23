@@ -1381,6 +1381,8 @@ with pkgs;
 
   arping = callPackage ../tools/networking/arping { };
 
+  arpoison = callPackage ../tools/networking/arpoison { };
+
   asciidoc = callPackage ../tools/typesetting/asciidoc {
     inherit (python2Packages) matplotlib numpy aafigure recursivePthLoader;
     w3m = w3m-batch;
@@ -3245,6 +3247,8 @@ with pkgs;
   nginx-config-formatter = callPackage ../tools/misc/nginx-config-formatter { };
 
   ninka = callPackage ../development/tools/misc/ninka { };
+
+  nixnote2 = libsForQt5.callPackage ../applications/misc/nixnote2 { };
 
   nodejs = hiPrio nodejs-6_x;
 
