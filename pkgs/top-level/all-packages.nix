@@ -17639,7 +17639,7 @@ with pkgs;
   };
 
   lxterminal = callPackage ../applications/misc/lxterminal {
-    vte = gnome2.vte;
+    vte = gnome3.vte;
   };
 
   deepin-terminal = callPackage ../applications/misc/deepin-terminal {
