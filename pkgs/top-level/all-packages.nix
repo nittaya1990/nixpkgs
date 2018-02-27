@@ -18029,6 +18029,8 @@ with pkgs;
 
   wayv = callPackage ../tools/X11/wayv {};
 
+  webtorrent_desktop = callPackage ../applications/video/webtorrent_desktop {};
+
   weechat = callPackage ../applications/networking/irc/weechat {
     inherit (darwin) libobjc;
     inherit (darwin) libresolv;
