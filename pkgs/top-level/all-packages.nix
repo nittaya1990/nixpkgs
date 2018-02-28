@@ -9660,10 +9660,6 @@ with pkgs;
 
   libgdata = gnome3.libgdata;
 
-  libgee_0_6 = callPackage ../development/libraries/libgee/0.6.nix { };
-
-  libgee_0_8 = callPackage ../development/libraries/libgee/0.8.nix { };
-
   libgig = callPackage ../development/libraries/libgig { };
 
   libgnome-keyring = callPackage ../development/libraries/libgnome-keyring { };
@@ -13836,7 +13832,7 @@ with pkgs;
 
   udisks1 = callPackage ../os-specific/linux/udisks/1-default.nix { };
   udisks2 = callPackage ../os-specific/linux/udisks/2-default.nix { };
-  udisks = udisks1;
+  udisks = udisks2;
 
   udisks_glue = callPackage ../os-specific/linux/udisks-glue { };
 
