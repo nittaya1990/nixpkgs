@@ -20871,8 +20871,6 @@ with pkgs;
 
   tlwg = callPackage ../data/fonts/tlwg { };
 
-  safeDiscardStringContext = callPackage ../build-support/safe-discard-string-context.nix { };
-
   simplehttp2server = callPackage ../servers/simplehttp2server { };
 
   diceware = callPackage ../tools/security/diceware { };
