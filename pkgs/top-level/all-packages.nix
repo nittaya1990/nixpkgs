@@ -2035,6 +2035,10 @@ with pkgs;
 
   uudeview = callPackage ../tools/misc/uudeview { };
 
+  uutils-coreutils = callPackage ../tools/misc/uutils-coreutils {
+    inherit (pythonPackages) sphinx;
+  };
+
   zabbix-cli = callPackage ../tools/misc/zabbix-cli { };
 
   ### DEVELOPMENT / EMSCRIPTEN
@@ -19009,6 +19013,8 @@ with pkgs;
   sgtpuzzles = callPackage (callPackage ../games/sgt-puzzles) { };
 
   sienna = callPackage ../games/sienna { love = love_0_10; };
+
+  sil = callPackage ../games/sil { };
 
   simutrans = callPackage ../games/simutrans { };
   # get binaries without data built by Hydra
