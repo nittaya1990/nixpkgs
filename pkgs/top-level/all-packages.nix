@@ -9467,7 +9467,7 @@ with pkgs;
   libb2 = callPackage ../development/libraries/libb2 { };
 
   libbap = callPackage ../development/libraries/libbap {
-    inherit (ocamlPackages_4_02) bap ocaml findlib ctypes;
+    inherit (ocamlPackages) bap ocaml findlib ctypes;
   };
 
   libbass = (callPackage ../development/libraries/audio/libbass { }).bass;
@@ -16853,6 +16853,8 @@ with pkgs;
   openjump = callPackage ../applications/misc/openjump { };
 
   openscad = callPackage ../applications/graphics/openscad {};
+
+  opentx = callPackage ../applications/misc/opentx { };
 
   opera = callPackage ../applications/networking/browsers/opera {};
 
