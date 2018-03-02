@@ -4794,6 +4794,8 @@ with pkgs;
 
   storebrowse = callPackage ../tools/system/storebrowse { };
 
+  stubby = callPackage ../tools/networking/stubby { };
+
   syntex = callPackage ../tools/graphics/syntex {};
 
   fusesmb = callPackage ../tools/filesystems/fusesmb { samba = samba3; };
@@ -13965,7 +13967,7 @@ with pkgs;
 
   caladea = callPackage ../data/fonts/caladea {};
 
-  cantarell_fonts = callPackage ../data/fonts/cantarell-fonts { };
+  cantarell-fonts = callPackage ../data/fonts/cantarell-fonts { };
 
   carlito = callPackage ../data/fonts/carlito {};
 
