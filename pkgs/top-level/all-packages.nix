@@ -1330,6 +1330,8 @@ with pkgs;
 
   riot-web = callPackage ../applications/networking/instant-messengers/riot/riot-web.nix { };
 
+  rsbep = callPackage ../tools/backup/rsbep { };
+
   rsyslog = callPackage ../tools/system/rsyslog {
     hadoop = null; # Currently Broken
     czmq = czmq3;
@@ -4050,9 +4052,7 @@ with pkgs;
 
   p7zip = callPackage ../tools/archivers/p7zip { };
 
-  packagekit = callPackage ../tools/package-management/packagekit {
-    nix = nixUnstable;
-  };
+  packagekit = callPackage ../tools/package-management/packagekit { };
 
   packagekit-qt = libsForQt5.callPackage ../tools/package-management/packagekit/qt.nix { };
 
@@ -6981,8 +6981,6 @@ with pkgs;
   mujs = callPackage ../development/interpreters/mujs { };
 
   nix-exec = callPackage ../development/interpreters/nix-exec {
-    nix = nixUnstable;
-
     git = gitMinimal;
   };
 
@@ -10593,8 +10591,7 @@ with pkgs;
   };
   libnghttp2 = nghttp2.lib;
 
-  nix-plugins = callPackage ../development/libraries/nix-plugins
-    { nix = nixUnstable; };
+  nix-plugins = callPackage ../development/libraries/nix-plugins { };
 
   nlohmann_json = callPackage ../development/libraries/nlohmann_json { };
 
@@ -17692,11 +17689,6 @@ with pkgs;
     vte = gnome3.vte;
   };
 
-  deepin-terminal = callPackage ../applications/misc/deepin-terminal {
-    inherit (gnome3) libgee vte;
-    wnck = libwnck3;
-  };
-
   termite = callPackage ../applications/misc/termite {
     vte = gnome3.vte-ng;
   };
@@ -19249,6 +19241,8 @@ with pkgs;
 
   clearlooks-phenix = callPackage ../misc/themes/clearlooks-phenix { };
 
+  deepin = recurseIntoAttrs (callPackage ../desktops/deepin { });
+
   enlightenment = recurseIntoAttrs (callPackage ../desktops/enlightenment {
     callPackage = newScope pkgs.enlightenment;
   });
@@ -19315,8 +19309,6 @@ with pkgs;
   latte-dock = libsForQt5.callPackage ../applications/misc/latte-dock { };
 
   orion = callPackage ../misc/themes/orion {};
-
-  deepin-gtk-theme = callPackage ../misc/themes/deepin { };
 
   elementary-gtk-theme = callPackage ../misc/themes/elementary { };
 
@@ -20258,6 +20250,7 @@ with pkgs;
       stateDir = config.nix.stateDir or "/nix/var";
       })
     nix
+    nix1
     nixStable
     nixUnstable;
 
@@ -20269,7 +20262,7 @@ with pkgs;
 
   nixui = callPackage ../tools/package-management/nixui { node_webkit = nwjs_0_12; };
 
-  nix-bundle = callPackage ../tools/package-management/nix-bundle { nix = nixUnstable; };
+  nix-bundle = callPackage ../tools/package-management/nix-bundle { };
 
   nix-delegate = haskell.lib.justStaticExecutables haskellPackages.nix-delegate;
   nix-deploy = haskell.lib.justStaticExecutables haskellPackages.nix-deploy;
