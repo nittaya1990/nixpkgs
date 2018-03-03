@@ -4655,6 +4655,8 @@ with pkgs;
 
   sdl-jstest = callPackage ../tools/misc/sdl-jstest { };
 
+  skim = callPackage ../tools/misc/skim { };
+
   sec = callPackage ../tools/admin/sec { };
 
   seccure = callPackage ../tools/security/seccure { };
@@ -20370,6 +20372,8 @@ with pkgs;
   ppsspp = libsForQt5.callPackage ../misc/emulators/ppsspp { };
 
   pt = callPackage ../applications/misc/pt { };
+
+  protocol = python3Packages.callPackage ../applications/networking/protocol { };
 
   pykms = callPackage ../tools/networking/pykms { };
 
