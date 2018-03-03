@@ -17293,6 +17293,8 @@ with pkgs;
   };
   rrsync = callPackage ../applications/networking/sync/rsync/rrsync.nix {};
 
+  rtl_433 = callPackage ../applications/misc/rtl_433 { };
+
   rtl-sdr = callPackage ../applications/misc/rtl-sdr { };
 
   rtv = callPackage ../applications/misc/rtv { };
