@@ -160,6 +160,12 @@ with pkgs;
 
   fetchdarcs = callPackage ../build-support/fetchdarcs { };
 
+  fetchdocker = callPackage ../build-support/fetchdocker { };
+
+  fetchDockerConfig = callPackage ../build-support/fetchdocker/fetchDockerConfig.nix { };
+
+  fetchDockerLayer = callPackage ../build-support/fetchdocker/fetchDockerLayer.nix { };
+
   fetchfossil = callPackage ../build-support/fetchfossil { };
 
   fetchgit = callPackage ../build-support/fetchgit {
@@ -17346,6 +17352,8 @@ with pkgs;
   sbagen = callPackage ../applications/misc/sbagen { };
 
   scantailor = callPackage ../applications/graphics/scantailor { };
+
+  scantailor-advanced = qt5.callPackage ../applications/graphics/scantailor/advanced.nix { };
 
   sc-im = callPackage ../applications/misc/sc-im { };
 
