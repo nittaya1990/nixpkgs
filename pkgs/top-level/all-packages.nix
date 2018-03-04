@@ -1955,7 +1955,8 @@ with pkgs;
     inherit (darwin) cf-private;
     wxGTK = wxGTK31;
   };
-  doomseeker = callPackage ../applications/misc/doomseeker { };
+
+  doomseeker = qt5.callPackage ../applications/misc/doomseeker { };
 
   doom-bcc = callPackage ../games/zdoom/bcc-git.nix { };
 
@@ -13994,8 +13995,6 @@ with pkgs;
 
   crimson = callPackage ../data/fonts/crimson {};
 
-  deepin-icon-theme = callPackage ../data/icons/deepin-icon-theme { };
-
   dejavu_fonts = lowPrio (callPackage ../data/fonts/dejavu-fonts {
     inherit (perlPackages) FontTTF;
   });
@@ -18156,6 +18155,7 @@ with pkgs;
       ++ optional (cfg.enableFceumm or false) fceumm
       ++ optional (cfg.enableGambatte or false) gambatte
       ++ optional (cfg.enableGenesisPlusGX or false) genesis-plus-gx
+      ++ optional (cfg.enableHiganSFC or false) higan-sfc
       ++ optional (cfg.enableMAME or false) mame
       ++ optional (cfg.enableMGBA or false) mgba
       ++ optional (cfg.enableMupen64Plus or false) mupen64plus
