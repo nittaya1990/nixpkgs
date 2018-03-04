@@ -1332,7 +1332,9 @@ with pkgs;
 
   ring-daemon = callPackage ../applications/networking/instant-messengers/ring-daemon { };
 
-  riot-web = callPackage ../applications/networking/instant-messengers/riot/riot-web.nix { };
+  riot-web = callPackage ../applications/networking/instant-messengers/riot/riot-web.nix {
+    conf = config.riot-web.conf or null;
+  };
 
   rsbep = callPackage ../tools/backup/rsbep { };
 
@@ -10113,9 +10115,7 @@ with pkgs;
 
   libpfm = callPackage ../development/libraries/libpfm { };
 
-  libpqxx = callPackage ../development/libraries/libpqxx {
-    gnused = gnused_422;
-  };
+  libpqxx = callPackage ../development/libraries/libpqxx { };
 
   libproxy = callPackage ../development/libraries/libproxy {
     inherit (darwin.apple_sdk.frameworks) SystemConfiguration CoreFoundation JavaScriptCore;
@@ -12557,8 +12557,6 @@ with pkgs;
   prometheus-varnish-exporter = callPackage ../servers/monitoring/prometheus/varnish-exporter.nix { };
 
   psqlodbc = callPackage ../servers/sql/postgresql/psqlodbc { };
-
-  pumpio = callPackage ../servers/web-apps/pump.io { };
 
   pure-ftpd = callPackage ../servers/ftp/pure-ftpd { };
 
@@ -20289,7 +20287,7 @@ with pkgs;
 
   nix-template-rpm = callPackage ../build-support/templaterpm { inherit (pythonPackages) python toposort; };
 
-  nix-repl = callPackage ../tools/package-management/nix-repl { };
+  nix-repl = callPackage ../tools/package-management/nix-repl { nix = nix1; };
 
   nix-serve = callPackage ../tools/package-management/nix-serve { };
 
