@@ -12932,6 +12932,8 @@ with pkgs;
 
   fwupdate = callPackage ../os-specific/linux/firmware/fwupdate { };
 
+  fwts = callPackage ../os-specific/linux/fwts { };
+
   libossp_uuid = callPackage ../development/libraries/libossp-uuid { };
 
   libuuid =
@@ -18768,6 +18770,8 @@ with pkgs;
 
   gnugo = callPackage ../games/gnugo { };
 
+  gnujump = callPackage ../games/gnujump { };
+
   gogui = callPackage ../games/gogui {};
 
   gtetrinet = callPackage ../games/gtetrinet {
@@ -20392,7 +20396,10 @@ with pkgs;
 
   redprl = callPackage ../applications/science/logic/redprl { };
 
-  retroarchBare = callPackage ../misc/emulators/retroarch { };
+  retroarchBare = callPackage ../misc/emulators/retroarch {
+    inherit (darwin) libobjc;
+    inherit (darwin.apple_sdk.frameworks) AppKit Foundation;
+  };
 
   retroarch = wrapRetroArch { retroarch = retroarchBare; };
 
