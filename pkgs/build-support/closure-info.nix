@@ -4,31 +4,26 @@
 # "nix-store --load-db" and "nix-store --register-validity
 # --hash-given".
 
-{ stdenv, coreutils, jq }:
+{ stdenv, coreutils, jq, perl, pathsFromGraph }:
 
 { rootPaths }:
 
-assert builtins.langVersion >= 5;
+# FIXME: this code is old to work with nix-1.11 also,
+# whatever combination of evaluator and daemon.  See #36268.
 
-stdenv.mkDerivation {
-  name = "closure-info";
+  stdenv.mkDerivation {
+    name = "closure-info";
 
-  __structuredAttrs = true;
+    exportReferencesGraph =
+      map (x: [("closure-" + baseNameOf x) x]) rootPaths;
 
-  exportReferencesGraph.closure = rootPaths;
+    buildInputs = [ perl ];
 
-  PATH = "${coreutils}/bin:${jq}/bin";
+    buildCommand =
+      ''
+        mkdir $out
+        printRegistration=1 perl ${pathsFromGraph} closure-* > $out/registration
+        perl ${pathsFromGraph} closure-* > $out/store-paths
+      '';
+  }
 
-  builder = builtins.toFile "builder"
-    ''
-      . .attrs.sh
-
-      out=''${outputs[out]}
-
-      mkdir $out
-
-      jq -r ".closure | map(.narSize) | add" < .attrs.json > $out/total-nar-size
-      jq -r '.closure | map([.path, .narHash, .narSize, "", (.references | length)] + .references) | add | map("\(.)\n") | add' < .attrs.json | head -n -1 > $out/registration
-      jq -r .closure[].path < .attrs.json > $out/store-paths
-    '';
-}
