@@ -9534,7 +9534,7 @@ with pkgs;
   libcddb = callPackage ../development/libraries/libcddb { };
 
   libcdio = callPackage ../development/libraries/libcdio { };
-  libcdio082 = callPackage ../development/libraries/libcdio/0.82.nix { };
+  libcdio-paranoia = callPackage ../development/libraries/libcdio-paranoia { };
 
   libcdr = callPackage ../development/libraries/libcdr { lcms = lcms2; };
 
@@ -14465,7 +14465,6 @@ with pkgs;
   abcde = callPackage ../applications/audio/abcde {
     inherit (perlPackages) DigestSHA MusicBrainz MusicBrainzDiscID;
     inherit (pythonPackages) eyeD3;
-    libcdio = libcdio082;
   };
 
   abiword = callPackage ../applications/office/abiword {
@@ -14856,7 +14855,6 @@ with pkgs;
   cmus = callPackage ../applications/audio/cmus {
     inherit (darwin.apple_sdk.frameworks) CoreAudio;
     libjack = libjack2;
-    libcdio = libcdio082;
     ffmpeg = ffmpeg_2;
 
     pulseaudioSupport = config.pulseaudio or false;
