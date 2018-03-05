@@ -7835,7 +7835,9 @@ with pkgs;
 
   inotify-tools = callPackage ../development/tools/misc/inotify-tools { };
 
-  intel-gpu-tools = callPackage ../development/tools/misc/intel-gpu-tools {};
+  intel-gpu-tools = callPackage ../development/tools/misc/intel-gpu-tools { };
+
+  insomnia = callPackage ../development/web/insomnia { };
 
   iozone = callPackage ../development/tools/misc/iozone { };
 
@@ -17858,6 +17860,8 @@ with pkgs;
   };
 
   utox = callPackage ../applications/networking/instant-messengers/utox { };
+
+  valentina = libsForQt5.callPackage ../applications/misc/valentina { };
 
   vanubi = callPackage ../applications/editors/vanubi { };
 
