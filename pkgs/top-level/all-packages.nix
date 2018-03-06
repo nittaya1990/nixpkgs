@@ -2606,10 +2606,6 @@ with pkgs;
   grin = callPackage ../tools/text/grin { };
   ripgrep = callPackage ../tools/text/ripgrep { };
 
-  grive = callPackage ../tools/filesystems/grive {
-    json_c = json-c-0-11; # won't configure with 0.12; others are vulnerable
-  };
-
   grive2 = callPackage ../tools/filesystems/grive2 { };
 
   groff = callPackage ../tools/text/groff {
@@ -3809,8 +3805,6 @@ with pkgs;
   networkmanagerapplet = newScope gnome2 ../tools/networking/network-manager-applet { };
 
   networkmanager_dmenu = callPackage ../tools/networking/networkmanager_dmenu  { };
-
-  newsbeuter = callPackage ../applications/networking/feedreaders/newsbeuter { };
 
   newsboat = callPackage ../applications/networking/feedreaders/newsboat { };
 
@@ -7355,6 +7349,8 @@ with pkgs;
   ansible  = ansible_2_4;
   ansible2 = ansible_2_4;
 
+  ansible-lint = callPackage ../development/tools/ansible-lint {};
+
   antlr = callPackage ../development/tools/parsing/antlr/2.7.7.nix { };
 
   antlr3_4 = callPackage ../development/tools/parsing/antlr/3.4.nix { };
@@ -9366,7 +9362,6 @@ with pkgs;
 
   json-glib = callPackage ../development/libraries/json-glib { };
 
-  json-c-0-11 = callPackage ../development/libraries/json-c/0.11.nix { }; # vulnerable
   json_c = callPackage ../development/libraries/json-c { };
 
   jsoncpp = callPackage ../development/libraries/jsoncpp { };
@@ -10912,7 +10907,6 @@ with pkgs;
   };
 
   postgis = callPackage ../development/libraries/postgis { };
-  postgis_2_3 = callPackage ../development/libraries/postgis/2.3.nix { };
 
   protobuf = callPackage ../development/libraries/protobuf/3.4.nix { };
 
