@@ -67,9 +67,7 @@ in
         ];
 
         serviceConfig =
-          { ExecStart = "@${pkgs.glibc.bin}/sbin/nscd nscd";
-            Type = "forking";
-            PIDFile = "/run/nscd/nscd.pid";
+          { ExecStart = "@${pkgs.glibc.bin}/sbin/nscd nscd -F";
             Restart = "always";
             ExecReload =
               [ "${pkgs.glibc.bin}/sbin/nscd --invalidate passwd"
