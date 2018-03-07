@@ -2446,6 +2446,8 @@ with pkgs;
 
   git-series = callPackage ../development/tools/git-series { };
 
+  git-sizer = callPackage ../applications/version-management/git-sizer { };
+
   git-up = callPackage ../applications/version-management/git-up { };
 
   gitfs = callPackage ../tools/filesystems/gitfs { };
