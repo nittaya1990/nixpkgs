@@ -10442,7 +10442,7 @@ with pkgs;
   ## libGL/libGLU/Mesa stuff
 
   # Default libGL implementation, should provide headers and libGL.so/libEGL.so/... to link agains them
-  # Default implementation is `mesa`, but can be eventually replaced with `libglvnd`, 
+  # Default implementation is `mesa`, but can be eventually replaced with `libglvnd`,
   # or other runtime dispatcher
   libGL = mesa_noglu;
 
@@ -10475,7 +10475,7 @@ with pkgs;
     # through /run/opengl-driver*, which is overriden according to config.grsecurity
     # grsecEnabled = true; # no more support in nixpkgs ATM
   });
-  mesa_noglu_glvnd = mesaDarwinOr (
+  mesa_noglu_glvnd = libGLDarwinOr (
     mesa_noglu.override {
       grsecEnabled = config.grsecurity or false;
       enableTextureFloats = true;
@@ -10491,7 +10491,7 @@ with pkgs;
     };
     in mo.drivers
   );
-  mesa_drivers_glvnd = mesaDarwinOr (
+  mesa_drivers_glvnd = libGLDarwinOr (
     let mo = mesa_noglu.override {
       grsecEnabled = config.grsecurity or false;
       enableTextureFloats = true;
