@@ -56,23 +56,22 @@ in
     unpackPhase = "dpkg-deb -x $src .";
     installPhase = ''
       mkdir -p $out
-      cp -R opt $out
+      mkdir -p $out/libexec
 
-      mv ./usr/share $out/share
-      mv $out/opt/Signal $out/libexec
-      rmdir $out/opt
+      mv opt/Signal $out/libexec/Signal
 
       chmod -R g-w $out
 
       # Patch signal
       patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-               --set-rpath ${rpath}:$out/libexec $out/libexec/signal-desktop
+               --set-rpath ${rpath}:$out/libexec/Signal $out/libexec/Signal/signal-desktop
 
       # Symlink to bin
       mkdir -p $out/bin
-      ln -s $out/libexec/signal-desktop $out/bin/signal-desktop
+      ln -s $out/libexec/Signal/signal-desktop $out/bin/signal-desktop
 
       # Fix the desktop link
+      mv ./usr/share $out/share
       substituteInPlace $out/share/applications/signal-desktop.desktop \
         --replace /opt/Signal/signal-desktop $out/bin/signal-desktop
     '';
