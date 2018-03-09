@@ -4832,6 +4832,8 @@ with pkgs;
 
   squashfsTools = callPackage ../tools/filesystems/squashfs { };
 
+  squashfuse = callPackage ../tools/filesystems/squashfuse { };
+
   srcml = callPackage ../applications/version-management/srcml { };
 
   sshfs-fuse = callPackage ../tools/filesystems/sshfs-fuse { };
@@ -5607,6 +5609,9 @@ with pkgs;
   yaft = callPackage ../applications/misc/yaft { };
 
   yarn = callPackage ../development/tools/yarn  { };
+
+  yarn2nix = callPackage ../development/tools/yarn2nix { };
+  inherit (yarn2nix) mkYarnPackage;
 
   yasr = callPackage ../applications/audio/yasr { };
 
