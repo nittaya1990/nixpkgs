@@ -1657,6 +1657,14 @@ with pkgs;
   skktools = callPackage ../tools/inputmethods/skk/skktools { };
   skk-dicts = callPackage ../tools/inputmethods/skk/skk-dicts { };
 
+  libkkc-data = callPackage ../data/misc/libkkc-data {
+    inherit (pythonPackages) marisa;
+  };
+
+  libkkc = callPackage ../tools/inputmethods/libkkc {
+    inherit (gnome3) libgee;
+  };
+
   ibus = callPackage ../tools/inputmethods/ibus {
     inherit (gnome3) dconf gconf glib;
   };
@@ -1667,6 +1675,8 @@ with pkgs;
     anthy = callPackage ../tools/inputmethods/ibus-engines/ibus-anthy { };
 
     hangul = callPackage ../tools/inputmethods/ibus-engines/ibus-hangul { };
+
+    kkc = callPackage ../tools/inputmethods/ibus-engines/ibus-kkc { };
 
     libpinyin = callPackage ../tools/inputmethods/ibus-engines/ibus-libpinyin { };
 
