@@ -98,6 +98,9 @@ let
   # providing Python modules.
   makePythonPath = drvs: stdenv.lib.makeSearchPath python.sitePackages (requiredPythonModules drvs);
 
+  removePythonPrefix = name:
+    removePrefix namePrefix name;
+
   # Convert derivation to a Python module.
   toPythonModule = drv:
     drv.overrideAttrs( oldAttrs: {
@@ -109,14 +112,27 @@ let
       };
     });
 
+  # Convert a Python library to an application.
+  toPythonApplication = drv:
+    drv.overrideAttrs( oldAttrs: {
+      passthru = (oldAttrs.passthru or {}) // {
+        # Remove Python prefix from name so we have a "normal" name.
+        # While the prefix shows up in the store path, it won't be
+        # used by `nix-env`.
+        name = removePythonPrefix oldAttrs.name;
+        pythonModule = false;
+      };
+    });
+
   disabledIf = x: drv:
-    if x then throw "${removePrefix namePrefix (drv.pname or drv.name)} not supported for interpreter ${python.executable}" else drv;
+    if x then throw "${removePythonPrefix (drv.pname or drv.name)} not supported for interpreter ${python.executable}" else drv;
 
 in {
 
   inherit python bootstrapped-pip pythonAtLeast pythonOlder isPy26 isPy27 isPy33 isPy34 isPy35 isPy36 isPyPy isPy3k buildPythonPackage buildPythonApplication;
   inherit fetchPypi callPackage;
   inherit hasPythonModule requiredPythonModules makePythonPath disabledIf;
+  inherit toPythonModule toPythonApplication;
 
   # helpers
 
@@ -1623,23 +1639,7 @@ in {
 
   rarfile = callPackage ../development/python-modules/rarfile { inherit (pkgs) libarchive; };
 
-  proboscis = buildPythonPackage rec {
-    name = "proboscis-1.2.6.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/proboscis/proboscis-1.2.6.0.tar.gz";
-      sha256 = "b822b243a7c82030fce0de97bdc432345941306d2c24ef227ca561dd019cd238";
-    };
-
-    propagatedBuildInputs = with self; [ nose ];
-    doCheck = false;
-
-    meta = {
-      description = "A Python test framework that extends Python's built-in unittest module and Nose with features from TestNG";
-      homepage = https://github.com/rackspace/python-proboscis;
-      license = licenses.asl20;
-    };
-  };
+  proboscis = callPackage ../development/python-modules/proboscis {};
 
   pyechonest = self.buildPythonPackage rec {
     name = "pyechonest-8.0.2";
@@ -3035,32 +3035,7 @@ in {
 
   pydub = callPackage ../development/python-modules/pydub {};
 
-  pyjade = buildPythonPackage rec {
-    name = "${pname}-${version}";
-    pname = "pyjade";
-    version = "4.0.0";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/${pname}/${name}.tar.gz";
-      sha256 = "1mycn5cc9cp4fb0i2vzgkkk6d0glnkbilggwb4i99i09vr0vg5cd";
-    };
-    buildInputs = with self; [ pyramid_mako nose django jinja2 tornado pyramid Mako ];
-    propagatedBuildInputs = with self; [ six ];
-    patchPhase = ''
-      sed -i 's/1.4.99/1.99/' setup.py
-    '';
-    checkPhase = ''
-      nosetests pyjade
-    '';
-    # No tests distributed. https://github.com/syrusakbary/pyjade/issues/262
-    doCheck = false;
-    meta = {
-      description = "Jade syntax template adapter for Django, Jinja2, Mako and Tornado templates";
-      homepage    = "http://github.com/syrusakbary/pyjade";
-      license     = licenses.mit;
-      maintainers = with maintainers; [ nand0p ];
-      platforms   = platforms.all;
-    };
-  };
+  pyjade = callPackage ../development/python-modules/pyjade {};
 
   PyLD = callPackage ../development/python-modules/PyLD { };
 
@@ -19671,21 +19646,7 @@ EOF
     };
   };
 
-  pychart = buildPythonPackage rec {
-    name = "pychart-1.39";
-    disabled = ! isPy27;
-
-    src = pkgs.fetchurl {
-      url = "http://download.gna.org/pychart/PyChart-1.39.tar.gz";
-      sha256 = "882650928776a7ca72e67054a9e0ac98f78645f279c0cfb5910db28f03f07c2e";
-    };
-
-    meta = {
-      description = "Library for creating high quality encapsulated Postscript, PDF, PNG, or SVG charts";
-      homepage = http://home.gna.org/pychart/;
-      license = licenses.gpl2;
-    };
-  };
+  pychart = callPackage ../development/python-modules/pychart {};
 
   parsimonious = buildPythonPackage rec {
     version = "0.7.0";
