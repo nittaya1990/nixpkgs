@@ -588,12 +588,6 @@ self: super: {
     jailbreak       = true;
   });
 
-  ChasingBottoms = overrideCabal super.ChasingBottoms (drv: {
-    ## Setup: Encountered missing dependencies:
-    ## QuickCheck >=2.3 && <2.11, base >=4.2 && <4.11
-    jailbreak       = true;
-  });
-
   deepseq-generics = overrideCabal super.deepseq-generics (drv: {
     ## Setup: Encountered missing dependencies:
     ## base >=4.5 && <4.11
@@ -765,25 +759,51 @@ self: super: {
   });
 
   # https://github.com/haskell/HTTP/pull/114
-  HTTP = doJailbreak super.HTTP;
+  HTTP = self.HTTP_4000_3_10;
+  HTTP_4000_3_10 = dontCheck super.HTTP_4000_3_10;
 
   # Older versions don't compile.
   haddock-library = self.haddock-library_1_5_0_1;
   haddock-library_1_5_0_1 = dontHaddock (dontCheck super.haddock-library_1_5_0_1);
 
-  # https://github.com/hslua/hslua-module-text/issues/1
-  hslua-module-text = doJailbreak super.hslua-module-text;
-
   # https://github.com/phadej/tree-diff/issues/15
   tree-diff = doJailbreak super.tree-diff;
 
   # https://github.com/jgm/doctemplates/issues/2
-  doctemplates = markBrokenVersion "0.2.1" super.doctemplates;
+  doctemplates = appendPatch super.doctemplates (pkgs.fetchpatch
+    { url = https://github.com/jgm/doctemplates/commit/3f8bb8feb19ed86b881bc09d963026db9d98df21.patch;
+      sha256 = "0xmjljh8c90qlzp6wn39iy23pj2j0d4m4r1hxs22zps6qdwk5s6d";
+    });
 
   # https://github.com/bitemyapp/esqueleto/issues/77
   esqueleto = markBrokenVersion "2.5.3" super.esqueleto;
 
+  # https://github.com/haskell-pkg-janitors/haskell-src/issues/5
+  haskell-src = markBrokenVersion "1.0.2.0" super.haskell-src;
+
   # Older versions don't compile.
   hackage-db = super.hackage-db_2_0_1;
+
+  # https://github.com/RazvanRanca/GenericPretty/issues/2
+  GenericPretty = appendPatch super.GenericPretty (pkgs.fetchpatch
+    { url = https://github.com/RazvanRanca/GenericPretty/pull/3.patch;
+      sha256 = "1dpdqsjmy9j9b6md5r9jyhbxnxjd51nmfb5in01j10iqzhj9j51k";
+    }
+  );
+
+  # https://github.com/haskell/hackage-security/issues/211
+  hackage-security = doJailbreak super.hackage-security;
+
+  # https://github.com/pikajude/stylish-cabal/issues/6
+  stylish-cabal = dontHaddock super.stylish-cabal;
+
+  # https://github.com/treeowl/boxes/issues/29
+  boxes = appendPatch super.boxes (pkgs.fetchpatch
+    { url = https://github.com/asr/boxes/commit/f03e16cb8677a9d85687c641fe27a87e6fd94d54.patch;
+      sha256 = "179vkn6jimiy64dwyam04x8v981l3pfrq3ig97600vnkns3v8i6a";
+    });
+
+  # https://bitbucket.org/IchUndNichtDu/haskell-setlocale/issues/1/please-allow-base-412-from-ghc-841
+  setlocale = doJailbreak super.setlocale;
 
 }
