@@ -946,9 +946,6 @@ self: super: {
   # Tries to read a file it is not allowed to in the test suite
   load-env = dontCheck super.load-env;
 
-  # Use latest version to support newer QuickCheck and base libraries.
-  ChasingBottoms = self.ChasingBottoms_1_3_1_4;
-
   # Add support for https://github.com/haskell-hvr/multi-ghc-travis.
   multi-ghc-travis = self.callPackage ../tools/haskell/multi-ghc-travis {};
 
@@ -1006,7 +1003,10 @@ self: super: {
   # Needs older hlint
   hpio = dontCheck super.hpio;
 
-  # Needs turtle >=1.5.0, which we use by default in lts-10.x.
-  changelogged = super.changelogged.override { turtle = self.turtle_1_5_4; };
+  # Needs turtle >=1.5.0, which we don't have by default in lts-10.x.
+  changelogged = super.changelogged.override { turtle = self.turtle_1_5_5; };
+
+  # https://github.com/fpco/inline-c/issues/72
+  inline-c = dontCheck super.inline-c;
 
 }

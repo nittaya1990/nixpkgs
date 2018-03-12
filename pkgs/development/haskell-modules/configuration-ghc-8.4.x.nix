@@ -50,9 +50,17 @@ self: super: {
   ## Shadowed:
 
   ## Needs bump to a versioned attribute
-  ##     • Could not deduce (Semigroup (Dict a))
+  ## Setup: Encountered missing dependencies:
+  ## base >=3 && <4.11
+  boxes = super.boxes_0_1_5;
+
+  ## Needs bump to a versioned attribute
+  ##     • No instance for (GHC.Base.Semigroup BV)
   ##         arising from the superclasses of an instance declaration
-  ##       from the context: a
+  ##     • In the instance declaration for ‘Monoid BV’
+  bv = super.bv_0_5;
+
+  ## Needs bump to a versioned attribute
   constraints = super.constraints_0_10;
 
   ## Needs bump to a versioned attribute
@@ -148,13 +156,6 @@ self: super: {
   hspec-discover = super.hspec-discover_2_4_8;
 
   ## Needs bump to a versioned attribute
-  HTTP = overrideCabal super.HTTP_4000_3_10 (drv: {
-    ##
-    ## https://github.com/haskell/HTTP/pull/114
-    doCheck         = false;
-  });
-
-  ## Needs bump to a versioned attribute
   ## Setup: Encountered missing dependencies:
   ## free ==4.*, template-haskell >=2.4 && <2.13
   lens = super.lens_4_16;
@@ -209,20 +210,8 @@ self: super: {
   });
 
 
-  ## Upstreamed
 
-  ## Upstreamed, awaiting a Hackage release
-  bv = overrideCabal super.bv (drv: {
-    ##     • No instance for (GHC.Base.Semigroup BV)
-    ##         arising from the superclasses of an instance declaration
-    ##     • In the instance declaration for ‘Monoid BV’
-    src = pkgs.fetchFromGitHub {
-      owner  = "iagoabal";
-      repo   = "haskell-bv";
-      rev    = "92932a75719020d6a8ac55c455e5c03a4304043f";
-      sha256 = "0fi4v9mpw5y9q1pm7lqhm2zazfyy921wpaa28125misix0frasfw";
-    };
-  });
+  ## Upstreamed
 
   ## Upstreamed, awaiting a Hackage release
   cabal2nix = (overrideCabal super.cabal2nix (drv: {
@@ -605,16 +594,6 @@ self: super: {
     jailbreak       = true;
   });
 
-  boxes = overrideCabal super.boxes (drv: {
-    ## https://github.com/treeowl/boxes/issues/29
-    patches = (drv.patches or []) ++ [
-      (pkgs.fetchpatch
-       { url    = https://github.com/asr/boxes/commit/f03e16cb8677a9d85687c641fe27a87e6fd94d54.patch;
-         sha256 = "179vkn6jimiy64dwyam04x8v981l3pfrq3ig97600vnkns3v8i6a";
-       })
-    ];
-  });
-
   deepseq-generics = overrideCabal super.deepseq-generics (drv: {
     ## Setup: Encountered missing dependencies:
     ## base >=4.5 && <4.11
@@ -808,5 +787,15 @@ self: super: {
     ## base >=4.8 && <4.11
     jailbreak       = true;
   });
+
+  # Fix missing semigroup instance for Journal.
+  hledger-lib = appendPatch super.hledger-lib (pkgs.fetchpatch
+    { url = https://github.com/simonmichael/hledger/pull/718.patch;
+      sha256 = "1gcs9j934wvk9hbn27zm42dnvf4x1gxr54li4kdw3zi3160y2l5c";
+      stripLen = 1;
+    });
+
+  # Old versions don't compile.
+  vty = self.vty_5_20;
 
 }
