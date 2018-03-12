@@ -5820,8 +5820,6 @@ with pkgs;
 
   clang-analyzer = callPackage ../development/tools/analysis/clang-analyzer { };
 
-  clangUnwrapped = llvm: pkg: callPackage pkg { inherit llvm; };
-
   clangSelf = clangWrapSelf llvmPackagesSelf.clang;
 
   clangWrapSelf = build: ccWrapperFun {
