@@ -16467,7 +16467,9 @@ with pkgs;
 
   looking-glass-client = callPackage ../applications/virtualization/looking-glass-client { };
 
-  lumail = callPackage ../applications/networking/mailreaders/lumail { };
+  lumail = callPackage ../applications/networking/mailreaders/lumail {
+    lua = lua5_1;
+  };
 
   lv2bm = callPackage ../applications/audio/lv2bm { };
 
