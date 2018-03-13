@@ -11487,6 +11487,8 @@ with pkgs;
 
   suil = suil-qt4;
 
+  sundials = callPackage ../development/libraries/sundials { };
+
   sutils = callPackage ../tools/misc/sutils { };
 
   svrcore = callPackage ../development/libraries/svrcore { };
