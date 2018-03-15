@@ -12943,32 +12943,7 @@ in {
 
   };
 
-  pycurl = buildPythonPackage (rec {
-    name = "pycurl-7.19.5.1";
-    disabled = isPyPy; # https://github.com/pycurl/pycurl/issues/208
-
-    src = pkgs.fetchurl {
-      url = "http://pycurl.sourceforge.net/download/${name}.tar.gz";
-      sha256 = "0v5w66ir3siimfzg3kc8hfrrilwwnbxq5bvipmrpyxar0kw715vf";
-    };
-
-    buildInputs = with self; [ pkgs.curl pkgs.openssl.out ];
-
-    checkInputs = with self; [ bottle pytest nose ];
-    checkPhase = ''
-      py.test -k "not test_ssl_in_static_libs" tests
-    '';
-
-    preConfigure = ''
-      substituteInPlace setup.py --replace '--static-libs' '--libs'
-      export PYCURL_SSL_LIBRARY=openssl
-    '';
-
-    meta = {
-      homepage = http://pycurl.sourceforge.net/;
-      description = "Python wrapper for libcurl";
-    };
-  });
+  pycurl = callPackage ../development/python-modules/pycurl { };
 
   pycurl2 = buildPythonPackage (rec {
     name = "pycurl2-7.20.0";
