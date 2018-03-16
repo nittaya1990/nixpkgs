@@ -7727,6 +7727,8 @@ with pkgs;
 
   frame = callPackage ../development/libraries/frame { };
 
+  fsatrace = callPackage ../development/tools/misc/fsatrace { };
+
   fswatch = callPackage ../development/tools/misc/fswatch { };
 
   funnelweb = callPackage ../development/tools/literate-programming/funnelweb { };
@@ -10286,6 +10288,9 @@ with pkgs;
   libva = callPackage ../development/libraries/libva { };
   libva-full = libva.override { minimal = false; };
   libva-utils = callPackage ../development/libraries/libva-utils { };
+
+  libva1 = callPackage ../development/libraries/libva/1.0.0.nix { };
+  libva1-full = libva1.override { minimal = false; };
 
   libvdpau = callPackage ../development/libraries/libvdpau { };
 
