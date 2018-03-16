@@ -20,6 +20,7 @@
   openglSupport ? false,
   tlsSupport ? false,
   gstreamerSupport ? false,
+  gstreamerUnsafeSupport ? false,
   cupsSupport ? false,
   colorManagementSupport ? false,
   dbusSupport ? false,
@@ -42,6 +43,8 @@
   xineramaSupport ? false,
   xmlSupport ? false }:
 
+assert gstreamerUnsafeSupport -> gstreamerSupport;
+
 let wine-build = build: release:
       lib.getAttr build (callPackage ./packages.nix {
         wineRelease = release;
@@ -51,7 +54,7 @@ let wine-build = build: release:
                   netapiSupport cursesSupport vaSupport pcapSupport v4lSupport saneSupport
                   gsmSupport gphoto2Support ldapSupport fontconfigSupport alsaSupport
                   pulseaudioSupport xineramaSupport gtkSupport openclSupport xmlSupport tlsSupport
-                  openglSupport gstreamerSupport udevSupport;
+                  openglSupport gstreamerSupport gstreamerUnsafeSupport udevSupport;
         };
       });
 
