@@ -254,6 +254,8 @@ let
     DeviceAllow = map (d: "${d.node} ${d.modifier}") cfg.allowedDevices;
   };
 
+  requiresMountsFor = config:
+    mapAttrsToList (containerPath: bindMount: bindMount.hostPath) config.bindMounts;
 
   system = config.nixpkgs.system;
 
@@ -666,6 +668,7 @@ in
             script = startScript config;
             postStart = postStartScript config;
             serviceConfig = serviceDirectives config;
+            unitConfig.RequiresMountsFor = unit.unitConfig.RequiresMountsFor ++ requiresMountsFor config;
           } // (
           if config.autoStart then
             {
