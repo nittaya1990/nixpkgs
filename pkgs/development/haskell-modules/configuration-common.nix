@@ -80,7 +80,7 @@ self: super: {
       name = "git-annex-${drv.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + drv.version;
-      sha256 = "0fdcv9nig896ckl9x51ximxsvja1ii8qysf6c9ickvc0511hvr9w";
+      sha256 = "0qi5wpsvw6g8xrri1pr0401370acs5sg75myr0h5mjad6pvqc667";
     };
   })).overrideScope (self: super: {
     aws = dontCheck (self.aws_0_18);
@@ -618,7 +618,7 @@ self: super: {
   }));
 
   # Need newer versions of their dependencies than the ones we have in LTS-11.x.
-  cabal2nix = super.cabal2nix.overrideScope (self: super: { hpack = self.hpack_0_28_1; hackage-db = self.hackage-db_2_0_1; });
+  cabal2nix = super.cabal2nix.overrideScope (self: super: { hpack = self.hpack_0_28_2; hackage-db = self.hackage-db_2_0_1; });
 
   # https://github.com/bos/configurator/issues/22
   configurator = dontCheck super.configurator;
@@ -827,7 +827,7 @@ self: super: {
   fluid-idl-http-client = markBroken super.fluid-idl-http-client;
   fluid-idl-scotty = markBroken super.fluid-idl-scotty;
 
-   # missing dependencies: Glob >=0.7.14 && <0.8, data-fix ==0.0.4
+  # missing dependencies: Glob >=0.7.14 && <0.8, data-fix ==0.0.4
   stack2nix = doJailbreak super.stack2nix;
 
   # Hacks to work around https://github.com/haskell/c2hs/issues/192.
