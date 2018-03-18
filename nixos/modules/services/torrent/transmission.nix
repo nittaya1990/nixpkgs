@@ -23,11 +23,11 @@ let
   fullSettings = { umask = 2; download-dir = downloadDir; incomplete-dir = incompleteDir; } // cfg.settings;
 
   preStart = pkgs.writeScript "transmission-pre-start" ''
-#!${pkgs.stdenv.shell}
+#!${pkgs.runtimeShell}
 set -ex
-mkdir -p ${homeDir} ${settingsDir} ${fullSettings.download-dir} ${fullSettings.incomplete-dir}
 for DIR in ${homeDir} ${settingsDir} ${fullSettings.download-dir} ${fullSettings.incomplete-dir}; do
-  chmod 770 $DIR
+  mkdir -p "$DIR"
+  chmod 770 "$DIR"
 done
 cp -f ${settingsFile} ${settingsDir}/settings.json
 '';
