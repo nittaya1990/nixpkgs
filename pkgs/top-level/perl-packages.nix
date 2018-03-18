@@ -2349,6 +2349,21 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  ConfigIniFiles = buildPerlPackage rec {
+    name = "Config-IniFiles-2.94";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/${name}.tar.gz";
+      sha256 = "d6d38a416da79de874c5f1825221f22e972ad500b6527d190cc6e9ebc45194b4";
+    };
+    buildInputs = [ ModuleBuild perl ];
+    propagatedBuildInputs = [ IOstringy ];
+    meta = {
+      description = "A module for reading .ini-style configuration files";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.limeytexan ];
+    };
+  };
+
   ConfigMerge = buildPerlPackage {
     name = "Config-Merge-1.04";
     src = fetchurl {
@@ -11272,6 +11287,20 @@ let self = _self // overrides; _self = with self; {
     meta = {
       description = "Simple flexible means of converting the output of PHP's serialize() into the equivalent Perl memory structure, and vice versa";
       license = "unknown";
+    };
+  };
+
+  PkgConfig = buildPerlPackage rec {
+    name = "PkgConfig-0.19026";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PL/PLICEASE/${name}.tar.gz";
+      sha256 = "5cb6e934d29dd93e04c2fa779f4b7e51361edaf56957b47a232017a4bb7e922c";
+    };
+    meta = {
+      homepage = https://metacpan.org/pod/PkgConfig;
+      description = "Pure-Perl Core-Only replacement for pkg-config";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.limeytexan ];
     };
   };
 
