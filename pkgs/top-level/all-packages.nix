@@ -4359,6 +4359,8 @@ with pkgs;
 
   profile-sync-daemon = callPackage ../tools/misc/profile-sync-daemon { };
 
+  projectlibre = callPackage ../applications/misc/projectlibre { };
+
   projectm = callPackage ../applications/audio/projectm { };
 
   proot = callPackage ../tools/system/proot { };
@@ -19576,7 +19578,9 @@ with pkgs;
   });
 
   samtools = callPackage ../applications/science/biology/samtools/default.nix { };
-  samtools_0_1_19 = callPackage ../applications/science/biology/samtools/samtools_0_1_19.nix { };
+  samtools_0_1_19 = callPackage ../applications/science/biology/samtools/samtools_0_1_19.nix {
+    stdenv = gccStdenv;
+  };
 
   snpeff = callPackage ../applications/science/biology/snpeff/default.nix { };
 
@@ -19860,7 +19864,9 @@ with pkgs;
 
   saw-tools = callPackage ../applications/science/logic/saw-tools {};
 
-  spass = callPackage ../applications/science/logic/spass {};
+  spass = callPackage ../applications/science/logic/spass {
+    stdenv = gccStdenv;
+  };
 
   statverif = callPackage ../applications/science/logic/statverif { };
 
