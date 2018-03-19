@@ -1316,6 +1316,8 @@ with pkgs;
 
   mpdris2 = callPackage ../tools/audio/mpdris2 { };
 
+  mq-cli = callPackage ../tools/system/mq-cli { };
+
   nfdump = callPackage ../tools/networking/nfdump { };
 
   noteshrink = callPackage ../tools/misc/noteshrink { };
@@ -2927,6 +2929,7 @@ with pkgs;
             stdenv = llvmPackages_38.libcxxStdenv;
             libcxx = llvmPackages_38.libcxx;
             boost = boost160.override { inherit stdenv; };
+            avro-cpp_llvm = avro-cpp.override { inherit stdenv boost; };
           })
       irods
       irods-icommands;
@@ -5026,7 +5029,7 @@ with pkgs;
     extraFonts = true;
   };
 
-  texmaker = callPackage ../applications/editors/texmaker { };
+  texmaker = libsForQt5.callPackage ../applications/editors/texmaker { };
 
   texstudio = callPackage ../applications/editors/texstudio { };
 
@@ -5269,6 +5272,8 @@ with pkgs;
   vnc2flv = callPackage ../tools/video/vnc2flv {};
 
   vncrec = callPackage ../tools/video/vncrec { };
+
+  vo-amrwbenc = callPackage ../development/libraries/vo-amrwbenc { };
 
   vobcopy = callPackage ../tools/cd-dvd/vobcopy { };
 
@@ -7963,11 +7968,6 @@ with pkgs;
   nexus = callPackage ../development/tools/repository-managers/nexus { };
 
   nwjs = callPackage ../development/tools/nwjs {
-    gconf = pkgs.gnome2.GConf;
-  };
-
-  # only kept for zed, see https://github.com/NixOS/nixpkgs/issues/37361
-  nwjs_0_9 = callPackage ../development/tools/node-webkit/nw9.nix {
     gconf = pkgs.gnome2.GConf;
   };
 
@@ -12621,8 +12621,13 @@ with pkgs;
 
   postgresql_jdbc = callPackage ../servers/sql/postgresql/jdbc { };
 
+  inherit (callPackage ../servers/monitoring/prometheus {})
+      prometheus_1
+      prometheus_2
+      ;
+
   prom2json = callPackage ../servers/monitoring/prometheus/prom2json.nix { };
-  prometheus = callPackage ../servers/monitoring/prometheus { };
+  prometheus = prometheus_1;
   prometheus-alertmanager = callPackage ../servers/monitoring/prometheus/alertmanager.nix { };
   prometheus-bind-exporter = callPackage ../servers/monitoring/prometheus/bind-exporter.nix { };
   prometheus-blackbox-exporter = callPackage ../servers/monitoring/prometheus/blackbox-exporter.nix { };
@@ -15863,6 +15868,8 @@ with pkgs;
 
   quvi_scripts = callPackage ../applications/video/quvi/scripts.nix { };
 
+  rhvoice = callPackage ../applications/audio/rhvoice { };
+
   svox = callPackage ../applications/audio/svox { };
 
   gkrellm = callPackage ../applications/misc/gkrellm {
@@ -18048,9 +18055,7 @@ with pkgs;
 
   virt-viewer = callPackage ../applications/virtualization/virt-viewer { };
 
-  virt-top = callPackage ../applications/virtualization/virt-top {
-    ocamlPackages = ocamlPackages_4_01_0;
-  };
+  virt-top = callPackage ../applications/virtualization/virt-top { };
 
   virt-what = callPackage ../applications/virtualization/virt-what { };
 
@@ -18612,10 +18617,6 @@ with pkgs;
 
   zathura = callPackage ../applications/misc/zathura {
     useMupdf = config.zathura.useMupdf or true;
-  };
-
-  zed = callPackage ../applications/editors/zed {
-    node_webkit = nwjs_0_9;
   };
 
   zeroc_ice = callPackage ../development/libraries/zeroc-ice {
