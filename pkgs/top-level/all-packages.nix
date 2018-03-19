@@ -5454,6 +5454,8 @@ with pkgs;
 
   unarj = callPackage ../tools/archivers/unarj { };
 
+  unp = callPackage ../tools/archivers/unp { };
+
   unshield = callPackage ../tools/archivers/unshield { };
 
   unzip = callPackage ../tools/archivers/unzip { };
@@ -16976,6 +16978,8 @@ with pkgs;
   openjump = callPackage ../applications/misc/openjump { };
 
   openscad = callPackage ../applications/graphics/openscad {};
+
+  opentimestamps-client = python3Packages.callPackage ../tools/misc/opentimestamps-client {};
 
   opentx = callPackage ../applications/misc/opentx { };
 
