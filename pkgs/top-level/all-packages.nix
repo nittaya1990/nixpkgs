@@ -7960,17 +7960,17 @@ with pkgs;
 
   nexus = callPackage ../development/tools/repository-managers/nexus { };
 
-  node_webkit = node_webkit_0_9;
+  nwjs = callPackage ../development/tools/nwjs {
+    gconf = pkgs.gnome2.GConf;
+  };
 
+  # only kept for zed, see https://github.com/NixOS/nixpkgs/issues/37361
+  nwjs_0_9 = callPackage ../development/tools/node-webkit/nw9.nix {
+    gconf = pkgs.gnome2.GConf;
+  };
+
+  # only kept for nixui, see https://github.com/matejc/nixui/issues/27
   nwjs_0_12 = callPackage ../development/tools/node-webkit/nw12.nix {
-    gconf = pkgs.gnome2.GConf;
-  };
-
-  node_webkit_0_11 = callPackage ../development/tools/node-webkit/nw11.nix {
-    gconf = pkgs.gnome2.GConf;
-  };
-
-  node_webkit_0_9 = callPackage ../development/tools/node-webkit/nw9.nix {
     gconf = pkgs.gnome2.GConf;
   };
 
@@ -11655,6 +11655,8 @@ with pkgs;
   vaapiVdpau = callPackage ../development/libraries/vaapi-vdpau {
     libva = libva-full; # needs libva-{x11,glx}
   };
+
+  vale = callPackage ../tools/text/vale { };
 
   vamp = callPackage ../development/libraries/audio/vamp { };
 
@@ -18608,7 +18610,9 @@ with pkgs;
     useMupdf = config.zathura.useMupdf or true;
   };
 
-  zed = callPackage ../applications/editors/zed { };
+  zed = callPackage ../applications/editors/zed {
+    node_webkit = nwjs_0_9;
+  };
 
   zeroc_ice = callPackage ../development/libraries/zeroc-ice {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -19631,6 +19635,8 @@ with pkgs;
   liblapack_3_5_0 = liblapack_3_5_0WithAtlas;
 
   liblbfgs = callPackage ../development/libraries/science/math/liblbfgs { };
+
+  nasc = callPackage ../applications/science/math/nasc { };
 
   openblas = callPackage ../development/libraries/science/math/openblas { };
 
