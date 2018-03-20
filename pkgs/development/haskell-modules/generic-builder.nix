@@ -32,10 +32,11 @@ in
 , enableSharedLibraries ? ((ghc.isGhcjs or false) || stdenv.lib.versionOlder "7.7" ghc.version)
 , enableDeadCodeElimination ? (!stdenv.isDarwin)  # TODO: use -dead_strip for darwin
 , enableStaticLibraries ? true
+, enableHsc2hsViaAsm ? hostPlatform.isWindows && stdenv.lib.versionAtLeast ghc.version "8.4"
 , extraLibraries ? [], librarySystemDepends ? [], executableSystemDepends ? []
 , homepage ? "http://hackage.haskell.org/package/${pname}"
-, platforms ? ghc.meta.platforms
-, hydraPlatforms ? platforms
+, platforms ? with stdenv.lib.platforms; unix ++ windows # GHC can cross-compile
+, hydraPlatforms ? null
 , hyperlinkSource ? true
 , isExecutable ? false, isLibrary ? !isExecutable
 , jailbreak ? false
@@ -114,9 +115,13 @@ let
     "--with-ghc-pkg=${ghc.targetPrefix}ghc-pkg"
     "--with-gcc=${stdenv.cc.targetPrefix}cc"
     "--with-ld=${stdenv.cc.bintools.targetPrefix}ld"
-    "--with-hsc2hs=${nativeGhc}/bin/hsc2hs" # not cross one
+    # use the one that comes with the cross compiler.
+    "--with-hsc2hs=${ghc.targetPrefix}hsc2hs"
     "--with-strip=${stdenv.cc.bintools.targetPrefix}strip"
-  ] ++ (if isHaLVM then [] else ["--hsc2hs-options=--cross-compile"]);
+  ] ++ optionals (!isHaLVM) [
+    "--hsc2hs-option=--cross-compile"
+    (optionalString enableHsc2hsViaAsm "--hsc2hs-option=--via-asm")
+  ];
 
   crossCabalFlagsString =
     stdenv.lib.optionalString isCross (" " + stdenv.lib.concatStringsSep " " crossCabalFlags);
@@ -404,7 +409,7 @@ stdenv.mkDerivation ({
          // optionalAttrs broken               { inherit broken; }
          // optionalAttrs (description != "")  { inherit description; }
          // optionalAttrs (maintainers != [])  { inherit maintainers; }
-         // optionalAttrs (hydraPlatforms != platforms) { inherit hydraPlatforms; }
+         // optionalAttrs (hydraPlatforms != null) { inherit hydraPlatforms; }
          ;
 
 }

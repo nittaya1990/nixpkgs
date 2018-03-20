@@ -4925,6 +4925,8 @@ with pkgs;
 
   ssss = callPackage ../tools/security/ssss { };
 
+  stabber = callPackage ../misc/stabber { };
+
   stress = callPackage ../tools/system/stress { };
 
   stress-ng = callPackage ../tools/system/stress-ng { };

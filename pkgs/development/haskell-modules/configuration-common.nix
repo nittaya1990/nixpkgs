@@ -463,6 +463,11 @@ self: super: {
   # Test suite won't compile against tasty-hunit 0.9.x.
   zlib = dontCheck super.zlib;
 
+  # Test suite won't compile against tasty-hunit 0.10.x.
+  binary-parser = dontCheck super.binary-parser;
+  bytestring-strict-builder = dontCheck super.bytestring-strict-builder;
+  bytestring-tree-builder = dontCheck super.bytestring-tree-builder;
+
   # https://github.com/ndmitchell/shake/issues/206
   # https://github.com/ndmitchell/shake/issues/267
   shake = overrideCabal super.shake (drv: { doCheck = !pkgs.stdenv.isDarwin && false; });
@@ -999,14 +1004,5 @@ self: super: {
 
   # https://github.com/fpco/inline-c/issues/72
   inline-c = dontCheck super.inline-c;
-
-  # Avoid GHC compiler crash a la https://ghc.haskell.org/trac/ghc/ticket/5361.
-  SHA = appendPatch super.SHA (pkgs.fetchpatch {
-    url = https://github.com/GaloisInc/SHA/commit/c258350e953c3de2f98c5625ac3857f1a6863afc.patch;
-    sha256 = "1485bbjca1wqbh3c9yqj85kmq8j7zxq79y5isxypy3r6wjpr3g6b";
-  });
-
-  # https://github.com/Daniel-Diaz/matrix/issues/55
-  matrix_0_3_6_0 = dontCheck super.matrix_0_3_6_0;
 
 }
