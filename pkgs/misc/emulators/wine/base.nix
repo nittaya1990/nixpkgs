@@ -49,6 +49,7 @@ stdenv.mkDerivation ((lib.optionalAttrs (! isNull buildScript) {
   ++ lib.optional xineramaSupport        pkgs.xorg.libXinerama
   ++ lib.optional udevSupport            pkgs.udev
   ++ lib.optionals gstreamerSupport      (with pkgs.gst_all_1; [ gstreamer gst-plugins-base gst-plugins-good gst-libav ])
+  ++ lib.optionals gstreamerUnsafeSupport (with pkgs.gst_all_1; [ gst-plugins-bad gst-plugins-ugly ])
   ++ lib.optionals gtkSupport    [ pkgs.gtk3 pkgs.glib ]
   ++ lib.optionals openclSupport [ pkgs.opencl-headers pkgs.ocl-icd ]
   ++ lib.optionals xmlSupport    [ pkgs.libxml2 pkgs.libxslt ]

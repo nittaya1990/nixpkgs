@@ -8216,6 +8216,8 @@ with pkgs;
 
   texi2mdoc = callPackage ../tools/misc/texi2mdoc { };
 
+  todolist = callPackage ../applications/misc/todolist { };
+
   travis = callPackage ../development/tools/misc/travis { };
 
   tweak = callPackage ../applications/editors/tweak { };
@@ -17048,9 +17050,7 @@ with pkgs;
 
   ncpamixer = callPackage ../applications/audio/ncpamixer { };
 
-  pan = callPackage ../applications/networking/newsreaders/pan {
-    spellChecking = false;
-  };
+  pan = callPackage ../applications/networking/newsreaders/pan { };
 
   panotools = callPackage ../applications/graphics/panotools { };
 
@@ -19499,7 +19499,10 @@ with pkgs;
   };
 
   xfce = xfce4-12;
+  xfceUnstable = xfce4-13;
+
   xfce4-12 = recurseIntoAttrs (callPackage ../desktops/xfce { });
+  xfce4-13 = recurseIntoAttrs (callPackage ../desktops/xfce4-13 { });
 
   xrandr-invert-colors = callPackage ../applications/misc/xrandr-invert-colors { };
 
