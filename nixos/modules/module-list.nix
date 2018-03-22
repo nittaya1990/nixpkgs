@@ -363,6 +363,7 @@
   ./services/misc/rippled.nix
   ./services/misc/ripple-data-api.nix
   ./services/misc/rogue.nix
+  ./services/misc/serviio.nix
   ./services/misc/siproxd.nix
   ./services/misc/snapper.nix
   ./services/misc/sonarr.nix
@@ -631,7 +632,6 @@
   ./services/web-apps/atlassian/jira.nix
   ./services/web-apps/frab.nix
   ./services/web-apps/mattermost.nix
-  ./services/web-apps/nixbot.nix
   ./services/web-apps/nexus.nix
   ./services/web-apps/pgpkeyserver-lite.nix
   ./services/web-apps/matomo.nix
