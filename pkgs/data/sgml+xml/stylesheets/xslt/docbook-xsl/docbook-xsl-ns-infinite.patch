@@ -19,7 +19,6 @@ diff -ru docbook-xsl-ns-1.79.1/lib/lib.xsl docbook-xsl-ns-1.79.1-0/lib/lib.xsl
 @@ -58,6 +60,9 @@
    <xsl:param name="replacement"/>
 
->>>>>>> 2fa0290857caec64eb8197b4d7051ea722ceb2ce
    <xsl:choose>
 +    <xsl:when test="function-available('str:replace')">
 +      <xsl:value-of select="str:replace($string, string($target), string($replacement))"/>
