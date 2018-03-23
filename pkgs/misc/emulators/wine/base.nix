@@ -96,8 +96,6 @@ stdenv.mkDerivation ((lib.optionalAttrs (! isNull buildScript) {
 
   enableParallelBuilding = true;
 
-  patches = [ ./disable-i386-preloader.patch ];
-
   # https://bugs.winehq.org/show_bug.cgi?id=43530
   # https://github.com/NixOS/nixpkgs/issues/31989
   hardeningDisable = [ "bindnow" ];

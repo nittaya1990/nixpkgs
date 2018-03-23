@@ -5035,10 +5035,15 @@ with pkgs;
 
   tewisay = callPackage ../tools/misc/tewisay { };
 
-  texmacs = callPackage ../applications/editors/texmacs {
-    tex = texlive.combined.scheme-small;
-    extraFonts = true;
-  };
+  texmacs = if stdenv.isDarwin
+    then callPackage ../applications/editors/texmacs/darwin.nix {
+      inherit (darwin.apple_sdk.frameworks) CoreFoundation Cocoa;
+      tex = texlive.combined.scheme-small;
+      extraFonts = true;
+    } else callPackage ../applications/editors/texmacs {
+      tex = texlive.combined.scheme-small;
+      extraFonts = true;
+    };
 
   texmaker = libsForQt5.callPackage ../applications/editors/texmaker { };
 
@@ -8143,7 +8148,7 @@ with pkgs;
 
   shards = callPackage ../development/tools/build-managers/shards { };
 
-  shellcheck = haskell.lib.justStaticExecutables haskellPackages.ShellCheck;
+  shellcheck = haskellPackages.ShellCheck;
 
   schemaspy = callPackage ../development/tools/database/schemaspy { };
 
@@ -10934,6 +10939,7 @@ with pkgs;
   polkit_qt4 = callPackage ../development/libraries/polkit-qt-1/qt-4.nix { };
 
   poppler = callPackage ../development/libraries/poppler { lcms = lcms2; };
+  poppler_0_61 = callPackage ../development/libraries/poppler/0.61.nix { lcms = lcms2; };
 
   poppler_gi = lowPrio (poppler.override {
     introspectionSupport = true;
@@ -12460,7 +12466,6 @@ with pkgs;
   oauth2_proxy = callPackage ../servers/oauth2_proxy { };
 
   openafs = callPackage ../servers/openafs { tsmbac = null; ncurses = null; };
-  openpts = callPackage ../servers/openpts { };
 
   openresty = callPackage ../servers/http/openresty { };
 
@@ -15946,10 +15951,7 @@ with pkgs;
 
   grisbi = callPackage ../applications/office/grisbi { gtk = gtk2; };
 
-  gtkpod = callPackage ../applications/audio/gtkpod {
-    gnome = gnome3;
-    inherit (gnome2) libglade;
-  };
+  gtkpod = callPackage ../applications/audio/gtkpod { };
 
   jbidwatcher = callPackage ../applications/misc/jbidwatcher {
     java = if stdenv.isLinux then jre else jdk;
@@ -16076,6 +16078,20 @@ with pkgs;
 
   hyper = callPackage ../applications/misc/hyper { inherit (gnome2) GConf; };
   hyperterm = self.hyper;
+
+  hyper-haskell-server-with-packages = callPackage ../development/tools/haskell/hyper-haskell/server.nix {
+    inherit (haskellPackages) ghcWithPackages;
+    packages = self: with self; [];
+  };
+
+  hyper-haskell = callPackage ../development/tools/haskell/hyper-haskell {
+    hyper-haskell-server = hyper-haskell-server-with-packages.override {
+      packages = self: with self; [
+        hyper-extra diagrams csound-catalog
+      ];
+    };
+    extra-packages = [ csound ];
+  };
 
   jackline = callPackage ../applications/networking/instant-messengers/jackline { };
 
@@ -16310,7 +16326,7 @@ with pkgs;
     akonadi akregator ark dolphin ffmpegthumbs filelight gwenview k3b
     kaddressbook kate kcachegrind kcalc kcolorchooser kcontacts kdenlive kdf kdialog keditbookmarks
     kget kgpg khelpcenter kig kleopatra kmail kmix kolourpaint kompare konsole
-    kontact korganizer krdc krfb kwalletmanager marble minuet okteta okular spectacle;
+    kontact korganizer krdc krfb ksystemlog kwalletmanager marble minuet okteta okular spectacle;
 
   kdeconnect = libsForQt5.callPackage ../applications/misc/kdeconnect { };
 
@@ -16459,6 +16475,7 @@ with pkgs;
     inherit (gnome3) defaultIconTheme;
     zip = zip.override { enableNLS = false; };
     bluez5 = bluez5_28;
+    poppler = poppler_0_61;
     fontsConf = makeFontsConf {
       fontDirectories = [
         freefont_ttf xorg.fontmiscmisc
