@@ -3685,7 +3685,7 @@ with pkgs;
 
   mmake = callPackage ../tools/misc/mmake { };
 
-  modemmanager = callPackage ../tools/networking/modemmanager {};
+  modemmanager = callPackage ../tools/networking/modem-manager {};
 
   modsecurity_standalone = callPackage ../tools/security/modsecurity { };
 
@@ -3812,6 +3812,8 @@ with pkgs;
 
   ndisc6 = callPackage ../tools/networking/ndisc6 { };
 
+  neopg = callPackage ../tools/security/neopg { };
+
   netboot = callPackage ../tools/networking/netboot {};
 
   netcat = netcat-openbsd;
@@ -3838,8 +3840,6 @@ with pkgs;
   networkmanager-iodine = callPackage ../tools/networking/network-manager/iodine.nix { };
 
   networkmanager-openvpn = callPackage ../tools/networking/network-manager/openvpn.nix { };
-
-  networkmanager-pptp = callPackage ../tools/networking/network-manager/pptp.nix { };
 
   networkmanager-l2tp = callPackage ../tools/networking/network-manager/l2tp.nix { };
 
@@ -5569,6 +5569,8 @@ with pkgs;
 
   wrk = callPackage ../tools/networking/wrk { };
 
+  wrk2 = callPackage ../tools/networking/wrk2 { };
+
   wuzz = callPackage ../tools/networking/wuzz { };
 
   wv = callPackage ../tools/misc/wv { };
@@ -6431,6 +6433,8 @@ with pkgs;
 
   oraclejdk9 = pkgs.oraclejdk9distro "JDK" false;
 
+  oraclejdk10 = pkgs.oraclejdk10distro "JDK" false;
+
   oraclejre = lowPrio (pkgs.jdkdistro false false);
 
   oraclejre8 = lowPrio (pkgs.oraclejdk8distro false false);
@@ -6439,7 +6443,11 @@ with pkgs;
 
   oraclejre9 = lowPrio (pkgs.oraclejdk9distro "JRE" false);
 
+  oraclejre10 = lowPrio (pkgs.oraclejdk10distro "JRE" false);
+
   oracleserverjre9 = lowPrio (pkgs.oraclejdk9distro "ServerJRE" false);
+
+  oracleserverjre10 = lowPrio (pkgs.oraclejdk10distro "ServerJRE" false);
 
   jrePlugin = jre8Plugin;
 
@@ -6458,6 +6466,10 @@ with pkgs;
   oraclejdk9distro = packageType: pluginSupport:
     (if pluginSupport then appendToName "with-plugin" else x: x)
       (callPackage ../development/compilers/oraclejdk/jdk9-linux.nix { inherit packageType pluginSupport; });
+
+  oraclejdk10distro = packageType: pluginSupport:
+    (if pluginSupport then appendToName "with-plugin" else x: x)
+      (callPackage ../development/compilers/oraclejdk/jdk10-linux.nix { inherit packageType pluginSupport; });
 
   jikes = callPackage ../development/compilers/jikes { };
 
@@ -8249,6 +8261,8 @@ with pkgs;
     hurd = gnu.hurdCross;
     inherit (gnu) mig;
   };
+
+  jhiccup = callPackage ../development/tools/java/jhiccup { };
 
   valgrind = callPackage ../development/tools/analysis/valgrind {
     inherit (darwin) xnu bootstrap_cmds cctools;
