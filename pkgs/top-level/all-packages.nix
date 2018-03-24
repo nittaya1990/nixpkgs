@@ -17337,6 +17337,7 @@ with pkgs;
   qsampler = libsForQt5.callPackage ../applications/audio/qsampler { };
 
   qscreenshot = callPackage ../applications/graphics/qscreenshot {
+    inherit (darwin.apple_sdk.frameworks) Carbon;
     qt = qt4;
   };
 
