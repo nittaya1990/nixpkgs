@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "qscintilla";
-  version = "2.9.4";
+  version = "2.10.1";
 
   name = "${pname}-${if withQt5 then "qt5" else "qt4"}-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/pyqt/QScintilla2/QScintilla-${version}/QScintilla_gpl-${version}.zip";
-    sha256 = "04678skipydx68zf52vznsfmll2v9aahr66g50lcqbr6xsmgr1yi";
+    sha256 = "1ki8vkv2bx65y8lh23qklidzidcc59030w24494957kq0gldb5s4";
   };
 
   buildInputs = [ (if withQt5 then qtbase else qt4) ]
