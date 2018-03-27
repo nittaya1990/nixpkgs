@@ -14,6 +14,10 @@ let
   pythonBuildInputs = [ python3Packages.qscintilla python3Packages.gdal ] ++
                         (with python3Packages; [ jinja2 numpy psycopg2 pygments pyqt5 sip OWSLib six ]);
   version = "3.0.1";
+  src = fetchurl {
+    url = "http://qgis.org/downloads/qgis-${version}.tar.bz2";
+    sha256 = "1m24kjl784csbv0dgx1wbdwg8r92cpc1j718aaw85p7vgicm8acy";
+  };
   meta = {
     description = "User friendly Open Source Geographic Information System";
     homepage = http://www.qgis.org;
@@ -44,10 +48,7 @@ in rec {
         --replace 'pyqtcfg.pyqt_sip_dir' '"${python3Packages.pyqt5}/share/sip/PyQt5"'
     '';
 
-    src = fetchurl {
-      url = "http://qgis.org/downloads/qgis-${version}.tar.bz2";
-      sha256 = "1m24kjl784csbv0dgx1wbdwg8r92cpc1j718aaw85p7vgicm8acy";
-    };
+    inherit src;
 
     cmakeFlags = [ "-DPYQT5_SIP_DIR=${python3Packages.pyqt5}/share/sip/PyQt5"
                    "-DQSCI_SIP_DIR=${python3Packages.qscintilla}/share/sip/PyQt5" ] ++
@@ -65,13 +66,33 @@ in rec {
     pythonInputs = pythonBuildInputs ++
                    (with python3Packages; [ chardet dateutil pyyaml pytz requests urllib3 ] );
 
+    # use the source archive directly to avoid rebuilding when changing qgis distro
+    inherit src;
+
     postBuild = ''
+      unpackPhase
+
       buildPythonPath "$pythonInputs"
 
       wrapProgram $out/bin/qgis \
         --prefix PATH : $program_PATH \
         --prefix PYTHONPATH : $program_PYTHONPATH \
         --prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [ openssl ]}
+
+      # desktop link
+      mkdir -p $out/share/applications
+
+      sed "/^Exec=/c\Exec=$out/bin/qgis" \
+        < $sourceRoot/debian/qgis.desktop \
+        > $out/share/applications/qgis.desktop
+
+      # mime types
+      mkdir -p $out/share/mime/packages
+      cp $sourceRoot/debian/qgis.xml $out/share/mime/packages
+
+      # vector icon
+      mkdir -p $out/share/icons/hicolor/scalable/apps
+      cp $sourceRoot/images/icons/qgis_icon.svg $out/share/icons/hicolor/scalable/apps/qgis.svg
     '';
   };
 }
