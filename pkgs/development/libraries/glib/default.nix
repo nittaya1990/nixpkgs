@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
 
   patches = optional stdenv.isDarwin ./darwin-compilation.patch
     ++ optional doCheck ./skip-timer-test.patch
-    ++ [ ./schema-override-variable.patch ];
+    ++ [ ./schema-override-variable.patch ./revert-wakeup-perf-fix.patch ];
 
   outputs = [ "out" "dev" "devdoc" ];
   outputBin = "dev";
