@@ -48,9 +48,7 @@ in rec {
   staging = fetchFromGitHub rec {
     # https://github.com/wine-compholio/wine-staging/releases
     inherit (unstable) version;
-    # FIXME update winestaging sources, when 3.3 is released
-    # FIXME then revert the staging derivation in ./default.nix
-    sha256 = "0000000000000000000000000000000000000000000000000000000000000000";
+    sha256 = "11cdymdd0qf8khhrakzj7qz12gx19h2a30r8bimbx6rriqryhlc2";
     owner = "wine-staging";
     repo = "wine-staging";
     rev = "v${version}";

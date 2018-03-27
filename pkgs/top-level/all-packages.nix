@@ -941,7 +941,7 @@ with pkgs;
   caddy = callPackage ../servers/caddy { };
   traefik = callPackage ../servers/traefik { };
 
-  calamares = libsForQt59.callPackage ../tools/misc/calamares {
+  calamares = libsForQt5.callPackage ../tools/misc/calamares {
     python = python3;
     boost = pkgs.boost.override { python = python3; };
     libyamlcpp = callPackage ../development/libraries/libyaml-cpp { inherit boost; };
@@ -3236,6 +3236,8 @@ with pkgs;
 
   ltwheelconf = callPackage ../applications/misc/ltwheelconf { };
 
+  lvmsync = callPackage ../tools/backup/lvmsync { };
+
   kippo = callPackage ../servers/kippo { };
 
   kzipmix = callPackage_i686 ../tools/compression/kzipmix { };
@@ -3431,6 +3433,8 @@ with pkgs;
   libmesode = callPackage ../development/libraries/libmesode { };
 
   libnabo = callPackage ../development/libraries/libnabo { };
+
+  libngspice = callPackage ../development/libraries/libngspice { };
 
   libpointmatcher = callPackage ../development/libraries/libpointmatcher { };
 
@@ -5637,6 +5641,8 @@ with pkgs;
 
   xmlroff = callPackage ../tools/typesetting/xmlroff { };
 
+  xmloscopy = callPackage ../tools/text/xml/xmloscopy { };
+
   xmlstarlet = callPackage ../tools/text/xml/xmlstarlet { };
 
   xmlto = callPackage ../tools/typesetting/xmlto {
@@ -6361,6 +6367,7 @@ with pkgs;
       callPackage ../development/compilers/openjdk-darwin { }
     else
       callPackage ../development/compilers/openjdk/7.nix {
+        ant = apacheAnt_1_9;
         bootjdk = callPackage ../development/compilers/openjdk/bootstrap.nix { version = "7"; };
       };
 
@@ -6379,6 +6386,12 @@ with pkgs;
     # else
       callPackage ../development/compilers/openjdk/9.nix {
         bootjdk = openjdk8;
+        inherit (gnome2) GConf gnome_vfs;
+      };
+
+  openjdk10 =
+      callPackage ../development/compilers/openjdk/10.nix {
+        bootjdk = openjdk9;
         inherit (gnome2) GConf gnome_vfs;
       };
 
@@ -6891,8 +6904,7 @@ with pkgs;
   z88dk = callPackage ../development/compilers/z88dk { };
 
   zulu8 = callPackage ../development/compilers/zulu/8.nix { };
-  zulu9 = callPackage ../development/compilers/zulu { };
-  zulu = zulu9;
+  zulu = callPackage ../development/compilers/zulu { };
 
   ### DEVELOPMENT / INTERPRETERS
 
@@ -7418,6 +7430,8 @@ with pkgs;
   ant = apacheAnt;
 
   apacheAnt = callPackage ../development/tools/build-managers/apache-ant { };
+
+  apacheAnt_1_9 = callPackage ../development/tools/build-managers/apache-ant/1.9.nix { };
 
   apacheKafka = apacheKafka_1_0;
   apacheKafka_0_9 = callPackage ../servers/apache-kafka { majorVersion = "0.9"; };
@@ -8160,7 +8174,7 @@ with pkgs;
 
   shards = callPackage ../development/tools/build-managers/shards { };
 
-  shellcheck = haskellPackages.ShellCheck;
+  shellcheck = haskell.lib.justStaticExecutables haskellPackages.ShellCheck;
 
   schemaspy = callPackage ../development/tools/database/schemaspy { };
 
@@ -8215,7 +8229,9 @@ with pkgs;
 
   swfmill = callPackage ../tools/video/swfmill { };
 
-  swftools = callPackage ../tools/video/swftools { };
+  swftools = callPackage ../tools/video/swftools {
+    stdenv = gccStdenv;
+  };
 
   tcptrack = callPackage ../development/tools/misc/tcptrack { };
 
@@ -10820,6 +10836,7 @@ with pkgs;
 
   opal = callPackage ../development/libraries/opal {
     ffmpeg = ffmpeg_2;
+    stdenv = overrideCC stdenv gcc6;
   };
 
   openh264 = callPackage ../development/libraries/openh264 { };
@@ -11009,7 +11026,8 @@ with pkgs;
 
   flatbuffers = callPackage ../development/libraries/flatbuffers { };
 
-  pth = callPackage ../development/libraries/pth { };
+  gnupth = callPackage ../development/libraries/pth { };
+  pth = if stdenv.hostPlatform.isMusl then npth else gnupth;
 
   ptlib = callPackage ../development/libraries/ptlib {};
 
@@ -13234,7 +13252,9 @@ with pkgs;
 
   kmscube = callPackage ../os-specific/linux/kmscube { };
 
-  kmsxx = callPackage ../development/libraries/kmsxx { };
+  kmsxx = callPackage ../development/libraries/kmsxx {
+    stdenv = overrideCC stdenv gcc6;
+  };
 
   latencytop = callPackage ../os-specific/linux/latencytop { };
 
@@ -14209,6 +14229,8 @@ with pkgs;
 
   docbook5_xsl = docbook_xsl_ns;
 
+  documentation-highlighter = callPackage ../misc/documentation-highlighter { };
+
   cabin = callPackage ../data/fonts/cabin { };
 
   camingo-code = callPackage ../data/fonts/camingo-code { };
@@ -14658,7 +14680,9 @@ with pkgs;
     stdenv = overrideCC stdenv gcc49;
   };
 
-  ahoviewer = callPackage ../applications/graphics/ahoviewer { };
+  ahoviewer = callPackage ../applications/graphics/ahoviewer {
+    useUnrar = config.ahoviewer.useUnrar or false;
+  };
 
   airwave = callPackage ../applications/audio/airwave/default.nix { };
 
@@ -20569,7 +20593,7 @@ with pkgs;
     pcre = pcre-cpp;
   });
 
-  redis-desktop-manager = libsForQt59.callPackage ../applications/misc/redis-desktop-manager { };
+  redis-desktop-manager = libsForQt5.callPackage ../applications/misc/redis-desktop-manager { };
 
   robo3t = callPackage ../applications/misc/robo3t { };
 
