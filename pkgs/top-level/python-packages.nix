@@ -10061,26 +10061,7 @@ in {
     };
   };
 
-  OWSLib = buildPythonPackage rec {
-    pname = "OWSLib";
-    version = "0.16.0";
-    name = "${pname}-${version}";
-
-    src = self.fetchPypi {
-      inherit pname version;
-      sha256 = "0m05225g1sqd2i8r2riaan33953hfni9wjq7n225snhl7klsb5gc";
-    };
-
-    buildInputs = with self; [ dateutil pep8 pillow pyproj pytz pytest pytestcov requests tox ];
-
-    doCheck = false;
-
-    meta = {
-      description = "Client programming with Open Geospatial Consortium (OGC) web service.";
-      license = licenses.bsd3;
-      homepage = "http://geopython.github.io/OWSLib/";
-    };
-  };
+  OWSLib = callPackage ../development/python-modules/OWSLib { };
 
   pint = buildPythonPackage rec {
     name = "pint-${version}";
