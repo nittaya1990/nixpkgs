@@ -6,10 +6,6 @@
 , withGrass ? true, grass
 }:
 with lib;
-#let pythonBuildInputs = [ python3Packages.qscintilla python3Packages.gdal ] ++
-#                        (with python3Packages; [ jinja2 numpy psycopg2 pygments requests sip OWSLib six ]);
-#    pythonInputs = pythonBuildInputs ++ [ python3Packages.gdal ] ++
-#                   (with python3Packages; [ jinja2 numpy psycopg2 pygments requests sip OWSLib six ]);
 let
   pythonBuildInputs = [ python3Packages.qscintilla python3Packages.gdal ] ++
                         (with python3Packages; [ jinja2 numpy psycopg2 pygments pyqt5 sip OWSLib six ]);
@@ -37,12 +33,16 @@ in rec {
 
     nativeBuildInputs = [ cmake ];
 
-    # To handle the lack of 'local' RPATH; required, as they call one of
-    # their built binaries requiring their libs, in the build process.
+    # Build processes depend on the built libraries. Extend
+    # LD_LIBRARY_PATH as required.
     preConfigure = ''
       export LD_LIBRARY_PATH=`pwd`/build/output/lib:${stdenv.lib.makeLibraryPath [ openssl ]}$LD_LIBRARY_PATH
     '';
 
+    # Force this pyqt_sip_dir variable to point to the sip dir in PyQt5
+    #
+    # TODO: Correct PyQt5 to provide the expected directory and fix
+    # build to use PYQT5_SIP_DIR consistently.
     postPatch = ''
       substituteInPlace cmake/FindPyQt5.py \
         --replace 'pyqtcfg.pyqt_sip_dir' '"${python3Packages.pyqt5}/share/sip/PyQt5"'
