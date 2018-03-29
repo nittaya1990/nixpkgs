@@ -14041,59 +14041,17 @@ in {
   # alias for an older package which did not support Python 3
   Quandl = callPackage ../development/python-modules/quandl { };
 
-  qscintilla = disabledIf isPyPy (buildPythonPackage (
-    let base = rec {
-      name = "qscintilla-${version}";
-      version = pkgs.qscintilla.version;
-      format = "other";
-      src = pkgs.qscintilla.src;
-
-      meta = with stdenv.lib; {
-        description = "A Python binding to QScintilla, Qt based text editing control";
-        license = licenses.lgpl21Plus;
-        maintainers = with maintainers; [ danbst ];
-        platforms = platforms.linux;
-      };
-    };
-    in if isPy3k
-    then base // {
-      buildInputs = with self; [ pkgs.xorg.lndir pyqt5 pkgs.qt5.qtbase ];
-      propagatedBuildInputs = [ pkgs.libsForQt5.qscintilla ];
-
-      patches = [ ./qscintilla-pyqt5-widgets.patch ];
-
-      preConfigure = ''
-        mkdir -p $out
-        lndir ${self.pyqt5} $out
-        rm -rf "$out/nix-support"
-        cd Python
-        ${python.executable} ./configure.py \
-            --pyqt=PyQt5 \
-            --destdir=$out/lib/${python.libPrefix}/site-packages/PyQt5 \
-            --stubsdir=$out/lib/${python.libPrefix}/site-packages/PyQt5 \
-            --apidir=$out/api/${python.libPrefix} \
-            --qsci-incdir=${pkgs.libsForQt5.qscintilla}/include \
-            --qsci-libdir=${pkgs.libsForQt5.qscintilla}/lib \
-            --pyqt-sipdir=${self.pyqt5}/share/sip/PyQt5 \
-            --qsci-sipdir=$out/share/sip/PyQt5
-      '';
-    }
-    else base // {
-      buildInputs = with self; [ pkgs.xorg.lndir pyqt4.qt pyqt4 ];
-
-      preConfigure = ''
-        mkdir -p $out
-        lndir ${self.pyqt4} $out
-        rm -rf "$out/nix-support"
-        cd Python
-        ${python.executable} ./configure-old.py \
-            --destdir $out/lib/${python.libPrefix}/site-packages/PyQt4 \
-            --apidir $out/api/${python.libPrefix} \
-            -n ${pkgs.qscintilla}/include \
-            -o ${pkgs.qscintilla}/lib \
-            --sipdir $out/share/sip
-      '';
-    }));
+  qscintilla =
+    if isPy3k then
+      callPackage ../development/python-modules/qscintilla/py3k.nix {
+        lndir = pkgs.xorg.lndir;
+      }
+    else disabledIf isPyPy (
+      callPackage ../development/python-modules/qscintilla {
+        qscintillaCpp = pkgs.qscintilla;
+        lndir = pkgs.xorg.lndir;
+      }
+    );
 
   qserve = buildPythonPackage rec {
     name = "qserve-0.2.8";
