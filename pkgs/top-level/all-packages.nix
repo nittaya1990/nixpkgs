@@ -14675,7 +14675,6 @@ with pkgs;
   };
 
   abiword = callPackage ../applications/office/abiword {
-    inherit (gnome2) libglade libgnomecanvas;
     iconTheme = gnome3.defaultIconTheme;
   };
 
