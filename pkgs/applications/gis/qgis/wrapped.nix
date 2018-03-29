@@ -1,20 +1,20 @@
 { stdenv, lib, fetchurl, openssl, python3Packages, makeWrapper, symlinkJoin
-, qgis-unwrapped
+, qgis3-unwrapped
 }:
 with lib;
 symlinkJoin rec {
-  inherit (qgis-unwrapped) version;
+  inherit (qgis3-unwrapped) version;
   name = "qgis-${version}";
 
-  paths = [ qgis-unwrapped ];
+  paths = [ qgis3-unwrapped ];
 
   nativeBuildInputs = [ makeWrapper python3Packages.wrapPython ];
 
-  pythonInputs = qgis-unwrapped.pythonBuildInputs ++
-                 (with python3Packages; [ chardet dateutil pyyaml pytz requests urllib3 ] );
+  # extend to add to the python environment of QGIS without rebuilding QGIS application.
+  pythonInputs = qgis3-unwrapped.pythonBuildInputs;
 
   # use the source archive directly to avoid rebuilding when changing qgis distro
-  inherit (qgis-unwrapped) src;
+  inherit (qgis3-unwrapped) src;
 
   postBuild = ''
     unpackPhase
@@ -23,8 +23,7 @@ symlinkJoin rec {
 
     wrapProgram $out/bin/qgis \
       --prefix PATH : $program_PATH \
-      --prefix PYTHONPATH : $program_PYTHONPATH \
-      --prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [ openssl ]}
+      --set PYTHONPATH $program_PYTHONPATH
 
     # desktop link
     mkdir -p $out/share/applications
