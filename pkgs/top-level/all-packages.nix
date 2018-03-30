@@ -15676,6 +15676,8 @@ with pkgs;
     gtk2 = gtk2-x11;
   };
 
+  gpx = callPackage ../applications/misc/gpx { };
+
   gqrx = qt5.callPackage ../applications/misc/gqrx { };
 
   gpx-viewer = callPackage ../applications/misc/gpx-viewer { };
