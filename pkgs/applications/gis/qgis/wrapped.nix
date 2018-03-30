@@ -2,11 +2,7 @@
 , qgis3-unwrapped
 }:
 with lib;
-let
-  # the python packages that should be included in the PYTHONPATH
-  pythonInputs = with python3Packages;
-    qgis3-unwrapped.pythonBuildInputs ++ [ chardet dateutil pyyaml pytz requests urllib3 ];
-in symlinkJoin rec {
+symlinkJoin rec {
   inherit (qgis3-unwrapped) version;
   name = "qgis-${version}";
 
@@ -14,7 +10,8 @@ in symlinkJoin rec {
 
   nativeBuildInputs = [ makeWrapper python3Packages.wrapPython ];
 
-  inherit pythonInputs;
+  # extend to add to the python environment of QGIS without rebuilding QGIS application.
+  pythonInputs = qgis3-unwrapped.pythonBuildInputs;
 
   # use the source archive directly to avoid rebuilding when changing qgis distro
   inherit (qgis3-unwrapped) src;

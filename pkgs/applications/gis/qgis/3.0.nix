@@ -7,7 +7,8 @@
 with lib;
 let
   pythonBuildInputs = with python3Packages;
-    [ python3Packages.qscintilla gdal jinja2 numpy psycopg2 pygments pyqt5 sip OWSLib six ];
+    [ python3Packages.qscintilla gdal jinja2 numpy psycopg2
+      chardet dateutil pyyaml pytz requests urllib3 pygments pyqt5 sip OWSLib six ];
 in stdenv.mkDerivation rec {
   version = "3.0.1";
   name = "qgis-unwrapped-${version}";
