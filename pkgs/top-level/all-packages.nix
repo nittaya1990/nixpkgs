@@ -7681,6 +7681,10 @@ with pkgs;
 
   cppcheck = callPackage ../development/tools/analysis/cppcheck { };
 
+  cquery = callPackage ../development/tools/misc/cquery {
+    llvmPackages = llvmPackages_6;
+  };
+
   creduce = callPackage ../development/tools/misc/creduce {
     inherit (perlPackages) perl
       ExporterLite FileWhich GetoptTabular RegexpCommon TermReadKey;
@@ -17365,7 +17369,15 @@ with pkgs;
 
   qemu-riscv = callPackage ../applications/virtualization/qemu/riscv.nix {};
 
-  qgis = callPackage ../applications/gis/qgis {};
+  qgis3-unwrapped = libsForQt5.callPackage ../applications/gis/qgis/3.0.nix {
+    postgresql = postgresql100;
+  };
+
+  qgis3 = callPackage ../applications/gis/qgis/wrapped.nix {};
+
+  qgis2 = callPackage ../applications/gis/qgis {};
+
+  qgis = qgis2;
 
   qgroundcontrol = libsForQt5.callPackage ../applications/science/robotics/qgroundcontrol { };
 

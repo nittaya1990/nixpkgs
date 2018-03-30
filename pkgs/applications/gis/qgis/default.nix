@@ -1,41 +1,47 @@
-{ stdenv, fetchurl, fetchpatch, gdal, cmake, qt4, flex, bison, proj, geos, xlibsWrapper, sqlite, gsl
-, qwt, fcgi, python2Packages, libspatialindex, libspatialite, qscintilla, postgresql, makeWrapper
-, qjson, qca2, txt2tags, openssl
-, withGrass ? false, grass
+{ stdenv, lib, fetchurl, cmake, flex, bison, proj, geos, xlibsWrapper, sqlite, gsl
+, qwt, fcgi, python3Packages, libspatialindex, libspatialite, postgresql
+, qjson, txt2tags, openssl, libzip
+, qtbase, qtwebkit, qtsensors, qca-qt5, qtkeychain, qscintilla
+, withGrass ? true, grass
 }:
-
+with lib;
 stdenv.mkDerivation rec {
-  name = "qgis-2.18.17";
-
-  buildInputs = [ gdal qt4 flex openssl bison proj geos xlibsWrapper sqlite gsl qwt qscintilla
-    fcgi libspatialindex libspatialite postgresql qjson qca2 txt2tags ] ++
-    (stdenv.lib.optional withGrass grass) ++
-    (with python2Packages; [ jinja2 numpy psycopg2 pygments requests python2Packages.qscintilla sip ]);
-
-  nativeBuildInputs = [ cmake makeWrapper ];
-
-  # `make -f src/providers/wms/CMakeFiles/wmsprovider_a.dir/build.make src/providers/wms/CMakeFiles/wmsprovider_a.dir/qgswmssourceselect.cpp.o`:
-  # fatal error: ui_qgsdelimitedtextsourceselectbase.h: No such file or directory
-  enableParallelBuilding = false;
-
-  # To handle the lack of 'local' RPATH; required, as they call one of
-  # their built binaries requiring their libs, in the build process.
-  preBuild = ''
-    export LD_LIBRARY_PATH=`pwd`/output/lib:${stdenv.lib.makeLibraryPath [ openssl ]}:$LD_LIBRARY_PATH
-  '';
+  version = "3.0.1";
+  name = "qgis-unwrapped-${version}";
 
   src = fetchurl {
-    url = "http://qgis.org/downloads/${name}.tar.bz2";
-    sha256 = "1nxwl5lwibbiz9v3qaw3px7iyxg113zr4j8d99yj07mhk2ap082y";
+    url = "http://qgis.org/downloads/qgis-${version}.tar.bz2";
+    sha256 = "1m24kjl784csbv0dgx1wbdwg8r92cpc1j718aaw85p7vgicm8acy";
   };
 
-  cmakeFlags = stdenv.lib.optional withGrass "-DGRASS_PREFIX7=${grass}/${grass.name}";
+  pythonBuildInputs = [ python3Packages.qscintilla python3Packages.gdal ] ++
+                        (with python3Packages; [ jinja2 numpy psycopg2 pygments pyqt5 sip OWSLib six ]);
 
-  postInstall = ''
-    wrapProgram $out/bin/qgis \
-      --prefix PYTHONPATH : $PYTHONPATH \
-      --prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [ openssl ]}
+  buildInputs = [ flex openssl bison proj geos xlibsWrapper sqlite gsl qwt
+    fcgi libspatialindex libspatialite postgresql qjson txt2tags libzip
+    qtbase qtwebkit qtsensors qca-qt5 qtkeychain qscintilla ] ++
+    (stdenv.lib.optional withGrass grass) ++ pythonBuildInputs;
+
+  nativeBuildInputs = [ cmake ];
+
+  # Build processes depend on the built libraries. Extend
+  # LD_LIBRARY_PATH as required.
+  preConfigure = ''
+    export LD_LIBRARY_PATH=`pwd`/build/output/lib:${stdenv.lib.makeLibraryPath [ openssl ]}$LD_LIBRARY_PATH
   '';
+
+  # Force this pyqt_sip_dir variable to point to the sip dir in PyQt5
+  #
+  # TODO: Correct PyQt5 to provide the expected directory and fix
+  # build to use PYQT5_SIP_DIR consistently.
+  postPatch = ''
+    substituteInPlace cmake/FindPyQt5.py \
+      --replace 'pyqtcfg.pyqt_sip_dir' '"${python3Packages.pyqt5}/share/sip/PyQt5"'
+  '';
+
+  cmakeFlags = [ "-DPYQT5_SIP_DIR=${python3Packages.pyqt5}/share/sip/PyQt5"
+                  "-DQSCI_SIP_DIR=${python3Packages.qscintilla}/share/sip/PyQt5" ] ++
+            stdenv.lib.optional withGrass "-DGRASS_PREFIX7=${grass}/${grass.name}";
 
   meta = {
     description = "User friendly Open Source Geographic Information System";
