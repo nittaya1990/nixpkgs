@@ -572,6 +572,11 @@
     github = "bergey";
     name = "Daniel Bergey";
   };
+  bgamari = {
+    email = "ben@smart-cactus.org";
+    github = "bgamari";
+    name = "Ben Gamari";
+  };
   bhipple = {
     email = "bhipple@protonmail.com";
     github = "bhipple";
@@ -3580,6 +3585,11 @@
     email = "phil@grmr.de";
     github = "tnias";
     name = "Philipp Bartsch";
+  };
+  tobim = {
+    email = "nix@tobim.fastmail.fm";
+    github = "tobimpub";
+    name = "Tobias Mayer";
   };
   tohl = {
     email = "tom@logand.com";

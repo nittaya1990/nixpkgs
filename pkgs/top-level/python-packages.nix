@@ -424,6 +424,8 @@ in {
 
   tokenserver = callPackage ../development/python-modules/tokenserver {};
 
+  toml = callPackage ../development/python-modules/toml { };
+
   unifi = callPackage ../development/python-modules/unifi { };
 
   pyunbound = callPackage ../tools/networking/unbound/python.nix { };
@@ -779,7 +781,7 @@ in {
 
     meta = {
       description = "Microsoft Azure SDK for Python";
-      homepage = "http://azure.microsoft.com/en-us/develop/python/";
+      homepage = "https://azure.microsoft.com/en-us/develop/python/";
       license = licenses.asl20;
       maintainers = with maintainers; [ olcai ];
     };
@@ -794,7 +796,7 @@ in {
     };
     meta = {
       description = "Microsoft Azure SDK for Python";
-      homepage = "http://azure.microsoft.com/en-us/develop/python/";
+      homepage = "https://azure.microsoft.com/en-us/develop/python/";
       license = licenses.asl20;
       maintainers = with maintainers; [ olcai ];
     };
@@ -814,7 +816,7 @@ in {
     '';
     meta = {
       description = "Microsoft Azure SDK for Python";
-      homepage = "http://azure.microsoft.com/en-us/develop/python/";
+      homepage = "https://azure.microsoft.com/en-us/develop/python/";
       license = licenses.asl20;
       maintainers = with maintainers; [ olcai ];
     };
@@ -834,7 +836,7 @@ in {
     '';
     meta = {
       description = "Microsoft Azure SDK for Python";
-      homepage = "http://azure.microsoft.com/en-us/develop/python/";
+      homepage = "https://azure.microsoft.com/en-us/develop/python/";
       license = licenses.asl20;
       maintainers = with maintainers; [ olcai ];
     };
@@ -859,7 +861,7 @@ in {
     propagatedBuildInputs = with self; [ azure-mgmt-common ];
     meta = {
       description = "Microsoft Azure SDK for Python";
-      homepage = "http://azure.microsoft.com/en-us/develop/python/";
+      homepage = "https://azure.microsoft.com/en-us/develop/python/";
       license = licenses.asl20;
       maintainers = with maintainers; [ olcai ];
     };
@@ -884,7 +886,7 @@ in {
     propagatedBuildInputs = with self; [ azure-mgmt-common ];
     meta = {
       description = "Microsoft Azure SDK for Python";
-      homepage = "http://azure.microsoft.com/en-us/develop/python/";
+      homepage = "https://azure.microsoft.com/en-us/develop/python/";
       license = licenses.asl20;
       maintainers = with maintainers; [ olcai ];
     };
@@ -900,7 +902,7 @@ in {
     propagatedBuildInputs = with self; [ azure-nspkg ];
     meta = {
       description = "Microsoft Azure SDK for Python";
-      homepage = "http://azure.microsoft.com/en-us/develop/python/";
+      homepage = "https://azure.microsoft.com/en-us/develop/python/";
       license = licenses.asl20;
       maintainers = with maintainers; [ olcai ];
     };
@@ -925,7 +927,7 @@ in {
     propagatedBuildInputs = with self; [ azure-mgmt-common ];
     meta = {
       description = "Microsoft Azure SDK for Python";
-      homepage = "http://azure.microsoft.com/en-us/develop/python/";
+      homepage = "https://azure.microsoft.com/en-us/develop/python/";
       license = licenses.asl20;
       maintainers = with maintainers; [ olcai ];
     };
@@ -950,7 +952,7 @@ in {
     propagatedBuildInputs = with self; [ azure-mgmt-common ];
     meta = {
       description = "Microsoft Azure SDK for Python";
-      homepage = "http://azure.microsoft.com/en-us/develop/python/";
+      homepage = "https://azure.microsoft.com/en-us/develop/python/";
       license = licenses.asl20;
       maintainers = with maintainers; [ olcai ];
     };
@@ -969,7 +971,7 @@ in {
     '';
     meta = {
       description = "Microsoft Azure SDK for Python";
-      homepage = "http://azure.microsoft.com/en-us/develop/python/";
+      homepage = "https://azure.microsoft.com/en-us/develop/python/";
       license = licenses.asl20;
       maintainers = with maintainers; [ olcai ];
     };
@@ -988,7 +990,7 @@ in {
     '';
     meta = {
       description = "Microsoft Azure SDK for Python";
-      homepage = "http://azure.microsoft.com/en-us/develop/python/";
+      homepage = "https://azure.microsoft.com/en-us/develop/python/";
       license = licenses.asl20;
       maintainers = with maintainers; [ olcai ];
     };
@@ -1754,7 +1756,7 @@ in {
 
     meta = {
       description = "Python bindings for Oracle Berkeley DB";
-      homepage = http://www.jcea.es/programacion/pybsddb.htm;
+      homepage = https://www.jcea.es/programacion/pybsddb.htm;
       license = with licenses; [ agpl3 ]; # License changed from bsd3 to agpl3 since 6.x
     };
   };
@@ -1865,7 +1867,7 @@ in {
     doCheck = false;
 
     meta = {
-      homepage =  http://github.com/ralphbean/bugwarrior;
+      homepage =  https://github.com/ralphbean/bugwarrior;
       description = "Sync github, bitbucket, bugzilla, and trac issues with taskwarrior";
       license = licenses.gpl3Plus;
       platforms = platforms.all;
@@ -4694,7 +4696,7 @@ in {
 
     meta = {
       description = "A small Gtk+ app for keeping track of your time. It's main goal is to be as unintrusive as possible";
-      homepage = http://mg.pov.lt/gtimelog/;
+      homepage = https://mg.pov.lt/gtimelog/;
       license = licenses.gpl2Plus;
       maintainers = with maintainers; [ ocharles ];
       platforms = platforms.unix;
@@ -5511,7 +5513,7 @@ in {
 
     meta = {
       description = "PAM interface using ctypes";
-      homepage = "http://github.com/minrk/pamela";
+      homepage = "https://github.com/minrk/pamela";
       license = licenses.mit;
     };
   };
@@ -5560,7 +5562,7 @@ in {
 
     meta = {
       description = "A Python-based build/distribution/deployment scripting tool";
-      homepage    = http://github.com/paver/paver;
+      homepage    = https://github.com/paver/paver;
       maintainers = with maintainers; [ lovek323 ];
       platforms   = platforms.unix;
     };
@@ -7639,7 +7641,7 @@ in {
 
     meta = {
       description = "Filesystem abstraction";
-      homepage    = http://pypi.python.org/pypi/fs;
+      homepage    = https://pypi.python.org/pypi/fs;
       license     = licenses.bsd3;
       maintainers = with maintainers; [ lovek323 ];
       platforms   = platforms.unix;
@@ -8088,6 +8090,8 @@ in {
 
   google_gax = callPackage ../development/python-modules/google_gax { };
 
+  gpgme = toPythonModule (pkgs.gpgme.override { withPython=true; });
+
   grammalecte = callPackage ../development/python-modules/grammalecte { };
 
   greenlet = buildPythonPackage rec {
@@ -8397,7 +8401,7 @@ in {
     '';
 
     meta = {
-      homepage = "http://falcao.it/HTTPretty/";
+      homepage = "https://falcao.it/HTTPretty/";
       description = "HTTP client request mocking tool";
       license = licenses.mit;
     };
@@ -8837,7 +8841,7 @@ in {
 
     meta = {
       description = "Messaging library for Python";
-      homepage    = "http://github.com/celery/kombu";
+      homepage    = "https://github.com/celery/kombu";
       license     = licenses.bsd3;
     };
   };
@@ -9075,7 +9079,7 @@ in {
     '';
 
     meta = {
-      homepage = http://launchpad.net/pylockfile;
+      homepage = https://launchpad.net/pylockfile;
       description = "Platform-independent advisory file locking capability for Python applications";
       license = licenses.asl20;
     };
@@ -10061,26 +10065,7 @@ in {
     };
   };
 
-  OWSLib = buildPythonPackage rec {
-    pname = "OWSLib";
-    version = "0.16.0";
-    name = "${pname}-${version}";
-
-    src = self.fetchPypi {
-      inherit pname version;
-      sha256 = "0m05225g1sqd2i8r2riaan33953hfni9wjq7n225snhl7klsb5gc";
-    };
-
-    buildInputs = with self; [ dateutil pep8 pillow pyproj pytz pytest pytestcov requests tox ];
-
-    doCheck = false;
-
-    meta = {
-      description = "Client programming with Open Geospatial Consortium (OGC) web service.";
-      license = licenses.bsd3;
-      homepage = "http://geopython.github.io/OWSLib/";
-    };
-  };
+  OWSLib = callPackage ../development/python-modules/OWSLib { };
 
   pint = buildPythonPackage rec {
     name = "pint-${version}";
@@ -10403,7 +10388,7 @@ in {
     };
 
     meta = {
-      homepage = http://alastairs-place.net/projects/netifaces/;
+      homepage = https://alastairs-place.net/projects/netifaces/;
       description = "Portable access to network interfaces from Python";
     };
   };
@@ -10957,7 +10942,7 @@ in {
 
     meta = {
       description = "Draws Python object reference graphs with graphviz";
-      homepage = http://mg.pov.lt/objgraph/;
+      homepage = https://mg.pov.lt/objgraph/;
       license = licenses.mit;
     };
   };
@@ -14060,59 +14045,17 @@ in {
   # alias for an older package which did not support Python 3
   Quandl = callPackage ../development/python-modules/quandl { };
 
-  qscintilla = disabledIf isPyPy (buildPythonPackage (
-    let base = rec {
-      name = "qscintilla-${version}";
-      version = pkgs.qscintilla.version;
-      format = "other";
-      src = pkgs.qscintilla.src;
-
-      meta = with stdenv.lib; {
-        description = "A Python binding to QScintilla, Qt based text editing control";
-        license = licenses.lgpl21Plus;
-        maintainers = with maintainers; [ danbst ];
-        platforms = platforms.linux;
-      };
-    };
-    in if isPy3k
-    then base // {
-      buildInputs = with self; [ pkgs.xorg.lndir pyqt5 pkgs.qt5.qtbase ];
-      propagatedBuildInputs = [ pkgs.libsForQt5.qscintilla ];
-
-      patches = [ ./qscintilla-pyqt5-widgets.patch ];
-
-      preConfigure = ''
-        mkdir -p $out
-        lndir ${self.pyqt5} $out
-        rm -rf "$out/nix-support"
-        cd Python
-        ${python.executable} ./configure.py \
-            --pyqt=PyQt5 \
-            --destdir=$out/lib/${python.libPrefix}/site-packages/PyQt5 \
-            --stubsdir=$out/lib/${python.libPrefix}/site-packages/PyQt5 \
-            --apidir=$out/api/${python.libPrefix} \
-            --qsci-incdir=${pkgs.libsForQt5.qscintilla}/include \
-            --qsci-libdir=${pkgs.libsForQt5.qscintilla}/lib \
-            --pyqt-sipdir=${self.pyqt5}/share/sip/PyQt5 \
-            --qsci-sipdir=$out/share/sip/PyQt5
-      '';
-    }
-    else base // {
-      buildInputs = with self; [ pkgs.xorg.lndir pyqt4.qt pyqt4 ];
-
-      preConfigure = ''
-        mkdir -p $out
-        lndir ${self.pyqt4} $out
-        rm -rf "$out/nix-support"
-        cd Python
-        ${python.executable} ./configure-old.py \
-            --destdir $out/lib/${python.libPrefix}/site-packages/PyQt4 \
-            --apidir $out/api/${python.libPrefix} \
-            -n ${pkgs.qscintilla}/include \
-            -o ${pkgs.qscintilla}/lib \
-            --sipdir $out/share/sip
-      '';
-    }));
+  qscintilla =
+    if isPy3k then
+      callPackage ../development/python-modules/qscintilla/py3k.nix {
+        lndir = pkgs.xorg.lndir;
+      }
+    else disabledIf isPyPy (
+      callPackage ../development/python-modules/qscintilla {
+        qscintillaCpp = pkgs.qscintilla;
+        lndir = pkgs.xorg.lndir;
+      }
+    );
 
   qserve = buildPythonPackage rec {
     name = "qserve-0.2.8";
@@ -18971,7 +18914,7 @@ EOF
     doCheck = false;
 
     meta = {
-      homepage = "http://matplotlib.org/basemap/";
+      homepage = "https://matplotlib.org/basemap/";
       description = "Plot data on map projections with matplotlib";
       longDescription = ''
         An add-on toolkit for matplotlib that lets you plot data on map projections with
@@ -19131,7 +19074,7 @@ EOF
 
     meta = {
       description = "Copy your docs directly to the gh-pages branch";
-      homepage = "http://github.com/davisp/ghp-import";
+      homepage = "https://github.com/davisp/ghp-import";
       license = "Tumbolia Public License";
       maintainers = with maintainers; [ garbas ];
     };
@@ -19247,7 +19190,7 @@ EOF
 
     meta = {
       description = "Jenkins Job Builder is a system for configuring Jenkins jobs using simple YAML files stored in Git";
-      homepage = "http://docs.openstack.org/infra/system-config/jjb.html";
+      homepage = "https://docs.openstack.org/infra/system-config/jjb.html";
       license = licenses.asl20;
       maintainers = with maintainers; [ garbas ];
     };

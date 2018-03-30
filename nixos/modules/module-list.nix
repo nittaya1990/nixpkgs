@@ -158,7 +158,6 @@
   ./services/audio/slimserver.nix
   ./services/audio/squeezelite.nix
   ./services/audio/ympd.nix
-  ./services/backup/almir.nix
   ./services/backup/bacula.nix
   ./services/backup/borgbackup.nix
   ./services/backup/crashplan.nix
@@ -324,7 +323,7 @@
   ./services/misc/geoip-updater.nix
   ./services/misc/gitea.nix
   #./services/misc/gitit.nix
-  ./services/misc/gitlab.nix
+  #./services/misc/gitlab.nix
   ./services/misc/gitolite.nix
   ./services/misc/gogs.nix
   ./services/misc/gollum.nix
