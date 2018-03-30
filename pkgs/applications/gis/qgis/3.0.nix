@@ -1,6 +1,6 @@
 { stdenv, lib, fetchurl, cmake, ninja, flex, bison, proj, geos, xlibsWrapper, sqlite, gsl
 , qwt, fcgi, python3Packages, libspatialindex, libspatialite, postgresql
-, qjson, txt2tags, openssl, libzip
+, txt2tags, openssl, libzip
 , qtbase, qtwebkit, qtsensors, qca-qt5, qtkeychain, qscintilla
 , withGrass ? true, grass
 }:
@@ -20,7 +20,7 @@ in stdenv.mkDerivation rec {
   inherit pythonBuildInputs;
 
   buildInputs = [ flex openssl bison proj geos xlibsWrapper sqlite gsl qwt
-    fcgi libspatialindex libspatialite postgresql qjson txt2tags libzip
+    fcgi libspatialindex libspatialite postgresql txt2tags libzip
     qtbase qtwebkit qtsensors qca-qt5 qtkeychain qscintilla ] ++
     (stdenv.lib.optional withGrass grass) ++ pythonBuildInputs;
 
