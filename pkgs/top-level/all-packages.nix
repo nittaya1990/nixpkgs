@@ -13230,6 +13230,8 @@ with pkgs;
     inherit (darwin) IOKit;
   };
 
+  nmon = callPackage ../os-specific/linux/nmon { };
+
   # GNU/Hurd core packages.
   gnu = recurseIntoAttrs (callPackage ../os-specific/gnu {
     inherit platform;
