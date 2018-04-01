@@ -17317,11 +17317,13 @@ with pkgs;
 
   qemu-riscv = callPackage ../applications/virtualization/qemu/riscv.nix {};
 
-  qgis-unwrapped = libsForQt5.callPackage ../applications/gis/qgis {
+  qgis3-unwrapped = libsForQt5.callPackage ../applications/gis/qgis {
     postgresql = postgresql100;
   };
+  qgis-unwrapped = qgis3-unwrapped;
 
-  qgis = callPackage ../applications/gis/qgis/wrapped.nix {};
+  qgis3 = callPackage ../applications/gis/qgis/wrapped.nix {};
+  qgis = qgis3;
 
   qgroundcontrol = libsForQt5.callPackage ../applications/science/robotics/qgroundcontrol { };
 
