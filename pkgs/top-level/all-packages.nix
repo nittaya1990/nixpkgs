@@ -8075,6 +8075,8 @@ with pkgs;
 
   pahole = callPackage ../development/tools/misc/pahole {};
 
+  panopticon = callPackage ../development/tools/analysis/panopticon {};
+
   pants = callPackage ../development/tools/build-managers/pants {};
 
   parse-cli-bin = callPackage ../development/tools/parse-cli-bin { };
@@ -18059,6 +18061,8 @@ with pkgs;
   toot = callPackage ../applications/misc/toot { };
 
   toxic = callPackage ../applications/networking/instant-messengers/toxic { };
+
+  toxiproxy = callPackage ../development/tools/toxiproxy { };
 
   tqsl = callPackage ../applications/misc/tqsl { };
 
