@@ -9688,6 +9688,8 @@ in {
     };
   });
 
+  mock-open = callPackage ../development/python-modules/mock-open { };
+
   modestmaps = buildPythonPackage rec {
     name = "ModestMaps-1.4.6";
 
@@ -18581,6 +18583,8 @@ EOF
 
     };
   };
+
+  vxi11 = callPackage ../development/python-modules/vxi11 { };
 
   svg2tikz = self.buildPythonPackage {
     name = "svg2tikz-1.0.0";
