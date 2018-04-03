@@ -612,7 +612,7 @@ with pkgs;
   container-linux-config-transpiler = callPackage ../development/tools/container-linux-config-transpiler { };
 
   cconv = callPackage ../tools/text/cconv { };
-  
+
   chkcrontab = callPackage ../tools/admin/chkcrontab { };
 
   djmount = callPackage ../tools/filesystems/djmount { };
@@ -17357,6 +17357,7 @@ with pkgs;
   qgis3-unwrapped = libsForQt5.callPackage ../applications/gis/qgis/3.0.nix {
     postgresql = postgresql100;
   };
+  qgis-unwrapped = qgis3-unwrapped;
 
   qgis3 = callPackage ../applications/gis/qgis/wrapped.nix {};
 
