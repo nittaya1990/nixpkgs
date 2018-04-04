@@ -47,7 +47,7 @@ in stdenv.mkDerivation rec {
     cp misc/dist/linux/godot.desktop "$out/share/applications/"
     substituteInPlace "$out/share/applications/godot.desktop" \
                       --replace "Exec=godot" \
-                      "$out/bin/godot"
+                      "Exec=$out/bin/godot"
 
     mkdir -p "$out/share/icons/hicolor/scalable/apps/"
     cp icon.svg "$out/share/icons/hicolor/scalable/apps/godot.svg"
