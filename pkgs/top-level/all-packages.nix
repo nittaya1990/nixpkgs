@@ -20588,6 +20588,8 @@ with pkgs;
 
   nix-repl = callPackage ../tools/package-management/nix-repl { nix = nix1; };
 
+  nix-review = callPackage ../tools/package-management/nix-review { };
+
   nix-serve = callPackage ../tools/package-management/nix-serve { };
 
   nixos-artwork = callPackage ../data/misc/nixos-artwork { };
