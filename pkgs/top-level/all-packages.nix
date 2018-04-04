@@ -18962,6 +18962,8 @@ with pkgs;
 
   factorio-headless = callPackage ../games/factorio { releaseType = "headless"; };
 
+  factorio-headless-experimental = callPackage ../games/factorio { releaseType = "headless"; experimental = true; };
+
   factorio-demo = callPackage ../games/factorio { releaseType = "demo"; };
 
   factorio-mods = callPackage ../games/factorio/mods.nix { };
