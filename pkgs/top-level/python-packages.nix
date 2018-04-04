@@ -14448,6 +14448,8 @@ in {
     };
   };
 
+  Rtree = callPackage ../development/python-modules/Rtree { inherit (pkgs) libspatialindex; };
+
   squaremap = buildPythonPackage rec {
     name = "squaremap-1.0.4";
     disabled = isPy3k;
