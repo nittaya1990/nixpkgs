@@ -42,6 +42,12 @@ in stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/bin
     cp bin/godot.x11.tools.* $out/bin/godot
+
+    mkdir -p "$out/share/applications"
+    cp misc/dist/linux/godot.desktop "$out/share/applications/"
+
+    mkdir -p "$out/share/man/man6"
+    cp misc/dist/linux/godot.6 "$out/share/man/man6/"
   '';
 
   meta = {
