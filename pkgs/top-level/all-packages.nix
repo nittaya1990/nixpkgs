@@ -8724,6 +8724,8 @@ with pkgs;
 
   esdl = callPackage ../development/libraries/esdl { };
 
+  libesmtp = callPackage ../development/libraries/libesmtp { };
+
   exiv2 = callPackage ../development/libraries/exiv2 { };
 
   expat = callPackage ../development/libraries/expat { };
@@ -17961,6 +17963,8 @@ with pkgs;
   terminator = callPackage ../applications/misc/terminator {
     vte = gnome2.vte.override { pythonSupport = true; };
   };
+
+  terminus = callPackage ../applications/misc/terminus { inherit (gnome2) GConf; };
 
   lxterminal = callPackage ../applications/misc/lxterminal {
     vte = gnome3.vte;
