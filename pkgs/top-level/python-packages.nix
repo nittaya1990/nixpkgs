@@ -18700,6 +18700,10 @@ EOF
     propagatedBuildInputs = with self; [];
   };
 
+  pybindgen = callPackage ../development/python-modules/pybindgen {};
+
+  pygccxml = callPackage ../development/python-modules/pygccxml {};
+
   pymacaroons-pynacl = callPackage ../development/python-modules/pymacaroons-pynacl { };
 
   pynacl = callPackage ../development/python-modules/pynacl { };
