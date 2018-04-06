@@ -4442,6 +4442,8 @@ with pkgs;
 
   pwnat = callPackage ../tools/networking/pwnat { };
 
+  pwndbg = callPackage ../development/tools/misc/pwndbg { };
+
   pycangjie = pythonPackages.pycangjie;
 
   pydb = callPackage ../development/tools/pydb { };
