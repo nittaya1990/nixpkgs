@@ -17062,6 +17062,8 @@ with pkgs;
 
   nedit = callPackage ../applications/editors/nedit { };
 
+  nheko = callPackage ../applications/networking/instant-messengers/nheko { };
+
   nomacs = libsForQt5.callPackage ../applications/graphics/nomacs { };
 
   notepadqq = libsForQt5.callPackage ../applications/editors/notepadqq { };
