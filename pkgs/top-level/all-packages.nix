@@ -4426,6 +4426,8 @@ with pkgs;
 
   pssh = callPackage ../tools/networking/pssh { };
 
+  pspg = callPackage ../tools/misc/pspg { };
+
   pstoedit = callPackage ../tools/graphics/pstoedit { };
 
   psutils = callPackage ../tools/typesetting/psutils { };
