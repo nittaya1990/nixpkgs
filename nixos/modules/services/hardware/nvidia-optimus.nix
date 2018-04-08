@@ -36,8 +36,6 @@ in
     boot.kernelModules = [ "bbswitch" ];
     boot.extraModulePackages = [ kernel.bbswitch ];
 
-    hardware.opengl.useGLVND = true;
-
     systemd.services.bbswitch = {
       description = "Disable NVIDIA Card";
       wantedBy = [ "multi-user.target" ];
