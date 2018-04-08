@@ -37,7 +37,7 @@ let
     then ["nouveau" "freedreno" "vc4" "etnaviv" "imx"]
     else if stdenv.isAarch64
     then ["nouveau" "vc4" ]
-    else ["svga" "i915" "r300" "r600" "radeonsi" "nouveau"];
+    else ["svga" "i915" "r300" "r600" "radeonsi" "nouveau" "virgl"];
   defaultDriDrivers =
     if (stdenv.isArm || stdenv.isAarch64)
     then ["nouveau"]
