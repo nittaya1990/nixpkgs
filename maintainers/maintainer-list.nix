@@ -2500,6 +2500,11 @@
     github = "mschristiansen";
     name = "Mikkel Christiansen";
   };
+  msiedlarek = {
+    email = "mikolaj@siedlarek.pl";
+    github = "msiedlarek";
+    name = "Mikołaj Siedlarek";
+  };
   mstarzyk = {
     email = "mstarzyk@gmail.com";
     github = "mstarzyk";
@@ -3267,6 +3272,11 @@
     email = "tlo@sengaya.de";
     github = "sengaya";
     name = "Thilo Uttendorfer";
+  };
+  sephalon = {
+    email = "me@sephalon.net";
+    github = "sephalon";
+    name = "Stefan Wiehler";
   };
   sepi = {
     email = "raffael@mancini.lu";

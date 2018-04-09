@@ -4245,6 +4245,8 @@ with pkgs;
 
   pcsc-cyberjack = callPackage ../tools/security/pcsc-cyberjack { };
 
+  pcsc-scm-scl011 = callPackage ../tools/security/pcsc-scm-scl011 { };
+
   pdd = python3Packages.callPackage ../tools/misc/pdd { };
 
   pdf2djvu = callPackage ../tools/typesetting/pdf2djvu { };
@@ -13200,6 +13202,8 @@ with pkgs;
   };
 
   gpm-ncurses = gpm.override { inherit ncurses; };
+
+  gpu-switch = callPackage ../os-specific/linux/gpu-switch { };
 
   gradm = callPackage ../os-specific/linux/gradm {
     flex = flex_2_5_35;
