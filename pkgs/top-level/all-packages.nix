@@ -14539,6 +14539,8 @@ with pkgs;
 
   shared_desktop_ontologies = callPackage ../data/misc/shared-desktop-ontologies { };
 
+  scheherazade = callPackage ../data/fonts/scheherazade { };
+
   signwriting = callPackage ../data/fonts/signwriting { };
 
   soundfont-fluid = callPackage ../data/soundfonts/fluid { };
@@ -17957,7 +17959,7 @@ with pkgs;
 
   tagainijisho = callPackage ../applications/office/tagainijisho {};
 
-  tahoelafs = callPackage ../tools/networking/p2p/tahoe-lafs {};
+  tahoe-lafs = callPackage ../tools/networking/p2p/tahoe-lafs {};
 
   tailor = callPackage ../applications/version-management/tailor {};
 
@@ -20383,6 +20385,8 @@ with pkgs;
   brgenml1cupswrapper = callPackage ../misc/cups/drivers/brgenml1cupswrapper {};
 
   calaos_installer = libsForQt5.callPackage ../misc/calaos/installer {};
+
+  click = callPackage ../applications/networking/cluster/click { };
 
   cups = callPackage ../misc/cups {
     libusb = libusb1;
