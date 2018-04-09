@@ -2037,6 +2037,8 @@ with pkgs;
 
   duo-unix = callPackage ../tools/security/duo-unix { };
 
+  duplicati = callPackage ../tools/backup/duplicati { };
+
   duplicity = callPackage ../tools/backup/duplicity {
     gnupg = gnupg1;
   };
@@ -14893,6 +14895,8 @@ with pkgs;
   backintime-qt4 = callPackage ../applications/networking/sync/backintime/qt4.nix { };
 
   backintime = backintime-qt4;
+
+  balsa = callPackage ../applications/networking/mailreaders/balsa { };
 
   bandwidth = callPackage ../tools/misc/bandwidth { };
 
