@@ -1,5 +1,5 @@
 { stdenv, targetPackages
-, fetchurl, fetchgit, fetchzip, file, python2, tzdata, procps
+, fetchurl, fetchgit, fetchzip, file, python2, tzdata, ps
 , llvm, jemalloc, ncurses, darwin, rustPlatform, git, cmake, curl
 , which, libffi, gdb
 , version
@@ -18,8 +18,6 @@
 let
   inherit (stdenv.lib) optional optionalString;
   inherit (darwin.apple_sdk.frameworks) Security;
-
-  procps = if stdenv.isDarwin then darwin.ps else args.procps;
 
   llvmShared = llvm.override { enableSharedLibraries = true; };
 
@@ -102,8 +100,10 @@ stdenv.mkDerivation {
 
     # Useful debugging parameter
     # export VERBOSE=1
-  ''
-  + optionalString stdenv.isDarwin ''
+  '' + optionalString stdenv.isAarch64 ''
+    # https://github.com/rust-lang/rust/issues/49807
+    rm -vr src/test/debuginfo/by-value-self-argument-in-trait-impl.rs
+  '' + optionalString stdenv.isDarwin ''
     # Disable all lldb tests.
     # error: Can't run LLDB test because LLDB's python path is not set
     rm -vr src/test/debuginfo/*
@@ -127,7 +127,7 @@ stdenv.mkDerivation {
 
   # ps is needed for one of the test cases
   nativeBuildInputs =
-    [ file python2 procps rustPlatform.rust.rustc git cmake
+    [ file python2 ps rustPlatform.rust.rustc git cmake
       which libffi
     ]
     # Only needed for the debuginfo tests

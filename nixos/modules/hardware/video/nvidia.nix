@@ -23,17 +23,6 @@ let
   nvidia_x11 = nvidiaForKernel config.boot.kernelPackages;
   nvidia_libs32 = (nvidiaForKernel pkgs_i686.linuxPackages).override { libsOnly = true; kernel = null; };
 
-  nvidiaPackage = nvidia: pkgs:
-    assert config.hardware.opengl.useGLVND -> nvidia.useGLVND;
-    if !nvidia.useGLVND || config.hardware.opengl.useGLVND then nvidia.out
-    else pkgs.buildEnv {
-      name = "nvidia-libs";
-      paths = [ pkgs.libglvnd nvidia.out ];
-    };
-
-  package = nvidiaPackage nvidia_x11 pkgs;
-  package32 = nvidiaPackage nvidia_libs32 pkgs_i686;
-
   enabled = nvidia_x11 != null;
   optimus = config.hardware.nvidiaOptimus.enable;
 in
@@ -70,13 +59,8 @@ in
       source = "${nvidia_x11.bin}/share/nvidia/nvidia-application-profiles-rc";
     };
 
-    hardware.opengl = if (!optimus) then {
-      inherit package package32;
-    } else {
-      useGLVND = true;
-      extraPackages = singleton package;
-      extraPackages32 = singleton package32;
-    };
+    hardware.opengl.package = nvidia_x11.out;
+    hardware.opengl.package32 = nvidia_libs32.out;
 
     environment.systemPackages = [ nvidia_x11.bin nvidia_x11.settings ]
       ++ lib.filter (p: p != null) [ nvidia_x11.persistenced ];
