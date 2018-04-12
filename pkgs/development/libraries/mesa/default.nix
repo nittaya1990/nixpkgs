@@ -192,13 +192,6 @@ let self = stdenv.mkDerivation {
     sed "/^libdir=/s,$out,$osmesa," -i $osmesa/lib/libOSMesa*.la
 
     # set the default search path for DRI drivers; used e.g. by X server
-<<<<<<< HEAD
-    substituteInPlace "$dev/lib/pkgconfig/dri.pc" --replace '$(drivers)' "${driverLink}"
-  '' + optionalString (vulkanDrivers != []) ''
-    # move share/vulkan/icd.d/
-    mkdir -p $drivers/share
-    mv $out/share/vulkan $drivers/share/
-=======
     substituteInPlace "$dev/lib/pkgconfig/dri.pc" --replace '$(drivers)' "${libglvnd.driverLink}"
 
     # remove GLES libraries; they are provided by libglvnd
@@ -215,7 +208,6 @@ let self = stdenv.mkDerivation {
       substituteInPlace "$js" --replace '"libEGL_' '"'"$drivers/lib/libEGL_"
     done
   '' + optionalString (vulkanDrivers != []) ''
->>>>>>> upstream/master
     # Update search path used by Vulkan (it's pointing to $out but
     # drivers are in $drivers)
     for js in $drivers/share/vulkan/icd.d/*.json; do
