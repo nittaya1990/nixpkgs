@@ -1203,6 +1203,8 @@ in {
 
   cycler = callPackage ../development/python-modules/cycler { };
 
+  cysignals = callPackage ../development/python-modules/cysignals { };
+
   dlib = buildPythonPackage rec {
     inherit (pkgs.dlib) name src nativeBuildInputs meta;
 
@@ -8136,26 +8138,7 @@ in {
     };
   };
 
-  mutagen = buildPythonPackage (rec {
-    name = "mutagen-1.36";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/m/mutagen/${name}.tar.gz";
-      sha256 = "1kabb9b81hgvpd3wcznww549vss12b1xlvpnxg1r6n4c7gikgvnp";
-    };
-
-    # Needed for tests only
-    buildInputs = with self; [ pkgs.faad2 pkgs.flac pkgs.vorbis-tools pkgs.liboggz
-      pkgs.glibcLocales pytest
-    ];
-    LC_ALL = "en_US.UTF-8";
-
-    meta = {
-      description = "Python multimedia tagging library";
-      homepage = http://code.google.com/p/mutagen;
-      license = licenses.lgpl2;
-    };
-  });
+  mutagen = callPackage ../development/python-modules/mutagen { };
 
 
   muttils = buildPythonPackage (rec {
@@ -8472,7 +8455,15 @@ in {
     name = "sleekxmpp-${version}";
     version = "1.3.3";
 
-    propagatedBuildInputs = with self; [ dnspython pyasn1 gevent ];
+    patches = [
+      # Fix https://github.com/etingof/pyasn1/issues/112
+      (pkgs.fetchpatch {
+        url = "https://github.com/kdschlosser/SleekXMPP/commit/597014ba5ca258763e96ee37729ac933c5af1602.patch";
+        sha256 = "176v3f3pr0bx48wv1kf9jn2pwxdn7qpqyc2chwv1m8gbppsfaikf";
+      })
+    ];
+
+    propagatedBuildInputs = with self; [ dnspython pyasn1 pyasn1-modules gevent ];
     checkInputs = [ pkgs.gnupg ];
     checkPhase = "${python.interpreter} testall.py";
     doCheck = false; # Tests failed all this time and upstream doesn't seem to care.

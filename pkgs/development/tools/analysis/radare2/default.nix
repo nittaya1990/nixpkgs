@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     owner = "radare";
     repo = "radare2";
     rev = version;
-    sha256 = "08zvxgsvc6rqpjaapcxz1wm9vzlrbsqgplfkx0lch2s67v6slr7z";
+    sha256 = "07x94chkhpn3wgw4pypn35psxq370j6xwmhf1mh5z27cqkq7c2yd";
   };
 
   postPatch = let
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     capstone = fetchgit {
       url = "https://github.com/aquynh/capstone.git";
       rev = cs_tip;
-      sha256 = "19vfgdfykmi3cfs4x1acxy0gnwggjjc8qq46pybqvcksbi11nw1k";
+      sha256 = "1b126npshdbwh5y7rafmb9w4dzlvxsf4ca6bx4zs2y7kbk48jyn8";
       leaveDotGit = true;
     };
   in ''
