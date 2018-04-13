@@ -152,7 +152,7 @@ let self = stdenv.mkDerivation {
     libffi wayland wayland-protocols libvdpau libelf libXvMC
     libomxil-bellagio libva-minimal libpthreadstubs openssl/*or another sha1 provider*/
     valgrind-light python2
-  ]
+  ];
 
   enableParallelBuilding = true;
   doCheck = false;
