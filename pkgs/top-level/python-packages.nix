@@ -410,6 +410,8 @@ in {
 
   rhpl = disabledIf isPy3k (callPackage ../development/python-modules/rhpl {});
 
+  rlp = callPackage ../development/python-modules/rlp { };
+
   rx = callPackage ../development/python-modules/rx { };
 
   salmon-mail = callPackage ../development/python-modules/salmon-mail { };
@@ -11861,12 +11863,12 @@ in {
 
   python-wifi = buildPythonPackage rec {
     name = "python-wifi-${version}";
-    version = "0.6.0";
+    version = "0.6.1";
     disabled = ! (isPy26 || isPy27 );
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/python-wifi/${name}.tar.bz2";
-      sha256 = "504639e5953eaec0e41758900fbe143d33d82ea86762b19b659a118c77d8403d";
+      sha256 = "149c3dznb63d82143cz5hqdim0mqjysz6p3yk0zv271vq3xnmzvv";
     };
 
     meta = {

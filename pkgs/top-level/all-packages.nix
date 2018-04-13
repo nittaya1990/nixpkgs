@@ -3491,6 +3491,8 @@ with pkgs;
 
   limesurvey = callPackage ../servers/limesurvey { };
 
+  linuxquota = callPackage ../tools/misc/linuxquota { };
+
   localtime = callPackage ../tools/system/localtime { };
 
   logcheck = callPackage ../tools/system/logcheck {
@@ -4517,7 +4519,7 @@ with pkgs;
 
   quilt = callPackage ../development/tools/quilt { };
 
-  quota = callPackage ../tools/misc/quota { };
+  quota = if stdenv.isLinux then linuxquota else unixtools.quota;
 
   wiggle = callPackage ../development/tools/wiggle { };
 
@@ -17368,7 +17370,7 @@ with pkgs;
     inherit (darwin.stubs) rez setfile;
   };
 
-  qemu-riscv = callPackage ../applications/virtualization/qemu/riscv.nix {};
+  qemu-riscv = lowPrio (callPackage ../applications/virtualization/qemu/riscv.nix {});
 
   qgis3-unwrapped = libsForQt5.callPackage ../applications/gis/qgis/3.0.nix {
     postgresql = postgresql100;
