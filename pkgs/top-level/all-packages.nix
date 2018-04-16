@@ -9452,6 +9452,8 @@ with pkgs;
 
   jemalloc = callPackage ../development/libraries/jemalloc { };
 
+  jemalloc450 = callPackage ../development/libraries/jemalloc/jemalloc450.nix { };
+
   jshon = callPackage ../development/tools/parsing/jshon { };
 
   json2hcl = callPackage ../development/tools/json2hcl { };
@@ -11309,7 +11311,7 @@ with pkgs;
 
   rlog = callPackage ../development/libraries/rlog { };
 
-  rocksdb = callPackage ../development/libraries/rocksdb { };
+  rocksdb = callPackage ../development/libraries/rocksdb { jemalloc = jemalloc450; };
 
   rocksdb_lite = rocksdb.override { enableLite = true; };
 
