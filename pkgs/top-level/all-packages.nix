@@ -563,6 +563,8 @@ with pkgs;
 
   aws-vault = callPackage ../tools/admin/aws-vault { };
 
+  iamy = callPackage ../tools/admin/iamy { };
+
   azure-cli = nodePackages.azure-cli;
 
   azure-vhd-utils  = callPackage ../tools/misc/azure-vhd-utils { };
@@ -17975,9 +17977,7 @@ with pkgs;
 
   terminal-notifier = callPackage ../applications/misc/terminal-notifier {};
 
-  terminator = callPackage ../applications/misc/terminator {
-    vte = gnome2.vte.override { pythonSupport = true; };
-  };
+  terminator = callPackage ../applications/misc/terminator { };
 
   terminus = callPackage ../applications/misc/terminus { inherit (gnome2) GConf; };
 
@@ -19526,6 +19526,13 @@ with pkgs;
   xsok = callPackage ../games/xsok { };
 
   xsokoban = callPackage ../games/xsokoban { };
+
+  inherit (callPackage ../games/quake2/yquake2 { })
+    yquake2
+    yquake2-ctf
+    yquake2-ground-zero
+    yquake2-the-reckoning
+    yquake2-all-games;
 
   zandronum = callPackage ../games/zandronum { };
 
