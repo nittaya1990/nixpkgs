@@ -24,9 +24,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ unzip ]
     ++ (if withQt5 then [ qmake ] else [ qmake4Hook ]);
 
-
-  patches = [] ++ lib.optional withQt5 [ xcodePatch ];
-
   enableParallelBuilding = true;
 
   preConfigure = ''
