@@ -17389,7 +17389,9 @@ with pkgs;
 
   qgis3 = callPackage ../applications/gis/qgis/wrapped.nix {};
 
-  qgis2 = callPackage ../applications/gis/qgis {};
+  qgis2 = callPackage ../applications/gis/qgis {
+    inherit (darwin.apple_sdk.frameworks) IOKit ApplicationServices;
+  };
 
   qgis = qgis2;
 
