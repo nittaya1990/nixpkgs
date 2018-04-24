@@ -28,6 +28,11 @@
     github = "AndersonTorres";
     name = "Anderson Torres";
   };
+  Anton-Latukha = {
+    email = "anton.latuka+nixpkgs@gmail.com";
+    github = "Anton-Latukha";
+    name = "Anton Latukha";
+  };
   Baughn = {
     email = "sveina@gmail.com";
     github = "Baughn";
@@ -586,6 +591,11 @@
     email = "bergey@teallabs.org";
     github = "bergey";
     name = "Daniel Bergey";
+  };
+  bfortz = {
+    email = "bernard.fortz@gmail.com";
+    github = "bfortz";
+    name = "Bernard Fortz";
   };
   bgamari = {
     email = "ben@smart-cactus.org";
@@ -1721,7 +1731,7 @@
     name = "Jeffrey David Johnson";
   };
   jensbin = {
-    email = "jensbin@protonmail.com";
+    email = "jensbin+git@pm.me";
     github = "jensbin";
     name = "Jens Binkert";
   };
@@ -1970,6 +1980,11 @@
     email = "louis@kragniz.eu";
     github = "kragniz";
     name = "Louis Taylor";
+  };
+  krav = {
+    email = "kristoffer@microdisko.no";
+    github = "krav";
+    name = "Kristoffer Thømt Ravneberg";
   };
   kristoff3r = {
     email = "k.soeholm@gmail.com";
@@ -3461,6 +3476,11 @@
     github = "spwhitt";
     name = "Spencer Whitt";
   };
+  srghma = {
+    email = "srghma@gmail.com";
+    github = "srghma";
+    name = "Sergei Khoma";
+  };
   srhb = {
     email = "sbrofeldt@gmail.com";
     github = "srhb";
@@ -3981,6 +4001,11 @@
     github = "womfoo";
     name = "Kranium Gikos Mendoza";
   };
+  worldofpeace = {
+    email = "worldofpeace@users.noreply.github.com";
+    github = "worldofpeace";
+    name = "Worldofpeace";
+  };
   wscott = {
     email = "wsc9tt@gmail.com";
     github = "wscott";
@@ -4144,10 +4169,5 @@
     email = "diego@zzamboni.org";
     github = "zzamboni";
     name = "Diego Zamboni";
-  };
-  srghma = {
-    email = "srghma@gmail.com";
-    github = "srghma";
-    name = "Sergei Khoma";
   };
 }

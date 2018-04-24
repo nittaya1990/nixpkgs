@@ -8,7 +8,7 @@
 , seccompSupport ? stdenv.isLinux, libseccomp
 , pulseSupport ? !stdenv.isDarwin, libpulseaudio
 , sdlSupport ? !stdenv.isDarwin, SDL2
-, gtkSupport ? !xenSupport, gtk3, gettext, gnome3
+, gtkSupport ? !stdenv.isDarwin && !xenSupport, gtk3, gettext, gnome3
 , vncSupport ? true, libjpeg, libpng
 , spiceSupport ? !stdenv.isDarwin, spice, spice-protocol
 , usbredirSupport ? spiceSupport, usbredir
@@ -67,6 +67,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  outputs = [ "out" "ga" ];
+
   patches = [ ./no-etc-install.patch ./statfs-flags.patch (fetchpatch {
     name = "glibc-2.27-memfd.patch";
     url = "https://git.qemu.org/?p=qemu.git;a=patch;h=75e5b70e6b5dcc4f2219992d7cffa462aa406af0";
@@ -105,6 +107,8 @@ stdenv.mkDerivation rec {
       "--sysconfdir=/etc"
       "--localstatedir=/var"
     ]
+    # disable sysctl check on darwin.
+    ++ optional stdenv.isDarwin "--cpu=x86_64"
     ++ optional numaSupport "--enable-numa"
     ++ optional seccompSupport "--enable-seccomp"
     ++ optional spiceSupport "--enable-spice"
@@ -122,6 +126,9 @@ stdenv.mkDerivation rec {
       for exe in $out/bin/qemu-system-* ; do
         paxmark m $exe
       done
+      # copy qemu-ga (guest agent) to separate output
+      mkdir -p $ga/bin
+      cp $out/bin/qemu-ga $ga/bin/
     '';
 
   # Add a ‘qemu-kvm’ wrapper for compatibility/convenience.

@@ -311,6 +311,10 @@ in {
 
   pyamf = callPackage ../development/python-modules/pyamf { };
 
+  pyarrow = callPackage ../development/python-modules/pyarrow {
+    inherit (pkgs) arrow-cpp cmake pkgconfig;
+  };
+
   pyatspi = disabledIf (!isPy3k) (callPackage ../development/python-modules/pyatspi { });
 
   pyaxmlparser = callPackage ../development/python-modules/pyaxmlparser { };
@@ -1185,6 +1189,8 @@ in {
   cycler = callPackage ../development/python-modules/cycler { };
 
   cysignals = callPackage ../development/python-modules/cysignals { };
+
+  cypari2 = callPackage ../development/python-modules/cypari2 { };
 
   dlib = buildPythonPackage rec {
     inherit (pkgs.dlib) name src nativeBuildInputs meta;
@@ -5527,6 +5533,10 @@ in {
 
   flask_assets = callPackage ../development/python-modules/flask-assets { };
 
+  flask-autoindex = callPackage ../development/python-modules/flask-autoindex { };
+
+  flask-babel = callPackage ../development/python-modules/flask-babel { };
+
   flask_cache = buildPythonPackage rec {
     name = "Flask-Cache-0.13.1";
 
@@ -5575,6 +5585,8 @@ in {
   flask-restplus = callPackage ../development/python-modules/flask-restplus { };
 
   flask_script = callPackage ../development/python-modules/flask-script { };
+
+  flask-silk = callPackage ../development/python-modules/flask-silk { };
 
   flask_sqlalchemy = buildPythonPackage rec {
     name = "Flask-SQLAlchemy-${version}";
@@ -7629,6 +7641,8 @@ in {
   };
 
   micawber = callPackage ../development/python-modules/micawber { };
+
+  milksnake = callPackage ../development/python-modules/milksnake { };
 
   minimock = buildPythonPackage rec {
     version = "1.2.8";

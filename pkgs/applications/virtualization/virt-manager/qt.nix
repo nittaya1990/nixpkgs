@@ -1,17 +1,17 @@
 { mkDerivation, lib, fetchFromGitHub, cmake, pkgconfig
-, qtbase, qtmultimedia, qtsvg, qttools
+, qtbase, qtmultimedia, qtsvg, qttools, krdc
 , libvncserver, libvirt, pcre, pixman, qtermwidget, spice-gtk, spice-protocol
 }:
 
 mkDerivation rec {
   name = "virt-manager-qt-${version}";
-  version = "0.57.86";
+  version = "0.60.88";
 
   src = fetchFromGitHub {
     owner  = "F1ash";
     repo   = "qt-virt-manager";
-    rev    = "ecd1612927a45c97e518ec83ad16f1a2ec158d6d";
-    sha256 = "12ajc7z2sd5rdfcklxl7hpcm29zwam0ag93948w49infzrrcnk6k";
+    rev    = "${version}";
+    sha256 = "0hd5d8zdghc5clv8pa4h9zigshdrarfpmzyvrq56rjkm13lrdz52";
   };
 
   cmakeFlags = [
@@ -20,13 +20,11 @@ mkDerivation rec {
   ];
 
   buildInputs = [
-    qtbase qtmultimedia qtsvg
+    qtbase qtmultimedia qtsvg krdc
     libvirt libvncserver pcre pixman qtermwidget spice-gtk spice-protocol
   ];
 
   nativeBuildInputs = [ cmake pkgconfig qttools ];
-
-  enableParallelBuilding = true;
 
   meta = with lib; {
     homepage    = https://f1ash.github.io/qt-virt-manager;
