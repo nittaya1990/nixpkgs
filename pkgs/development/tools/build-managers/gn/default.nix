@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchgit, fetchurl, fetchpatch
+{ stdenv, lib, fetchgit, fetchzip, fetchpatch
 , libevent, ninja, python, darwin }:
 
 let
@@ -28,9 +28,20 @@ let
       rev = "585ec31ea716f08233a815e680fc0d4699843938";
       sha256 = "0csn1cza66851nmxxiw42smsm3422mx67vcyykwn0a71lcjng6rc";
     };
-    "third_party/apple_apsl" = fetchurl {
+    "third_party/apple_apsl" = fetchzip {
       url = "https://chromium.googlesource.com/chromium/src/third_party/+archive/8e6ccb8c74db6dfa15dd21401ace3ac96c054cf7/apple_apsl.tar.gz";
-      sha256 = "0sc7b7zdw7f9piyyijl7xq3v1fzflqlck1apwm8kvgdhkyz3l63k";
+      sha256 = "1vgcg741lwz84kdy0qc5wn9dxx3j9zh6a9d185fpygdsipwikqv8";
+      stripRoot = false;
+    };
+    "buildtools/third_party/libc++/trunk" = fetchgit {
+      url = "https://chromium.googlesource.com/chromium/llvm-project/libcxx";
+      rev = "ece1de8658d749e19c12cacd4458cc330eca94e3";
+      sha256 = "1nlyvfkzhchwv9b18bh82jcamqv3acj26ah9ajs31f2dql05amhg";
+    };
+    "buildtools/third_party/libc++abi/trunk" = fetchgit {
+      url = "https://chromium.googlesource.com/chromium/llvm-project/libcxxabi";
+      rev = "52c7a3760aef1df328a9bc957f686410872f0dc0";
+      sha256 = "1aam539j01381q27b7xhij18pz3h0lhw08hglvqq4hgvlqx5cn2s";
     };
   };
 
