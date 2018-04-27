@@ -12967,6 +12967,8 @@ with pkgs;
     erlang = erlangR18;
   };
 
+  youtrack = callPackage ../servers/jetbrains/youtrack.nix { };
+
   zabbix = recurseIntoAttrs (callPackages ../servers/monitoring/zabbix {});
 
   zabbix20 = callPackage ../servers/monitoring/zabbix/2.0.nix { };
@@ -14364,8 +14366,6 @@ with pkgs;
   inconsolata-lgc = callPackage ../data/fonts/inconsolata/lgc.nix {};
 
   input-fonts = callPackage ../data/fonts/input-fonts { };
-
-  inziu-iosevka = callPackage ../data/fonts/inziu-iosevka { };
 
   iosevka = callPackage ../data/fonts/iosevka {
     nodejs = nodejs-8_x;
