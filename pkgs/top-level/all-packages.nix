@@ -5276,6 +5276,10 @@ with pkgs;
 
   oysttyer = callPackage ../applications/networking/instant-messengers/oysttyer { };
 
+  twilight = callPackage ../tools/graphics/twilight/default.nix {
+    libX11 = xorg.libX11;
+  };
+
   twitterBootstrap = callPackage ../development/web/twitter-bootstrap {};
   twitterBootstrap3 = callPackage ../development/web/twitter-bootstrap/v3.nix {};
 
