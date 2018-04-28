@@ -80,7 +80,7 @@ with pkgs;
     ../build-support/setup-hooks/autoreconf.sh;
 
   autoPatchelfHook = makeSetupHook
-    { deps = [ file ]; }
+    { name = "auto-patchelf-hook"; deps = [ file ]; }
     ../build-support/setup-hooks/auto-patchelf.sh;
 
   ensureNewerSourcesHook = { year }: makeSetupHook {}
@@ -14781,6 +14781,8 @@ with pkgs;
   arora = callPackage ../applications/networking/browsers/arora { };
 
   artha = callPackage ../applications/misc/artha { };
+
+  atlassian-cli = callPackage ../applications/office/atlassian-cli { };
 
   atomEnv = callPackage ../applications/editors/atom/env.nix {
     gconf = gnome2.GConf;
