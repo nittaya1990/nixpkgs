@@ -82,7 +82,7 @@ self: super: {
       name = "git-annex-${drv.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + drv.version;
-      sha256 = "011kiyy1anj99ab70npl5i7pcqri0pdk04s4cvdm39zyas5m9lbd";
+      sha256 = "05rygb8jm4nh7ggzihz6664hcgwkbqspi8gbpkpf7l7wwvzdm1rd";
     };
   })).overrideScope (self: super: {
     aws = dontCheck (self.aws_0_18);
@@ -845,17 +845,8 @@ self: super: {
   # missing dependencies: Glob >=0.7.14 && <0.8, data-fix ==0.0.4
   stack2nix = doJailbreak super.stack2nix;
 
-  # Hacks to work around https://github.com/haskell/c2hs/issues/192.
-  c2hs = (overrideCabal super.c2hs {
-    version = "0.26.2-28-g8b79823";
-    doCheck = false;
-    src = pkgs.fetchFromGitHub {
-      owner = "deech";
-      repo = "c2hs";
-      rev = "8b79823c32e234c161baec67fdf7907952ca62b8";
-      sha256 = "0hyrcyssclkdfcw2kgcark8jl869snwnbrhr9k0a9sbpk72wp7nz";
-    };
-  });
+  # Work around https://github.com/haskell/c2hs/issues/192.
+  c2hs = dontCheck super.c2hs;
 
   # Needs pginit to function and pgrep to verify.
   tmp-postgres = overrideCabal super.tmp-postgres (drv: {
@@ -863,8 +854,8 @@ self: super: {
     testToolDepends = drv.testToolDepends or [] ++ [pkgs.procps];
   });
 
-  # https://github.com/fpco/stackage/issues/3126
-  stack = doJailbreak super.stack;
+  # Needs newer versions than what we have in LTS-11.x at the moment.
+  stack = super.stack.overrideScope (self: super: { hpack = self.hpack_0_28_2; });
 
   # These packages depend on each other, forming an infinite loop.
   scalendar = markBroken (super.scalendar.override { SCalendar = null; });
