@@ -288,7 +288,7 @@ with pkgs;
     ... # For hash agility
   }@args: fetchzip ({
     inherit name;
-    url = "https://gitlab.com/${owner}/${repo}/-/archive/${rev}/${repo}-${rev}.tar.gz";
+    url = "https://gitlab.com/api/v4/projects/${owner}%2F${repo}/repository/archive.tar.gz?sha=${rev}";
     meta.homepage = "https://gitlab.com/${owner}/${repo}/";
   } // removeAttrs args [ "owner" "repo" "rev" ]) // { inherit rev; };
 
@@ -784,6 +784,8 @@ with pkgs;
   bashburn = callPackage ../tools/cd-dvd/bashburn { };
 
   bashmount = callPackage ../tools/filesystems/bashmount {};
+
+  bat = callPackage ../tools/misc/bat { };
 
   bc = callPackage ../tools/misc/bc { };
 
@@ -1357,6 +1359,8 @@ with pkgs;
   playerctl = callPackage ../tools/audio/playerctl { };
 
   ps_mem = callPackage ../tools/system/ps_mem { };
+
+  psstop = callPackage ../tools/system/psstop { };
 
   parallel-rust = callPackage ../tools/misc/parallel-rust { };
 
@@ -2105,6 +2109,8 @@ with pkgs;
 
   mcrcon = callPackage ../tools/networking/mcrcon {};
 
+  tealdeer = callPackage ../tools/misc/tealdeer/default.nix { };
+
   uudeview = callPackage ../tools/misc/uudeview { };
 
   uutils-coreutils = callPackage ../tools/misc/uutils-coreutils {
@@ -2414,6 +2420,13 @@ with pkgs;
   fswebcam = callPackage ../os-specific/linux/fswebcam { };
 
   fuseiso = callPackage ../tools/filesystems/fuseiso { };
+
+  fdbPackages = callPackage ../servers/foundationdb { stdenv = overrideCC stdenv gcc49; };
+
+  inherit (fdbPackages)
+    foundationdb51
+    foundationdb52
+    foundationdb60;
 
   foundationdb = callPackage ../servers/foundationdb { stdenv = overrideCC stdenv gcc49; };
 
@@ -2776,8 +2789,6 @@ with pkgs;
 
   gvolicon = callPackage ../tools/audio/gvolicon {};
 
-  gwyddion = callPackage ../applications/science/chemistry/gwyddion {};
-
   gzip = callPackage ../tools/compression/gzip { };
 
   gzrt = callPackage ../tools/compression/gzrt { };
@@ -2905,6 +2916,8 @@ with pkgs;
   hhpc = callPackage ../tools/misc/hhpc { };
 
   hiera-eyaml = callPackage ../tools/system/hiera-eyaml { };
+
+  hfsprogs = callPackage ../tools/filesystems/hfsprogs { };
 
   highlight = callPackage ../tools/text/highlight ({
     lua = lua5;
@@ -3119,8 +3132,6 @@ with pkgs;
   jl = haskellPackages.callPackage ../development/tools/jl { };
 
   jmespath = callPackage ../development/tools/jmespath { };
-
-  jmol = callPackage ../applications/science/chemistry/jmol { };
 
   jmtpfs = callPackage ../tools/filesystems/jmtpfs { };
 
@@ -3457,6 +3468,11 @@ with pkgs;
 
   libite = callPackage ../development/libraries/libite { };
 
+  liblangtag = callPackage ../development/libraries/liblangtag {
+    inherit (gnome2) gtkdoc;
+    inherit (gnome3) gnome-common;
+  };
+
   liblouis = callPackage ../development/libraries/liblouis { };
 
   liboauth = callPackage ../development/libraries/liboauth { };
@@ -3750,8 +3766,6 @@ with pkgs;
 
   modsecurity_standalone = callPackage ../tools/security/modsecurity { };
 
-  molden = callPackage ../applications/science/chemistry/molden { };
-
   molly-guard = callPackage ../os-specific/linux/molly-guard { };
 
   moneyplex = callPackage ../applications/office/moneyplex { };
@@ -3879,9 +3893,7 @@ with pkgs;
 
   netcat = netcat-openbsd;
 
-  netcat-gnu = callPackage ../tools/networking/netcat-gnu { };
-
-  netcat-openbsd = callPackage ../tools/networking/netcat-openbsd { };
+  netcat-gnu = callPackage ../tools/networking/netcat { };
 
   nethogs = callPackage ../tools/networking/nethogs { };
 
@@ -4290,6 +4302,8 @@ with pkgs;
   fmodex = callPackage ../games/zandronum/fmod.nix { };
 
   pdfmod = callPackage ../applications/misc/pdfmod { };
+
+  pdf-quench = callPackage ../applications/misc/pdf-quench { };
 
   jbig2enc = callPackage ../tools/graphics/jbig2enc { };
 
@@ -5225,7 +5239,7 @@ with pkgs;
 
   torsocks = callPackage ../tools/security/tor/torsocks.nix { };
 
-  toxvpn = callPackage ../tools/networking/toxvpn { };
+  toxvpn = callPackage ../tools/networking/toxvpn { libtoxcore = libtoxcore_0_1; };
 
   tpmmanager = callPackage ../applications/misc/tpmmanager { };
 
@@ -5312,6 +5326,8 @@ with pkgs;
   };
 
   uget = callPackage ../tools/networking/uget { };
+
+  uget-integrator = callPackage ../tools/networking/uget-integrator { };
 
   uif2iso = callPackage ../tools/cd-dvd/uif2iso { };
 
@@ -5612,6 +5628,8 @@ with pkgs;
   varnishPackages = varnish5Packages;
   varnish = varnishPackages.varnish;
 
+  hitch = callPackage ../servers/hitch { };
+
   venus = callPackage ../tools/misc/venus {
     python = python27;
   };
@@ -5736,6 +5754,8 @@ with pkgs;
   libxfs = xfsprogs.dev;
 
   xml2 = callPackage ../tools/text/xml/xml2 { };
+
+  xmlformat = callPackage ../tools/text/xml/xmlformat { };
 
   xmlroff = callPackage ../tools/typesetting/xmlroff { };
 
@@ -7163,8 +7183,6 @@ with pkgs;
   }));
 
   ocropus = callPackage ../applications/misc/ocropus { };
-
-  octopus = callPackage ../applications/science/chemistry/octopus { openblas=openblasCompat; };
 
   inherit (callPackages ../development/interpreters/perl {}) perl perl522 perl524 perl526;
 
@@ -8956,6 +8974,10 @@ with pkgs;
     gtk = self.gtk2;
   };
 
+  gegl_0_4 = callPackage ../development/libraries/gegl/4.0.nix {
+    gtk = self.gtk2;
+  };
+
   geoclue = callPackage ../development/libraries/geoclue {};
 
   geoclue2 = callPackage ../development/libraries/geoclue/2.0.nix {};
@@ -10365,9 +10387,12 @@ with pkgs;
 
   libtorrentRasterbar = callPackage ../development/libraries/libtorrent-rasterbar { };
 
+  # this is still the new version of the old API
   libtoxcore-new = callPackage ../development/libraries/libtoxcore/new-api.nix { };
 
-  libtoxcore = callPackage ../development/libraries/libtoxcore { };
+  inherit (callPackages ../development/libraries/libtoxcore {})
+    libtoxcore_0_1 libtoxcore_0_2;
+  libtoxcore = libtoxcore_0_2;
 
   libtap = callPackage ../development/libraries/libtap { };
 
@@ -12443,6 +12468,8 @@ with pkgs;
 
   lwan = callPackage ../servers/http/lwan { };
 
+  labelImg = callPackage ../applications/science/machine-learning/labelimg { };
+
   mailman = callPackage ../servers/mail/mailman { };
 
   mattermost = callPackage ../servers/mattermost { };
@@ -12919,8 +12946,11 @@ with pkgs;
 
   axis2 = callPackage ../servers/http/tomcat/axis2 { };
 
-  unifi = callPackage ../servers/unifi { };
-  unifiLTS = callPackage ../servers/unifi { useLTS=true; };
+  inherit (callPackages ../servers/unifi { })
+    unifiLTS
+    unifiStable
+    unifiTesting;
+  unifi = unifiStable;
 
   virtuoso6 = callPackage ../servers/sql/virtuoso/6.x.nix { };
 
@@ -14854,10 +14884,6 @@ with pkgs;
 
   avidemux = libsForQt5.callPackage ../applications/video/avidemux { };
 
-  avogadro = callPackage ../applications/science/chemistry/avogadro {
-    eigen = eigen2;
-  };
-
   avrdudess = callPackage ../applications/misc/avrdudess { };
 
   avxsynth = callPackage ../applications/video/avxsynth {
@@ -15920,16 +15946,14 @@ with pkgs;
 
   ghq = gitAndTools.ghq;
 
-  gimp_2_8 = callPackage ../applications/graphics/gimp/2.8.nix {
-    webkit = null;
+  gimp = callPackage ../applications/graphics/gimp {
+    gegl = gegl_0_4;
     lcms = lcms2;
+    inherit (gnome3) gexiv2;
     inherit (darwin.apple_sdk.frameworks) AppKit Cocoa;
   };
 
-  gimp = gimp_2_8;
-
   gimp-with-plugins = callPackage ../applications/graphics/gimp/wrapper.nix {
-    gimp = gimp_2_8;
     plugins = null; # All packaged plugins enabled, if not explicit plugin list supplied
   };
 
@@ -15966,11 +15990,7 @@ with pkgs;
   gmrun = callPackage ../applications/misc/gmrun {};
 
   gnucash = callPackage ../applications/office/gnucash {
-    inherit (gnome2) libgnomeui libgtkhtml gtkhtml libbonoboui libgnomeprint libglade libart_lgpl;
-    gconf = gnome2.GConf;
-    guile = guile_1_8;
-    slibGuile = slibGuile.override { scheme = guile_1_8; };
-    goffice = goffice_0_8;
+    inherit (gnome3) dconf;
   };
 
   gnucash26 = lowPrio (callPackage ../applications/office/gnucash/2.6.nix {
@@ -16037,6 +16057,8 @@ with pkgs;
   gnumeric = callPackage ../applications/office/gnumeric { };
 
   gnunet = callPackage ../applications/networking/p2p/gnunet { };
+
+  gnunet_git = lowPrio (callPackage ../applications/networking/p2p/gnunet/git.nix { });
 
   gnunet_svn = lowPrio (callPackage ../applications/networking/p2p/gnunet/svn.nix { });
 
@@ -16474,9 +16496,7 @@ with pkgs;
 
   khard = callPackage ../applications/misc/khard { };
 
-  kid3 = callPackage ../applications/audio/kid3 {
-    qt = qt4;
-  };
+  kid3 = libsForQt5.callPackage ../applications/audio/kid3 { };
 
   kile = libsForQt5.callPackage ../applications/editors/kile { };
 
@@ -17092,6 +17112,8 @@ with pkgs;
 
   mypaint = callPackage ../applications/graphics/mypaint { };
 
+  mypaint-brushes = callPackage ../development/libraries/mypaint-brushes { };
+
   mythtv = libsForQt5.callPackage ../applications/video/mythtv { };
 
   micro = callPackage ../applications/editors/micro { };
@@ -17416,8 +17438,6 @@ with pkgs;
 
   puremapping = callPackage ../applications/audio/pd-plugins/puremapping { };
 
-  pymol = callPackage ../applications/science/chemistry/pymol { };
-
   pybitmessage = callPackage ../applications/networking/instant-messengers/pybitmessage { };
 
   pythonmagick = callPackage ../applications/graphics/PythonMagick { };
@@ -17485,7 +17505,7 @@ with pkgs;
 
   qtbitcointrader = callPackage ../applications/misc/qtbitcointrader { };
 
-  qtox = libsForQt5.callPackage ../applications/networking/instant-messengers/qtox { ffmpeg = ffmpeg_2; };
+  qtox = libsForQt5.callPackage ../applications/networking/instant-messengers/qtox { };
 
   qtpass = libsForQt5.callPackage ../applications/misc/qtpass { };
 
@@ -18242,7 +18262,7 @@ with pkgs;
 
   vimNox = lowPrio (vim_configurable.override { source = "vim-nox"; });
 
-  qpdfview = callPackage ../applications/misc/qpdfview {};
+  qpdfview = libsForQt5.callPackage ../applications/misc/qpdfview {};
 
   qtile = callPackage ../applications/window-managers/qtile {
     inherit (xorg) libxcb;
@@ -19473,6 +19493,8 @@ with pkgs;
 
   tremulous = callPackage ../games/tremulous { };
 
+  tuxpaint = callPackage ../games/tuxpaint { };
+
   speed_dreams = callPackage ../games/speed-dreams {
     # Torcs wants to make shared libraries linked with plib libraries (it provides static).
     # i686 is the only platform I know than can do that linking without plib built with -fPIC
@@ -19756,6 +19778,22 @@ with pkgs;
 
   ### SCIENCE
 
+  ### SCIENCE/CHEMISTY
+
+  avogadro = callPackage ../applications/science/chemistry/avogadro {
+    eigen = eigen2;
+  };
+
+  gwyddion = callPackage ../applications/science/chemistry/gwyddion {};
+
+  jmol = callPackage ../applications/science/chemistry/jmol { };
+
+  molden = callPackage ../applications/science/chemistry/molden { };
+
+  octopus = callPackage ../applications/science/chemistry/octopus { openblas=openblasCompat; };
+
+  pymol = callPackage ../applications/science/chemistry/pymol { };
+
   ### SCIENCE/GEOMETRY
 
   drgeo = callPackage ../applications/science/geometry/drgeo {
@@ -19779,6 +19817,10 @@ with pkgs;
   bedtools = callPackage ../applications/science/biology/bedtools/default.nix { };
 
   bcftools = callPackage ../applications/science/biology/bcftools { };
+
+  conglomerate = callPackage ../applications/science/biology/conglomerate {
+    inherit (perlPackages) GetoptTabular MNI-Perllib;
+  };
 
   dcm2niix = callPackage ../applications/science/biology/dcm2niix { };
 
@@ -20656,7 +20698,7 @@ with pkgs;
 
   hplip_3_16_11 = callPackage ../misc/drivers/hplip/3.16.11.nix { };
 
-  hplipWithPlugin_3_16_11 = hplip.override { withPlugin = true; };
+  hplipWithPlugin_3_16_11 = hplip_3_16_11.override { withPlugin = true; };
 
   hyperfine = callPackage ../tools/misc/hyperfine { };
 
@@ -21405,5 +21447,5 @@ with pkgs;
                       mount wall hostname more sysctl;
 
   inherit (recurseIntoAttrs (callPackages ../os-specific/bsd { }))
-          netbsd openbsd;
+          netbsd;
 }
