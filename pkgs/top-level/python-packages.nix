@@ -18248,6 +18248,8 @@ EOF
   coinmarketcap = callPackage ../development/python-modules/coinmarketcap { };
 
   pyowm = callPackage ../development/python-modules/pyowm { };
+
+  prometheus_client = callPackage ../development/python-modules/prometheus_client { };
 });
 
 in fix' (extends overrides packages)
