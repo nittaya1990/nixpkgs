@@ -6,7 +6,6 @@
   buildScript ? null, configureFlags ? ""
 }:
 
-assert stdenv.isLinux;
 assert stdenv.cc.cc.isGNU or false;
 
 with import ./util.nix { inherit lib; };
@@ -50,6 +49,7 @@ stdenv.mkDerivation ((lib.optionalAttrs (! isNull buildScript) {
   ++ lib.optional udevSupport            pkgs.udev
   ++ lib.optionals gstreamerSupport      (with pkgs.gst_all_1; [ gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad gst-libav ])
   ++ lib.optionals gstreamerUnsafeSupport (with pkgs.gst_all_1; [ gst-plugins-ugly ])
+  ++ lib.optional vulkanSupport          pkgs.vulkan-loader
   ++ lib.optionals gtkSupport    [ pkgs.gtk3 pkgs.glib ]
   ++ lib.optionals openclSupport [ pkgs.opencl-headers pkgs.ocl-icd ]
   ++ lib.optionals xmlSupport    [ pkgs.libxml2 pkgs.libxslt ]

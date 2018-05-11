@@ -3882,36 +3882,6 @@ in {
 
   pomegranate = callPackage ../development/python-modules/pomegranate { };
 
-  poppler-qt4 = buildPythonPackage rec {
-    name = "poppler-qt4-${version}";
-    version = "0.18.1";
-    disabled = isPy3k || isPyPy;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/python-poppler-qt4/" +
-            "python-poppler-qt4-${version}.tar.gz";
-      sha256 = "00e3f89f4e23a844844d082918a89c2cbb1e8231ecb011b81d592e7e3c33a74c";
-    };
-
-    propagatedBuildInputs = [ self.pyqt4 pkgs.pkgconfig pkgs.poppler_qt4 ];
-
-    preBuild = "${python}/bin/${python.executable} setup.py build_ext" +
-               " --include-dirs=${pkgs.poppler_qt4.dev}/include/poppler/";
-
-    NIX_CFLAGS_COMPILE = "-I${pkgs.poppler_qt4.dev}/include/poppler/";
-
-    meta = {
-      description = "A Python binding to Poppler-Qt4";
-      longDescription = ''
-        A Python binding to Poppler-Qt4 that aims for completeness
-        and for being actively maintained.
-      '';
-      license = licenses.lgpl21Plus;
-      maintainers = with maintainers; [ sepi ];
-      platforms = platforms.all;
-    };
-  };
-
   poppler-qt5 = callPackage ../development/python-modules/poppler-qt5 {
     inherit (pkgs.qt5) qtbase;
     inherit (pkgs.libsForQt5) poppler;
@@ -5653,7 +5623,17 @@ in {
     };
   };
 
-  pytorch = callPackage ../development/python-modules/pytorch { };
+  pytorch = callPackage ../development/python-modules/pytorch {
+    cudaSupport = pkgs.config.cudaSupport or false;
+  };
+
+  pytorchWithCuda = self.pytorch.override {
+    cudaSupport = true;
+  };
+
+  pytorchWithoutCuda = self.pytorch.override {
+    cudaSupport = false;
+  };
 
   python2-pythondialog = buildPythonPackage rec {
     name = "python2-pythondialog-${version}";
@@ -11589,11 +11569,15 @@ in {
       sha256 = "9b47c5c3a094fa518ca88aeed35ae75834d53e4285512c61879f67a48c94ddaf";
     };
     propagatedBuildInputs = [ pkgs.libGLU_combined pkgs.freeglut self.pillow ];
-    patchPhase = ''
-      sed -i "s|util.find_library( name )|name|" OpenGL/platform/ctypesloader.py
-      sed -i "s|'GL',|'libGL.so',|" OpenGL/platform/glx.py
-      sed -i "s|'GLU',|'${pkgs.libGLU_combined}/lib/libGLU.so',|" OpenGL/platform/glx.py
-      sed -i "s|'glut',|'${pkgs.freeglut}/lib/libglut.so',|" OpenGL/platform/glx.py
+    patchPhase = let
+      ext = stdenv.hostPlatform.extensions.sharedLibrary; in ''
+      substituteInPlace OpenGL/platform/glx.py \
+        --replace "'GL'" "'${pkgs.libGL}/lib/libGL${ext}'" \
+        --replace "'GLU'" "'${pkgs.libGLU}/lib/libGLU${ext}'" \
+        --replace "'glut'" "'${pkgs.freeglut}/lib/libglut${ext}'"
+      substituteInPlace OpenGL/platform/darwin.py \
+        --replace "'OpenGL'" "'${pkgs.libGL}/lib/libGL${ext}'" \
+        --replace "'GLUT'" "'${pkgs.freeglut}/lib/libglut${ext}'"
     '';
     meta = {
       homepage = http://pyopengl.sourceforge.net/;
@@ -18219,6 +18203,8 @@ EOF
 
   pyspark = callPackage ../development/python-modules/pyspark { };
 
+  pysensors = callPackage ../development/python-modules/pysensors { };
+
   sseclient = callPackage ../development/python-modules/sseclient { };
 
   warrant = callPackage ../development/python-modules/warrant { };
@@ -18250,6 +18236,14 @@ EOF
   h11 = callPackage ../development/python-modules/h11 { };
 
   python-docx = callPackage ../development/python-modules/python-docx { };
+
+  aiohue = callPackage ../development/python-modules/aiohue { };
+
+  PyMVGLive = callPackage ../development/python-modules/pymvglive { };
+
+  coinmarketcap = callPackage ../development/python-modules/coinmarketcap { };
+
+  pyowm = callPackage ../development/python-modules/pyowm { };
 });
 
 in fix' (extends overrides packages)
