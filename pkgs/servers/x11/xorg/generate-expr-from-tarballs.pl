@@ -35,6 +35,7 @@ $pcMap{"dbus-1"} = "dbus";
 $pcMap{"uuid"} = "libuuid";
 $pcMap{"libudev"} = "udev";
 $pcMap{"gl"} = "libGL";
+$pcMap{"gbm"} = "libGL_driver";
 $pcMap{"\$PIXMAN"} = "pixman";
 $pcMap{"\$RENDERPROTO"} = "renderproto";
 $pcMap{"\$DRI3PROTO"} = "dri3proto";
@@ -231,7 +232,7 @@ print OUT "";
 print OUT <<EOF;
 # THIS IS A GENERATED FILE.  DO NOT EDIT!
 args @ { clangStdenv, fetchurl, fetchgit, fetchpatch, stdenv, pkgconfig, intltool, freetype, fontconfig
-, libxslt, expat, libpng, zlib, perl, mesa_noglu, mesa_drivers, spice-protocol
+, libxslt, expat, libpng, zlib, perl, libGL, libGL_driver, spice-protocol
 , dbus, libuuid, openssl, gperf, m4, libevdev, tradcpp, libinput, mcpp, makeWrapper, autoreconfHook
 , autoconf, automake, libtool, xmlto, asciidoc, flex, bison, python, mtdev, pixman, ... }: with args;
 
