@@ -29,7 +29,7 @@ rec {
         [ ../modules/virtualisation/qemu-vm.nix
           ../modules/testing/test-instrumentation.nix # !!! should only get added for automated test runs
           { key = "no-manual"; services.nixosManual.enable = false; }
-          { key = "qemu"; system.build.qemu = qemu; }
+          { key = "qemu"; system.build.qemu = qemu; boot.kernelParams = [ "udev.event_timeout=600" ]; }
         ] ++ optional minimal ../modules/testing/minimal-kernel.nix;
       extraArgs = { inherit nodes; };
     };
