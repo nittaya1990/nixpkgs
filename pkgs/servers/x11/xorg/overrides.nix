@@ -388,7 +388,7 @@ in
   };
 
   xf86videovmware = attrs: attrs // {
-    buildInputs =  attrs.buildInputs ++ [ args.mesa_drivers ]; # for libxatracker
+    buildInputs =  attrs.buildInputs ++ [ args.libGL_driver ]; # for libxatracker
     meta = attrs.meta // {
       platforms = ["i686-linux" "x86_64-linux"];
     };
@@ -492,7 +492,7 @@ in
       if (!isDarwin)
       then {
         outputs = [ "out" "dev" ];
-        buildInputs = commonBuildInputs ++ [ args.libdrm args.mesa_noglu ];
+        buildInputs = commonBuildInputs ++ [ args.libdrm args.libGL ];
         propagatedBuildInputs = [ libpciaccess args.epoxy ] ++ commonPropagatedBuildInputs ++ lib.optionals stdenv.isLinux [
           args.udev
         ];
