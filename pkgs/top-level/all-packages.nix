@@ -6899,6 +6899,7 @@ with pkgs;
     });
 
   cargo-edit = callPackage ../tools/package-management/cargo-edit { };
+  cargo-release = callPackage ../tools/package-management/cargo-release { };
 
   cargo-fuzz = callPackage ../development/tools/rust/cargo-fuzz { };
 
@@ -17713,6 +17714,8 @@ with pkgs;
   retroshare06 = retroshare;
 
   ricochet = libsForQt5.callPackage ../applications/networking/instant-messengers/ricochet { };
+
+  ries = callPackage ../applications/science/math/ries { };
 
   ripser = callPackage ../applications/science/math/ripser { };
 
