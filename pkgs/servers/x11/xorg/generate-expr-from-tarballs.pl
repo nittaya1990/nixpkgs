@@ -36,6 +36,7 @@ $pcMap{"uuid"} = "libuuid";
 $pcMap{"libudev"} = "udev";
 $pcMap{"gl"} = "libGL";
 $pcMap{"gbm"} = "libGL_driver";
+$pcMap{"dri"} = "libGL_driver";
 $pcMap{"\$PIXMAN"} = "pixman";
 $pcMap{"\$RENDERPROTO"} = "renderproto";
 $pcMap{"\$DRI3PROTO"} = "dri3proto";
