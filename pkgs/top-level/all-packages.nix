@@ -629,6 +629,8 @@ with pkgs;
 
   ecdsautils = callPackage ../tools/security/ecdsautils { };
 
+  sedutil = callPackage ../tools/security/sedutil { };
+
   elvish = callPackage ../shells/elvish { };
 
   encryptr = callPackage ../tools/security/encryptr {
@@ -1162,6 +1164,8 @@ with pkgs;
   duperemove = callPackage ../tools/filesystems/duperemove { };
 
   dynamic-colors = callPackage ../tools/misc/dynamic-colors { };
+
+  dyncall = callPackage ../development/libraries/dyncall { };
 
   earlyoom = callPackage ../os-specific/linux/earlyoom { };
 
@@ -2336,6 +2340,8 @@ with pkgs;
 
   flashrom = callPackage ../tools/misc/flashrom { };
 
+  flent = python3Packages.callPackage ../applications/networking/flent { };
+
   flpsed = callPackage ../applications/editors/flpsed { };
 
   fluentd = callPackage ../tools/misc/fluentd { };
@@ -3154,6 +3160,8 @@ with pkgs;
   jing = self.jing-trang;
   jing-trang = callPackage ../tools/text/xml/jing-trang { };
 
+  jira-cli = callPackage ../development/tools/jira_cli { };
+ 
   jl = haskellPackages.callPackage ../development/tools/jl { };
 
   jmespath = callPackage ../development/tools/jmespath { };
@@ -5482,7 +5490,10 @@ with pkgs;
 
   watchexec = callPackage ../tools/misc/watchexec { };
 
-  watchman = callPackage ../development/tools/watchman { };
+  watchman = callPackage ../development/tools/watchman {
+    inherit (darwin.apple_sdk.frameworks) CoreServices;
+    CoreFoundation = darwin.cf-private;
+  };
 
   wavefunctioncollapse = callPackage ../tools/graphics/wavefunctioncollapse {};
 
@@ -7560,11 +7571,12 @@ with pkgs;
 
   apacheAnt_1_9 = callPackage ../development/tools/build-managers/apache-ant/1.9.nix { };
 
-  apacheKafka = apacheKafka_1_0;
+  apacheKafka = apacheKafka_1_1;
   apacheKafka_0_9 = callPackage ../servers/apache-kafka { majorVersion = "0.9"; };
   apacheKafka_0_10 = callPackage ../servers/apache-kafka { majorVersion = "0.10"; };
   apacheKafka_0_11 = callPackage ../servers/apache-kafka { majorVersion = "0.11"; };
   apacheKafka_1_0 = callPackage ../servers/apache-kafka { majorVersion = "1.0"; };
+  apacheKafka_1_1 = callPackage ../servers/apache-kafka { majorVersion = "1.1"; };
 
   kt = callPackage ../tools/misc/kt {};
 
@@ -10532,6 +10544,7 @@ with pkgs;
   libvpx-git = callPackage ../development/libraries/libvpx/git.nix { };
 
   libvterm = callPackage ../development/libraries/libvterm { };
+  libvterm-neovim = callPackage ../development/libraries/libvterm-neovim { };
 
   libvorbis = callPackage ../development/libraries/libvorbis { };
 
@@ -10808,7 +10821,7 @@ with pkgs;
   ncurses6 = callPackage ../development/libraries/ncurses {
     abiVersion = "6";
   };
-  ncurses = ncurses6;
+  ncurses = if hostPlatform.useiOSPrebuilt then null else ncurses6;
 
   neardal = callPackage ../development/libraries/neardal { };
 
@@ -14088,9 +14101,7 @@ with pkgs;
 
   sysfsutils = callPackage ../os-specific/linux/sysfsutils { };
 
-  sysprof = callPackage ../development/tools/profiling/sysprof {
-    inherit (gnome2) libglade;
-  };
+  sysprof = callPackage ../development/tools/profiling/sysprof { };
 
   # Provided with sysfsutils.
   libsysfs = sysfsutils;
@@ -15067,6 +15078,8 @@ with pkgs;
 
   bspwm-unstable = callPackage ../applications/window-managers/bspwm/unstable.nix { };
 
+  btops = callPackage ../applications/window-managers/btops { };
+
   bvi = callPackage ../applications/editors/bvi { };
 
   bviplus = callPackage ../applications/editors/bviplus { };
@@ -15985,6 +15998,8 @@ with pkgs;
   game-music-emu = callPackage ../applications/audio/game-music-emu { };
 
   gcalcli = callPackage ../applications/misc/gcalcli { };
+
+  vcal = callPackage ../applications/misc/vcal { };
 
   gcolor2 = callPackage ../applications/graphics/gcolor2 { };
 
@@ -17568,6 +17583,10 @@ with pkgs;
   qsynth = libsForQt5.callPackage ../applications/audio/qsynth { };
 
   qtbitcointrader = callPackage ../applications/misc/qtbitcointrader { };
+
+  qtchan = callPackage ../applications/networking/browsers/qtchan {
+    qt = qt5;
+  };
 
   qtox = libsForQt5.callPackage ../applications/networking/instant-messengers/qtox { };
 
@@ -19362,6 +19381,8 @@ with pkgs;
 
   orthorobot = callPackage ../games/orthorobot { love = love_0_7; };
 
+  pacvim = callPackage ../games/pacvim { };
+
   performous = callPackage ../games/performous { };
 
   pingus = callPackage ../games/pingus {};
@@ -19780,6 +19801,8 @@ with pkgs;
 
   redshift = callPackage ../applications/misc/redshift {
     inherit (python3Packages) python pygobject3 pyxdg wrapPython;
+    inherit (darwin.apple_sdk.frameworks) CoreLocation ApplicationServices Foundation Cocoa;
+    geoclue = geoclue2;
   };
 
   redshift-plasma-applet = libsForQt5.callPackage ../applications/misc/redshift-plasma-applet { };
@@ -21213,54 +21236,7 @@ with pkgs;
     pythonPackages = python3Packages;
   };
 
-  winePackages = rec {
-    minimal = callPackage ../misc/emulators/wine {
-      wineRelease = config.wine.release or "stable";
-      wineBuild = config.wine.build or "wine32";
-    };
-
-    base = minimal.override {
-      pngSupport = true;
-      jpegSupport = true;
-      tiffSupport = true;
-      gettextSupport = true;
-      fontconfigSupport = true;
-      alsaSupport = true;
-      openglSupport = true;
-      vulkanSupport = stdenv.isLinux;
-      tlsSupport = true;
-      cupsSupport = true;
-      dbusSupport = true;
-      cairoSupport = true;
-      cursesSupport = true;
-      saneSupport = true;
-      pulseaudioSupport = config.pulseaudio or stdenv.isLinux;
-      udevSupport = true;
-      xineramaSupport = true;
-      xmlSupport = true;
-    };
-
-    full = base.override {
-      gtkSupport = true;
-      gstreamerSupport = true;
-      colorManagementSupport = true;
-      mpg123Support = true;
-      openalSupport = true;
-      openclSupport = true;
-      odbcSupport = true;
-      netapiSupport = true;
-      vaSupport = true;
-      pcapSupport = true;
-      v4lSupport = true;
-      gsmSupport = true;
-      gphoto2Support = true;
-      ldapSupport = true;
-    };
-
-    stable = base.override { wineRelease = "stable"; };
-    unstable = base.override { wineRelease = "unstable"; };
-    staging = base.override { wineRelease = "staging"; };
-  };
+  winePackages = recurseIntoAttrs (callPackage ./wine-packages.nix { });
 
   wine = winePackages.full;
 
