@@ -21281,6 +21281,8 @@ with pkgs;
 
   xboxdrv = callPackage ../misc/drivers/xboxdrv { };
 
+  xbps = callPackage ../tools/package-management/xbps { };
+
   xcftools = callPackage ../tools/graphics/xcftools { };
 
   xhyve = callPackage ../applications/virtualization/xhyve {
@@ -21480,6 +21482,10 @@ with pkgs;
   wire-desktop = callPackage ../applications/networking/instant-messengers/wire-desktop { };
 
   teseq = callPackage ../applications/misc/teseq {  };
+
+  ape = callPackage ../applications/misc/ape { };
+  attemptoClex = callPackage ../applications/misc/ape/clex.nix { };
+  apeClex = callPackage ../applications/misc/ape/apeclex.nix { };
 
   # Unix tools
   unixtools = recurseIntoAttrs (callPackages ./unix-tools.nix { });
