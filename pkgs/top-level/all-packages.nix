@@ -844,6 +844,8 @@ with pkgs;
 
   blink = callPackage ../applications/networking/instant-messengers/blink { };
 
+  blockhash = callPackage ../tools/graphics/blockhash { };
+
   bluemix-cli = callPackage ../tools/admin/bluemix-cli { };
 
   libqmatrixclient = libsForQt5.callPackage ../development/libraries/libqmatrixclient { };
@@ -5513,6 +5515,8 @@ with pkgs;
   welkin = callPackage ../tools/graphics/welkin {};
 
   whois = callPackage ../tools/networking/whois { };
+
+  wireguard-tools = callPackage ../tools/networking/wireguard-tools { };
 
   woff2 = callPackage ../development/web/woff2 { };
 
@@ -18576,8 +18580,6 @@ with pkgs;
   wings = callPackage ../applications/graphics/wings {
     erlang = erlangR18;
   };
-
-  wireguard = callPackage ../os-specific/linux/wireguard { };
 
   alsamixer.app = callPackage ../applications/window-managers/windowmaker/dockapps/alsamixer.app.nix { };
 
