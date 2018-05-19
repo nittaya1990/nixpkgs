@@ -1445,6 +1445,8 @@ with pkgs;
 
   mcrypt = callPackage ../tools/misc/mcrypt { };
 
+  mongodb-compass = callPackage ../tools/misc/mongodb-compass { };
+  
   mongodb-tools = callPackage ../tools/misc/mongodb-tools { };
 
   mozlz4a = callPackage ../tools/compression/mozlz4a {
@@ -15793,6 +15795,8 @@ with pkgs;
 
   goldendict = libsForQt5.callPackage ../applications/misc/goldendict { };
 
+  gomuks = callPackage ../applications/networking/instant-messengers/gomuks { };
+
   inherit (ocamlPackages) google-drive-ocamlfuse;
 
   google-musicmanager = callPackage ../applications/audio/google-musicmanager { };
@@ -21494,4 +21498,7 @@ with pkgs;
 
   inherit (recurseIntoAttrs (callPackages ../os-specific/bsd { }))
           netbsd;
+
+  yrd = callPackage ../tools/networking/yrd { };
+
 }
