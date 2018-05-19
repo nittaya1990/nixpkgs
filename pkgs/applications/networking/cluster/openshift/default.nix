@@ -26,7 +26,7 @@ in stdenv.mkDerivation rec {
     owner = "openshift";
     repo = "origin";
     rev = "v${version}";
-    sha256 = "06k0zilfyvll7z34yirraslgpwgah9k6y5i6wgi7f00a79k76k78";
+    sha256 = "101awmbfa4v1qjwhwyvma4vrzqhkzf8cl3d7zhmxigyq8rz4akd8";
 };
 
   # go > 1.10
