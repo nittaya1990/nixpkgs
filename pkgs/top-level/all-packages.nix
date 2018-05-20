@@ -1466,6 +1466,8 @@ with pkgs;
     utillinux = utillinuxMinimal;
   };
 
+  antibody = callPackage ../shells/zsh/antibody { };
+  
   antigen = callPackage ../shells/zsh/antigen { };
 
   apparix = callPackage ../tools/misc/apparix { };
@@ -15770,6 +15772,8 @@ with pkgs;
   fvwm = callPackage ../applications/window-managers/fvwm { };
 
   ganttproject-bin = callPackage ../applications/misc/ganttproject-bin { };
+
+  gauche = callPackage ../development/interpreters/gauche { };
 
   gcal = callPackage ../applications/misc/gcal { };
 
