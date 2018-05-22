@@ -1,6 +1,6 @@
 # THIS IS A GENERATED FILE.  DO NOT EDIT!
 args @ { clangStdenv, fetchurl, fetchgit, fetchpatch, stdenv, pkgconfig, intltool, freetype, fontconfig
-, libxslt, expat, libpng, zlib, perl, libGL, libGL_driver, spice-protocol
+, libxslt, expat, libpng, zlib, perl, mesa_noglu, libGL, libGL_driver, spice-protocol
 , dbus, libuuid, openssl, gperf, m4, libevdev, tradcpp, libinput, mcpp, makeWrapper, autoreconfHook
 , autoconf, automake, libtool, xmlto, asciidoc, flex, bison, python, mtdev, pixman, ... }: with args;
 
@@ -1839,9 +1839,9 @@ let
       sha256 = "0z56ifw3xiq9dychv8chg1cny0hq4v3c1r9pqcybk5fp7nzw9jpq";
     };
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ fontsproto libGL libGL_driver libdrm udev randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto ];
+    buildInputs = [ fontsproto mesa_noglu libGL libdrm udev randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) // {inherit fontsproto libGL libGL_driver libdrm udev randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto ;};
+  }) // {inherit fontsproto mesa_noglu libGL libdrm udev randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto ;};
 
   xf86videoark = (mkDerivation "xf86videoark" {
     name = "xf86-video-ark-0.7.5";
@@ -2570,9 +2570,6 @@ let
       url = mirror://xorg/individual/util/xorg-cf-files-1.0.6.tar.bz2;
       sha256 = "0kckng0zs1viz0nr84rdl6dswgip7ndn4pnh5nfwnviwpsfmmksd";
     };
-    postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
-      substituteInPlace $out/lib/X11/config/darwin.cf --replace "/usr/bin/" ""
-    '';
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ ];
     meta.platforms = stdenv.lib.platforms.unix;
@@ -2598,9 +2595,9 @@ let
       sha256 = "15y13ihgkggmly5s07vzvpn35gzx1w0hrkbnlcvcy05h3lpm0cm7";
     };
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ dri2proto dri3proto renderproto openssl libX11 libXau libXaw libxcb xcbutil xcbutilwm xcbutilimage xcbutilkeysyms xcbutilrenderutil libXdmcp libXfixes libxkbfile libXmu libXpm libXrender libXres libXt libGL_driver ];
+    buildInputs = [ dri2proto dri3proto renderproto openssl libX11 libXau libXaw libxcb xcbutil xcbutilwm xcbutilimage xcbutilkeysyms xcbutilrenderutil libXdmcp libXfixes libxkbfile libXmu libXpm libXrender libXres libXt mesa_noglu ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) // {inherit dri2proto dri3proto renderproto openssl libX11 libXau libXaw libxcb xcbutil xcbutilwm xcbutilimage xcbutilkeysyms xcbutilrenderutil libXdmcp libXfixes libxkbfile libXmu libXpm libXrender libXres libXt libGL_driver ;};
+  }) // {inherit dri2proto dri3proto renderproto openssl libX11 libXau libXaw libxcb xcbutil xcbutilwm xcbutilimage xcbutilkeysyms xcbutilrenderutil libXdmcp libXfixes libxkbfile libXmu libXpm libXrender libXres libXt mesa_noglu ;};
 
   xorgsgmldoctools = (mkDerivation "xorgsgmldoctools" {
     name = "xorg-sgml-doctools-1.11";
