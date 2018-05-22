@@ -17581,8 +17581,6 @@ with pkgs;
     inherit (darwin.stubs) rez setfile;
   };
 
-  qemu-riscv = lowPrio (callPackage ../applications/virtualization/qemu/riscv.nix {});
-
   qgis3-unwrapped = libsForQt5.callPackage ../applications/gis/qgis/3.0.nix {
     postgresql = postgresql100;
   };
