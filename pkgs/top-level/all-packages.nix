@@ -20481,6 +20481,8 @@ with pkgs;
     texinfo = texinfo4;
   };
 
+  form = callPackage ../applications/science/math/form { };
+
   fricas = callPackage ../applications/science/math/fricas { };
 
   gap = callPackage ../applications/science/math/gap { };
@@ -20850,6 +20852,8 @@ with pkgs;
   hatari = callPackage ../misc/emulators/hatari { };
 
   helm = callPackage ../applications/audio/helm { };
+
+  helmfile = callPackage ../applications/networking/cluster/helmfile { };
 
   heptio-ark = callPackage ../applications/networking/cluster/heptio-ark { };
 
