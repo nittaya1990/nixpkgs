@@ -547,6 +547,8 @@ in {
 
   asyncio = callPackage ../development/python-modules/asyncio {};
 
+  asyncssh = callPackage ../development/python-modules/asyncssh { };
+
   python-fontconfig = callPackage ../development/python-modules/python-fontconfig { };
 
   funcsigs = callPackage ../development/python-modules/funcsigs { };
@@ -5158,6 +5160,7 @@ in {
     };
   };
 
+  effect = callPackage ../development/python-modules/effect {};
 
   elpy = buildPythonPackage rec {
     name = "elpy-${version}";
@@ -9887,25 +9890,7 @@ in {
 
   pybase64 = callPackage ../development/python-modules/pybase64 { };
 
-  pylibconfig2 = buildPythonPackage rec {
-    name = "pylibconfig2-${version}";
-    version = "0.2.4";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pylibconfig2/${name}.tar.gz";
-      sha256 = "0kyg6gldj6hi2jhc5xhi834bb2mcaiy24dvfik963shnldqr7kqg";
-    };
-
-    doCheck = false;
-
-    propagatedBuildInputs = with self ; [ pyparsing ];
-
-    meta = {
-      homepage = https://github.com/heinzK1X/pylibconfig2;
-      description = "Pure python library for libconfig syntax";
-      license = licenses.gpl3;
-    };
-  };
+  pylibconfig2 = callPackage ../development/python-modules/pylibconfig2 { };
 
   pylibmc = callPackage ../development/python-modules/pylibmc {};
 
@@ -16331,8 +16316,8 @@ EOF
     };
   };
 
-  # For backwards compatibility. Please use nixpkgs.udiskie instead.
-  udiskie = toPythonModule (pkgs.udiskie.override { pythonPackages = self; });
+  # added 2018-05-23, can be removed once 18.09 is branched off
+  udiskie = throw "pythonPackages.udiskie has been replaced by udiskie";
 
   # Should be bumped along with EFL!
   pythonefl = buildPythonPackage rec {
