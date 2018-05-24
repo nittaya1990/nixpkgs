@@ -18,13 +18,16 @@ let
 
     makefile = "Makefile.libretro";
 
+    inherit core;
+
     installPhase = ''
       COREDIR="$out/lib/retroarch/cores"
+      so_name=''${core//-/_}_libretro${stdenv.hostPlatform.extensions.sharedLibrary}
       mkdir -p $out/bin
       mkdir -p $COREDIR
-      mv ${d2u core}_libretro${stdenv.hostPlatform.extensions.sharedLibrary} $COREDIR/.
-      makeWrapper ${retroarch}/bin/retroarch $out/bin/retroarch-${core} \
-        --add-flags "-L $COREDIR/${d2u core}_libretro${stdenv.hostPlatform.extensions.sharedLibrary} $@"
+      mv $so_name $COREDIR/.
+      makeWrapper ${retroarch}/bin/retroarch $out/bin/retroarch-$core \
+        --add-flags "-L $COREDIR/$so_name $@"
     '';
 
     enableParallelBuilding = true;
