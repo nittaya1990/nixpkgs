@@ -11,13 +11,6 @@ with lib;
 let
   version = "3.9.0";
   ver = stdenv.lib.elemAt (stdenv.lib.splitString "." version);
-  versionMajor = ver 0;
-  versionMinor = ver 1;
-  versionPatch = ver 2;
-  gitCommit = "191fece";
-  # version is in vendor/k8s.io/kubernetes/pkg/version/base.go
-  k8sversion = "v1.9.1";
-  k8sgitcommit = "a0ce1bc657";
 in stdenv.mkDerivation rec {
   name = "openshift-origin-${version}";
   inherit version;
@@ -27,7 +20,7 @@ in stdenv.mkDerivation rec {
     repo = "origin";
     rev = "v${version}";
     sha256 = "101awmbfa4v1qjwhwyvma4vrzqhkzf8cl3d7zhmxigyq8rz4akd8";
-};
+  };
 
   # go > 1.10
   # [FATAL] [14:44:02+0000] Please install Go version go1.9 or use PERMISSIVE_GO=y to bypass this check.
@@ -35,7 +28,7 @@ in stdenv.mkDerivation rec {
 
   outputs = [ "out" ];
 
-  patchPhase = ''
+  postPatch = ''
     patchShebangs ./hack
 
     substituteInPlace pkg/oc/bootstrap/docker/host/host.go  \
@@ -48,19 +41,27 @@ in stdenv.mkDerivation rec {
 
     substituteInPlace pkg/oc/bootstrap/docker/host/host.go  \
       --replace 'nsenter --mount=/rootfs/proc/1/ns/mnt mkdir' \
-      'nsenter --mount=/rootfs/proc/1/ns/mnt ${utillinux}/bin/mount'
+      'nsenter --mount=/rootfs/proc/1/ns/mnt ${coreutils}/bin/mkdir'
   '';
+
+  # version is in vendor/k8s.io/kubernetes/pkg/version/base.go
+  k8sversion = "v1.9.1";
+  k8sgitcommit = "a0ce1bc657";
+  versionMajor = ver 0;
+  versionMinor = ver 1;
+  versionPatch = ver 2;
+  gitCommit = "191fece";
 
   buildPhase = ''
     # Openshift build require this variables to be set
     # unless there is a .git folder which is not the case with fetchFromGitHub
-    echo "OS_GIT_VERSION=v${version}" >> os-version-defs
-    echo "OS_GIT_MAJOR=${versionMajor}" >> os-version-defs
-    echo "OS_GIT_MINOR=${versionMinor}" >> os-version-defs
-    echo "OS_GIT_PATCH=${versionPatch}" >> os-version-defs
-    echo "OS_GIT_COMMIT=${gitCommit}" >> os-version-defs
-    echo "KUBE_GIT_VERSION=${k8sversion}" >> os-version-defs
-    echo "KUBE_GIT_COMMIT=${k8sgitcommit}" >> os-version-defs
+    echo "OS_GIT_VERSION=v$version" >> os-version-defs
+    echo "OS_GIT_MAJOR=$versionMajor" >> os-version-defs
+    echo "OS_GIT_MINOR=$versionMinor" >> os-version-defs
+    echo "OS_GIT_PATCH=$versionPatch" >> os-version-defs
+    echo "OS_GIT_COMMIT=$gitCommit" >> os-version-defs
+    echo "KUBE_GIT_VERSION=$k8sversion" >> os-version-defs
+    echo "KUBE_GIT_COMMIT=$k8sgitcommit" >> os-version-defs
     export OS_VERSION_FILE="os-version-defs"
     export CC=clang
     make all WHAT='${concatStringsSep " " components}'
