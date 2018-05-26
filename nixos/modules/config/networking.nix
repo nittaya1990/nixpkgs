@@ -10,6 +10,7 @@ let
   dnsmasqResolve = config.services.dnsmasq.enable &&
                    config.services.dnsmasq.resolveLocalQueries;
   hasLocalResolver = config.services.bind.enable || dnsmasqResolve;
+  localResolverIp = if (dnsmasqResolve) then config.services.dnsmasq.localNameserver else "127.0.0.1";
 
   resolvconfOptions = cfg.resolvconfOptions
     ++ optional cfg.dnsSingleRequest "single-request"
@@ -240,7 +241,7 @@ in
               resolv_conf_options='${concatStringsSep " " resolvconfOptions}'
             '' + optionalString hasLocalResolver ''
               # This hosts runs a full-blown DNS resolver.
-              name_servers='127.0.0.1'
+              name_servers='${localResolverIp}'
             '' + optionalString dnsmasqResolve ''
               dnsmasq_conf=/etc/dnsmasq-conf.conf
               dnsmasq_resolv=/etc/dnsmasq-resolv.conf
