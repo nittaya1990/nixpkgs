@@ -9270,7 +9270,7 @@ with pkgs;
 
   qt-gstreamer = callPackage ../development/libraries/gstreamer/legacy/qt-gstreamer {};
 
-  qt-gstreamer1 = callPackage ../development/libraries/gstreamer/qt-gstreamer { boost = boost155;};
+  qt-gstreamer1 = callPackage ../development/libraries/gstreamer/qt-gstreamer { boost = boost155; };
 
   qtstyleplugin-kvantum-qt4 = callPackage ../development/libraries/qtstyleplugin-kvantum-qt4 { };
 
@@ -11803,7 +11803,9 @@ with pkgs;
 
   uid_wrapper = callPackage ../development/libraries/uid_wrapper { };
 
-  umockdev = callPackage ../development/libraries/umockdev {  };
+  umockdev = callPackage ../development/libraries/umockdev {
+    vala = vala_0_40;
+  };
 
   unibilium = callPackage ../development/libraries/unibilium { };
 
@@ -14534,7 +14536,7 @@ with pkgs;
   nafees = callPackage ../data/fonts/nafees { };
 
   inherit (callPackages ../data/fonts/noto-fonts {})
-    noto-fonts noto-fonts-cjk noto-fonts-emoji;
+    noto-fonts noto-fonts-cjk noto-fonts-emoji noto-fonts-extra;
 
   nullmailer = callPackage ../servers/mail/nullmailer {
     stdenv = gccStdenv;
@@ -16423,6 +16425,7 @@ with pkgs;
 
   inkscape = callPackage ../applications/graphics/inkscape {
     lcms = lcms2;
+    poppler = poppler_0_61;
   };
 
   inspectrum = libsForQt5.callPackage ../applications/misc/inspectrum { };
