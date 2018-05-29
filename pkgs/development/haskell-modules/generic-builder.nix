@@ -35,7 +35,7 @@ in
 , enableStaticLibraries ? !hostPlatform.isWindows
 , enableHsc2hsViaAsm ? hostPlatform.isWindows && stdenv.lib.versionAtLeast ghc.version "8.4"
 , extraLibraries ? [], librarySystemDepends ? [], executableSystemDepends ? []
-, homepage ? "http://hackage.haskell.org/package/${pname}"
+, homepage ? "https://hackage.haskell.org/package/${pname}"
 , platforms ? with stdenv.lib.platforms; unix ++ windows # GHC can cross-compile
 , hydraPlatforms ? null
 , hyperlinkSource ? true
@@ -355,6 +355,8 @@ stdenv.mkDerivation ({
     runHook postBuild
   '';
 
+  inherit doCheck;
+
   checkPhase = ''
     runHook preCheck
     ${setupCommand} test ${testTarget}
@@ -469,7 +471,6 @@ stdenv.mkDerivation ({
 // optionalAttrs (postConfigure != "")  { inherit postConfigure; }
 // optionalAttrs (preBuild != "")       { inherit preBuild; }
 // optionalAttrs (postBuild != "")      { inherit postBuild; }
-// optionalAttrs (doCheck)              { inherit doCheck; }
 // optionalAttrs (doBenchmark)          { inherit doBenchmark; }
 // optionalAttrs (checkPhase != "")     { inherit checkPhase; }
 // optionalAttrs (preCheck != "")       { inherit preCheck; }

@@ -2101,6 +2101,8 @@ in {
 
   demjson = callPackage ../development/python-modules/demjson { };
 
+  deprecation = callPackage ../development/python-modules/deprecation { };
+
   derpconf = callPackage ../development/python-modules/derpconf { };
 
   deskcon = self.buildPythonPackage rec {
@@ -2817,9 +2819,10 @@ in {
   };
 
   gnutls = buildPythonPackage rec {
-    name = "python-gnutls";
+    pname = "python-gnutls";
+    version = "3.0.0";
     src = pkgs.fetchurl {
-      url = "mirror://pypi/p/python-gnutls/python-gnutls-3.0.0.tar.gz";
+      url = "mirror://pypi/p/python-gnutls/${pname}-${version}.tar.gz";
       sha256 = "1yrdxcj5rzvz8iglircz6icvyggz5fmdcd010n6w3j60yp4p84kc";
     };
 
@@ -6962,6 +6965,9 @@ in {
 
   pylru = callPackage ../development/python-modules/pylru { };
 
+  libnl-python = disabledIf isPy3k
+    (toPythonModule (pkgs.libnl.override{pythonSupport=true; inherit python; })).py;
+
   lark-parser = callPackage ../development/python-modules/lark-parser { };
 
   lazy-object-proxy = buildPythonPackage rec {
@@ -9113,7 +9119,7 @@ in {
       sha256 = "0hh9j5zd2kc0804d2jmf1q3w5xm9l9s69hhgysbncrv5fw0414lh";
     };
     buildInputs = with pkgs; [ bashInteractive ]; # needed for bash-completion helper
-    propagatedBuildInputs = with self; [ urlgrabber m2crypto pyyaml ];
+    propagatedBuildInputs = with self; [ urlgrabber m2crypto pyyaml lxml ];
     postInstall = ''
       ln -s $out/bin/osc-wrapper.py $out/bin/osc
       install -D -m444 osc.fish $out/etc/fish/completions/osc.fish
@@ -10372,7 +10378,7 @@ in {
   };
 
   pybcrypt = buildPythonPackage rec {
-    name = "pybcrypt";
+    pname = "pybcrypt";
     version = "0.4";
 
     src = pkgs.fetchurl {
@@ -13399,27 +13405,7 @@ in {
     };
   };
 
-  supervisor = buildPythonPackage rec {
-    name = "supervisor-3.1.4";
-
-    disabled = isPy3k;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/s/supervisor/${name}.tar.gz";
-      sha256 = "0kk0sv7780m4dzmrcb2m284krz907jh8jp7khz5a79qryy4m1xw2";
-    };
-
-    buildInputs = with self; [ mock ];
-    propagatedBuildInputs = with self; [ meld3 ];
-
-    # failing tests when building under chroot as root user doesn't exist
-    doCheck = false;
-
-    meta = {
-      description = "A system for controlling process state under UNIX";
-      homepage = http://supervisord.org/;
-    };
-  };
+  supervisor = callPackage ../development/python-modules/supervisor {};
 
   subprocess32 = callPackage ../development/python-modules/subprocess32 { };
 
@@ -14260,25 +14246,7 @@ in {
 
   TurboCheetah = callPackage ../development/python-modules/TurboCheetah { };
 
-  tweepy = buildPythonPackage (rec {
-    name = "tweepy-3.5.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/t/tweepy/${name}.tar.gz";
-      sha256 = "0n2shilamgwhzmvf534xg7f6hrnznbixyl5pw2f5a3f391gwy37h";
-    };
-
-    doCheck = false;
-    propagatedBuildInputs = with self; [ requests six requests_oauthlib ];
-
-    meta = {
-      homepage = "https://github.com/tweepy/tweepy";
-      description = "Twitter library for python";
-      license = licenses.mit;
-      maintainers = with maintainers; [ garbas ];
-      platforms = platforms.linux;
-    };
-  });
+  tweepy = callPackage ../development/python-modules/tweepy { };
 
   twiggy = buildPythonPackage rec {
     name = "Twiggy-${version}";
@@ -16235,6 +16203,10 @@ EOF
     };
   };
 
+  libversion = callPackage ../development/python-modules/libversion {
+    inherit (pkgs) libversion;
+  };
+
   libvirt = callPackage ../development/python-modules/libvirt {
     inherit (pkgs) libvirt;
   };
@@ -18176,6 +18148,8 @@ EOF
   pysdl2 = callPackage ../development/python-modules/pysdl2 { };
 
   pyogg = callPackage ../development/python-modules/pyogg { };
+
+  rubymarshal = callPackage ../development/python-modules/rubymarshal { };
 });
 
 in fix' (extends overrides packages)
