@@ -13187,7 +13187,7 @@ with pkgs;
     pulseSupport = config.pulseaudio or false;
   } // config.conky or {});
 
-  conntrack_tools = callPackage ../os-specific/linux/conntrack-tools { };
+  conntrack-tools = callPackage ../os-specific/linux/conntrack-tools { };
 
   coredns = callPackage ../servers/dns/coredns { };
 
@@ -18118,7 +18118,7 @@ with pkgs;
 
   terminator = callPackage ../applications/misc/terminator { };
 
-  terminus = callPackage ../applications/misc/terminus { inherit (gnome2) GConf; };
+  terminus = callPackage ../applications/misc/terminus { };
 
   lxterminal = callPackage ../applications/misc/lxterminal {
     vte = gnome3.vte;
