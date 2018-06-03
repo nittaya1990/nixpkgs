@@ -46,15 +46,6 @@ in
         '';
       };
 
-      localNameserver = mkOption {
-        type = types.string;
-        default = "127.0.0.1";
-        description = ''
-          IP address to use for local nameserver resolution. Defaults to 127.0.0.1.
-          OpenShift Origin, for instance, expects this to be the local IP of the host.
-        '';
-      };
-
       servers = mkOption {
         type = types.listOf types.str;
         default = [];
@@ -90,8 +81,9 @@ in
 
   config = mkIf config.services.dnsmasq.enable {
 
-    networking.nameservers =
-      optional cfg.resolveLocalQueries cfg.localNameserver;
+    networking.nameservers = [ ]
+      ++ optional cfg.resolveLocalQueries "127.0.0.1"
+      ++ optional (cfg.resolveLocalQueries && config.networking.enableIPv6) "::1";
 
     services.dbus.packages = [ dnsmasq ];
 
