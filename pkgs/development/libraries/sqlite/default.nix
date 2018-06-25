@@ -10,12 +10,12 @@ in
 
 stdenv.mkDerivation rec {
   name = "sqlite-${version}";
-  version = "3.23.1";
+  version = "3.24.0";
 
   # NB! Make sure to update analyzer.nix src (in the same directory).
   src = fetchurl {
     url = "https://sqlite.org/2018/sqlite-autoconf-${archiveVersion version}.tar.gz";
-    sha256 = "09ggapjhqjb2pzk0wkfczil77plijg3d77m2bpzlwx2y7ql2p14j";
+    sha256 = "0jmprv2vpggzhy7ma4ynmv1jzn3pfiwzkld0kkg6hvgvqs44xlfr";
   };
 
   outputs = [ "bin" "dev" "out" ];
@@ -64,6 +64,11 @@ stdenv.mkDerivation rec {
     echo ""
     echo "NIX_CFLAGS_COMPILE = $NIX_CFLAGS_COMPILE"
     echo ""
+  '';
+
+  postInstall = ''
+    # Do not contaminate dependent libtool-based projects with sqlite dependencies.
+    sed -i $out/lib/libsqlite3.la -e "s/dependency_libs=.*/dependency_libs='''/"
   '';
 
   meta = {

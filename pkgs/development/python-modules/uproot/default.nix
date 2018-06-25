@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "uproot";
-  version = "2.8.23";
+  version = "2.8.33";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "121ggyl5s0q66yrbdfznvzrc793zq1w2xnr3baadlzfvqdlkhgj7";
+    sha256 = "42b6482d085b699a534f0a3ec352e96d4653e31c8839855c8a852618f54e27d8";
   };
 
   propagatedBuildInputs = [

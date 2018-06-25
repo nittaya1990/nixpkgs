@@ -23,12 +23,15 @@ in stdenv.mkDerivation rec {
   };
 
   patches = [
+    (fetchpatch {
+      name = "CVE-2018-10289.patch";
+      url = "https://bugs.ghostscript.com/attachment.cgi?id=15230";
+      sha256 = "0jmpacxd9930g6k57kda9jrcrbk75whdlv8xwmqg5jwn848qvy4q";
+    })
   ]
-
-  # Use shared libraries to decrease size
-  ++ stdenv.lib.optional (!stdenv.isDarwin) ./mupdf-1.13-shared_libs-1.patch
-
-  ++ stdenv.lib.optional stdenv.isDarwin ./darwin.patch
+    # Use shared libraries to decrease size
+    ++ stdenv.lib.optional (!stdenv.isDarwin) ./mupdf-1.13-shared_libs-1.patch
+    ++ stdenv.lib.optional stdenv.isDarwin ./darwin.patch
   ;
 
   postPatch = ''
@@ -83,7 +86,7 @@ in stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = http://mupdf.com;
+    homepage = https://mupdf.com;
     repositories.git = git://git.ghostscript.com/mupdf.git;
     description = "Lightweight PDF, XPS, and E-book viewer and toolkit written in portable C";
     license = licenses.agpl3Plus;

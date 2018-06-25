@@ -12,7 +12,6 @@
 , release_version
 , zlib
 , compiler-rt_src
-, libcxxabi
 , debugVersion ? false
 , enableManpages ? false
 , enableSharedLibraries ? true
@@ -42,8 +41,7 @@ in stdenv.mkDerivation (rec {
   nativeBuildInputs = [ cmake python ]
     ++ stdenv.lib.optional enableManpages python.pkgs.sphinx;
 
-  buildInputs = [ libxml2 libffi ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ libcxxabi ];
+  buildInputs = [ libxml2 libffi ];
 
   propagatedBuildInputs = [ ncurses zlib ];
 
@@ -85,7 +83,7 @@ in stdenv.mkDerivation (rec {
     patch -p0 < ${../aarch64.patch}
   '' + stdenv.lib.optionalString stdenv.hostPlatform.isMusl ''
     patch -p1 -i ${../TLI-musl.patch}
-    patch -p1 -i ${./dynamiclibrary-musl.patch}
+    patch -p1 -i ${../dynamiclibrary-musl.patch}
     patch -p1 -i ${./sanitizers-nongnu.patch} -d projects/compiler-rt
   '';
 

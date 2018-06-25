@@ -42,21 +42,22 @@ let
     inherit (bootGhcjs) version;
     isGhcjs = true;
 
+    enableShared = true;
+
     socket-io = nodePackages."socket.io";
 
     # Relics of the old GHCJS build system
     stage1Packages = [];
     mkStage2 = _: {};
+
+    haskellCompilerName = "ghcjs-${bootGhcjs.version}";
   };
 
   bootGhcjs = haskellLib.justStaticExecutables passthru.bootPkgs.ghcjs;
-  libexec =
-    if builtins.compareVersions bootGhcjs.version "8.3" <= 0
-      then "${bootGhcjs}/bin"
-      else "${bootGhcjs}/libexec/${builtins.replaceStrings ["darwin"] ["osx"] stdenv.system}-${passthru.bootPkgs.ghc.name}/${bootGhcjs.name}";
+  libexec = "${bootGhcjs}/libexec/${builtins.replaceStrings ["darwin" "i686"] ["osx" "i386"] stdenv.system}-${passthru.bootPkgs.ghc.name}/${bootGhcjs.name}";
 
 in stdenv.mkDerivation {
-    name = "ghcjs";
+    name = bootGhcjs.name;
     src = passthru.configuredSrc;
     nativeBuildInputs = [
       bootGhcjs
@@ -70,9 +71,12 @@ in stdenv.mkDerivation {
     ] ++ lib.optionals stdenv.isDarwin [
       gcc # https://github.com/ghcjs/ghcjs/issues/663
     ];
-    phases = ["unpackPhase" "buildPhase"];
+    dontConfigure = true;
+    dontInstall = true;
     buildPhase = ''
       export HOME=$TMP
+      mkdir $HOME/.cabal
+      touch $HOME/.cabal/config
       cd lib/boot
 
       mkdir -p $out/bin
@@ -94,4 +98,3 @@ in stdenv.mkDerivation {
 
     meta.platforms = passthru.bootPkgs.ghc.meta.platforms;
   }
-

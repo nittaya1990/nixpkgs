@@ -214,6 +214,11 @@ with stdenv.lib;
   ${optionalString (versionOlder version "4.3") ''
     DRM_I915_KMS y
   ''}
+  # iGVT-g support
+  ${optionalString (versionAtLeast version "4.16") ''
+    DRM_I915_GVT y
+    DRM_I915_GVT_KVMGT m
+  ''}
   # Allow specifying custom EDID on the kernel command line
   DRM_LOAD_EDID_FIRMWARE y
   VGA_SWITCHEROO y # Hybrid graphics support
@@ -363,7 +368,7 @@ with stdenv.lib;
   ${optionalString (! stdenv.hostPlatform.isAarch32)
     (if versionOlder version "3.14" then ''
         CC_STACKPROTECTOR? y # Detect buffer overflows on the stack
-      '' else ''
+      '' else optionalString (versionOlder version "4.18") ''
         CC_STACKPROTECTOR_REGULAR? y
       '')}
   ${optionalString (versionAtLeast version "3.12") ''
@@ -458,6 +463,7 @@ with stdenv.lib;
   PPP_FILTER y
   REGULATOR y # Voltage and Current Regulator Support
   RC_DEVICES? y # Enable IR devices
+  RT2800USB_RT53XX y
   RT2800USB_RT55XX y
   SCHED_AUTOGROUP y
   CFS_BANDWIDTH y
@@ -641,7 +647,7 @@ with stdenv.lib;
     X86_X2APIC y
     IRQ_REMAP y
   ''}
-  
+
   # needed for iwd WPS support (wpa_supplicant replacement)
   ${optionalString (versionAtLeast version "4.7") ''
     KEY_DH_OPERATIONS y
@@ -684,10 +690,12 @@ with stdenv.lib;
 
   CRC32_SELFTEST? n
   CRYPTO_TEST? n
-  DRM_DEBUG_MM_SELFTEST? n
+  ${optionalString (versionOlder version "4.18") ''
+    DRM_DEBUG_MM_SELFTEST? n
+    LNET_SELFTEST? n
+  ''}
   EFI_TEST? n
   GLOB_SELFTEST? n
-  LNET_SELFTEST? n
   LOCK_TORTURE_TEST? n
   MTD_TESTS? n
   NOTIFIER_ERROR_INJECTION? n

@@ -51,8 +51,10 @@ in
     inherit (pkgs.llvmPackages) clang-unwrapped;
   };
 
+  iproute2mac = callPackage ../os-specific/darwin/iproute2mac { };
+
   libobjc = apple-source-releases.objc4;
-  
+
   lsusb = callPackage ../os-specific/darwin/lsusb { };
 
   opencflite = callPackage ../os-specific/darwin/opencflite { };
@@ -69,7 +71,8 @@ in
 
   usr-include = callPackage ../os-specific/darwin/usr-include { };
 
-  inherit (callPackages ../os-specific/darwin/xcode { } ) xcode_8_1 xcode_8_2 xcode_9_1 xcode_9_2;
+  inherit (callPackages ../os-specific/darwin/xcode { } )
+          xcode_8_1 xcode_8_2 xcode_9_1 xcode_9_2 xcode_9_4 xcode;
 
   CoreSymbolication = callPackage ../os-specific/darwin/CoreSymbolication { };
 

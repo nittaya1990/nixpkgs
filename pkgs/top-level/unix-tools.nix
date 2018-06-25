@@ -19,14 +19,12 @@ let
     in runCommand "${cmd}-${version}" {
       meta.platforms = map (n: { kernel.name = n; }) (pkgs.lib.attrNames providers);
     } ''
-      mkdir -p $out/bin
-
       if ! [ -x "${provider}" ]; then
         echo "Cannot find command ${cmd}"
         exit 1
       fi
 
-      ln -s "${provider}" "$out/bin/${cmd}"
+      install -D "${provider}" "$out/bin/${cmd}"
     '';
 
   # more is unavailable in darwin
@@ -50,14 +48,14 @@ let
       linux = pkgs.utillinux;
     };
     getconf = {
-      linux = if hostPlatform.isMusl then pkgs.musl-getconf
-              else lib.getBin stdenv.cc.libc;
+      linux = if hostPlatform.libc == "glibc" then lib.getBin pkgs.glibc
+              else pkgs.netbsd.getconf;
       darwin = pkgs.darwin.system_cmds;
     };
     getent = {
-      linux = if hostPlatform.isMusl then pkgs.musl-getent
-              # This may not be right on other platforms, but preserves existing behavior
-              else /* if hostPlatform.libc == "glibc" then */ pkgs.glibc.bin;
+      linux = if hostPlatform.libc == "glibc" then lib.getBin pkgs.glibc
+              else pkgs.netbsd.getent;
+      darwin = pkgs.netbsd.getent;
     };
     getopt = {
       linux = pkgs.utillinux;
@@ -82,6 +80,10 @@ let
     ifconfig = {
       linux = pkgs.nettools;
       darwin = pkgs.darwin.network_cmds;
+    };
+    locale = {
+      linux = pkgs.glibc;
+      darwin = pkgs.netbsd.locale;
     };
     logger = {
       linux = pkgs.utillinux;

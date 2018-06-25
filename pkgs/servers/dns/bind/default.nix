@@ -1,4 +1,6 @@
-{ stdenv, lib, fetchurl, openssl, libtool, perl, libxml2
+{ stdenv, lib, fetchurl
+, perl
+, libcap, libtool, libxml2, openssl
 , enablePython ? false, python3 ? null
 , enableSeccomp ? false, libseccomp ? null, buildPackages
 }:
@@ -22,7 +24,8 @@ stdenv.mkDerivation rec {
     stdenv.lib.optional stdenv.isDarwin ./darwin-openssl-linking-fix.patch;
 
   nativeBuildInputs = [ perl ];
-  buildInputs = [ openssl libtool libxml2 ]
+  buildInputs = [ libtool libxml2 openssl ]
+    ++ lib.optional stdenv.isLinux libcap
     ++ lib.optional enableSeccomp libseccomp
     ++ lib.optional enablePython python3;
 
@@ -43,6 +46,7 @@ stdenv.mkDerivation rec {
     "--without-idn"
     "--without-idnlib"
     "--without-lmdb"
+    "--without-libjson"
     "--without-pkcs11"
     "--without-purify"
     "--with-randomdev=/dev/random"
@@ -50,7 +54,8 @@ stdenv.mkDerivation rec {
     "--with-gost"
     "--without-eddsa"
     "--with-aes"
-  ] ++ lib.optional enableSeccomp "--enable-seccomp";
+  ] ++ lib.optional stdenv.isLinux "--with-libcap=${libcap.dev}"
+    ++ lib.optional enableSeccomp "--enable-seccomp";
 
   postInstall = ''
     moveToOutput bin/bind9-config $dev

@@ -408,8 +408,8 @@ self: super: {
   # Older versions don't compile.
   base-compat = self.base-compat_0_10_1;
   brick = self.brick_0_37_1;
-  dhall = self.dhall_1_13_0;
-  dhall_1_13_0 = doJailbreak super.dhall_1_13_0;  # support ansi-terminal 0.8.x
+  dhall = self.dhall_1_14_0;
+  dhall_1_13_0 = doJailbreak super.dhall_1_14_0;  # support ansi-terminal 0.8.x
   HaTeX = self.HaTeX_3_19_0_0;
   hpack = self.hpack_0_28_2;
   hspec = dontCheck super.hspec_2_5_1;
@@ -418,7 +418,7 @@ self: super: {
   hspec-smallcheck = self.hspec-smallcheck_0_5_2;
   matrix = self.matrix_0_3_6_1;
   pandoc = self.pandoc_2_2_1;
-  pandoc-types = self.pandoc-types_1_17_4_2;
+  pandoc-types = self.pandoc-types_1_17_5_1;
   wl-pprint-text = self.wl-pprint-text_1_2_0_0;
 
   # https://github.com/xmonad/xmonad/issues/155
@@ -443,5 +443,11 @@ self: super: {
   });
 
   lambdabot-core = appendPatch super.lambdabot-core ./patches/lambdabot-core-ghc-8.4.x-fix.patch;
+
+  # Version 1.9.1 excludes base-compat 0.10.x for the benefit of older
+  # compilers, but ghc 8.4.x works fine with the new version.
+  hledger-lib = doJailbreak super.hledger-lib;
+  hledger = doJailbreak super.hledger;
+  hledger-ui = doJailbreak super.hledger-ui;
 
 }

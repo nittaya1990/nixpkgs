@@ -21,13 +21,21 @@ let
     let drv-manpages = drv.override { enableManpages = true; }; in
     drv // { man = drv-manpages.out; /*outputs = drv.outputs ++ ["man"];*/ };
 
-  tools = let
+  tools = stdenv.lib.makeExtensible (tools: let
     callPackage = newScope (tools // { inherit stdenv cmake libxml2 python2 isl release_version version fetch; });
+    mkExtraBuildCommands = cc: ''
+      rsrc="$out/resource-root"
+      mkdir "$rsrc"
+      ln -s "${cc}/lib/clang/${release_version}/include" "$rsrc"
+      ln -s "${targetLlvmLibraries.compiler-rt.out}/lib" "$rsrc/lib"
+      echo "-resource-dir=$rsrc" >> $out/nix-support/cc-cflags
+    '' + stdenv.lib.optionalString stdenv.targetPlatform.isLinux ''
+      echo "--gcc-toolchain=${tools.clang-unwrapped.gcc}" >> $out/nix-support/cc-cflags
+    '';
   in {
 
-    llvm = overrideManOutput (callPackage ./llvm.nix {
-      inherit (targetLlvmLibraries) libcxxabi;
-    });
+    llvm = overrideManOutput (callPackage ./llvm.nix { });
+
     clang-unwrapped = overrideManOutput (callPackage ./clang {
       inherit clang-tools-extra_src;
     });
@@ -40,16 +48,11 @@ let
 
     libstdcxxClang = wrapCCWith rec {
       cc = tools.clang-unwrapped;
-      extraPackages = [ libstdcxxHook targetLlvmLibraries.compiler-rt ];
-      extraBuildCommands = ''
-        rsrc="$out/resource-root"
-        mkdir "$rsrc"
-        ln -s "${cc}/lib/clang/${release_version}/include" "$rsrc"
-        ln -s "${targetLlvmLibraries.compiler-rt.out}/lib" "$rsrc/lib"
-        echo "-resource-dir=$rsrc" >> $out/nix-support/cc-cflags
-      '' + stdenv.lib.optionalString stdenv.targetPlatform.isLinux ''
-        echo "--gcc-toolchain=${tools.clang-unwrapped.gcc}" >> $out/nix-support/cc-cflags
-      '';
+      extraPackages = [
+        libstdcxxHook
+        targetLlvmLibraries.compiler-rt
+      ];
+      extraBuildCommands = mkExtraBuildCommands cc;
     };
 
     libcxxClang = wrapCCWith rec {
@@ -59,23 +62,15 @@ let
         targetLlvmLibraries.libcxxabi
         targetLlvmLibraries.compiler-rt
       ];
-      extraBuildCommands = ''
-        rsrc="$out/resource-root"
-        mkdir "$rsrc"
-        ln -s "${cc}/lib/clang/${release_version}/include" "$rsrc"
-        ln -s "${targetLlvmLibraries.compiler-rt.out}/lib" "$rsrc/lib"
-        echo "-resource-dir=$rsrc" >> $out/nix-support/cc-cflags
-      '' + stdenv.lib.optionalString stdenv.targetPlatform.isLinux ''
-        echo "--gcc-toolchain=${tools.clang-unwrapped.gcc}" >> $out/nix-support/cc-cflags
-      '';
+      extraBuildCommands = mkExtraBuildCommands cc;
     };
 
     lld = callPackage ./lld.nix {};
 
     lldb = callPackage ./lldb.nix {};
-  };
+  });
 
-  libraries = let
+  libraries = stdenv.lib.makeExtensible (libraries: let
     callPackage = newScope (libraries // buildLlvmTools // { inherit stdenv cmake libxml2 python2 isl release_version version fetch; });
   in {
 
@@ -90,6 +85,6 @@ let
     libcxxabi = callPackage ./libc++abi.nix {};
 
     openmp = callPackage ./openmp.nix {};
-  };
+  });
 
 in { inherit tools libraries; } // libraries // tools

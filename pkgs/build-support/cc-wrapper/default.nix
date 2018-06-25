@@ -42,7 +42,7 @@ let
   # The wrapper scripts use 'cat' and 'grep', so we may need coreutils.
   coreutils_bin = if nativeTools then "" else getBin coreutils;
 
-  default_cxx_stdlib_compile = optionalString (targetPlatform.isLinux && !(cc.isGNU or false) && !nativeTools)
+  default_cxx_stdlib_compile = optionalString (targetPlatform.isLinux && !(cc.isGNU or false) && !nativeTools && cc ? gcc)
     "-isystem $(echo -n ${cc.gcc}/include/c++/*) -isystem $(echo -n ${cc.gcc}/include/c++/*)/$(${cc.gcc}/bin/gcc -dumpmachine)";
 
   dashlessTarget = stdenv.lib.replaceStrings ["-"] ["_"] targetPlatform.config;
@@ -278,6 +278,10 @@ stdenv.mkDerivation {
 
     + optionalString hostPlatform.isCygwin ''
       hardening_unsupported_flags+=" pic"
+    ''
+
+    + optionalString targetPlatform.isMinGW ''
+      hardening_unsupported_flags+=" stackprotector"
     ''
 
     + ''

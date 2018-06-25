@@ -73,12 +73,14 @@ let
   mkKubeConfigOptions = prefix: {
     server = mkOption {
       description = "${prefix} kube-apiserver server address.";
-      default = "http://${cfg.apiserver.address}:${toString cfg.apiserver.port}";
+      default = "http://${if cfg.apiserver.advertiseAddress != null
+                          then cfg.apiserver.advertiseAddress
+                          else "127.0.0.1"}:${toString cfg.apiserver.port}";
       type = types.str;
     };
 
     caFile = mkOption {
-      description = "${prefix} certificate authrority file used to connect to kube-apiserver.";
+      description = "${prefix} certificate authority file used to connect to kube-apiserver.";
       type = types.nullOr types.path;
       default = cfg.caFile;
     };
@@ -103,12 +105,18 @@ let
     keyFile = mkDefault cfg.kubeconfig.keyFile;
   };
 
-  cniConfig = pkgs.buildEnv {
-    name = "kubernetes-cni-config";
-    paths = imap (i: entry:
-      pkgs.writeTextDir "${toString (10+i)}-${entry.type}.conf" (builtins.toJSON entry)
-    ) cfg.kubelet.cni.config;
-  };
+  cniConfig =
+    if cfg.kubelet.cni.config != [] && !(isNull cfg.kubelet.cni.configDir) then
+      throw "Verbatim CNI-config and CNI configDir cannot both be set."
+    else if !(isNull cfg.kubelet.cni.configDir) then
+      cfg.kubelet.cni.configDir
+    else
+      (pkgs.buildEnv {
+        name = "kubernetes-cni-config";
+        paths = imap (i: entry:
+          pkgs.writeTextDir "${toString (10+i)}-${entry.type}.conf" (builtins.toJSON entry)
+        ) cfg.kubelet.cni.config;
+      });
 
   manifests = pkgs.buildEnv {
     name = "kubernetes-manifests";
@@ -244,18 +252,13 @@ in {
         type = types.listOf types.str;
       };
 
-      address = mkOption {
-        description = "Kubernetes apiserver listening address.";
-        default = "127.0.0.1";
-        type = types.str;
-      };
-
-      publicAddress = mkOption {
+      bindAddress = mkOption {
         description = ''
-          Kubernetes apiserver public listening address used for read only and
-          secure port.
+          The IP address on which to listen for the --secure-port port.
+          The associated interface(s) must be reachable by the rest
+          of the cluster, and by CLI/web clients.
         '';
-        default = cfg.apiserver.address;
+        default = "0.0.0.0";
         type = types.str;
       };
 
@@ -329,11 +332,11 @@ in {
 
       authorizationMode = mkOption {
         description = ''
-          Kubernetes apiserver authorization mode (AlwaysAllow/AlwaysDeny/ABAC/RBAC). See
+          Kubernetes apiserver authorization mode (AlwaysAllow/AlwaysDeny/ABAC/Webhook/RBAC/Node). See
           <link xlink:href="https://kubernetes.io/docs/reference/access-authn-authz/authorization/"/>
         '';
         default = ["RBAC" "Node"];
-        type = types.listOf (types.enum ["AlwaysAllow" "AlwaysDeny" "ABAC" "RBAC" "Node"]);
+        type = types.listOf (types.enum ["AlwaysAllow" "AlwaysDeny" "ABAC" "Webhook" "RBAC" "Node"]);
       };
 
       authorizationPolicy = mkOption {
@@ -343,6 +346,15 @@ in {
         '';
         default = [];
         type = types.listOf types.attrs;
+      };
+
+      webhookConfig = mkOption {
+        description = ''
+          Kubernetes apiserver Webhook config file. It uses the kubeconfig file format.
+          See <link xlink:href="https://kubernetes.io/docs/reference/access-authn-authz/webhook/"/>
+        '';
+        default = null;
+        type = types.nullOr types.path;
       };
 
       allowPrivileged = mkOption {
@@ -670,6 +682,12 @@ in {
             }]
           '';
         };
+
+        configDir = mkOption {
+          description = "Path to Kubernetes CNI configuration directory.";
+          type = types.nullOr types.path;
+          default = null;
+        };
       };
 
       manifests = mkOption {
@@ -892,7 +910,7 @@ in {
 
     (mkIf cfg.apiserver.enable {
       systemd.services.kube-apiserver = {
-        description = "Kubernetes Kubelet Service";
+        description = "Kubernetes APIServer Service";
         wantedBy = [ "kubernetes.target" ];
         after = [ "network.target" "docker.service" ];
         serviceConfig = {
@@ -906,7 +924,7 @@ in {
             ${optionalString (cfg.etcd.keyFile != null)
               "--etcd-keyfile=${cfg.etcd.keyFile}"} \
             --insecure-port=${toString cfg.apiserver.port} \
-            --bind-address=${toString cfg.apiserver.address} \
+            --bind-address=${cfg.apiserver.bindAddress} \
             ${optionalString (cfg.apiserver.advertiseAddress != null)
               "--advertise-address=${cfg.apiserver.advertiseAddress}"} \
             --allow-privileged=${boolToString cfg.apiserver.allowPrivileged}\
@@ -933,6 +951,9 @@ in {
                 pkgs.writeText "kube-auth-policy.jsonl"
                 (concatMapStringsSep "\n" (l: builtins.toJSON l) cfg.apiserver.authorizationPolicy)
               }"
+            } \
+            ${optionalString (elem "Webhook" cfg.apiserver.authorizationMode)
+              "--authorization-webhook-config-file=${cfg.apiserver.webhookConfig}"
             } \
             --secure-port=${toString cfg.apiserver.securePort} \
             --service-cluster-ip-range=${cfg.apiserver.serviceClusterIpRange} \

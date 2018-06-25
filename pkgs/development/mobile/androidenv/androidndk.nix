@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, zlib, ncurses, p7zip, lib, makeWrapper
+{ stdenv, fetchurl, zlib, ncurses5, unzip, lib, makeWrapper
 , coreutils, file, findutils, gawk, gnugrep, gnused, jdk, which
-, platformTools, python3, version, sha256
+, platformTools, python3, libcxx, version, sha256
 }:
 
 stdenv.mkDerivation rec {
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   phases = "buildPhase";
 
-  nativeBuildInputs = [ p7zip makeWrapper ];
+  nativeBuildInputs = [ unzip makeWrapper file ];
 
   buildCommand = let
     bin_path = "$out/bin";
@@ -31,10 +31,11 @@ stdenv.mkDerivation rec {
       jdk python3 which
     ]) + ":${platformTools}/platform-tools";
   in ''
-    set -x
     mkdir -pv $out/libexec
     cd $out/libexec
-    7z x $src
+    unzip -qq $src
+
+    patchShebangs ${pkg_path}
 
     # so that it doesn't fail because of read-only permissions set
     cd -
@@ -46,8 +47,6 @@ stdenv.mkDerivation rec {
         ''
       else
         ''
-          patchShebangs ${pkg_path}/build/tools/make-standalone-toolchain.sh
-
           patch -p1 \
             --no-backup-if-mismatch \
             -d $out/libexec/${name} < ${ ./. + builtins.toPath ("/make_standalone_toolchain.py_" + "${version}" + ".patch") }
@@ -56,21 +55,22 @@ stdenv.mkDerivation rec {
     }
     cd ${pkg_path}
 
-    find $out \( \
+    # Steps to reduce output size
+    rm -rf docs sources tests
+    # We only support cross compiling with gcc for now
+    rm -rf toolchains/*-clang* toolchains/llvm*
+
+    find ${pkg_path}/toolchains \( \
         \( -type f -a -name "*.so*" \) -o \
         \( -type f -a -perm -0100 \) \
         \) -exec patchelf --set-interpreter ${stdenv.cc.libc.out}/lib/ld-*so.? \
-                          --set-rpath ${stdenv.lib.makeLibraryPath [ zlib.out ncurses ]} {} \;
+                          --set-rpath ${stdenv.lib.makeLibraryPath [ libcxx zlib ncurses5 ]} {} \;
     # fix ineffective PROGDIR / MYNDKDIR determination
     for i in ndk-build ${lib.optionalString (version == "10e") "ndk-gdb ndk-gdb-py"}
     do
         sed -i -e ${sed_script_1} $i
     done
-    ${lib.optionalString (version == "10e") ''
-      sed -i -e ${sed_script_2} ndk-which
-      # a bash script
-      patchShebangs ndk-which
-    ''}
+
     # wrap
     for i in ndk-build ${lib.optionalString (version == "10e") "ndk-gdb ndk-gdb-py ndk-which"}
     do

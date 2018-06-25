@@ -30,7 +30,7 @@ in
 , profilingDetail ? "all-functions"
 # TODO enable shared libs for cross-compiling
 , enableSharedExecutables ? false
-, enableSharedLibraries ? ((ghc.isGhcjs or false) || stdenv.lib.versionOlder "7.7" ghc.version)
+, enableSharedLibraries ? (ghc.enableShared or false)
 , enableDeadCodeElimination ? (!stdenv.isDarwin)  # TODO: use -dead_strip for darwin
 , enableStaticLibraries ? !hostPlatform.isWindows
 , enableHsc2hsViaAsm ? hostPlatform.isWindows && stdenv.lib.versionAtLeast ghc.version "8.4"
@@ -98,7 +98,7 @@ let
                         else "package-conf";
 
   # the target dir for haddock documentation
-  docdir = docoutput: docoutput + "/share/doc";
+  docdir = docoutput: docoutput + "/share/doc/" + pname + "-" + version;
 
   newCabalFileUrl = "http://hackage.haskell.org/package/${pname}-${version}/revision/${revision}.cabal";
   newCabalFile = fetchurl {
@@ -167,7 +167,7 @@ let
   ] ++ crossCabalFlags);
 
   setupCompileFlags = [
-    (optionalString (!coreSetup) "-${nativePackageDbFlag}=$packageConfDir")
+    (optionalString (!coreSetup) "-${nativePackageDbFlag}=$setupPackageConfDir")
     (optionalString (isGhcjs || isHaLVM || versionOlder "7.8" ghc.version) "-j$NIX_BUILD_CORES")
     # https://github.com/haskell/cabal/issues/2398
     (optionalString (versionOlder "7.10" ghc.version && !isHaLVM) "-threaded")
@@ -179,7 +179,8 @@ let
   allPkgconfigDepends = pkgconfigDepends ++ libraryPkgconfigDepends ++ executablePkgconfigDepends ++
                         optionals doCheck testPkgconfigDepends ++ optionals doBenchmark benchmarkPkgconfigDepends;
 
-  nativeBuildInputs = [ ghc nativeGhc removeReferencesTo ] ++ optional (allPkgconfigDepends != []) pkgconfig ++
+  depsBuildBuild = [ nativeGhc ];
+  nativeBuildInputs = [ ghc removeReferencesTo ] ++ optional (allPkgconfigDepends != []) pkgconfig ++
                       setupHaskellDepends ++
                       buildTools ++ libraryToolDepends ++ executableToolDepends;
   propagatedBuildInputs = buildDepends ++ libraryHaskellDepends ++ executableHaskellDepends ++ libraryFrameworkDepends;
@@ -205,22 +206,10 @@ let
 
   nativeGhcCommand = "${nativeGhc.targetPrefix}ghc";
 
-  buildPkgDb = ghcName: ''
+  buildPkgDb = ghcName: packageConfDir: ''
     if [ -d "$p/lib/${ghcName}/package.conf.d" ]; then
-      cp -f "$p/lib/${ghcName}/package.conf.d/"*.conf $packageConfDir/
+      cp -f "$p/lib/${ghcName}/package.conf.d/"*.conf ${packageConfDir}/
       continue
-    fi
-    if [ -d "$p/include" ]; then
-      configureFlags+=" --extra-include-dirs=$p/include"
-    fi
-    if [ -d "$p/lib" ]; then
-      configureFlags+=" --extra-lib-dirs=$p/lib"
-    fi
-  ''
-  # It is not clear why --extra-framework-dirs does work fine on Linux
-  + optionalString (!buildPlatform.isDarwin || versionAtLeast nativeGhc.version "8.0") ''
-    if [[ -d "$p/Library/Frameworks" ]]; then
-      configureFlags+=" --extra-framework-dirs=$p/Library/Frameworks"
     fi
   '';
 
@@ -242,7 +231,7 @@ stdenv.mkDerivation ({
 
   inherit src;
 
-  inherit nativeBuildInputs;
+  inherit depsBuildBuild nativeBuildInputs;
   buildInputs = otherBuildInputs ++ optionals (!hasActiveLibrary) propagatedBuildInputs;
   propagatedBuildInputs = optionals hasActiveLibrary propagatedBuildInputs;
 
@@ -264,10 +253,8 @@ stdenv.mkDerivation ({
     echo "Build with ${ghc}."
     ${optionalString (hasActiveLibrary && hyperlinkSource) "export PATH=${hscolour}/bin:$PATH"}
 
-  '' + (optionalString (setupHaskellDepends != []) ''
     setupPackageConfDir="$TMPDIR/setup-package.conf.d"
     mkdir -p $setupPackageConfDir
-  '') + ''
     packageConfDir="$TMPDIR/package.conf.d"
     mkdir -p $packageConfDir
 
@@ -278,17 +265,29 @@ stdenv.mkDerivation ({
   # dependencies for the build machine.
   #
   # pkgs* arrays defined in stdenv/setup.hs
-  + (optionalString (setupHaskellDepends != []) ''
+  + ''
     for p in "''${pkgsBuildBuild[@]}" "''${pkgsBuildHost[@]}" "''${pkgsBuildTarget[@]}"; do
-      ${buildPkgDb nativeGhc.name}
+      ${buildPkgDb nativeGhc.name "$setupPackageConfDir"}
     done
     ${nativeGhcCommand}-pkg --${nativePackageDbFlag}="$setupPackageConfDir" recache
-  '')
-
-    # For normal components
+  ''
+  # For normal components
   + ''
     for p in "''${pkgsHostHost[@]}" "''${pkgsHostTarget[@]}"; do
-      ${buildPkgDb ghc.name}
+      ${buildPkgDb ghc.name "$packageConfDir"}
+      if [ -d "$p/include" ]; then
+        configureFlags+=" --extra-include-dirs=$p/include"
+      fi
+      if [ -d "$p/lib" ]; then
+        configureFlags+=" --extra-lib-dirs=$p/lib"
+      fi
+    ''
+    # It is not clear why --extra-framework-dirs does work fine on Linux
+    + optionalString (!buildPlatform.isDarwin || versionAtLeast nativeGhc.version "8.0") ''
+      if [[ -d "$p/Library/Frameworks" ]]; then
+        configureFlags+=" --extra-framework-dirs=$p/Library/Frameworks"
+      fi
+  '' + ''
     done
   ''
   # only use the links hack if we're actually building dylibs. otherwise, the
@@ -323,11 +322,7 @@ stdenv.mkDerivation ({
     done
 
     echo setupCompileFlags: $setupCompileFlags
-    ${optionalString (setupHaskellDepends != [])
-       ''
-       echo GHC_PACKAGE_PATH="$setupPackageConfDir:"
-       GHC_PACKAGE_PATH="$setupPackageConfDir:" ''
-    }${nativeGhcCommand} $setupCompileFlags --make -o Setup -odir $TMPDIR -hidir $TMPDIR $i
+    ${nativeGhcCommand} $setupCompileFlags --make -o Setup -odir $TMPDIR -hidir $TMPDIR $i
 
     runHook postCompileBuildDriver
   '';

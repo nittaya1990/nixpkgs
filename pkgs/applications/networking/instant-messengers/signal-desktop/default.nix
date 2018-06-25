@@ -1,8 +1,10 @@
-{ stdenv, lib, fetchurl, dpkg, gnome3, gtk3, atk, cairo, pango, gdk_pixbuf, glib, freetype,
-fontconfig, dbus, libX11, xorg, libXi, libXcursor, libXdamage, libXrandr,
-libXcomposite, libXext, libXfixes, libXrender, libXtst, libXScrnSaver, nss,
-nspr, alsaLib, cups, expat, udev
+{ stdenv, lib, fetchurl, dpkg, wrapGAppsHook
+, gnome3, gtk3, atk, cairo, pango, gdk_pixbuf, glib, freetype, fontconfig
+, dbus, libX11, xorg, libXi, libXcursor, libXdamage, libXrandr, libXcomposite
+, libXext, libXfixes, libXrender, libXtst, libXScrnSaver, nss, nspr, alsaLib
+, cups, expat, udev
 }:
+
 let
   rpath = lib.makeLibraryPath [
     alsaLib
@@ -36,53 +38,49 @@ let
     xorg.libxcb
   ];
 
-in
-  stdenv.mkDerivation rec {
-    name = "signal-desktop-${version}";
+in stdenv.mkDerivation rec {
+  name = "signal-desktop-${version}";
+  version = "1.13.0";
 
-    version = "1.12.0";
+  src = fetchurl {
+    url = "https://updates.signal.org/desktop/apt/pool/main/s/signal-desktop/signal-desktop_${version}_amd64.deb";
+    sha256 = "1iapkkfqssbjcksgic7i8x0cwp6gwcbbrfxlw7vp6k1cfvjwv9pf";
+  };
 
-    src =
-      if stdenv.system == "x86_64-linux" then
-        fetchurl {
-          url = "https://updates.signal.org/desktop/apt/pool/main/s/signal-desktop/signal-desktop_${version}_amd64.deb";
-          sha256 = "19c9pilx2qkpyqw3p167bfcizrpd4np5jxdcwqmpbcfibmrpmcsk";
-        }
-      else
-        throw "Signal for Desktop is not currently supported on ${stdenv.system}";
+  phases = [ "unpackPhase" "installPhase" ];
 
-    phases = [ "unpackPhase" "installPhase" ];
-    nativeBuildInputs = [ dpkg ];
-    unpackPhase = "dpkg-deb -x $src .";
-    installPhase = ''
-      mkdir -p $out
-      mkdir -p $out/libexec
+  nativeBuildInputs = [ dpkg wrapGAppsHook ];
 
-      mv opt/Signal $out/libexec/Signal
+  unpackPhase = "dpkg-deb -x $src .";
+  installPhase = ''
+    mkdir -p $out
+    mkdir -p $out/libexec
 
-      chmod -R g-w $out
+    mv opt/Signal $out/libexec/Signal
 
-      # Patch signal
-      patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-               --set-rpath ${rpath}:$out/libexec/Signal $out/libexec/Signal/signal-desktop
+    # Patch signal
+    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+             --set-rpath ${rpath}:$out/libexec/Signal $out/libexec/Signal/signal-desktop
 
-      # Symlink to bin
-      mkdir -p $out/bin
-      ln -s $out/libexec/Signal/signal-desktop $out/bin/signal-desktop
+    # Symlink to bin
+    mkdir -p $out/bin
+    ln -s $out/libexec/Signal/signal-desktop $out/bin/signal-desktop
 
-      # Fix the desktop link
-      mv ./usr/share $out/share
-      substituteInPlace $out/share/applications/signal-desktop.desktop \
-        --replace /opt/Signal/signal-desktop $out/bin/signal-desktop
+    # Fix the desktop link
+    mv ./usr/share $out/share
+    substituteInPlace $out/share/applications/signal-desktop.desktop \
+      --replace /opt/Signal/signal-desktop $out/bin/signal-desktop
+  '';
+
+  meta = {
+    description = "Private, simple, and secure messenger";
+    longDescription = ''
+      Signal Desktop is an Electron application that links with your
+      "Signal Android" or "Signal iOS" app.
     '';
-
-    meta = {
-      description = "Signal Private Messenger for the Desktop.";
-      homepage    = https://signal.org/;
-      license     = lib.licenses.gpl3;
-      maintainers = with lib.maintainers; [ ixmatus primeos ];
-      platforms   = [
-        "x86_64-linux"
-      ];
-    };
-  }
+    homepage    = https://signal.org/;
+    license     = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ ixmatus primeos ];
+    platforms   = [ "x86_64-linux" ];
+  };
+}

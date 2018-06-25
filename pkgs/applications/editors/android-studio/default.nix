@@ -8,14 +8,14 @@ let
     inherit (gnome2) GConf gnome_vfs;
   };
   stableVersion = {
-    version = "3.1.2.0"; # "Android Studio 3.1.2"
-    build = "173.4720617";
-    sha256Hash = "1h9f4pkyqxkqxampi8v035czg5d4g6lp4bsrnq5mgpwhjwkr1whk";
+    version = "3.1.3.0"; # "Android Studio 3.1.3"
+    build = "173.4819257";
+    sha256Hash = "196yaswbxh2nd83gimjxr8ggr5xkdxq7n3xlh6ax73v59pj4hryq";
   };
   latestVersion = {
-    version = "3.2.0.15"; # "Android Studio 3.2 Canary 16"
-    build = "181.4802120";
-    sha256Hash = "0ch9jjq58k83dpnq65xyxchyik24w3fmh2v9q3kx1s028iavmpym";
+    version = "3.2.0.18"; # "Android Studio 3.2 Beta 1"
+    build = "181.4847800";
+    sha256Hash = "1ipdvrx3qxwygq72jlf0dl4haxviscl41q18kclg519r1zbzd4cw";
   };
 in rec {
   # Old alias
@@ -40,7 +40,7 @@ in rec {
     };
   });
 
-  beta = mkStudio (stableVersion // {
+  beta = mkStudio (latestVersion // {
     pname = "android-studio-preview";
     #pname = "android-studio-beta"; # TODO: Rename and provide symlink
 

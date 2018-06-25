@@ -99,6 +99,16 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     fullName = ''BSD 4-clause "Original" or "Old" License'';
   };
 
+  bsl10 = {
+    fullName = "Business Source License 1.0";
+    url = https://mariadb.com/bsl10;
+  };
+
+  bsl11 = {
+    fullName = "Business Source License 1.1";
+    url = https://mariadb.com/bsl11;
+  };
+
   clArtistic = spdx {
     spdxId = "ClArtistic";
     fullName = "Clarified Artistic License";
@@ -112,26 +122,31 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
   cc-by-nc-sa-20 = spdx {
     spdxId = "CC-BY-NC-SA-2.0";
     fullName = "Creative Commons Attribution Non Commercial Share Alike 2.0";
+    free = false;
   };
 
   cc-by-nc-sa-25 = spdx {
     spdxId = "CC-BY-NC-SA-2.5";
     fullName = "Creative Commons Attribution Non Commercial Share Alike 2.5";
+    free = false;
   };
 
   cc-by-nc-sa-30 = spdx {
     spdxId = "CC-BY-NC-SA-3.0";
     fullName = "Creative Commons Attribution Non Commercial Share Alike 3.0";
+    free = false;
   };
 
   cc-by-nc-sa-40 = spdx {
     spdxId = "CC-BY-NC-SA-4.0";
     fullName = "Creative Commons Attribution Non Commercial Share Alike 4.0";
+    free = false;
   };
 
   cc-by-nd-30 = spdx {
     spdxId = "CC-BY-ND-3.0";
     fullName = "Creative Commons Attribution-No Derivative Works v3.00";
+    free = false;
   };
 
   cc-by-sa-25 = spdx {
@@ -445,6 +460,7 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
   msrla = {
     fullName  = "Microsoft Research License Agreement";
     url       = "http://research.microsoft.com/en-us/projects/pex/msr-la.txt";
+    free = false;
   };
 
   ncsa = spdx {

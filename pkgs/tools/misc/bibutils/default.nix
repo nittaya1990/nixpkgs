@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "bibutils-${version}";
-  version = "6.2";
+  version = "6.5";
 
   src = fetchurl {
     url = "mirror://sourceforge/bibutils/bibutils_${version}_src.tgz";
-    sha256 = "07wgzk01kfdrjl6g3qlxg9qbi3kyrxxmxyy49qmcfq24fpmf9mrr";
+    sha256 = "0bc5b9nyxbcc1y4vrhghj9y9221i34qq384zslfyb0ihkb6kq521";
   };
 
   configureFlags = [ "--dynamic" "--install-dir" "$(out)/bin" "--install-lib" "$(out)/lib" ];

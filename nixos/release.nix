@@ -300,11 +300,13 @@ in rec {
   tests.grafana = callTest tests/grafana.nix {};
   tests.graphite = callTest tests/graphite.nix {};
   tests.hardened = callTest tests/hardened.nix { };
+  tests.haproxy = callTest tests/haproxy.nix {};
   tests.hibernate = callTest tests/hibernate.nix {};
   tests.hitch = callTest tests/hitch {};
   tests.home-assistant = callTest tests/home-assistant.nix { };
   tests.hound = callTest tests/hound.nix {};
   tests.hocker-fetchdocker = callTest tests/hocker-fetchdocker {};
+  tests.hydra = callTest tests/hydra {};
   tests.i3wm = callTest tests/i3wm.nix {};
   tests.iftop = callTest tests/iftop.nix {};
   tests.initrd-network-ssh = callTest tests/initrd-network-ssh {};
@@ -312,6 +314,7 @@ in rec {
   tests.influxdb = callTest tests/influxdb.nix {};
   tests.ipv6 = callTest tests/ipv6.nix {};
   tests.jenkins = callTest tests/jenkins.nix {};
+  tests.ostree = callTest tests/ostree.nix {};
   tests.osquery = callTest tests/osquery.nix {};
   tests.plasma5 = callTest tests/plasma5.nix {};
   tests.plotinus = callTest tests/plotinus.nix {};
@@ -332,6 +335,7 @@ in rec {
   #tests.logstash = callTest tests/logstash.nix {};
   tests.mathics = callTest tests/mathics.nix {};
   tests.matrix-synapse = callTest tests/matrix-synapse.nix {};
+  tests.memcached = callTest tests/memcached.nix {};
   tests.mesos = callTest tests/mesos.nix {};
   tests.misc = callTest tests/misc.nix {};
   tests.mongodb = callTest tests/mongodb.nix {};
@@ -395,6 +399,7 @@ in rec {
   tests.switchTest = callTest tests/switch-test.nix {};
   tests.taskserver = callTest tests/taskserver.nix {};
   tests.tomcat = callTest tests/tomcat.nix {};
+  tests.tor = callTest tests/tor.nix {};
   tests.transmission = callTest tests/transmission.nix {};
   tests.udisks2 = callTest tests/udisks2.nix {};
   tests.vault = callTest tests/vault.nix {};
@@ -408,6 +413,7 @@ in rec {
   tests.xss-lock = callTest tests/xss-lock.nix {};
   tests.yabar = callTest tests/yabar.nix {};
   tests.zookeeper = callTest tests/zookeeper.nix {};
+  tests.morty = callTest tests/morty.nix { };
 
   /* Build a bunch of typical closures so that Hydra can keep track of
      the evolution of closure sizes. */
