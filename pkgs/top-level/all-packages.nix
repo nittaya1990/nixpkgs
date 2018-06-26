@@ -8891,6 +8891,8 @@ with pkgs;
 
   cutee = callPackage ../development/libraries/cutee { };
 
+  cutelyst = libsForQt5.callPackage ../development/libraries/cutelyst { };
+
   cxxtools = callPackage ../development/libraries/cxxtools { };
 
   cwiid = callPackage ../development/libraries/cwiid { };
@@ -13175,6 +13177,8 @@ with pkgs;
     unifiStable
     unifiTesting;
   unifi = unifiStable;
+
+  virtlyst = libsForQt5.callPackage ../servers/web-apps/virtlyst { };
 
   virtuoso6 = callPackage ../servers/sql/virtuoso/6.x.nix { };
 
