@@ -1353,6 +1353,8 @@ with pkgs;
 
   languagetool = callPackage ../tools/text/languagetool {  };
 
+  lief = callPackage ../development/libraries/lief {};
+
   loadwatch = callPackage ../tools/system/loadwatch { };
 
   loccount = callPackage ../development/tools/misc/loccount { };
@@ -11201,7 +11203,10 @@ with pkgs;
 
   phonon-backend-gstreamer = callPackage ../development/libraries/phonon/backends/gstreamer.nix {};
 
-  phonon-backend-vlc = callPackage ../development/libraries/phonon/backends/vlc.nix {};
+  # TODO(@Ma27) get rid of that as soon as QT4 can be dropped
+  phonon-backend-vlc = callPackage ../development/libraries/phonon/backends/vlc.nix {
+    withQt4 = true;
+  };
 
   inherit (callPackage ../development/libraries/physfs { })
     physfs_2
@@ -14964,6 +14969,8 @@ with pkgs;
     gtk = gtk2;
     stdenv = overrideCC stdenv gcc49;
   };
+
+  agedu = callPackage ../tools/misc/agedu { };
 
   ahoviewer = callPackage ../applications/graphics/ahoviewer {
     useUnrar = config.ahoviewer.useUnrar or false;
