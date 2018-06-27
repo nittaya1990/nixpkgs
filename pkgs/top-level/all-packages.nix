@@ -4078,6 +4078,8 @@ with pkgs;
 
   pasystray = callPackage ../tools/audio/pasystray { };
 
+  phash = callPackage ../development/libraries/phash { };
+
   pnmixer = callPackage ../tools/audio/pnmixer { };
 
   pulsemixer = callPackage ../tools/audio/pulsemixer { };
@@ -21439,6 +21441,8 @@ with pkgs;
   tup = callPackage ../development/tools/build-managers/tup { };
 
   trufflehog = callPackage ../tools/security/trufflehog { };
+
+  tvbrowser-bin = callPackage ../applications/misc/tvbrowser/bin.nix { };
 
   tvheadend = callPackage ../servers/tvheadend { };
 
