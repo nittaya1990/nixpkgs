@@ -8,10 +8,10 @@ overrideDerivation xf86videoqxl (oldAttrs: {
   nativeBuildInputs =  oldAttrs.nativeBuildInputs ++ [
     spice libjpeg.dev sasl.dev
   ];
-}) // {
   meta = {
+    name = "xf86-video-spiceqxl";
     description = "A standalone server that is both an X server and a Spice server.";
     homepage = http://www.spice-space.org/page/Features/XSpice;
     platforms = platforms.linux;
   };
-}
+})
