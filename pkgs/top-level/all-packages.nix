@@ -8583,8 +8583,7 @@ with pkgs;
 
   xcbuild  = callPackage ../development/tools/xcbuild/wrapper.nix {
     inherit (darwin.apple_sdk.frameworks) CoreServices CoreGraphics ImageIO;
-    inherit (darwin) cctools bootstrap_cmds binutils;
-    stdenv = clangStdenv;
+    stdenv = buildPackages.clangStdenv;
   };
 
   xmlindent = callPackage ../development/web/xmlindent {};
@@ -21764,7 +21763,7 @@ with pkgs;
   unixtools = recurseIntoAttrs (callPackages ./unix-tools.nix { });
   inherit (unixtools) hexdump ps logger eject umount
                       mount wall hostname more sysctl getconf
-                      getent locale;
+                      getent locale killall;
 
   fts = if hostPlatform.isMusl then netbsd.fts else null;
 
