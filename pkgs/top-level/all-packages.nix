@@ -5449,6 +5449,8 @@ with pkgs;
 
   trickle = callPackage ../tools/networking/trickle {};
 
+  triggerhappy = callPackage ../tools/inputmethods/triggerhappy {};
+
   trousers = callPackage ../tools/security/trousers { };
 
   tryton = callPackage ../applications/office/tryton { };
@@ -19606,6 +19608,8 @@ with pkgs;
   hexen = callPackage ../games/hexen { };
 
   holdingnuts = callPackage ../games/holdingnuts { };
+
+  hyperrogue = callPackage ../games/hyperrogue { };
 
   icbm3d = callPackage ../games/icbm3d { };
 
