@@ -2468,11 +2468,11 @@ let
   }) // {inherit inputproto libX11 libXaw xproto libXt ;};
 
   xkeyboardconfig = (mkDerivation "xkeyboardconfig" {
-    name = "xkeyboard-config-2.23.1";
+    name = "xkeyboard-config-2.24";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/data/xkeyboard-config/xkeyboard-config-2.23.1.tar.bz2;
-      sha256 = "1wq27cs1c9y7d1d7zp5yhq29paj9smajdb68lyvm28d2zq2vqjra";
+      url = mirror://xorg/individual/data/xkeyboard-config/xkeyboard-config-2.24.tar.bz2;
+      sha256 = "1my4786pd7iv5x392r9skj3qclmbd26nqzvh2fllwkkbyj08bcci";
     };
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libX11 xproto ];
