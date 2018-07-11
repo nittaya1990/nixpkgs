@@ -3026,6 +3026,8 @@ with pkgs;
     inherit (llvmPackages_38) stdenv;
   });
 
+  holochain-go = callPackage ../servers/holochain-go { };
+
   homesick = callPackage ../tools/misc/homesick { };
 
   honcho = callPackage ../tools/system/honcho { };
@@ -5948,6 +5950,8 @@ with pkgs;
   xpf = callPackage ../tools/text/xml/xpf {
     libxml2 = libxml2Python;
   };
+
+  xsecurelock = callPackage ../tools/X11/xsecurelock { };
 
   xsel = callPackage ../tools/misc/xsel { };
 
