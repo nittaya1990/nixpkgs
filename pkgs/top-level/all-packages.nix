@@ -16841,6 +16841,8 @@ with pkgs;
 
   k9copy = libsForQt5.callPackage ../applications/video/k9copy {};
 
+  kail = callPackage ../tools/networking/kail {  };
+
   kanboard = callPackage ../applications/misc/kanboard { };
 
   kdeApplications =
@@ -18893,6 +18895,10 @@ with pkgs;
 
   weston = callPackage ../applications/window-managers/weston {
     freerdp = freerdp_legacy;
+  };
+
+  whitebox-tools = callPackage ../applications/gis/whitebox-tools {
+    inherit (darwin.apple_sdk.frameworks) Security;
   };
 
   windowlab = callPackage ../applications/window-managers/windowlab { };
