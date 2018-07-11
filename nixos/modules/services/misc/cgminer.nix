@@ -110,8 +110,7 @@ in
 
   config = mkIf config.services.cgminer.enable {
 
-    users.extraGroups = { plugdev = {}; };
-    users.extraUsers = optionalAttrs (cfg.user == "cgminer") (singleton
+    users.users = optionalAttrs (cfg.user == "cgminer") (singleton
       { name = "cgminer";
         uid = config.ids.uids.cgminer;
         description = "Cgminer user";

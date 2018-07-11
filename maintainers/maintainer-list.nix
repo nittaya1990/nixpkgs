@@ -716,6 +716,11 @@
     github = "brian-dawn";
     name = "Brian Dawn";
   };
+  bricewge = {
+    email = "bricewge@gmail.com";
+    github = "bricewge";
+    name = "Brice Waegeneire";
+  };
   bstrik = {
     email = "dutchman55@gmx.com";
     github = "bstrik";
@@ -1171,6 +1176,11 @@
     email = "nixos@sodosopa.io";
     github = "e-user";
     name = "Alexander Kahl";
+  };
+  eadwu = {
+    email = "edmund.wu@protonmail.com";
+    github = "eadwu";
+    name = "Edmund Wu";
   };
   earldouglas = {
     email = "james@earldouglas.com";
@@ -2854,6 +2864,11 @@
     github = "nthorne";
     name = "Niklas Thörne";
   };
+  numinit = {
+    email = "me@numin.it";
+    github = "numinit";
+    name = "Morgan Jones";
+  };
   nyanloutre = {
     email = "paul@nyanlout.re";
     github = "nyanloutre";
@@ -2937,6 +2952,11 @@
     email = "oxij@oxij.org";
     github = "oxij";
     name = "Jan Malakhovski";
+  };
+  oyren = {
+    email = "m.scheuren@oyra.eu";
+    github = "oyren";
+    name = "Moritz Scheuren";
   };
   pSub = {
     email = "mail@pascal-wittmann.de";
@@ -3107,6 +3127,11 @@
     github = "pmiddend";
     name = "Philipp Middendorf";
   };
+  pmyjavec = {
+    email = "pauly@myjavec.com";
+    github = "pmyjavec";
+    name = "Pauly Myjavec";
+  };
   pneumaticat = {
     email = "kevin@potatofrom.space";
     github = "pneumaticat";
@@ -3169,6 +3194,11 @@
     email = "js@lastlog.de";
     github = "qknight";
     name = "Joachim Schiele";
+  };
+  qoelet = {
+    email = "kenny@machinesung.com";
+    github = "qoelet";
+    name = "Kenny Shen";
   };
   ragge = {
     email = "r.dahlen@gmail.com";
@@ -4173,6 +4203,11 @@
     email = "elisp.vim@gmail.com";
     github = "vyp";
     name = "vyp";
+  };
+  waynr = {
+    name = "Wayne Warren";
+    email = "wayne.warren.s@gmail.com";
+    github = "waynr";
   };
   wchresta = {
     email = "wchresta.nix@chrummibei.ch";

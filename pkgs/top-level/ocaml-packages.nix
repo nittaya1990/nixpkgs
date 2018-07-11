@@ -56,6 +56,17 @@ let
 
     bap = callPackage ../development/ocaml-modules/bap {
       inherit (janeStreet_0_9_0) core_kernel ppx_jane parsexp;
+      ezjsonm = ezjsonm.override {
+        inherit (janeStreet_0_9_0) sexplib;
+        hex = hex.override {
+          cstruct = cstruct.override {
+            inherit (janeStreet_0_9_0) sexplib;
+          };
+        };
+      };
+      uri = uri.override {
+        inherit (janeStreet_0_9_0) ppx_sexp_conv sexplib;
+      };
     };
 
     batteries = callPackage ../development/ocaml-modules/batteries { };
@@ -310,6 +321,8 @@ let
 
     inifiles = callPackage ../development/ocaml-modules/inifiles { };
 
+    iri = callPackage ../development/ocaml-modules/iri { };
+
     jingoo = callPackage ../development/ocaml-modules/jingoo {
       pcre = ocaml_pcre;
     };
@@ -531,6 +544,8 @@ let
     piqi = callPackage ../development/ocaml-modules/piqi { };
     piqi-ocaml = callPackage ../development/ocaml-modules/piqi-ocaml { };
 
+    ppxlib = callPackage ../development/ocaml-modules/ppxlib { };
+
     psmt2-frontend = callPackage ../development/ocaml-modules/psmt2-frontend { };
 
     psq = callPackage ../development/ocaml-modules/psq { };
@@ -735,7 +750,7 @@ let
     janeStreet = import ../development/ocaml-modules/janestreet {
       inherit lib janePackage ocaml ocamlbuild angstrom ctypes cryptokit;
       inherit magic-mime num ocaml-migrate-parsetree octavius ounit;
-      inherit ppx_deriving re zarith;
+      inherit ppx_deriving re zarith ppxlib;
       inherit (pkgs) stdenv openssl;
     };
     

@@ -178,6 +178,7 @@
   ./services/backup/rsnapshot.nix
   ./services/backup/tarsnap.nix
   ./services/backup/znapzend.nix
+  ./services/cluster/hadoop/default.nix
   ./services/cluster/kubernetes/default.nix
   ./services/cluster/kubernetes/dns.nix
   ./services/cluster/kubernetes/dashboard.nix
@@ -626,6 +627,7 @@
   ./services/security/hologram-agent.nix
   ./services/security/munge.nix
   ./services/security/oauth2_proxy.nix
+  ./services/security/oauth2_proxy_nginx.nix
   ./services/security/physlock.nix
   ./services/security/shibboleth-sp.nix
   ./services/security/sks.nix
