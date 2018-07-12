@@ -14313,6 +14313,8 @@ with pkgs;
   radeontop = callPackage ../os-specific/linux/radeontop { };
 
   raspberrypifw = callPackage ../os-specific/linux/firmware/raspberrypi {};
+  raspberrypiWirelessFirmware = callPackage ../os-specific/linux/firmware/raspberrypi-wireless { };
+
   raspberrypi-tools = callPackage ../os-specific/linux/firmware/raspberrypi/tools.nix {};
 
   regionset = callPackage ../os-specific/linux/regionset { };
@@ -14723,6 +14725,8 @@ with pkgs;
   hack-font = callPackage ../data/fonts/hack { };
 
   helvetica-neue-lt-std = callPackage ../data/fonts/helvetica-neue-lt-std { };
+
+  hetzner-kube = callPackage ../applications/networking/cluster/hetzner-kube { };
 
   hicolor-icon-theme = callPackage ../data/icons/hicolor-icon-theme { };
 
