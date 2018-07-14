@@ -2417,22 +2417,7 @@ in {
     };
   };
 
-  events = buildPythonPackage rec {
-    name = "Events-${version}";
-    version = "0.2.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/E/Events/${name}.tar.gz";
-      sha256 = "0rymyfvarjdi2fdhfz2iqmp4wgd2n2sm0p2mx44c3spm7ylnqzqa";
-    };
-
-    meta = {
-      homepage = "http://events.readthedocs.org";
-      description = "Bringing the elegance of C# EventHanlder to Python";
-      license = licenses.bsd3;
-    };
-  };
-
+  events = callPackage ../development/python-modules/events { };
 
   eyeD3 = buildPythonPackage rec {
     version = "0.7.8";
@@ -6934,33 +6919,7 @@ in {
 
   koji = callPackage ../development/python-modules/koji { };
 
-  kombu = buildPythonPackage rec {
-    name = "kombu-${version}";
-    version = "4.0.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/k/kombu/${name}.tar.gz";
-      sha256 = "18hiricdnbnlz6hx3hbaa4dni6npv8rbid4dhf7k02k16qm6zz6h";
-    };
-
-    # Backport fix for python-3.6 from master (see issue https://github.com/celery/kombu/issues/675)
-    # TODO remove at next update
-    patches = [ (pkgs.fetchpatch {
-      url = "https://github.com/celery/kombu/commit/dc3fceff59d79ceac3f8f11a5d697beabb4b7a7f.patch";
-      sha256 = "0s6gsihzjvmpffc7xrrcijw00r56yb74jg0sbjgng2v1324z1da9";
-      name = "don-t-modify-dict-size-while-iterating-over-it";
-    }) ];
-
-    buildInputs = with self; [ pytest case pytz ];
-
-    propagatedBuildInputs = with self; [ amqp ];
-
-    meta = {
-      description = "Messaging library for Python";
-      homepage    = "https://github.com/celery/kombu";
-      license     = licenses.bsd3;
-    };
-  };
+  kombu = callPackage ../development/python-modules/kombu { };
 
   konfig = callPackage ../development/python-modules/konfig { };
 

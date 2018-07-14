@@ -15412,8 +15412,6 @@ with pkgs;
 
   cava = callPackage ../applications/audio/cava { };
 
-  cask = callPackage ../development/tools/build-managers/cask { };
-
   cb2bib = libsForQt5.callPackage ../applications/office/cb2bib { };
 
   cbatticon = callPackage ../applications/misc/cbatticon { };
