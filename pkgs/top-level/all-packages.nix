@@ -5912,6 +5912,8 @@ with pkgs;
     gccCross = pkgsCross.ben-nanonote.buildPackages.gccCrossStageStatic;
   };
 
+  clipnotify = callPackage ../tools/misc/clipnotify { };
+
   xclip = callPackage ../tools/misc/xclip { };
 
   xcwd = callPackage ../tools/X11/xcwd { };
@@ -15486,6 +15488,8 @@ with pkgs;
   cligh = python3Packages.callPackage ../development/tools/github/cligh {};
 
   clipgrab = callPackage ../applications/video/clipgrab { };
+
+  clipmenu = callPackage ../applications/misc/clipmenu { };
 
   clipit = callPackage ../applications/misc/clipit { };
 
