@@ -21901,7 +21901,7 @@ with pkgs;
 
   xrq = callPackage ../applications/misc/xrq { };
 
-  nitrokey-app = callPackage ../tools/security/nitrokey-app { };
+  nitrokey-app = libsForQt5.callPackage ../tools/security/nitrokey-app { };
   nitrokey-udev-rules = callPackage ../tools/security/nitrokey-app/udev-rules.nix { };
 
   fpm2 = callPackage ../tools/security/fpm2 { };
