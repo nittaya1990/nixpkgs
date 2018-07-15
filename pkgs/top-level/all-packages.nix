@@ -5251,6 +5251,8 @@ with pkgs;
 
   subsonic = callPackage ../servers/misc/subsonic { };
 
+  subfinder = callPackage ../tools/networking/subfinder { };
+
   surfraw = callPackage ../tools/networking/surfraw { };
 
   swagger-codegen = callPackage ../tools/networking/swagger-codegen { };
