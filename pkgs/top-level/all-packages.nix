@@ -20428,6 +20428,8 @@ with pkgs;
 
   flintqs = callPackage ../development/libraries/science/math/flintqs { };
 
+  gurobi = callPackage ../applications/science/math/gurobi { };
+
   jags = callPackage ../applications/science/math/jags { };
 
 
