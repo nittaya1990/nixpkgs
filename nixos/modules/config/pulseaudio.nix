@@ -234,8 +234,19 @@ in {
       security.rtkit.enable = true;
 
       systemd.packages = [ overriddenPackage ];
-    })
 
+      users.users.pulse = {
+        # For some reason, PulseAudio wants UID == GID.
+        uid = assert uid == gid; uid;
+        group = "pulse";
+        extraGroups = [ "audio" ];
+        description = "PulseAudio system service user";
+        home = stateDir;
+        createHome = true;
+      };
+
+      users.groups.pulse.gid = gid;
+    })
     (mkIf hasZeroconf {
       services.avahi.enable = true;
     })
@@ -243,7 +254,6 @@ in {
       services.avahi.publish.enable = true;
       services.avahi.publish.userServices = true;
     })
-
     (mkIf nonSystemWide {
       environment.etc = singleton {
         target = "pulse/default.pa";
@@ -264,18 +274,6 @@ in {
     })
 
     (mkIf systemWide {
-      users.users.pulse = {
-        # For some reason, PulseAudio wants UID == GID.
-        uid = assert uid == gid; uid;
-        group = "pulse";
-        extraGroups = [ "audio" ];
-        description = "PulseAudio system service user";
-        home = stateDir;
-        createHome = true;
-      };
-
-      users.groups.pulse.gid = gid;
-
       systemd.services.pulseaudio = {
         description = "PulseAudio System-Wide Server";
         wantedBy = [ "sound.target" ];
