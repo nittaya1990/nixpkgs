@@ -429,6 +429,8 @@ with pkgs;
     portaudioSupport  = config.aegisub.portaudioSupport or false;
   };
 
+  aerospike = callPackage ../servers/nosql/aerospike { };
+
   aespipe = callPackage ../tools/security/aespipe { };
 
   aescrypt = callPackage ../tools/misc/aescrypt { };
@@ -552,6 +554,8 @@ with pkgs;
   awsebcli = callPackage ../tools/virtualization/awsebcli {};
 
   awslogs = callPackage ../tools/admin/awslogs { };
+
+  aws-rotate-key = callPackage ../tools/admin/aws-rotate-key { };
 
   aws_shell = pythonPackages.callPackage ../tools/admin/aws_shell { };
 
@@ -847,6 +851,8 @@ with pkgs;
   blockhash = callPackage ../tools/graphics/blockhash { };
 
   bluemix-cli = callPackage ../tools/admin/bluemix-cli { };
+
+  charles = callPackage ../applications/networking/charles { };
 
   libqmatrixclient = libsForQt5.callPackage ../development/libraries/libqmatrixclient { };
 
@@ -3082,6 +3088,8 @@ with pkgs;
 
   iannix = libsForQt5.callPackage ../applications/audio/iannix { };
 
+  ibniz = callPackage ../tools/graphics/ibniz { };
+
   icecast = callPackage ../servers/icecast { };
 
   darkice = callPackage ../tools/audio/darkice { };
@@ -3718,7 +3726,7 @@ with pkgs;
   lzip = callPackage ../tools/compression/lzip { };
 
   luxcorerender = callPackage ../tools/graphics/luxcorerender { };
-  
+
   xz = callPackage ../tools/compression/xz { };
 
   lz4 = callPackage ../tools/compression/lz4 { };
@@ -4047,7 +4055,7 @@ with pkgs;
 
   networkmanager-iodine = callPackage ../tools/networking/network-manager/iodine.nix { };
 
-  networkmanager-openvpn = callPackage ../tools/networking/network-manager/openvpn.nix { };
+  networkmanager-openvpn = callPackage ../tools/networking/network-manager/openvpn { };
 
   networkmanager-l2tp = callPackage ../tools/networking/network-manager/l2tp.nix { };
 
@@ -4919,6 +4927,8 @@ with pkgs;
 
   s3cmd = callPackage ../tools/networking/s3cmd { };
 
+  s4cmd = callPackage ../tools/networking/s4cmd { };
+
   s3gof3r = callPackage ../tools/networking/s3gof3r { };
 
   s6Dns = callPackage ../tools/networking/s6-dns { };
@@ -4992,7 +5002,7 @@ with pkgs;
   securefs = callPackage ../tools/filesystems/securefs { };
 
   seexpr = callPackage ../development/compilers/seexpr { };
- 
+
   setroot = callPackage  ../tools/X11/setroot { };
 
   setserial = callPackage ../tools/system/setserial { };
@@ -5246,6 +5256,8 @@ with pkgs;
   su = shadow.su;
 
   subsonic = callPackage ../servers/misc/subsonic { };
+
+  subfinder = callPackage ../tools/networking/subfinder { };
 
   surfraw = callPackage ../tools/networking/surfraw { };
 
@@ -5905,6 +5917,8 @@ with pkgs;
     # load into the Ben Nanonote
     gccCross = pkgsCross.ben-nanonote.buildPackages.gccCrossStageStatic;
   };
+
+  clipnotify = callPackage ../tools/misc/clipnotify { };
 
   xclip = callPackage ../tools/misc/xclip { };
 
@@ -6640,20 +6654,7 @@ with pkgs;
   icedtea_web = icedtea8_web;
 
   idrisPackages = callPackage ../development/idris-modules {
-
-    idris-no-deps =
-      let
-        inherit (self.haskell) lib;
-        haskellPackages = self.haskellPackages.override {
-          overrides = self: super: {
-            binary = lib.dontCheck self.binary_0_8_5_1;
-            parsers = lib.dontCheck super.parsers;
-            semigroupoids = lib.dontCheck super.semigroupoids;
-            trifecta = lib.dontCheck super.trifecta;
-          };
-        };
-      in
-        haskellPackages.idris;
+    idris-no-deps = haskellPackages.idris;
   };
 
   idris = idrisPackages.with-packages [ idrisPackages.base ] ;
@@ -6801,7 +6802,7 @@ with pkgs;
     fpc = fpc;
   };
 
-  lessc = callPackage ../development/compilers/lessc { };
+  lessc = nodePackages.less;
 
   liquibase = callPackage ../development/tools/database/liquibase { };
 
@@ -7078,7 +7079,9 @@ with pkgs;
 
   scalafmt = callPackage ../development/tools/scalafmt { };
 
-  sdcc = callPackage ../development/compilers/sdcc { };
+  sdcc = callPackage ../development/compilers/sdcc {
+    gputils = null;
+  };
 
   serpent = callPackage ../development/compilers/serpent { };
 
@@ -7988,7 +7991,7 @@ with pkgs;
   creduce = callPackage ../development/tools/misc/creduce {
     inherit (perlPackages) perl
       ExporterLite FileWhich GetoptTabular RegexpCommon TermReadKey;
-    inherit (llvmPackages_4) llvm clang-unwrapped;
+    inherit (llvmPackages_6) llvm clang-unwrapped;
   };
 
   cscope = callPackage ../development/tools/misc/cscope { };
@@ -8105,8 +8108,6 @@ with pkgs;
   flow = callPackage ../development/tools/analysis/flow {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
     inherit (darwin) cf-private;
-    inherit (ocamlPackages) ocaml findlib camlp4 sedlex ocamlbuild lwt_ppx
-      wtf8 dtoa;
   };
 
   foreman = callPackage ../tools/system/foreman { };
@@ -8168,6 +8169,8 @@ with pkgs;
   gocd-server = callPackage ../development/tools/continuous-integration/gocd-server { };
 
   gotty = callPackage ../servers/gotty { };
+
+  gputils = callPackage ../development/tools/misc/gputils { };
 
   gradleGen = callPackage ../development/tools/build-managers/gradle { };
   gradle = self.gradleGen.gradle_latest;
@@ -9137,7 +9140,6 @@ with pkgs;
     game-music-emu = if stdenv.isDarwin then null else game-music-emu;
     libjack2 = if stdenv.isDarwin then null else libjack2;
     libmodplug = if stdenv.isDarwin then null else libmodplug;
-    libvpx = if stdenv.isDarwin then null else libvpx;
     openal = if stdenv.isDarwin then null else openal;
     libpulseaudio = if stdenv.isDarwin then null else libpulseaudio;
     samba = if stdenv.isDarwin then null else samba;
@@ -9767,8 +9769,8 @@ with pkgs;
   isocodes = callPackage ../development/libraries/iso-codes { };
 
   ispc = callPackage ../development/compilers/ispc {
-    llvmPackages = llvmPackages_4;
-    stdenv = llvmPackages_4.stdenv;
+    llvmPackages = llvmPackages_6;
+    stdenv = llvmPackages_6.stdenv;
   };
 
   isso = callPackage ../servers/isso { };
@@ -10745,9 +10747,7 @@ with pkgs;
     then darwin.libunwind
     else callPackage ../development/libraries/libunwind { };
 
-  libuv = callPackage ../development/libraries/libuv {
-    inherit (darwin.apple_sdk.frameworks) ApplicationServices CoreServices;
-  };
+  libuv = callPackage ../development/libraries/libuv { };
 
   libv4l = lowPrio (v4l_utils.override {
     withUtils = false;
@@ -10921,6 +10921,8 @@ with pkgs;
   menu-cache = callPackage ../development/libraries/menu-cache { };
 
   mergerfs = callPackage ../tools/filesystems/mergerfs { };
+
+  mergerfs-tools = callPackage ../tools/filesystems/mergerfs/tools.nix { };
 
   ## libGL/libGLU/Mesa stuff
 
@@ -11882,6 +11884,8 @@ with pkgs;
   srtp = callPackage ../development/libraries/srtp {
     libpcap = if stdenv.isLinux then libpcap else null;
   };
+
+  stb = callPackage ../development/libraries/stb { };
 
   stxxl = callPackage ../development/libraries/stxxl { parallel = true; };
 
@@ -15412,8 +15416,6 @@ with pkgs;
 
   cava = callPackage ../applications/audio/cava { };
 
-  cask = callPackage ../development/tools/build-managers/cask { };
-
   cb2bib = libsForQt5.callPackage ../applications/office/cb2bib { };
 
   cbatticon = callPackage ../applications/misc/cbatticon { };
@@ -15480,6 +15482,8 @@ with pkgs;
   cligh = python3Packages.callPackage ../development/tools/github/cligh {};
 
   clipgrab = callPackage ../applications/video/clipgrab { };
+
+  clipmenu = callPackage ../applications/misc/clipmenu { };
 
   clipit = callPackage ../applications/misc/clipit { };
 
@@ -15926,7 +15930,7 @@ with pkgs;
   emacsPackagesNgGen = emacs: import ./emacs-packages.nix {
     inherit lib newScope stdenv;
     inherit fetchFromGitHub fetchgit fetchhg fetchurl fetchpatch;
-    inherit emacs texinfo makeWrapper runCommand;
+    inherit emacs texinfo makeWrapper runCommand writeText;
     inherit (xorg) lndir;
 
     trivialBuild = callPackage ../build-support/emacs/trivial.nix {
@@ -15940,7 +15944,8 @@ with pkgs;
     external = {
       inherit (haskellPackages) ghc-mod structured-haskell-mode Agda hindent;
       inherit (pythonPackages) elpy;
-      inherit rtags libffi autoconf automake libpng zlib poppler pkgconfig w3m;
+      inherit
+        autoconf automake git libffi libpng pkgconfig poppler rtags w3m zlib;
     };
   };
 
@@ -16496,6 +16501,8 @@ with pkgs;
 
   gmtp = callPackage ../applications/misc/gmtp {};
 
+  gnomecast = callPackage ../applications/video/gnomecast { };
+
   gnome-mpv = callPackage ../applications/video/gnome-mpv { };
 
   gollum = callPackage ../applications/misc/gollum { };
@@ -16946,6 +16953,8 @@ with pkgs;
 
   ktorrent = libsForQt5.callPackage ../applications/networking/p2p/ktorrent { };
 
+  ksonnet = callPackage ../applications/networking/cluster/ksonnet { };
+
   kubecfg = callPackage ../applications/networking/cluster/kubecfg { };
 
   kubernetes = callPackage ../applications/networking/cluster/kubernetes {  };
@@ -17140,6 +17149,8 @@ with pkgs;
 
   marathon = callPackage ../applications/networking/cluster/marathon { };
   marathonctl = callPackage ../tools/virtualization/marathonctl { } ;
+
+  markdown-pp = callPackage ../tools/text/markdown-pp { };
 
   marp = callPackage ../applications/office/marp { };
 
@@ -18702,8 +18713,6 @@ with pkgs;
     flags = [ "python" "X11" ]; # only flag "X11" by now
   });
 
-  xxd = callPackage ../tools/misc/xxd { };
-
   vimNox = lowPrio (vim_configurable.override {
     source = "vim-nox";
     lua = pkgs.lua5_1; # vimNox source is from 2012, requires older lua
@@ -19162,11 +19171,7 @@ with pkgs;
 
   xmind = callPackage ../applications/misc/xmind { };
 
-  xneur_0_13 = callPackage ../applications/misc/xneur { };
-
-  xneur_0_8 = callPackage ../applications/misc/xneur/0.8.nix { };
-
-  xneur = xneur_0_13;
+  xneur = callPackage ../applications/misc/xneur { };
 
   gxneur = callPackage ../applications/misc/gxneur  {
     inherit (gnome2) libglade GConf;
@@ -19752,7 +19757,7 @@ with pkgs;
 
   openxcom = callPackage ../games/openxcom { };
 
-  orthorobot = callPackage ../games/orthorobot { love = love_0_7; };
+  orthorobot = callPackage ../games/orthorobot { };
 
   pacvim = callPackage ../games/pacvim { };
 
@@ -20421,6 +20426,8 @@ with pkgs;
   cliquer = callPackage ../development/libraries/science/math/cliquer { };
 
   flintqs = callPackage ../development/libraries/science/math/flintqs { };
+
+  gurobi = callPackage ../applications/science/math/gurobi { };
 
   jags = callPackage ../applications/science/math/jags { };
 
@@ -21235,6 +21242,9 @@ with pkgs;
   lilypond-with-fonts = callPackage ../misc/lilypond/with-fonts.nix {
     lilypond = lilypond-unstable;
   };
+
+  lollypop-portal = callPackages ../misc/lollypop-portal { };
+
   openlilylib-fonts = callPackage ../misc/lilypond/fonts.nix { };
 
   mailcore2 = callPackage ../development/libraries/mailcore2 {
@@ -21897,7 +21907,7 @@ with pkgs;
 
   xrq = callPackage ../applications/misc/xrq { };
 
-  nitrokey-app = callPackage ../tools/security/nitrokey-app { };
+  nitrokey-app = libsForQt5.callPackage ../tools/security/nitrokey-app { };
   nitrokey-udev-rules = callPackage ../tools/security/nitrokey-app/udev-rules.nix { };
 
   fpm2 = callPackage ../tools/security/fpm2 { };
@@ -21962,7 +21972,7 @@ with pkgs;
   unixtools = recurseIntoAttrs (callPackages ./unix-tools.nix { });
   inherit (unixtools) hexdump ps logger eject umount
                       mount wall hostname more sysctl getconf
-                      getent locale killall;
+                      getent locale killall xxd;
 
   fts = if hostPlatform.isMusl then netbsd.fts else null;
 

@@ -20,7 +20,6 @@ let
 let
   pythonAtLeast = versionAtLeast python.pythonVersion;
   pythonOlder = versionOlder python.pythonVersion;
-  isPy26 = python.pythonVersion == "2.6";
   isPy27 = python.pythonVersion == "2.7";
   isPy33 = python.pythonVersion == "3.3";
   isPy34 = python.pythonVersion == "3.4";
@@ -133,7 +132,7 @@ let
 
 in {
 
-  inherit python bootstrapped-pip pythonAtLeast pythonOlder isPy26 isPy27 isPy33 isPy34 isPy35 isPy36 isPy37 isPyPy isPy3k buildPythonPackage buildPythonApplication;
+  inherit python bootstrapped-pip pythonAtLeast pythonOlder isPy27 isPy33 isPy34 isPy35 isPy36 isPy37 isPyPy isPy3k buildPythonPackage buildPythonApplication;
   inherit fetchPypi callPackage;
   inherit hasPythonModule requiredPythonModules makePythonPath disabledIf;
   inherit toPythonModule toPythonApplication;
@@ -204,6 +203,8 @@ in {
   aws-sam-translator = callPackage ../development/python-modules/aws-sam-translator { };
 
   aws-xray-sdk = callPackage ../development/python-modules/aws-xray-sdk { };
+
+  aws-adfs = callPackage ../development/python-modules/aws-adfs { };
 
   # packages defined elsewhere
 
@@ -983,7 +984,7 @@ in {
     name = "${pname}-${version}";
     version = "0.2.2";
     pname = "basiciw";
-    disabled = isPy26 || isPy27 || isPyPy;
+    disabled = isPy27 || isPyPy;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/b/${pname}/${name}.tar.gz";
@@ -1029,7 +1030,7 @@ in {
     propagatedBuildInputs = [
       self.sqlalchemy
       self.pycrypto
-    ] ++ optionals (isPy26 || isPy27) [
+    ] ++ optionals (isPy27) [
       self.funcsigs
       self.pycryptopp
     ];
@@ -1880,6 +1881,8 @@ in {
     '';
   };
 
+  parsy = callPackage ../development/python-modules/parsy { };
+
   portpicker = callPackage ../development/python-modules/portpicker { };
 
   pkginfo = callPackage ../development/python-modules/pkginfo { };
@@ -1956,7 +1959,7 @@ in {
   };
 
   # Needed for celery
-  pytest_32 = self.pytest_36.overrideAttrs( oldAttrs: rec {
+  pytest_32 = self.pytest_36.overridePythonAttrs( oldAttrs: rec {
     version = "3.2.5";
     src = oldAttrs.src.override {
       inherit version;
@@ -2417,22 +2420,7 @@ in {
     };
   };
 
-  events = buildPythonPackage rec {
-    name = "Events-${version}";
-    version = "0.2.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/E/Events/${name}.tar.gz";
-      sha256 = "0rymyfvarjdi2fdhfz2iqmp4wgd2n2sm0p2mx44c3spm7ylnqzqa";
-    };
-
-    meta = {
-      homepage = "http://events.readthedocs.org";
-      description = "Bringing the elegance of C# EventHanlder to Python";
-      license = licenses.bsd3;
-    };
-  };
-
+  events = callPackage ../development/python-modules/events { };
 
   eyeD3 = buildPythonPackage rec {
     version = "0.7.8";
@@ -2942,8 +2930,6 @@ in {
     name = "gtimelog-${version}";
     version = "0.9.1";
 
-    disabled = isPy26;
-
     src = pkgs.fetchurl {
       url = "https://github.com/gtimelog/gtimelog/archive/${version}.tar.gz";
       sha256 = "0qk8fv8cszzqpdi3wl9vvkym1jil502ycn6sic4jrxckw5s9jsfj";
@@ -3182,7 +3168,7 @@ in {
   ipfsapi = buildPythonPackage rec {
     name = "ipfsapi-${version}";
     version = "0.4.2.post1";
-    disabled = isPy26 || isPy27;
+    disabled = isPy27;
 
     src = pkgs.fetchFromGitHub {
       owner = "ipfs";
@@ -4110,7 +4096,7 @@ in {
       virtualenv
       webtest
       zope_component
-    ] ++ optional isPy26 unittest2;
+    ];
 
     propagatedBuildInputs = with self; [
       hupper
@@ -4643,11 +4629,8 @@ in {
       sha256 = "0va95cml7wfjpvgj3dc9xdn8psyjh3zbk6v51b0hcqv2fzh409vb";
     } ;
 
-    buildInputs = with self; [] ++ optionals isPy26 [ ordereddict unittest2 ];
-
     meta = {
-       maintainers = with maintainers; [ garbas domenkozar ];
-      platforms = platforms.all;
+      maintainers = with maintainers; [ garbas domenkozar ];
     };
   };
 
@@ -5252,7 +5235,6 @@ in {
       sha256 = "8ad8c4783bf61ded74527bffb48ed9b54166685e4230386a9ed9b1279e2df5b1";
     };
 
-    buildInputs = optional isPy26 self.ordereddict;
     checkPhase = ''
       ${python.interpreter} -m unittest discover
     '';
@@ -5605,7 +5587,7 @@ in {
     # This is fixed in master I believe but not yet in 2.1;
     doCheck = false;
 
-    propagatedBuildInputs = with self; ([ Babel ] ++ (optionals isPy26 [ ordereddict ]));
+    propagatedBuildInputs = with self; [ Babel ];
 
     meta = {
       homepage = https://github.com/wtforms/wtforms;
@@ -6051,7 +6033,7 @@ in {
       sha256 = "c77d007cc32cdff836ecf8df6192371767976c108a75b055e057bb6f4a09cd42";
     };
 
-    buildInputs = with self; [ setuptools ] ++ (optional isPy26 argparse);
+    buildInputs = with self; [ setuptools ];
 
     meta = {
       description = "Automatically generated zsh completion function for Python's option parser modules";
@@ -6066,7 +6048,7 @@ in {
 
   gipc = buildPythonPackage rec {
     name = "gipc-0.5.0";
-    disabled = !isPy26 && !isPy27;
+    disabled = !isPy27;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/g/gipc/${name}.zip";
@@ -6585,7 +6567,7 @@ in {
   importlib = buildPythonPackage rec {
     name = "importlib-1.0.2";
 
-    disabled = (!isPy26) || isPyPy;
+    disabled = isPyPy;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/i/importlib/importlib-1.0.2.tar.gz";
@@ -6800,7 +6782,7 @@ in {
       sha256 = "0y3w1x9935qzx8w6m2r6g4ghyjmxn33wryiif6xb56q7cj9w1433";
     };
 
-    disabled = ! (isPy26 || isPy27);
+    disabled = !isPy27;
 
     buildInputs = [ self.nose ];
 
@@ -6934,33 +6916,7 @@ in {
 
   koji = callPackage ../development/python-modules/koji { };
 
-  kombu = buildPythonPackage rec {
-    name = "kombu-${version}";
-    version = "4.0.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/k/kombu/${name}.tar.gz";
-      sha256 = "18hiricdnbnlz6hx3hbaa4dni6npv8rbid4dhf7k02k16qm6zz6h";
-    };
-
-    # Backport fix for python-3.6 from master (see issue https://github.com/celery/kombu/issues/675)
-    # TODO remove at next update
-    patches = [ (pkgs.fetchpatch {
-      url = "https://github.com/celery/kombu/commit/dc3fceff59d79ceac3f8f11a5d697beabb4b7a7f.patch";
-      sha256 = "0s6gsihzjvmpffc7xrrcijw00r56yb74jg0sbjgng2v1324z1da9";
-      name = "don-t-modify-dict-size-while-iterating-over-it";
-    }) ];
-
-    buildInputs = with self; [ pytest case pytz ];
-
-    propagatedBuildInputs = with self; [ amqp ];
-
-    meta = {
-      description = "Messaging library for Python";
-      homepage    = "https://github.com/celery/kombu";
-      license     = licenses.bsd3;
-    };
-  };
+  kombu = callPackage ../development/python-modules/kombu { };
 
   konfig = callPackage ../development/python-modules/konfig { };
 
@@ -7415,8 +7371,6 @@ in {
       rev = "v${version}";
       sha256 = "0xzz7j8xskj5y6as178mjmm0i2xbhd4q4mwmdnvghpd2aqq3qx1c";
     };
-
-    disabled = isPy26;
 
     buildInputs = with self; [ pexpect ];
 
@@ -8591,7 +8545,7 @@ in {
 
   nose-exclude = callPackage ../development/python-modules/nose-exclude { };
 
-  nose2 = if isPy26 then null else (buildPythonPackage rec {
+  nose2 = buildPythonPackage rec {
     name = "nose2-0.5.0";
     src = pkgs.fetchurl {
       url = "mirror://pypi/n/nose2/${name}.tar.gz";
@@ -8603,7 +8557,7 @@ in {
     propagatedBuildInputs = with self; [ six ];
     # AttributeError: 'module' object has no attribute 'collector'
     doCheck = false;
-  });
+  };
 
   nose-cover3 = buildPythonPackage rec {
     name = "nose-cover3-${version}";
@@ -8879,7 +8833,6 @@ in {
     buildInputs = [ pkgs.makeWrapper ];
 
     propagatedBuildInputs = with self; [ pkgs.rtmpdump pycrypto requests ]
-      ++ optionals isPy26 [ singledispatch futures argparse ]
       ++ optionals isPy27 [ singledispatch futures ]
       ++ optionals isPy33 [ singledispatch ];
 
@@ -9153,7 +9106,9 @@ in {
    cachetools_1 = callPackage ../development/python-modules/cachetools/1.nix {};
    cachetools = callPackage ../development/python-modules/cachetools {};
 
-  cmd2 = callPackage ../development/python-modules/cmd2 {};
+  cmd2_8 = callPackage ../development/python-modules/cmd2/old.nix {};
+  cmd2_9 = callPackage ../development/python-modules/cmd2 {};
+  cmd2 = if isPy27 then self.cmd2_8 else self.cmd2_9;
 
  warlock = buildPythonPackage rec {
    name = "warlock-${version}";
@@ -9447,7 +9402,7 @@ in {
     name = "paho-mqtt-${version}";
     version = "1.1";
 
-    disabled = isPyPy || isPy26;
+    disabled = isPyPy;
 
     src = pkgs.fetchurl {
         url = "mirror://pypi/p/paho-mqtt/${name}.tar.gz";
@@ -10415,6 +10370,7 @@ in {
     };
   };
 
+  pycaption = callPackage ../development/python-modules/pycaption { };
 
   pycdio = buildPythonPackage rec {
     name = "pycdio-2.0.0";
@@ -11720,7 +11676,7 @@ in {
   python-wifi = buildPythonPackage rec {
     name = "python-wifi-${version}";
     version = "0.6.1";
-    disabled = ! (isPy26 || isPy27 );
+    disabled = !isPy27;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/python-wifi/${name}.tar.bz2";
@@ -12035,7 +11991,6 @@ in {
 
   repocheck = buildPythonPackage rec {
     name = "repocheck-2015-08-05";
-    disabled = isPy26 || isPy27;
 
     src = pkgs.fetchFromGitHub {
       sha256 = "1jc4v5zy7z7xlfmbfzvyzkyz893f5x2k6kvb3ni3rn2df7jqhc81";
@@ -12625,8 +12580,6 @@ in {
     name = "shortuuid-${version}";
     version = "0.4.3";
 
-    disabled = isPy26;
-
     src = pkgs.fetchurl {
       url = "mirror://pypi/s/shortuuid/${name}.tar.gz";
       sha256 = "4606dbb19124d98109c00e2cafae2df8117aec02115623e18fb2abe3f766d293";
@@ -12861,7 +12814,7 @@ in {
     buildInputs = with self; [ pytest ];
     propagatedBuildInputs = with self; [ praw xmltodict pytz pyenchant pygeoip ];
 
-    disabled = isPyPy || isPy26 || isPy27;
+    disabled = isPyPy || isPy27;
 
     checkPhase = ''
     ${python.interpreter} test/*.py                                         #*/
@@ -14051,7 +14004,7 @@ in {
     src = py;
     format = "other";
 
-    disabled = isPy26 || isPyPy;
+    disabled = isPyPy;
 
     installPhase = ''
       # Move the tkinter module
@@ -14586,6 +14539,8 @@ in {
     };
   };
 
+  vega_datasets = callPackage ../development/python-modules/vega_datasets { };
+
   virtkey = callPackage ../development/python-modules/virtkey { };
 
   virtual-display = callPackage ../development/python-modules/virtual-display { };
@@ -14757,30 +14712,7 @@ EOF
     imagemagick = pkgs.imagemagickBig;
   };
 
-  wcwidth = buildPythonPackage rec {
-    name = "wcwidth-${version}";
-    version = "0.1.6";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/w/wcwidth/${name}.tar.gz";
-      sha256 = "02wjrpf001gjdjsaxxbzcwfg19crlk2dbddayrfc2v06f53yrcyw";
-    };
-
-    # Checks fail due to missing tox.ini file:
-    doCheck = false;
-
-    meta = {
-      description = "Measures number of Terminal column cells of wide-character codes";
-      longDescription = ''
-        This API is mainly for Terminal Emulator implementors -- any Python
-        program that attempts to determine the printable width of a string on
-        a Terminal. It is implemented in python (no C library calls) and has
-        no 3rd-party dependencies.
-      '';
-      homepage = https://github.com/jquast/wcwidth;
-      license = licenses.mit;
-    };
-  };
+  wcwidth = callPackage ../development/python-modules/wcwidth { };
 
   web = buildPythonPackage rec {
     version = "0.37";
@@ -14854,11 +14786,6 @@ EOF
     preConfigure = ''
       substituteInPlace setup.py --replace "nose<1.3.0" "nose"
     '';
-
-    # XXX: skipping two tests fails in python2.6
-    doCheck = ! isPy26;
-
-    buildInputs = with self; optionals isPy26 [ ordereddict unittest2 ];
 
     propagatedBuildInputs = with self; [
       nose
@@ -15301,7 +15228,7 @@ EOF
       sha256 = "1p943jdxb587dh7php4vx04qvn7b2877hr4qs5zyckvp5afhhank";
     };
 
-    propagatedBuildInputs = with self; [ zope_location zope_event zope_interface zope_testing ] ++ optional isPy26 ordereddict;
+    propagatedBuildInputs = with self; [ zope_location zope_event zope_interface zope_testing ];
 
     # ImportError: No module named 'zope.event'
     # even though zope_event has been included.
@@ -16905,7 +16832,7 @@ EOF
 
   jenkins-job-builder = buildPythonPackage rec {
     name = "jenkins-job-builder-2.0.0.0b2";
-    disabled = ! (isPy26 || isPy27);
+    disabled = !isPy27;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/j/jenkins-job-builder/${name}.tar.gz";
@@ -16927,10 +16854,6 @@ EOF
       pyyaml
       six
       stevedore
-    ] ++ optionals isPy26 [
-      ordereddict
-      argparse
-      ordereddict
     ];
 
     meta = {
@@ -18094,6 +18017,8 @@ EOF
   qiskit = callPackage ../development/python-modules/qiskit { };
 
   qasm2image = callPackage ../development/python-modules/qasm2image { };
+
+  simpy = callPackage ../development/python-modules/simpy { };
 });
 
 in fix' (extends overrides packages)

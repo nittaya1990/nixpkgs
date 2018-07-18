@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, jdk, zip, unzip, bash, writeCBin, coreutils, makeWrapper, which, python, gnused
+{ stdenv, lib, fetchurl, runCommand, jdk, zip, unzip, bash, writeCBin, coreutils, makeWrapper, which, python, gnused
 # Always assume all markers valid (don't redownload dependencies).
 # Also, don't clean up environment variables.
 , enableNixHacks ? false
@@ -6,9 +6,20 @@
 , libcxx, CoreFoundation, CoreServices, Foundation
 }:
 
+let srcDeps = stdenv.lib.singleton (
+      fetchurl {
+        url = "https://github.com/google/desugar_jdk_libs/archive/f5e6d80c6b4ec6b0a46603f72b015d45cf3c11cd.zip";
+        sha256 = "c80f3f3d442d8a6ca7adc83f90ecd638c3864087fdd6787ffac070b6f1cc8f9b";
+      }
+    );
+    distDir = runCommand "bazel-deps" {} ''
+      mkdir -p $out
+      for i in ${builtins.toString srcDeps}; do cp $i $out/$(stripHash $i); done
+    '';
+in
 stdenv.mkDerivation rec {
 
-  version = "0.13.0";
+  version = "0.15.1";
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/bazelbuild/bazel/";
@@ -22,7 +33,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-dist.zip";
-    sha256 = "143nd9dmw2x88azf8spinl2qnvw9m8lqlqc765l9q2v6hi807sc2";
+    sha256 = "0v7wdwbxy4bcx488lm1glf4iv3wfdwbkg8fh6kmmmfn1lhgkaay6";
   };
 
   sourceRoot = ".";
@@ -67,6 +78,9 @@ stdenv.mkDerivation rec {
     # Fixup scripts that generate scripts. Not fixed up by patchShebangs below.
     substituteInPlace scripts/bootstrap/compile.sh \
         --replace /bin/sh ${customBash}/bin/bash
+
+    echo "build --experimental_distdir=${distDir}" >> .bazelrc
+    echo "fetch --experimental_distdir=${distDir}" >> .bazelrc
     echo "build --copt=\"$(echo $NIX_CFLAGS_COMPILE | sed -e 's/ /" --copt=\"/g')\"" >> .bazelrc
     echo "build --host_copt=\"$(echo $NIX_CFLAGS_COMPILE | sed -e 's/ /" --host_copt=\"/g')\"" >> .bazelrc
     echo "build --linkopt=\"-Wl,$(echo $NIX_LDFLAGS | sed -e 's/ /" --linkopt=\"-Wl,/g')\"" >> .bazelrc
@@ -96,9 +110,9 @@ stdenv.mkDerivation rec {
   # Change this to $(mktemp -d) as soon as we figure out why.
 
   buildPhase = ''
-    export TMPDIR=/tmp
+    export TMPDIR=/tmp/.bazel-$UID
     ./compile.sh
-    ./output/bazel --output_user_root=/tmp/.bazel build //scripts:bash_completion \
+    ./output/bazel --output_user_root=$TMPDIR/.bazel build //scripts:bash_completion \
       --spawn_strategy=standalone \
       --genrule_strategy=standalone
     cp bazel-bin/scripts/bazel-complete.bash output/
