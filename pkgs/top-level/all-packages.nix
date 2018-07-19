@@ -17386,8 +17386,11 @@ with pkgs;
     xvSupport          = !stdenv.isDarwin;
   };
 
+  mpv-with-scripts = callPackage ../applications/video/mpv/wrapper.nix { };
+
   mpvScripts = {
     convert = callPackage ../applications/video/mpv/scripts/convert.nix {};
+    mpris = callPackage ../applications/video/mpv/scripts/mpris.nix {};
   };
 
   mrpeach = callPackage ../applications/audio/pd-plugins/mrpeach { };
@@ -21806,6 +21809,8 @@ with pkgs;
   };
 
   xinput_calibrator = callPackage ../tools/X11/xinput_calibrator { };
+
+  xlog = callPackage ../applications/misc/xlog { };
 
   xmagnify = callPackage ../tools/X11/xmagnify { };
 
