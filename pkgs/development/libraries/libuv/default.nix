@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
 
   patches = [
     (fetchpatch {
-      url = "https://github.com/libuv/libuv/pull/1909.patch";
-      sha256 = "0zbblj99zkgm9ssqjlf3c9hrnh9pmqxsqbqnvyx1lkcrc0pqjb7s";
+      url = "https://github.com/libuv/libuv/commit/1a5d4f08238dd532c3718e210078de1186a5920d.patch";
+      sha256 = "1s2692h4dvqnzwwicrkpj0zph1i2bhv39w31z5vh7ssgvykaradj";
     })
   ];
 
