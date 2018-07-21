@@ -83,6 +83,7 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/share/applications/keybase.desktop \
       --replace run_keybase $out/bin/keybase-gui
   '';
+
   postFixup = ''
     patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) --set-rpath "${libPath}:\$ORIGIN" "$out/share/keybase/Keybase"
   '';

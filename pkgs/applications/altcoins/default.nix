@@ -4,6 +4,8 @@ rec {
 
   aeon = callPackage ./aeon { };
 
+  augur-app = callPackage ./augur/app.nix { };
+
   bitcoin  = libsForQt5.callPackage ./bitcoin.nix { miniupnpc = miniupnpc_2; withGui = true; };
   bitcoind = callPackage ./bitcoin.nix { miniupnpc = miniupnpc_2; withGui = false; };
   clightning = callPackage ./clightning.nix { };
