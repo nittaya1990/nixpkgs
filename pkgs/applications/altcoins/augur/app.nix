@@ -79,6 +79,6 @@ in stdenv.mkDerivation rec {
     homepage = https://github.com/AugurProject/augur-app;
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = [ maintainers.coreyoconnor ];
+    maintainers = [ maintainers.coconnor ];
   };
 }
