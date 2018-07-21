@@ -1,4 +1,4 @@
-{ stdenv, lib, callPackage, fetchurl, fetchFromGitHub, unzip
+{ stdenv, callPackage, fetchurl, fetchFromGitHub, unzip
 , steam, libusb, pcre-cpp, jsoncpp, libhdhomerun, wmctrl, zlib }:
 
 with (callPackage ./commons.nix {});

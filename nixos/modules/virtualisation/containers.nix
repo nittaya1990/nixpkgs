@@ -259,7 +259,7 @@ let
 
   system = config.nixpkgs.localSystem.system;
 
-  bindMountOpts = { name, config, ... }: {
+  bindMountOpts = { name, ... }: {
 
     options = {
       mountPoint = mkOption {
@@ -286,7 +286,7 @@ let
 
   };
 
-  allowedDeviceOpts = { name, config, ... }: {
+  allowedDeviceOpts = { ... }: {
     options = {
       node = mkOption {
         example = "/dev/net/tun";
