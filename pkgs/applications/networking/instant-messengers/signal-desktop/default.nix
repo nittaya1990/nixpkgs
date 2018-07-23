@@ -47,7 +47,7 @@ in stdenv.mkDerivation rec {
     sha256 = "0590r7748kv6g7zygq95v8qxf7vi2n5ypj6734x9yshrn8z6p8lr";
   };
 
-  phases = [ "unpackPhase" "installPhase" ];
+  phases = [ "unpackPhase" "installPhase" "fixupPhase" ];
 
   nativeBuildInputs = [ dpkg wrapGAppsHook ];
 

@@ -1,4 +1,4 @@
-{ stdenv, pkgs, fetchurl, lib, makeWrapper
+{ stdenv, pkgs, fetchurl, lib, makeWrapper, wrapGAppsHook
 , dpkg
 , gtk3, gnome3, alsaLib, atk, cairo, pango, gdk_pixbuf, glib, fontconfig
 , dbus, libX11, xorg, libXi, libXcursor, libXdamage, libXrandr, libXcomposite
@@ -45,9 +45,9 @@ in stdenv.mkDerivation rec {
     name = "${name}.deb";
   };
 
-  buildInputs = [ dpkg ] ;
+  nativeBuildInputs = [ dpkg wrapGAppsHook ] ;
 
-  phases = ["unpackPhase" "installPhase"];
+  phases = [ "unpackPhase" "installPhase" "fixupPhase" ];
 
   unpackCmd = ''
     mkdir pkg
@@ -58,6 +58,7 @@ in stdenv.mkDerivation rec {
   installPhase = ''
     mkdir $out
     mkdir $out/libexec/
+
     mv opt/Augur $out/libexec/
     mv usr/share $out/
 
@@ -72,6 +73,10 @@ in stdenv.mkDerivation rec {
     # Fix the desktop link
     substituteInPlace $out/share/applications/augur.desktop \
       --replace /opt/Augur/augur $out/bin/augur
+
+    # remove executable from libs. That causes gappsWrapper to wrap those.
+    chmod -x $out/libexec/Augur/libnode.so
+    chmod -x $out/libexec/Augur/libffmpeg.so
   '';
 
   meta = with stdenv.lib; {
