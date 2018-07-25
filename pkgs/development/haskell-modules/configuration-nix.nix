@@ -471,6 +471,9 @@ self: super: builtins.intersectAttrs super {
     '';
   });
 
+  # https://github.com/plow-technologies/servant-streaming/issues/12
+  servant-streaming-server = dontCheck super.servant-streaming-server;
+
   # tests run executable, relying on PATH
   # without this, tests fail with "Couldn't launch intero process"
   intero = overrideCabal super.intero (drv: {
@@ -499,9 +502,4 @@ self: super: builtins.intersectAttrs super {
   LDAP = dontCheck (overrideCabal super.LDAP (drv: {
     librarySystemDepends = drv.librarySystemDepends or [] ++ [ pkgs.cyrus_sasl.dev ];
   }));
-
-  # Tests require a browser: https://github.com/ku-fpg/blank-canvas/issues/73
-  blank-canvas = dontCheck super.blank-canvas;
-  blank-canvas_0_6_2 = dontCheck super.blank-canvas_0_6_2;
-
 }

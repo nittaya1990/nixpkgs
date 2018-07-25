@@ -209,6 +209,7 @@ mapAliases ({
   piwik = matomo; # added 2018-01-16
   pltScheme = racket; # just to be sure
   poppler_qt5 = libsForQt5.poppler;  # added 2015-12-19
+  procps-ng = procps; # added 2018-06-08
   prometheus-statsd-bridge = prometheus-statsd-exporter;  # added 2017-08-27
   pulseaudioLight = pulseaudio; # added 2018-04-25
   qca-qt5 = libsForQt5.qca-qt5;  # added 2015-12-19
@@ -228,6 +229,10 @@ mapAliases ({
   ruby_2_5_0 = throw "deprecated 2018-0213: use ruby_2_5 instead";
   rubygems = throw "deprecated 2016-03-02: rubygems is now bundled with ruby";
   rxvt_unicode_with-plugins = rxvt_unicode-with-plugins; # added 2015-04-02
+  s6Dns = s6-dns; # added 2018-07-23
+  s6Networking = s6-networking; # added 2018-07-23
+  s6LinuxUtils = s6-linux-utils; # added 2018-07-23
+  s6PortableUtils = s6-portable-utils; # added 2018-07-23
   sam = deadpixi-sam; # added 2018-04-25
   samsungUnifiedLinuxDriver = samsung-unified-linux-driver; # added 2016-01-25
   saneBackends = sane-backends; # added 2016-01-02

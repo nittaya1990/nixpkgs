@@ -22,6 +22,21 @@ with pkgs;
 
   stdenvNoCC = stdenv.override { cc = null; };
 
+  stdenvNoLibs = let
+    bintools = stdenv.cc.bintools.override {
+      libc = null;
+      noLibc = true;
+    };
+  in stdenv.override {
+    cc = stdenv.cc.override {
+      libc = null;
+      noLibc = true;
+      extraPackages = [];
+      inherit bintools;
+    };
+    allowedRequisites = stdenv.allowedRequisites ++ [ bintools ];
+  };
+
   # For convenience, allow callers to get the path to Nixpkgs.
   path = ../..;
 
@@ -167,6 +182,8 @@ with pkgs;
   graph-easy = callPackage ../tools/graphics/graph-easy { };
 
   packer = callPackage ../development/tools/packer { };
+
+  pet = callPackage ../development/tools/pet { };
 
   mht2htm = callPackage ../tools/misc/mht2htm { };
 
@@ -858,7 +875,12 @@ with pkgs;
 
   tensor = libsForQt5.callPackage ../applications/networking/instant-messengers/tensor { };
 
-  libtensorflow = callPackage ../development/libraries/libtensorflow { };
+  libtensorflow = callPackage ../development/libraries/libtensorflow {
+    cudaSupport = config.cudaSupport or false;
+    inherit (linuxPackages) nvidia_x11;
+    cudatoolkit = cudatoolkit_9_0;
+    cudnn = cudnn_cudatoolkit_9_0;
+  };
 
   blink1-tool = callPackage ../tools/misc/blink1-tool { };
 
@@ -1775,7 +1797,8 @@ with pkgs;
   };
 
   ibus = callPackage ../tools/inputmethods/ibus {
-    inherit (gnome3) dconf gconf glib;
+    gconf = gnome2.GConf;
+    inherit (gnome3) dconf glib;
   };
 
   ibus-qt = callPackage ../tools/inputmethods/ibus/ibus-qt.nix { };
@@ -4914,6 +4937,8 @@ with pkgs;
 
   rubocop = callPackage ../development/tools/rubocop { };
 
+  runelite = callPackage ../games/runelite { };
+
   runningx = callPackage ../tools/X11/runningx { };
 
   runzip = callPackage ../tools/archivers/runzip { };
@@ -4936,13 +4961,13 @@ with pkgs;
 
   s3gof3r = callPackage ../tools/networking/s3gof3r { };
 
-  s6Dns = callPackage ../tools/networking/s6-dns { };
+  s6-dns = callPackage ../tools/networking/s6-dns { };
 
-  s6LinuxUtils = callPackage ../os-specific/linux/s6-linux-utils { };
+  s6-linux-utils = callPackage ../os-specific/linux/s6-linux-utils { };
 
-  s6Networking = callPackage ../tools/networking/s6-networking { };
+  s6-networking = callPackage ../tools/networking/s6-networking { };
 
-  s6PortableUtils = callPackage ../tools/misc/s6-portable-utils { };
+  s6-portable-utils = callPackage ../tools/misc/s6-portable-utils { };
 
   sablotron = callPackage ../tools/text/xml/sablotron { };
 
@@ -6331,13 +6356,7 @@ with pkgs;
     { substitutions = { gcc = gcc-unwrapped; }; }
     ../development/compilers/gcc/libstdc++-hook.sh;
 
-  # Can't just overrideCC, because then the stdenv-cross mkDerivation will be
-  # thrown away. TODO: find a better solution for this.
-  crossLibcStdenv = buildPackages.makeStdenvCross {
-    inherit (buildPackages.buildPackages) stdenv;
-    inherit buildPlatform hostPlatform targetPlatform;
-    cc = buildPackages.gccCrossStageStatic;
-  };
+  crossLibcStdenv = overrideCC stdenv buildPackages.gccCrossStageStatic;
 
   # The GCC used to build libc for the target platform. Normal gccs will be
   # built with, and use, that cross-compiled libc.
@@ -6884,13 +6903,6 @@ with pkgs;
     inherit (stdenvAdapters) overrideCC;
     buildLlvmTools = buildPackages.llvmPackages_5.tools;
     targetLlvmLibraries = targetPackages.llvmPackages_5.libraries;
-  } // stdenv.lib.optionalAttrs (stdenv.isDarwin && hostPlatform == buildPlatform) {
-    cmake = buildPackages.cmake.override {
-      isBootstrap = true;
-      majorVersion = "3.9"; # 3.10.2: 'ApplicationServices/ApplicationServices.h' file not found
-    };
-    libxml2 = libxml2.override { pythonSupport = false; };
-    python2 = callPackage ../development/interpreters/python/cpython/2.7/boot.nix { inherit (darwin) CF configd; };
   } // stdenv.lib.optionalAttrs (stdenv.cc.isGNU && stdenv.hostPlatform.isi686) {
     stdenv = overrideCC stdenv buildPackages.gcc6; # with gcc-7: undefined reference to `__divmoddi4'
   });
@@ -8015,7 +8027,9 @@ with pkgs;
 
   librarian-puppet-go = callPackage ../development/tools/librarian-puppet-go { };
 
-  libstdcxx5 = callPackage ../development/libraries/libstdc++5 { };
+  libgcc = callPackage ../development/libraries/gcc/libgcc { };
+
+  libstdcxx5 = callPackage ../development/libraries/gcc/libstdc++/5.nix { };
 
   libsigrok = callPackage ../development/tools/libsigrok { };
   # old version:
@@ -8844,7 +8858,11 @@ with pkgs;
 
   c-blosc = callPackage ../development/libraries/c-blosc { };
 
-  cachix = haskell.lib.justStaticExecutables haskellPackages.cachix;
+  cachix = (haskell.lib.justStaticExecutables haskellPackages.cachix).overrideAttrs (drv: {
+    meta = drv.meta // {
+      hydraPlatforms = stdenv.lib.platforms.unix;
+    };
+  });
 
   capnproto = callPackage ../development/libraries/capnproto { };
 
@@ -8992,6 +9010,8 @@ with pkgs;
   db6 = db60;
   db60 = callPackage ../development/libraries/db/db-6.0.nix { };
   db62 = callPackage ../development/libraries/db/db-6.2.nix { };
+
+  dbxml = callPackage ../development/libraries/dbxml { };
 
   dbus = callPackage ../development/libraries/dbus { };
   dbus_cplusplus  = callPackage ../development/libraries/dbus-cplusplus { };
@@ -10344,6 +10364,8 @@ with pkgs;
 
   libmypaint = callPackage ../development/libraries/libmypaint { };
 
+  libmysofa = callPackage ../development/libraries/audio/libmysofa { };
+
   libmysqlconnectorcpp = callPackage ../development/libraries/libmysqlconnectorcpp {
     mysql = mysql57;
   };
@@ -11077,15 +11099,9 @@ with pkgs;
 
   neardal = callPackage ../development/libraries/neardal { };
 
-  neon = callPackage ../development/libraries/neon {
-    compressionSupport = true;
-    sslSupport = true;
-  };
+  neon = callPackage ../development/libraries/neon { };
 
-  neon_0_29 = callPackage ../development/libraries/neon/0.29.nix {
-    compressionSupport = true;
-    sslSupport = true;
-  };
+  neon_0_29 = callPackage ../development/libraries/neon/0.29.nix { };
 
   nettle = callPackage ../development/libraries/nettle { };
 
@@ -11845,6 +11861,8 @@ with pkgs;
 
   sofia_sip = callPackage ../development/libraries/sofia-sip { };
 
+  soil = callPackage ../development/libraries/soil { };
+  
   sonic = callPackage ../development/libraries/sonic { };
 
   soprano = callPackage ../development/libraries/soprano { };
@@ -12939,7 +12957,7 @@ with pkgs;
   };
 
   pulseaudioFull = pulseaudio.override {
-    gconf = gnome3.gconf;
+    gconf = gnome2.GConf;
     x11Support = true;
     jackaudioSupport = true;
     airtunesSupport = true;
@@ -13793,11 +13811,6 @@ with pkgs;
         # kernelPatches.cpu-cgroup-v2."4.11"
         kernelPatches.modinst_arg_list_too_long
         kernelPatches.bcm2835_mmal_v4l2_camera_driver # Only needed for 4.16!
-        # https://github.com/NixOS/nixpkgs/issues/42755
-        # Remove these xen-netfront patches once they're included in
-        # upstream! Fixes https://github.com/NixOS/nixpkgs/issues/42755
-        kernelPatches.xen-netfront_fix_mismatched_rtnl_unlock
-        kernelPatches.xen-netfront_update_features_after_registering_netdev
       ];
   };
 
@@ -14305,9 +14318,6 @@ with pkgs;
 
   procps = if stdenv.isLinux then callPackage ../os-specific/linux/procps-ng { }
            else unixtools.procps;
-  procps-ng = procps; # TODO: move to aliases.nix
-
-  watch = callPackage ../os-specific/linux/procps/watch.nix { };
 
   qemu_kvm = lowPrio (qemu.override { hostCpuOnly = true; });
 
@@ -15380,7 +15390,7 @@ with pkgs;
 
   bonzomatic = callPackage ../applications/editors/bonzomatic { };
 
-  brackets = callPackage ../applications/editors/brackets { gconf = gnome3.gconf; };
+  brackets = callPackage ../applications/editors/brackets { gconf = gnome2.GConf; };
 
   notmuch-bower = callPackage ../applications/networking/mailreaders/notmuch-bower { };
 
@@ -15414,10 +15424,7 @@ with pkgs;
     openjpeg = openjpeg_1;
   };
 
-  perkeep = callPackage ../applications/misc/perkeep {
-    # Perkeep is very particular about which go version to build with.
-    go = go_1_9;
-  };
+  perkeep = callPackage ../applications/misc/perkeep { };
 
   canto-curses = callPackage ../applications/networking/feedreaders/canto-curses { };
 
@@ -15666,6 +15673,8 @@ with pkgs;
   };
 
   docker-distribution = callPackage ../applications/virtualization/docker/distribution.nix { };
+
+  amazon-ecr-credential-helper = callPackage ../tools/admin/amazon-ecr-credential-helper { };
 
   docker-credential-gcr = callPackage ../tools/admin/docker-credential-gcr { };
 
@@ -19383,6 +19392,8 @@ with pkgs;
 
   armagetronad = callPackage ../games/armagetronad { };
 
+  arena = callPackage ../games/arena {};
+
   arx-libertatis = callPackage ../games/arx-libertatis {
     stdenv = overrideCC stdenv gcc6;
   };
@@ -20251,7 +20262,8 @@ with pkgs;
       mkPlasma5 = import ../desktops/plasma-5;
       attrs = {
         inherit libsForQt5 lib fetchurl;
-        inherit (gnome3) gconf gsettings-desktop-schemas;
+        inherit (gnome3) gsettings-desktop-schemas;
+        gconf = gnome2.GConf;
       };
     in
       recurseIntoAttrs (makeOverridable mkPlasma5 attrs);
@@ -20943,6 +20955,8 @@ with pkgs;
 
   spyder = pythonPackages.spyder;
 
+  openspace = callPackage ../applications/science/astronomy/openspace { };
+  
   stellarium = libsForQt5.callPackage ../applications/science/astronomy/stellarium { };
 
   tulip = callPackage ../applications/science/misc/tulip {
@@ -21062,7 +21076,7 @@ with pkgs;
   cups-zj-58 =  callPackage ../misc/cups/drivers/zj-58 { };
 
   crashplan = callPackage ../applications/backup/crashplan { };
-  crashplansb = callPackage ../applications/backup/crashplan/crashplan-small-business.nix { inherit (gnome3) gconf; };
+  crashplansb = callPackage ../applications/backup/crashplan/crashplan-small-business.nix { gconf = gnome2.GConf; };
 
   colort = callPackage ../applications/misc/colort { };
 
@@ -21987,7 +22001,7 @@ with pkgs;
   unixtools = recurseIntoAttrs (callPackages ./unix-tools.nix { });
   inherit (unixtools) hexdump ps logger eject umount
                       mount wall hostname more sysctl getconf
-                      getent locale killall xxd;
+                      getent locale killall xxd watch;
 
   fts = if hostPlatform.isMusl then netbsd.fts else null;
 
