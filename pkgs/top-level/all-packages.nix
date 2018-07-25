@@ -16981,6 +16981,8 @@ with pkgs;
 
   kubernetes-helm = callPackage ../applications/networking/cluster/helm { };
 
+  kubetail = callPackage ../applications/networking/cluster/kubetail { } ;
+
   kupfer = callPackage ../applications/misc/kupfer { };
 
   lame = callPackage ../development/libraries/lame { };
@@ -21846,6 +21848,8 @@ with pkgs;
   yandex-disk = callPackage ../tools/filesystems/yandex-disk { };
 
   yara = callPackage ../tools/security/yara { };
+
+  yaxg = callPackage ../tools/graphics/yaxg {};
 
   zap = callPackage ../tools/networking/zap { };
 
