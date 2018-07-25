@@ -19701,9 +19701,7 @@ with pkgs;
 
   megaglest = callPackage ../games/megaglest {};
 
-  minecraft = callPackage ../games/minecraft {
-    useAlsa = config.minecraft.alsa or false;
-  };
+  minecraft = callPackage ../games/minecraft { };
 
   minecraft-server = callPackage ../games/minecraft-server { };
 
