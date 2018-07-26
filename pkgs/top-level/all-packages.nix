@@ -11726,6 +11726,8 @@ with pkgs;
 
   ronn = callPackage ../development/tools/ronn { };
 
+  rshell = python3.pkgs.callPackage ../development/tools/rshell { };
+
   rubberband = callPackage ../development/libraries/rubberband {
     inherit (vamp) vampSDK;
   };
