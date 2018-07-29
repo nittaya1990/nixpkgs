@@ -678,6 +678,8 @@ with pkgs;
 
   glyr = callPackage ../tools/audio/glyr { };
 
+  httperf = callPackage ../tools/networking/httperf { };
+
   imgpatchtools = callPackage ../development/mobile/imgpatchtools { };
 
   lastpass-cli = callPackage ../tools/security/lastpass-cli { };
@@ -898,7 +900,7 @@ with pkgs;
   blockdiag = pythonPackages.blockdiag;
 
   blsd = callPackage ../tools/misc/blsd {
-    libgit2 = libgit2_0_25;
+    libgit2 = libgit2_0_27;
   };
 
   bluez-tools = callPackage ../tools/bluetooth/bluez-tools { };
@@ -6804,36 +6806,12 @@ with pkgs;
 
   jikes = callPackage ../development/compilers/jikes { };
 
-  julia_04 = callPackage ../development/compilers/julia {
-    gmp = gmp6;
-    openblas = openblasCompat;
-    inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices;
-    llvm = llvm_37;
-  };
-
-  julia_05 = callPackage ../development/compilers/julia/0.5.nix {
-    gmp = gmp6;
-    libgit2 = libgit2_0_25;
-    openblas = openblasCompat;
-    inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices;
-    llvm = llvm_38;
-  };
-
-  julia_06 = callPackage ../development/compilers/julia/0.6.nix {
+  julia = callPackage ../development/compilers/julia {
     gmp = gmp6;
     openblas = openblasCompat;
     inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices;
     llvm = llvm_39;
   };
-
-  julia-git = lowPrio (callPackage ../development/compilers/julia/git.nix {
-    gmp = gmp6;
-    openblas = openblasCompat;
-    inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices;
-    llvm = llvm_39;
-  });
-
-  julia = julia_06;
 
   jwasm =  callPackage ../development/compilers/jwasm { };
 
@@ -9357,7 +9335,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  libgit2_0_25 = callPackage ../development/libraries/git2/0.25.nix {
+  libgit2_0_27 = callPackage ../development/libraries/git2/0.27.nix {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
@@ -18322,10 +18300,7 @@ with pkgs;
 
   insync = callPackage ../applications/networking/insync { };
 
-  lightdm = libsForQt5.callPackage ../applications/display-managers/lightdm {
-    qt4 = null;
-    withQt5 = false;
-  };
+  lightdm = libsForQt5.callPackage ../applications/display-managers/lightdm { };
 
   lightdm_qt = lightdm.override { withQt5 = true; };
 

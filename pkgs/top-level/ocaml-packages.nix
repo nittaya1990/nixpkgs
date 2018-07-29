@@ -71,6 +71,8 @@ let
 
     batteries = callPackage ../development/ocaml-modules/batteries { };
 
+    bigstringaf = callPackage ../development/ocaml-modules/bigstringaf { };
+
     bitstring = callPackage ../development/ocaml-modules/bitstring { };
 
     bitv = callPackage ../development/ocaml-modules/bitv { };
@@ -317,6 +319,8 @@ let
 
     hex = callPackage ../development/ocaml-modules/hex { };
 
+    httpaf = callPackage ../development/ocaml-modules/httpaf { };
+
     inifiles = callPackage ../development/ocaml-modules/inifiles { };
 
     iri = callPackage ../development/ocaml-modules/iri { };
@@ -365,6 +369,8 @@ let
     lablgtkmathview = callPackage ../development/ocaml-modules/lablgtkmathview {
       gtkmathview = callPackage ../development/libraries/gtkmathview { };
     };
+
+    labltk = callPackage ../development/ocaml-modules/labltk { };
 
     lambdaTerm-1_6 = callPackage ../development/ocaml-modules/lambda-term/1.6.nix { lwt = lwt2; };
     lambdaTerm =
