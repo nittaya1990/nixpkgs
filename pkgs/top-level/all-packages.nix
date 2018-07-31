@@ -967,6 +967,8 @@ with pkgs;
 
   buildah = callPackage ../development/tools/buildah { };
 
+  bukubrow = callPackage ../tools/networking/bukubrow { };
+
   burpsuite = callPackage ../tools/networking/burpsuite {};
 
   c3d = callPackage ../applications/graphics/c3d {
@@ -8112,6 +8114,8 @@ with pkgs;
   emma = callPackage ../development/tools/analysis/emma { };
 
   epm = callPackage ../development/tools/misc/epm { };
+
+  eresi = callPackage ../development/tools/analysis/eresi { };
 
   eweb = callPackage ../development/tools/literate-programming/eweb { };
 
@@ -18064,6 +18068,8 @@ with pkgs;
   };
 
   rapcad = libsForQt5.callPackage ../applications/graphics/rapcad { boost = boost159; };
+
+  rapid-photo-downloader = libsForQt5.callPackage ../applications/graphics/rapid-photo-downloader { };
 
   rapidsvn = callPackage ../applications/version-management/rapidsvn { };
 
