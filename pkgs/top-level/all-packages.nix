@@ -1324,6 +1324,8 @@ with pkgs;
 
   glide = callPackage ../development/tools/glide { };
 
+  globalarrays = callPackage ../development/libraries/globalarrays { };
+
   glock = callPackage ../development/tools/glock { };
 
   glslviewer = callPackage ../development/tools/glslviewer {
@@ -7094,6 +7096,7 @@ with pkgs;
   cargo-edit = callPackage ../tools/package-management/cargo-edit { };
   cargo-release = callPackage ../tools/package-management/cargo-release { };
   cargo-tree = callPackage ../tools/package-management/cargo-tree { };
+  cargo-update = callPackage ../tools/package-management/cargo-update { };
 
   cargo-asm = callPackage ../development/tools/rust/cargo-asm { };
   cargo-fuzz = callPackage ../development/tools/rust/cargo-fuzz { };
@@ -20338,6 +20341,8 @@ with pkgs;
   molden = callPackage ../applications/science/chemistry/molden { };
 
   octopus = callPackage ../applications/science/chemistry/octopus { openblas=openblasCompat; };
+
+  openmolcas = callPackage ../applications/science/chemistry/openmolcas { };
 
   pymol = callPackage ../applications/science/chemistry/pymol { };
 
