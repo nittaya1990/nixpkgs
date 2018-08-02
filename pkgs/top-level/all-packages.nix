@@ -5457,6 +5457,8 @@ with pkgs;
 
   tiny8086 = callPackage ../applications/virtualization/8086tiny { };
 
+  tinyproxy = callPackage ../tools/networking/tinyproxy {};
+
   tio = callPackage ../tools/misc/tio { };
 
   tldr = callPackage ../tools/misc/tldr { };
@@ -15214,7 +15216,7 @@ with pkgs;
   androidStudioPackages = recurseIntoAttrs
     (callPackage ../applications/editors/android-studio { });
   android-studio = androidStudioPackages.stable;
-  android-studio-preview = androidStudioPackages.preview; # TODO: Drop old alias after 18.09
+  android-studio-preview = androidStudioPackages.beta;
 
   antfs-cli = callPackage ../applications/misc/antfs-cli {};
 
@@ -22069,4 +22071,5 @@ with pkgs;
 
   powershell = callPackage ../shells/powershell { };
 
+  doing = callPackage ../applications/misc/doing  { };
 }
