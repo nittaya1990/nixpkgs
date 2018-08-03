@@ -1696,6 +1696,8 @@ with pkgs;
   ceph = callPackage ../tools/filesystems/ceph { boost = boost165; };
   ceph-dev = ceph;
 
+  certmgr = callPackage ../tools/security/certmgr { };
+
   cfdg = callPackage ../tools/graphics/cfdg {
     ffmpeg = ffmpeg_2;
   };
@@ -21579,6 +21581,8 @@ with pkgs;
   ricty = callPackage ../data/fonts/ricty { };
 
   rss-glx = callPackage ../misc/screensavers/rss-glx { };
+
+  run-scaled = callPackage ../tools/X11/run-scaled { };
 
   runit = callPackage ../tools/system/runit { };
 
