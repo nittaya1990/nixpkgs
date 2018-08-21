@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     xorg.libX11 xorg.libXext xorg.libXinerama jansson
   ];
   configureScript = "./autogen.sh";
-  configureFlags = "--enable-scrypt --enable-opencl --enable-bflsc";
+  configureFlags = [ "--enable-scrypt" "--enable-opencl" ];
   NIX_LDFLAGS = "-lgcc_s -lX11 -lXext -lXinerama";
 
   preConfigure = ''

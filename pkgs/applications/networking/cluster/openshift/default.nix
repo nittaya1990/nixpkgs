@@ -9,8 +9,17 @@
 with lib;
 
 let
-  version = "3.9.0";
+  version = "3.10.0";
   ver = stdenv.lib.elemAt (stdenv.lib.splitString "." version);
+  versionMajor = ver 0;
+  versionMinor = ver 1;
+  versionPatch = ver 2;
+  gitCommit = "dd10d17";
+  # version is in vendor/k8s.io/kubernetes/pkg/version/base.go
+  k8sversion = "v1.10.0";
+  k8sgitcommit = "b81c8f8";
+  k8sgitMajor = "0";
+  k8sgitMinor = "1";
 in stdenv.mkDerivation rec {
   name = "openshift-origin-${version}";
   inherit version;
@@ -19,7 +28,7 @@ in stdenv.mkDerivation rec {
     owner = "openshift";
     repo = "origin";
     rev = "v${version}";
-    sha256 = "101awmbfa4v1qjwhwyvma4vrzqhkzf8cl3d7zhmxigyq8rz4akd8";
+    sha256 = "13aglz005jl48z17vnggkvr39l5h6jcqgkfyvkaz4c3jakms1hi9";
   };
 
   # go > 1.10
@@ -31,37 +40,31 @@ in stdenv.mkDerivation rec {
   postPatch = ''
     patchShebangs ./hack
 
-    substituteInPlace pkg/oc/bootstrap/docker/host/host.go  \
+    substituteInPlace pkg/oc/clusterup/docker/host/host.go  \
       --replace 'nsenter --mount=/rootfs/proc/1/ns/mnt findmnt' \
       'nsenter --mount=/rootfs/proc/1/ns/mnt ${utillinux}/bin/findmnt'
 
-    substituteInPlace pkg/oc/bootstrap/docker/host/host.go  \
+    substituteInPlace pkg/oc/clusterup/docker/host/host.go  \
       --replace 'nsenter --mount=/rootfs/proc/1/ns/mnt mount' \
       'nsenter --mount=/rootfs/proc/1/ns/mnt ${utillinux}/bin/mount'
 
-    substituteInPlace pkg/oc/bootstrap/docker/host/host.go  \
+    substituteInPlace pkg/oc/clusterup/docker/host/host.go  \
       --replace 'nsenter --mount=/rootfs/proc/1/ns/mnt mkdir' \
       'nsenter --mount=/rootfs/proc/1/ns/mnt ${coreutils}/bin/mkdir'
   '';
 
-  # version is in vendor/k8s.io/kubernetes/pkg/version/base.go
-  k8sversion = "v1.9.1";
-  k8sgitcommit = "a0ce1bc657";
-  versionMajor = ver 0;
-  versionMinor = ver 1;
-  versionPatch = ver 2;
-  gitCommit = "191fece";
-
   buildPhase = ''
     # Openshift build require this variables to be set
     # unless there is a .git folder which is not the case with fetchFromGitHub
-    echo "OS_GIT_VERSION=v$version" >> os-version-defs
-    echo "OS_GIT_MAJOR=$versionMajor" >> os-version-defs
-    echo "OS_GIT_MINOR=$versionMinor" >> os-version-defs
-    echo "OS_GIT_PATCH=$versionPatch" >> os-version-defs
-    echo "OS_GIT_COMMIT=$gitCommit" >> os-version-defs
-    echo "KUBE_GIT_VERSION=$k8sversion" >> os-version-defs
-    echo "KUBE_GIT_COMMIT=$k8sgitcommit" >> os-version-defs
+    echo "OS_GIT_VERSION=v${version}" >> os-version-defs
+    echo "OS_GIT_MAJOR=${versionMajor}" >> os-version-defs
+    echo "OS_GIT_MINOR=${versionMinor}" >> os-version-defs
+    echo "OS_GIT_PATCH=${versionPatch}" >> os-version-defs
+    echo "OS_GIT_COMMIT=${gitCommit}" >> os-version-defs
+    echo "KUBE_GIT_VERSION=${k8sversion}" >> os-version-defs
+    echo "KUBE_GIT_COMMIT=${k8sgitcommit}" >> os-version-defs
+    echo "KUBE_GIT_MAJOR=${k8sgitMajor}" >> os-version-defs
+    echo "KUBE_GIT_MINOR=${k8sgitMinor}" >> os-version-defs
     export OS_VERSION_FILE="os-version-defs"
     export CC=clang
     make all WHAT='${concatStringsSep " " components}'

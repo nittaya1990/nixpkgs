@@ -29,12 +29,12 @@ let
     };
 
   generic = extensionsEnv: extraPassthru: stdenv.mkDerivation rec {
-    version = "1.7.2";
+    version = "1.7.3";
     name    = "password-store-${version}";
 
     src = fetchurl {
       url    = "https://git.zx2c4.com/password-store/snapshot/${name}.tar.xz";
-      sha256 = "1sl0d7nc85c6c2bmmmyb8rpmn47vhkj831l153mjlkawjvhwas27";
+      sha256 = "1x53k5dn3cdmvy8m4fqdld4hji5n676ksl0ql4armkmsds26av1b";
     };
 
     patches = [ ./set-correct-program-name-for-sleep.patch
@@ -86,6 +86,24 @@ let
       wrapProgram $out/bin/passmenu \
         --prefix PATH : "$out/bin:${wrapperPath}"
     '';
+
+    # Turn "check" into "installcheck", since we want to test our pass,
+    # not the one before the fixup.
+    postPatch = ''
+      patchShebangs tests
+
+      # the turning
+      sed -i -e 's@^PASS=.*''$@PASS=$out/bin/pass@' \
+             -e 's@^GPGS=.*''$@GPG=${gnupg}/bin/gpg2@' \
+             -e '/which gpg/ d' \
+        tests/setup.sh
+    '';
+
+    doCheck = false;
+
+    doInstallCheck = true;
+    installCheckInputs = [ git ];
+    installCheckTarget = "test";
 
     passthru = {
       extensions = passExtensions;
