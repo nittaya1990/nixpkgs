@@ -3407,7 +3407,14 @@ with pkgs;
 
   kexectools = callPackage ../os-specific/linux/kexectools { };
 
-  keybase = callPackage ../tools/security/keybase { };
+  keybase = callPackage ../tools/security/keybase {
+    # Reasoning for the inherited apple_sdk.frameworks:
+    # 1. specific compiler errors about: AVFoundation, AudioToolbox, MediaToolbox
+    # 2. the rest are added from here: https://github.com/keybase/client/blob/68bb8c893c5214040d86ea36f2f86fbb7fac8d39/go/chat/attachments/preview_darwin.go#L7
+    #      #cgo LDFLAGS: -framework AVFoundation -framework CoreFoundation -framework ImageIO -framework CoreMedia  -framework Foundation -framework CoreGraphics -lobjc
+    #    with the exception of CoreFoundation, due to the warning in https://github.com/NixOS/nixpkgs/blob/master/pkgs/os-specific/darwin/apple-sdk/frameworks.nix#L25
+    inherit (darwin.apple_sdk.frameworks) AVFoundation AudioToolbox ImageIO CoreMedia Foundation CoreGraphics MediaToolbox;
+  };
 
   kbfs = callPackage ../tools/security/kbfs { };
 
@@ -8922,6 +8929,7 @@ with pkgs;
   boost165 = callPackage ../development/libraries/boost/1.65.nix { };
   boost166 = callPackage ../development/libraries/boost/1.66.nix { };
   boost167 = callPackage ../development/libraries/boost/1.67.nix { };
+  boost168 = callPackage ../development/libraries/boost/1.68.nix { };
   boost16x = boost167;
   boost = boost16x;
 
@@ -9776,13 +9784,14 @@ with pkgs;
   };
   libheimdal = heimdal.override { type = "lib"; };
 
-  harfbuzz = callPackage ../development/libraries/harfbuzz { };
-  harfbuzz-icu = harfbuzz.override {
-    withIcu = true;
-    withGraphite2 = true;
+  harfbuzz = callPackage ../development/libraries/harfbuzz {
+    inherit (darwin.apple_sdk.frameworks) ApplicationServices CoreText;
   };
-  harfbuzz-icu-58 = harfbuzz-icu.override {
-    icu = icu58;
+
+  harfbuzzFull = harfbuzz.override {
+    withCoreText = stdenv.isDarwin;
+    withGraphite2 = true;
+    withIcu = true;
   };
 
   hawknl = callPackage ../development/libraries/hawknl { };
@@ -11581,7 +11590,7 @@ with pkgs;
       inherit stdenv fetchurl makeSetupHook;
       bison = bison2; # error: too few arguments to function 'int yylex(...
       inherit cups;
-      harfbuzz = harfbuzz-icu;
+      harfbuzz = harfbuzzFull;
       inherit libGL;
       inherit perl;
       inherit (gst_all_1) gstreamer gst-plugins-base;
@@ -11595,7 +11604,7 @@ with pkgs;
       inherit stdenv fetchurl makeSetupHook;
       bison = bison2; # error: too few arguments to function 'int yylex(...
       inherit cups;
-      harfbuzz = harfbuzz-icu;
+      harfbuzz = harfbuzzFull;
       inherit libGL;
       inherit perl;
       inherit (gst_all_1) gstreamer gst-plugins-base;
@@ -11610,7 +11619,7 @@ with pkgs;
       inherit stdenv fetchurl fetchFromGitHub makeSetupHook;
       bison = bison2; # error: too few arguments to function 'int yylex(...
       inherit cups;
-      harfbuzz = harfbuzz-icu;
+      harfbuzz = harfbuzzFull;
       inherit libGL;
       inherit perl;
       inherit (gst_all_1) gstreamer gst-plugins-base;
@@ -12130,7 +12139,9 @@ with pkgs;
 
   tecla = callPackage ../development/libraries/tecla { };
 
-  tectonic = callPackage ../tools/typesetting/tectonic { };
+  tectonic = callPackage ../tools/typesetting/tectonic {
+    harfbuzz = harfbuzzFull;
+  };
 
   tepl = callPackage ../development/libraries/tepl { };
 
@@ -12325,13 +12336,15 @@ with pkgs;
   webkitgtk = webkitgtk220x;
 
   webkitgtk24x-gtk3 = callPackage ../development/libraries/webkitgtk/2.4.nix {
-    harfbuzz = harfbuzz-icu-58;
+    harfbuzz = harfbuzzFull.override {
+      icu = icu58;
+    };
     gst-plugins-base = gst_all_1.gst-plugins-base;
     inherit (darwin) libobjc;
   };
 
   webkitgtk220x = callPackage ../development/libraries/webkitgtk/2.20.nix {
-    harfbuzz = harfbuzz-icu;
+    harfbuzz = harfbuzzFull;
     inherit (gst_all_1) gst-plugins-base gst-plugins-bad;
     stdenv = overrideCC stdenv gcc6;
   };
