@@ -382,6 +382,8 @@ in {
 
   pycangjie = disabledIf (!isPy3k) (callPackage ../development/python-modules/pycangjie { });
 
+  pycrc = callPackage ../development/python-modules/pycrc { };
+
   pycrypto = callPackage ../development/python-modules/pycrypto { };
 
   pycryptodome = callPackage ../development/python-modules/pycryptodome { };
@@ -6925,6 +6927,8 @@ in {
     inherit (pkgs.linuxPackages) nvidia_x11;
   };
 
+  libkeepass = callPackage ../development/python-modules/libkeepass { };
+
   librepo = toPythonModule (pkgs.librepo.override {
     inherit python;
   });
@@ -7880,6 +7884,8 @@ in {
   mysqlclient = callPackage ../development/python-modules/mysqlclient { };
 
   mypy = callPackage ../development/python-modules/mypy { };
+
+  mypy-protobuf = callPackage ../development/python-modules/mypy-protobuf { };
 
   mwclient = buildPythonPackage rec {
     version = "0.8.3";

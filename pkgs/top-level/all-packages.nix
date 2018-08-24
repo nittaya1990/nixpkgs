@@ -5307,6 +5307,8 @@ with pkgs;
 
   su-exec = callPackage ../tools/security/su-exec {};
 
+  subberthehut = callPackage ../tools/misc/subberthehut { };
+
   subsurface = libsForQt5.callPackage ../applications/misc/subsurface { };
 
   sudo = callPackage ../tools/security/sudo { };
@@ -5450,6 +5452,8 @@ with pkgs;
 
   termplay = callPackage ../tools/misc/termplay { };
 
+  testdisk-photorec = callPackage ../tools/system/testdisk-photorec { };
+
   tewisay = callPackage ../tools/misc/tewisay { };
 
   texmacs = if stdenv.isDarwin
@@ -5528,7 +5532,13 @@ with pkgs;
 
   tokei = callPackage ../development/tools/misc/tokei { };
 
-  tor = callPackage ../tools/security/tor { };
+  tor = callPackage ../tools/security/tor {
+    openssl = openssl_1_1_0;
+    # remove this, when libevent's openssl is upgraded to 1_1_0 or newer.
+    libevent = libevent.override {
+      sslSupport = false;
+    };
+  };
 
   tor-arm = callPackage ../tools/security/tor/tor-arm.nix { };
 
@@ -6320,7 +6330,6 @@ with pkgs;
   clang_38 = llvmPackages_38.clang;
   clang_37 = llvmPackages_37.clang;
   clang_35 = wrapCC llvmPackages_35.clang;
-  clang_34 = wrapCC llvmPackages_34.clang;
 
   clang-tools = callPackage ../development/tools/clang-tools { };
 
@@ -6911,15 +6920,8 @@ with pkgs;
   llvm_38 = llvmPackages_38.llvm;
   llvm_37 = llvmPackages_37.llvm;
   llvm_35 = llvmPackages_35.llvm;
-  llvm_34 = llvmPackages_34.llvm;
 
   llvmPackages = recurseIntoAttrs llvmPackages_5;
-
-  llvmPackages_34 = callPackage ../development/compilers/llvm/3.4 ({
-    isl = isl_0_12;
-  } // stdenv.lib.optionalAttrs (stdenv.cc.isGNU && stdenv.hostPlatform.isi686) {
-    stdenv = overrideCC stdenv buildPackages.gcc6;
-  });
 
   llvmPackages_35 = callPackage ../development/compilers/llvm/3.5 ({
     isl = isl_0_14;
@@ -7412,6 +7414,8 @@ with pkgs;
   love_0_10 = callPackage ../development/interpreters/love/0.10.nix { };
   love_11 = callPackage ../development/interpreters/love/11.1.nix { };
   love = love_0_10;
+
+  wabt = callPackage ../development/tools/wabt { };
 
   ### LUA MODULES
 
@@ -12940,6 +12944,8 @@ with pkgs;
 
   glabels = callPackage ../applications/graphics/glabels { };
 
+  gnatsd = callPackage ../servers/gnatsd { };
+
   gofish = callPackage ../servers/gopher/gofish { };
 
   grafana = callPackage ../servers/monitoring/grafana { };
@@ -14709,6 +14715,8 @@ with pkgs;
 
   adapta-backgrounds = callPackage ../data/misc/adapta-backgrounds { };
 
+  aileron = callPackage ../data/fonts/aileron { };
+
   andagii = callPackage ../data/fonts/andagii { };
 
   android-udev-rules = callPackage ../os-specific/linux/android-udev-rules { };
@@ -14817,9 +14825,15 @@ with pkgs;
 
   elliptic_curves = callPackage ../data/misc/elliptic_curves { };
 
+  eunomia = callPackage ../data/fonts/eunomia { };
+
+  f5_6 = callPackage ../data/fonts/f5_6 { };
+
   faba-icon-theme = callPackage ../data/icons/faba-icon-theme { };
 
   faba-mono-icons = callPackage ../data/icons/faba-mono-icons { };
+
+  ferrum = callPackage ../data/fonts/ferrum { };
 
   fixedsys-excelsior = callPackage ../data/fonts/fixedsys-excelsior { };
 
@@ -14971,6 +14985,8 @@ with pkgs;
 
   media-player-info = callPackage ../data/misc/media-player-info {};
 
+  medio = callPackage ../data/fonts/medio { };
+
   mobile-broadband-provider-info = callPackage ../data/misc/mobile-broadband-provider-info { };
 
   monoid = callPackage ../data/fonts/monoid { };
@@ -15042,6 +15058,8 @@ with pkgs;
 
   pari-seadata-small = callPackage ../data/misc/pari-seadata-small {};
 
+  penna = callPackage ../data/fonts/penna { };
+
   poly = callPackage ../data/fonts/poly { };
 
   polytopes_db = callPackage ../data/misc/polytopes_db { };
@@ -15060,11 +15078,15 @@ with pkgs;
 
   proggyfonts = callPackage ../data/fonts/proggyfonts { };
 
+  route159 = callPackage ../data/fonts/route159 { };
+
   sampradaya = callPackage ../data/fonts/sampradaya { };
 
   sarasa-gothic = callPackage ../data/fonts/sarasa-gothic { };
 
   scowl = callPackage ../data/misc/scowl { };
+
+  seshat = callPackage ../data/fonts/seshat { };
 
   shaderc = callPackage ../development/compilers/shaderc { };
 
@@ -15157,6 +15179,8 @@ with pkgs;
   template-glib = callPackage ../development/libraries/template-glib { };
 
   tempora_lgc = callPackage ../data/fonts/tempora-lgc { };
+
+  tenderness = callPackage ../data/fonts/tenderness { };
 
   terminus_font = callPackage ../data/fonts/terminus-font { };
 
@@ -20710,6 +20734,10 @@ with pkgs;
 
   petsc = callPackage ../development/libraries/science/math/petsc { };
 
+  scs = callPackage ../development/libraries/science/math/scs {
+    liblapack = liblapackWithoutAtlas;
+  };
+
   sage = callPackage ../applications/science/math/sage {
     nixpkgs = pkgs;
   };
@@ -21166,6 +21194,8 @@ with pkgs;
 
   stellarium = libsForQt5.callPackage ../applications/science/astronomy/stellarium { };
 
+  astrolabe-generator = callPackage ../applications/science/astronomy/astrolabe-generator { };
+
   tulip = callPackage ../applications/science/misc/tulip {
     cmake = cmake_2_8;
   };
@@ -21231,6 +21261,10 @@ with pkgs;
   yoda-with-root = lowPrio (yoda.override {
     withRootSupport = true;
   });
+
+  ### SCIENCE/ROBOTICS
+
+  apmplanner2 = libsForQt5.callPackage ../applications/science/robotics/apmplanner2 { };
 
   ### MISC
 
