@@ -2963,7 +2963,7 @@ with pkgs;
 
   gtkperf = callPackage ../development/tools/misc/gtkperf { };
 
-  gtkvnc = callPackage ../tools/admin/gtk-vnc {};
+  gtk-vnc = callPackage ../tools/admin/gtk-vnc {};
 
   gtmess = callPackage ../applications/networking/instant-messengers/gtmess { };
 
@@ -10327,6 +10327,8 @@ with pkgs;
   libgringotts = callPackage ../development/libraries/libgringotts { };
 
   libgroove = callPackage ../development/libraries/libgroove { };
+
+  libgrss = callPackage ../development/libraries/libgrss { };
 
   libseccomp = callPackage ../development/libraries/libseccomp { };
 
