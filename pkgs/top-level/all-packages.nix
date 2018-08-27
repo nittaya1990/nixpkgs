@@ -20328,6 +20328,8 @@ with pkgs;
 
   vessel = pkgsi686Linux.callPackage ../games/vessel { };
 
+  vitetris = callPackage ../games/vitetris { };
+
   vms-empire = callPackage ../games/vms-empire { };
 
   voxelands = callPackage ../games/voxelands {
