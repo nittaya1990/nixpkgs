@@ -17045,6 +17045,8 @@ with pkgs;
 
   img2pdf = callPackage ../applications/misc/img2pdf { };
 
+  imgcat = callPackage ../applications/graphics/imgcat { };
+
   # Impressive, formerly known as "KeyJNote".
   impressive = callPackage ../applications/office/impressive { };
 
