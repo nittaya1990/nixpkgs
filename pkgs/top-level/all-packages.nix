@@ -7265,9 +7265,6 @@ with pkgs;
   urweb = callPackage ../development/compilers/urweb { };
 
   inherit (callPackage ../development/compilers/vala { })
-    vala_0_26
-    vala_0_28
-    vala_0_32
     vala_0_34
     vala_0_36
     vala_0_38
@@ -18942,8 +18939,6 @@ with pkgs;
   utox = callPackage ../applications/networking/instant-messengers/utox { };
 
   valentina = libsForQt5.callPackage ../applications/misc/valentina { };
-
-  vanubi = callPackage ../applications/editors/vanubi { };
 
   vbindiff = callPackage ../applications/editors/vbindiff { };
 
