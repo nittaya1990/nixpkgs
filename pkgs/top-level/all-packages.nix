@@ -15470,10 +15470,6 @@ with pkgs;
     ffmpeg = ffmpeg_2;
   };
 
-  awesome-3-5 = callPackage ../applications/window-managers/awesome/3.5.nix {
-    cairo = cairo.override { xcbSupport = true; };
-    luaPackages = luaPackages.override { inherit lua; };
-  };
   awesome-4-0 = callPackage ../applications/window-managers/awesome {
     cairo = cairo.override { xcbSupport = true; };
     luaPackages = luaPackages.override { inherit lua; };
@@ -19520,8 +19516,6 @@ with pkgs;
     libssh2 = null;
     openssl = null;
   };
-
-  finalterm = callPackage ../applications/misc/finalterm { };
 
   roxterm = callPackage ../applications/misc/roxterm {
     inherit (gnome3) gsettings-desktop-schemas vte;
