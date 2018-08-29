@@ -1408,9 +1408,9 @@ with pkgs;
 
   lief = callPackage ../development/libraries/lief {};
 
-  libndtypes = callPackages ../development/libraries/libndtypes { };
+  libndtypes = callPackage ../development/libraries/libndtypes { };
 
-  libxnd = callPackages ../development/libraries/libxnd { };
+  libxnd = callPackage ../development/libraries/libxnd { };
 
   loadwatch = callPackage ../tools/system/loadwatch { };
 
@@ -15912,6 +15912,11 @@ with pkgs;
 
   dwm = callPackage ../applications/window-managers/dwm {
     patches = config.dwm.patches or [];
+  };
+
+  dwm-git = callPackage ../applications/window-managers/dwm/git.nix {
+    patches = config.dwm.patches or [];
+    conf = config.dwm.conf or null;
   };
 
   dwm-status = callPackage ../applications/window-managers/dwm/dwm-status.nix { };
