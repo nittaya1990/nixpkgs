@@ -19384,9 +19384,7 @@ with pkgs;
 
   inherit (xorg) xcompmgr;
 
-  compton = callPackage ../applications/window-managers/compton { };
-
-  compton-git = callPackage ../applications/window-managers/compton/git.nix { };
+  inherit (callPackage ../applications/window-managers/compton {}) compton compton-git;
 
   xdaliclock = callPackage ../tools/misc/xdaliclock {};
 
