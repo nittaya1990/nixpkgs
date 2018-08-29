@@ -5172,8 +5172,6 @@ with pkgs;
 
   signal-desktop = callPackage ../applications/networking/instant-messengers/signal-desktop { };
 
-  signal-desktop-beta = callPackage ../applications/networking/instant-messengers/signal-desktop/beta.nix { };
-
   # aka., pgp-tools
   signing-party = callPackage ../tools/security/signing-party { };
 
