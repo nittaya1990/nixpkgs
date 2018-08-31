@@ -21574,6 +21574,8 @@ with pkgs;
 
   idsk = callPackage ../tools/filesystems/idsk { };
 
+  igraph = callPackage ../development/libraries/igraph { };
+
   illum = callPackage ../tools/system/illum { };
 
   # using the new configuration style proposal which is unstable
