@@ -16281,7 +16281,9 @@ with pkgs;
 
   fbpanel = callPackage ../applications/window-managers/fbpanel { };
 
-  fbreader = callPackage ../applications/misc/fbreader { };
+  fbreader = callPackage ../applications/misc/fbreader {
+    inherit (darwin.apple_sdk.frameworks) AppKit Cocoa;
+  };
 
   fdr = libsForQt5.callPackage ../applications/science/programming/fdr { };
 
