@@ -74,8 +74,8 @@ in with stdenv.lib.licenses;
     core = "mednafen-pce-fast";
     src = fetchRetro {
       repo = "beetle-pce-fast-libretro";
-      rev = "2954e645d668ee73d93803dc30da4462fc7a459b";
-      sha256 = "0p0k7kqfd6xg1qh6vgzgwp122miprb2bpzljgxd9kvigxihsl6f7";
+      rev = "6dfaf04cf2085ab9e5bb6ffac75070816cb4ff52";
+      sha256 = "14lpg0jpkacs9cpg4z5mrl11bkr862cydsa2sp2j99innfs533zn";
     };
     description = "Port of Mednafen's PC Engine core to libretro";
     license = gpl2;
@@ -394,8 +394,8 @@ in with stdenv.lib.licenses;
     core = "snes9x";
     src = fetchRetro {
       repo = core;
-      rev = "db4bfaba3b0d5a067fe9aea323503656837a8d9a";
-      sha256 = "02f04ss45km32lp68diyfkix1gryx89qy8cc80189ipwnx80pgip";
+      rev = "d3e21d7463c4ef99cfb15f3d003912f40bebe887";
+      sha256 = "0786hl0wayzb095yx8f9l3c880ly0hwzf22hvmyrwvyvs1c196ap";
     };
     description = "Port of SNES9x git to libretro";
     license = "Non-commercial";
