@@ -10,10 +10,6 @@ stdenv.mkDerivation rec {
     sha256 = "0jz6wiq2yw5jda56jgi1dys7hlvzk1a49xql7lccrrm3fj8p41li";
   };
 
-  passthru = {
-    updateScript = gnome3.updateScript { packageName = "adwaita-icon-theme"; attrPath = "gnome3.adwaita-icon-theme"; };
-  };
-
   # For convenience, we can specify adwaita-icon-theme only in packages
   propagatedBuildInputs = [ hicolor-icon-theme ];
 
@@ -23,6 +19,13 @@ stdenv.mkDerivation rec {
 
   # remove a tree of dirs with no files within
   postInstall = '' rm -rf "$out/locale" '';
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = "adwaita-icon-theme";
+      attrPath = "gnome3.adwaita-icon-theme";
+    };
+  };
 
   meta = with stdenv.lib; {
     platforms = with platforms; linux ++ darwin;
