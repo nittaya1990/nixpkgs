@@ -4922,6 +4922,8 @@ with pkgs;
 
   redsocks = callPackage ../tools/networking/redsocks { };
 
+  richgo = callPackage ../development/tools/richgo {  };
+
   rst2html5 = callPackage ../tools/text/rst2html5 { };
 
   rt = callPackage ../servers/rt { };
