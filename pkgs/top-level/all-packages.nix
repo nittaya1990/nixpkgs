@@ -13377,6 +13377,8 @@ with pkgs;
 
   cbfstool = callPackage ../applications/virtualization/cbfstool { };
 
+  nvramtool = callPackage ../tools/misc/nvramtool { };
+
   vmfs-tools = callPackage ../tools/filesystems/vmfs-tools { };
 
   pgbouncer = callPackage ../servers/sql/pgbouncer { };
