@@ -15480,7 +15480,7 @@ with pkgs;
     inherit (vamp) vampSDK;
   };
 
-  inherit (python34Packages) arelle;
+  inherit (python3Packages) arelle;
 
   ario = callPackage ../applications/audio/ario { };
 
