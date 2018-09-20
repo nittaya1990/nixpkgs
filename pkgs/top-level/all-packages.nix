@@ -14518,8 +14518,6 @@ with pkgs;
 
   godef = callPackage ../development/tools/godef { };
 
-  goimports = callPackage ../development/tools/goimports { };
-
   gopkgs = callPackage ../development/tools/gopkgs { };
 
   govers = callPackage ../development/tools/govers { };
