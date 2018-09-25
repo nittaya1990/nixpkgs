@@ -42,6 +42,7 @@
 , channel
 , generated
 , writeScript
+, writeText
 , xidel
 , coreutils
 , gnused
@@ -68,6 +69,14 @@ let
       (isPrefixOf source.locale locale) && source.arch == arch;
 
   systemLocale = config.i18n.defaultLocale or "en-US";
+
+  policiesJson = writeText "no-update-firefox-policy.json" ''
+  {
+    "policies": {
+      "DisableAppUpdate": true
+    }
+  }
+  '';
 
   defaultSource = stdenv.lib.findFirst (sourceMatches "en-US") {} sources;
 
@@ -172,6 +181,10 @@ stdenv.mkDerivation {
       ln -s "$out/usr/lib" "$out/lib"
 
       gappsWrapperArgs+=(--argv0 "$out/bin/.firefox-wrapped")
+
+      # See: https://github.com/mozilla/policy-templates/blob/master/README.md
+      mkdir -p "$out/lib/firefox-bin-${version}/distribution";
+      ln -s ${policiesJson} "$out/lib/firefox-bin-${version}/distribution/policies.json";
     '';
 
   passthru.execdir = "/bin";
