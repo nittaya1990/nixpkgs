@@ -52,7 +52,6 @@ rec {
   dogecoin  = callPackage ./dogecoin.nix { boost = boost165; withGui = true; };
   dogecoind = callPackage ./dogecoin.nix { boost = boost165; withGui = false; };
 
-  ethsign = callPackage ./ethsign { };
 
   freicoin = callPackage ./freicoin.nix { boost = boost155; };
   go-ethereum = callPackage ./go-ethereum.nix {
@@ -80,11 +79,6 @@ rec {
   namecoind = callPackage ./namecoin.nix { withGui = false; };
 
   ethabi = callPackage ./ethabi.nix { };
-  ethrun = callPackage ./ethrun.nix { };
-  seth = callPackage ./seth.nix { };
-  dapp = callPackage ./dapp.nix { };
-
-  hevm = (haskellPackages.callPackage ./hevm.nix {});
 
   stellar-core = callPackage ./stellar-core.nix { };
 
