@@ -17106,6 +17106,11 @@ EOF
   libtorrentRasterbar = (toPythonModule (pkgs.libtorrentRasterbar.override {
     inherit python;
   })).python;
+
+  libiio = (toPythonModule (pkgs.libiio.override {
+    inherit python;
+  })).python;
+
 });
 
 in fix' (extends overrides packages)
