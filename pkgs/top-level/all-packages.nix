@@ -17807,6 +17807,8 @@ with pkgs;
     pythonPackages = python3Packages;
   };
 
+  neap = callPackage ../applications/misc/neap { };
+
   neomutt = callPackage ../applications/networking/mailreaders/neomutt { };
 
   natron = callPackage ../applications/video/natron { };
