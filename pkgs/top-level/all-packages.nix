@@ -16645,6 +16645,8 @@ with pkgs;
 
   flac = callPackage ../applications/audio/flac { };
 
+  redoflacs = callPackage ../applications/audio/redoflacs { };
+
   flameshot = libsForQt5.callPackage ../tools/misc/flameshot { };
 
   flashplayer = callPackage ../applications/networking/browsers/mozilla-plugins/flashplayer {
