@@ -3858,6 +3858,8 @@ with pkgs;
 
   libwebsockets = callPackage ../development/libraries/libwebsockets { };
 
+  lidarr = callPackage ../servers/lidarr { };
+
   limesuite = callPackage ../applications/misc/limesuite { };
 
   limesurvey = callPackage ../servers/limesurvey { };
@@ -17567,6 +17569,8 @@ with pkgs;
   mendeley = libsForQt5.callPackage ../applications/office/mendeley {
     gconf = pkgs.gnome2.GConf;
   };
+
+  menumaker = callPackage ../applications/misc/menumaker { };
 
   mercurial = callPackage ../applications/version-management/mercurial {
     inherit (darwin.apple_sdk.frameworks) ApplicationServices;
