@@ -15072,6 +15072,8 @@ with pkgs;
 
   hanazono = callPackage ../data/fonts/hanazono { };
 
+  hyperscrypt-font = callPackage ../data/fonts/hyperscrypt { };
+
   ia-writer-duospace = callPackage ../data/fonts/ia-writer-duospace { };
 
   ibm-plex = callPackage ../data/fonts/ibm-plex { };
@@ -22135,6 +22137,8 @@ with pkgs;
   splix = callPackage ../misc/cups/drivers/splix { };
 
   steamcontroller = callPackage ../misc/drivers/steamcontroller { };
+
+  stern = callPackage ../applications/networking/cluster/stern { };
 
   streamripper = callPackage ../applications/audio/streamripper { };
 
