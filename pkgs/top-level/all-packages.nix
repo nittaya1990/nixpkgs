@@ -22179,6 +22179,8 @@ with pkgs;
 
   tetex = callPackage ../tools/typesetting/tex/tetex { libpng = libpng12; };
 
+  tetra-gtk-theme = callPackage ../misc/themes/tetra { };
+
   tewi-font = callPackage ../data/fonts/tewi  {};
 
   texFunctions = callPackage ../tools/typesetting/tex/nix pkgs;
