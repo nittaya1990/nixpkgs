@@ -70,13 +70,11 @@ let
 
   systemLocale = config.i18n.defaultLocale or "en-US";
 
-  policiesJson = writeText "no-update-firefox-policy.json" ''
-  {
-    "policies": {
-      "DisableAppUpdate": true
-    }
-  }
-  '';
+  policies = {
+    DisableAppUpdate = true;
+  };
+
+  policiesJson = writeText "no-update-firefox-policy.json" (builtins.toJSON { inherit policies; });
 
   defaultSource = stdenv.lib.findFirst (sourceMatches "en-US") {} sources;
 
