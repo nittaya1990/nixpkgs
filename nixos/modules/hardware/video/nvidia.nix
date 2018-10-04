@@ -25,7 +25,6 @@ let
 
   enabled = nvidia_x11 != null;
 
-  cfg = config.hardware.nvidia;
   optimusCfg = cfg.optimus_prime;
 in
 
