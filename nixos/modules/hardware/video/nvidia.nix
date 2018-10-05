@@ -6,17 +6,17 @@ with lib;
 
 let
 
-  cfg = config.hardware.video.nvidia;
+  pkgCfg = config.hardware.video.nvidia;
   drivers = config.services.xserver.videoDrivers;
 
   nvidiaForKernel = kernelPackages:
-    if elem "nvidia" cfg.package then
+    if elem "nvidia" pkgCfg.package then
         kernelPackages.nvidia_x11
-    else if elem "nvidiaBeta" cfg.package then
+    else if elem "nvidiaBeta" pkgCfg.package then
         kernelPackages.nvidia_x11_beta
-    else if elem "nvidiaLegacy304" drivers then
+    else if elem "nvidiaLegacy304" pkgCfg.package then
       kernelPackages.nvidia_x11_legacy304
-    else if elem "nvidiaLegacy340" cfg.package then
+    else if elem "nvidiaLegacy340" pkgCfg.package then
       kernelPackages.nvidia_x11_legacy340
     else null;
 
@@ -89,9 +89,7 @@ in
         shows the Intel GPU at "00:02.0", set this option to "PCI:0:2:0".
       '';
     };
-  };
 
-  options = {
     hardware.video.nvidia.package = options.services.xserver.videoDrivers // {
       default = drivers;
       description = ''
@@ -176,8 +174,8 @@ in
     boot.extraModulePackages = [ nvidia_x11.bin ];
 
     # nvidia-uvm is required by CUDA applications.
-    boot.kernelModules = optionals (!optimus) ([ "nvidia-uvm" ] ++
-      lib.optionals config.services.xserver.enable [ "nvidia" "nvidia_modeset" "nvidia_drm" ]);
+    boot.kernelModules = [ "nvidia-uvm" ] ++
+      lib.optionals config.services.xserver.enable [ "nvidia" "nvidia_modeset" "nvidia_drm" ];
 
     # If requested enable modesetting via kernel parameter.
     boot.kernelParams = optional cfg.modesetting.enable "nvidia-drm.modeset=1";
