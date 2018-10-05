@@ -1284,6 +1284,8 @@ with pkgs;
 
   envconsul = callPackage ../tools/system/envconsul { };
 
+  envsubst = callPackage ../tools/misc/envsubst { };
+
   eschalot = callPackage ../tools/security/eschalot { };
 
   esptool = callPackage ../tools/misc/esptool { };
@@ -17385,6 +17387,8 @@ with pkgs;
   ksonnet = callPackage ../applications/networking/cluster/ksonnet { };
 
   kubecfg = callPackage ../applications/networking/cluster/kubecfg { };
+
+  kubeval = callPackage ../applications/networking/cluster/kubeval { };
 
   kubernetes = callPackage ../applications/networking/cluster/kubernetes {  };
 
