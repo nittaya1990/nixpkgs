@@ -5,18 +5,17 @@
 with lib;
 
 let
-
-  pkgCfg = config.hardware.video.nvidia;
+  cfg = config.hardware.nvidia;
   drivers = config.services.xserver.videoDrivers;
 
   nvidiaForKernel = kernelPackages:
-    if elem "nvidia" pkgCfg.package then
+    if elem "nvidia" cfg.package then
         kernelPackages.nvidia_x11
-    else if elem "nvidiaBeta" pkgCfg.package then
+    else if elem "nvidiaBeta" cfg.package then
         kernelPackages.nvidia_x11_beta
-    else if elem "nvidiaLegacy304" pkgCfg.package then
+    else if elem "nvidiaLegacy304" cfg.package then
       kernelPackages.nvidia_x11_legacy304
-    else if elem "nvidiaLegacy340" pkgCfg.package then
+    else if elem "nvidiaLegacy340" cfg.package then
       kernelPackages.nvidia_x11_legacy340
     else null;
 
@@ -90,7 +89,7 @@ in
       '';
     };
 
-    hardware.video.nvidia.package = options.services.xserver.videoDrivers // {
+    hardware.nvidia.package = options.services.xserver.videoDrivers // {
       default = drivers;
       description = ''
         Package to use. One of nvidia, nvidiaBeta, nvidiaLegacy173,
