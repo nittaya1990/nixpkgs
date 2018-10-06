@@ -1434,6 +1434,8 @@ with pkgs;
 
   libxnd = callPackage ../development/libraries/libxnd { };
 
+  link-grammar = callPackage ../tools/text/link-grammar { };
+
   loadwatch = callPackage ../tools/system/loadwatch { };
 
   loccount = callPackage ../development/tools/misc/loccount { };
@@ -2343,6 +2345,8 @@ with pkgs;
   ### DEVELOPMENT / EMSCRIPTEN
 
   buildEmscriptenPackage = callPackage ../development/em-modules/generic { };
+
+  carp = callPackage ../development/compilers/carp { };
 
   emscriptenVersion = "1.37.36";
 
@@ -5436,6 +5440,8 @@ with pkgs;
   ssmtp = callPackage ../tools/networking/ssmtp {
     tlsSupport = true;
   };
+
+  ssocr = callPackage ../applications/misc/ssocr { };
 
   ssss = callPackage ../tools/security/ssss { };
 
@@ -13697,6 +13703,8 @@ with pkgs;
 
   webmetro = callPackage ../servers/webmetro { };
 
+  webhook = callPackage ../servers/http/webhook { };
+
   winstone = callPackage ../servers/http/winstone { };
 
   xinetd = callPackage ../servers/xinetd { };
@@ -21107,6 +21115,8 @@ with pkgs;
 
   sherpa = callPackage ../applications/science/physics/sherpa {};
 
+  xfitter = callPackage ../applications/science/physics/xfitter {};
+
   ### SCIENCE/PROGRAMMING
 
   dafny = dotnetPackages.Dafny;
@@ -21499,6 +21509,10 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Cocoa OpenGL;
   };
 
+  root5 = lowPrio (callPackage ../applications/science/misc/root/5.nix {
+    inherit (darwin.apple_sdk.frameworks) Cocoa OpenGL;
+  });
+
   simgrid = callPackage ../applications/science/misc/simgrid { };
 
   spyder = callPackage ../applications/science/spyder { };
@@ -21520,6 +21534,14 @@ with pkgs;
 
   ### SCIENCE / PHYSICS
 
+  apfelgrid = callPackage ../development/libraries/physics/apfelgrid { };
+
+  apfel = callPackage ../development/libraries/physics/apfel { };
+
+  applgrid = callPackage ../development/libraries/physics/applgrid { };
+
+  hoppet = callPackage ../development/libraries/physics/hoppet { };
+
   fastjet = callPackage ../development/libraries/physics/fastjet { };
 
   fastnlo = callPackage ../development/libraries/physics/fastnlo { };
@@ -21538,6 +21560,8 @@ with pkgs;
 
   mcgrid = callPackage ../development/libraries/physics/mcgrid { };
 
+  mela = callPackage ../development/libraries/physics/mela { };
+
   nlojet = callPackage ../development/libraries/physics/nlojet { };
 
   pythia = callPackage ../development/libraries/physics/pythia { };
@@ -21552,6 +21576,8 @@ with pkgs;
   yoda-with-root = lowPrio (yoda.override {
     withRootSupport = true;
   });
+
+  qcdnum = callPackage ../development/libraries/physics/qcdnum { };
 
   ### SCIENCE/ROBOTICS
 
