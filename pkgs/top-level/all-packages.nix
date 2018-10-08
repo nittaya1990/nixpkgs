@@ -586,6 +586,8 @@ with pkgs;
 
   awslogs = callPackage ../tools/admin/awslogs { };
 
+  aws-env = callPackage ../tools/admin/aws-env { };
+
   aws-okta = callPackage ../tools/security/aws-okta { };
 
   aws-rotate-key = callPackage ../tools/admin/aws-rotate-key { };
@@ -2594,6 +2596,8 @@ with pkgs;
   fdk_aac = callPackage ../development/libraries/fdk-aac { };
 
   feedgnuplot = callPackage ../tools/graphics/feedgnuplot { };
+
+  fbv = callPackage ../tools/graphics/fbv { };
 
   fim = callPackage ../tools/graphics/fim { };
 
@@ -17037,6 +17041,8 @@ with pkgs;
   homebank = callPackage ../applications/office/homebank {
     gtk = gtk3;
   };
+
+  howl = callPackage ../applications/editors/howl { };
 
   ht = callPackage ../applications/editors/ht { };
 
