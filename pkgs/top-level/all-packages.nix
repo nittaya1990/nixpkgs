@@ -569,7 +569,6 @@ with pkgs;
   asymptote = callPackage ../tools/graphics/asymptote {
     texLive = texlive.combine { inherit (texlive) scheme-small epsf cm-super; };
     gsl = gsl_1;
-    boehmgc = boehmgc_766;
   };
 
   atomicparsley = callPackage ../tools/video/atomicparsley { };
@@ -2336,6 +2335,8 @@ with pkgs;
   s-tar = callPackage ../tools/archivers/s-tar {};
 
   tealdeer = callPackage ../tools/misc/tealdeer { };
+
+  teamocil = callPackage ../tools/misc/teamocil { };
 
   uudeview = callPackage ../tools/misc/uudeview { };
 
@@ -5609,6 +5610,8 @@ with pkgs;
 
   tiny8086 = callPackage ../applications/virtualization/8086tiny { };
 
+  tinyemu = callPackage ../applications/virtualization/tinyemu { };
+
   tinyproxy = callPackage ../tools/networking/tinyproxy {};
 
   tio = callPackage ../tools/misc/tio { };
@@ -5802,6 +5805,8 @@ with pkgs;
   vacuum = callPackage ../applications/networking/instant-messengers/vacuum {};
 
   vampire = callPackage ../applications/science/logic/vampire {};
+
+  vk-messenger = callPackage ../applications/networking/instant-messengers/vk-messenger {};
 
   volatility = callPackage ../tools/security/volatility { };
 
@@ -18781,6 +18786,11 @@ with pkgs;
   lightdm = libsForQt5.callPackage ../applications/display-managers/lightdm { };
 
   lightdm_qt = lightdm.override { withQt5 = true; };
+
+  lightdm-enso-os-greeter = callPackage ../applications/display-managers/lightdm-enso-os-greeter {
+    inherit (gnome3) libgee;
+    inherit (xorg) libX11 libXdmcp libpthreadstubs;
+  };
 
   lightdm_gtk_greeter = callPackage ../applications/display-managers/lightdm/gtk-greeter.nix {
     inherit (xfce) exo;
