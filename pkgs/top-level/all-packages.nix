@@ -4930,6 +4930,8 @@ with pkgs;
 
   qtikz = libsForQt5.callPackage ../applications/graphics/ktikz { };
 
+  quickserve = callPackage ../tools/networking/quickserve { };
+
   quicktun = callPackage ../tools/networking/quicktun { };
 
   quilt = callPackage ../development/tools/quilt { };
