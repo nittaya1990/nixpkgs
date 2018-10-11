@@ -1298,6 +1298,8 @@ with pkgs;
 
   et = callPackage ../applications/misc/et {};
 
+  ejson = callPackage ../development/tools/ejson {};
+
   eternal-terminal = callPackage ../tools/networking/eternal-terminal {};
 
   f3 = callPackage ../tools/filesystems/f3 { };
@@ -21701,6 +21703,8 @@ with pkgs;
   cups-bjnp = callPackage ../misc/cups/drivers/cups-bjnp { };
 
   cups-brother-hl1110 = pkgsi686Linux.callPackage ../misc/cups/drivers/hl1110 { };
+
+  cups-googlecloudprint = callPackage ../misc/cups/drivers/googlecloudprint { };
 
   # this driver ships with pre-compiled 32-bit binary libraries
   cnijfilter_2_80 = pkgsi686Linux.callPackage ../misc/cups/drivers/cnijfilter_2_80 { };
