@@ -736,6 +736,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
   };
 
+  luigi = callPackage ../applications/networking/cluster/luigi { };
+
   m-cli = callPackage ../os-specific/darwin/m-cli { };
 
   reattach-to-user-namespace = callPackage ../os-specific/darwin/reattach-to-user-namespace {};
@@ -11607,8 +11609,6 @@ with pkgs;
 
   paperkey = callPackage ../tools/security/paperkey { };
 
-  parquet-cpp = callPackage ../development/libraries/parquet-cpp {};
-
   pangoxsl = callPackage ../development/libraries/pangoxsl { };
 
   pcaudiolib = callPackage ../development/libraries/pcaudiolib {
@@ -13537,6 +13537,7 @@ with pkgs;
   prometheus-snmp-exporter = callPackage ../servers/monitoring/prometheus/snmp-exporter.nix {
     buildGoPackage = buildGo110Package;
   };
+  prometheus-tor-exporter = callPackage ../servers/monitoring/prometheus/tor-exporter.nix { };
   prometheus-statsd-exporter = callPackage ../servers/monitoring/prometheus/statsd-bridge.nix { };
   prometheus-surfboard-exporter = callPackage ../servers/monitoring/prometheus/surfboard-exporter.nix { };
   prometheus-unifi-exporter = callPackage ../servers/monitoring/prometheus/unifi-exporter { };
@@ -19015,6 +19016,8 @@ with pkgs;
   teamspeak_client = libsForQt5.callPackage ../applications/networking/instant-messengers/teamspeak/client.nix { };
   teamspeak_server = callPackage ../applications/networking/instant-messengers/teamspeak/server.nix { };
 
+  taskell = callPackage ../applications/misc/taskell { };
+
   taskjuggler = callPackage ../applications/misc/taskjuggler { };
 
   tasknc = callPackage ../applications/misc/tasknc { };
@@ -21188,9 +21191,7 @@ with pkgs;
     ocamlPackages = ocaml-ng.ocamlPackages_4_05;
   };
 
-  alt-ergo = callPackage ../applications/science/logic/alt-ergo {
-    ocamlPackages = ocaml-ng.ocamlPackages_4_05;
-  };
+  alt-ergo = callPackage ../applications/science/logic/alt-ergo {};
 
   aspino = callPackage ../applications/science/logic/aspino {};
 
