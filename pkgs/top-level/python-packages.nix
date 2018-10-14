@@ -1659,6 +1659,8 @@ in {
 
   python-jose = callPackage ../development/python-modules/python-jose {};
 
+  python-json-logger = callPackage ../development/python-modules/python-json-logger { };
+
   python-ly = callPackage ../development/python-modules/python-ly {};
 
   pyhepmc = buildPythonPackage rec {
@@ -6317,6 +6319,10 @@ in {
   jupyter_client = callPackage ../development/python-modules/jupyter_client { };
 
   jupyter_core = callPackage ../development/python-modules/jupyter_core { };
+
+  jupyter-repo2docker = callPackage ../development/python-modules/jupyter-repo2docker {
+    pkgs-docker = pkgs.docker;
+  };
 
   jupyterhub = callPackage ../development/python-modules/jupyterhub { };
 
