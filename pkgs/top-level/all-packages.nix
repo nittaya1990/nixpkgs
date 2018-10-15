@@ -14973,6 +14973,8 @@ with pkgs;
 
   andagii = callPackage ../data/fonts/andagii { };
 
+  andika = callPackage ../data/fonts/andika { };
+
   android-udev-rules = callPackage ../os-specific/linux/android-udev-rules { };
 
   anonymousPro = callPackage ../data/fonts/anonymous-pro { };
@@ -15004,6 +15006,8 @@ with pkgs;
   capitaine-cursors = callPackage ../data/icons/capitaine-cursors { };
 
   carlito = callPackage ../data/fonts/carlito {};
+
+  charis-sil = callPackage ../data/fonts/charis-sil { };
 
   comfortaa = callPackage ../data/fonts/comfortaa {};
 
@@ -15062,6 +15066,8 @@ with pkgs;
     docbook_xsl_ns;
 
   documentation-highlighter = callPackage ../misc/documentation-highlighter { };
+
+  doulos-sil = callPackage ../data/fonts/doulos-sil { };
 
   cabin = callPackage ../data/fonts/cabin { };
 
