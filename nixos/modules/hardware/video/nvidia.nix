@@ -1,6 +1,6 @@
 # This module provides the proprietary NVIDIA X11 / OpenGL drivers.
 
-{ config, lib, pkgs, pkgs_i686, options, ... }:
+{ stdenv, config, lib, pkgs, pkgs_i686, ... }:
 
 with lib;
 
@@ -9,18 +9,22 @@ let
   drivers = config.services.xserver.videoDrivers;
 
   nvidiaForKernel = kernelPackages:
-    if elem "nvidia" cfg.package then
+    if elem "nvidia" drivers then
         kernelPackages.nvidia_x11
-    else if elem "nvidiaBeta" cfg.package then
+    else if elem "nvidiaBeta" drivers then
         kernelPackages.nvidia_x11_beta
-    else if elem "nvidiaLegacy304" cfg.package then
+    else if elem "nvidiaLegacy304" drivers then
       kernelPackages.nvidia_x11_legacy304
-    else if elem "nvidiaLegacy340" cfg.package then
+    else if elem "nvidiaLegacy340" drivers then
       kernelPackages.nvidia_x11_legacy340
     else null;
 
   nvidia_x11 = nvidiaForKernel config.boot.kernelPackages;
-  nvidia_libs32 = (nvidiaForKernel pkgs_i686.linuxPackages).override { libsOnly = true; kernel = null; };
+  nvidia_libs32 =
+    if versionOlder nvidia_x11.version "391" then
+      ((nvidiaForKernel pkgs_i686.linuxPackages).override { libsOnly = true; kernel = null; }).out
+    else
+      (nvidiaForKernel config.boot.kernelPackages).lib32;
 
   enabled = nvidia_x11 != null;
 
@@ -88,21 +92,13 @@ in
         shows the Intel GPU at "00:02.0", set this option to "PCI:0:2:0".
       '';
     };
-
-    hardware.nvidia.package = options.services.xserver.videoDrivers // {
-      default = drivers;
-      description = ''
-        Package to use. One of nvidia, nvidiaBeta, nvidiaLegacy173,
-        nvidiaLegacy304, nvidiaLegacy340.
-      '';
-    };
   };
 
   config = mkIf enabled {
     assertions = [
       {
         assertion = config.services.xserver.displayManager.gdm.wayland;
-        message = "NVidia drivers don't support wayland";
+        message = "NVIDIA drivers don't support wayland";
       }
       {
         assertion = !optimusCfg.enable ||
@@ -165,7 +161,7 @@ in
     };
 
     hardware.opengl.package = nvidia_x11.out;
-    hardware.opengl.package32 = nvidia_libs32.out;
+    hardware.opengl.package32 = nvidia_libs32;
 
     environment.systemPackages = [ nvidia_x11.bin nvidia_x11.settings ]
       ++ lib.filter (p: p != null) [ nvidia_x11.persistenced ];

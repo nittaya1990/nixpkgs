@@ -1684,6 +1684,8 @@ with pkgs;
     pythonPackages = python3Packages;
   };
 
+  bento4 = callPackage ../tools/video/bento4 { };
+
   bepasty = callPackage ../tools/misc/bepasty { };
 
   bettercap = callPackage ../tools/security/bettercap { };
@@ -6975,14 +6977,12 @@ with pkgs;
         (lib.addMetaAttrs { outputsToInstall = [ "jre" ]; }
           ((openjdk8.override { minimal = true; }).jre // { outputs = [ "jre" ]; }));
 
-  jdk10 = if stdenv.isAarch32 || stdenv.isAarch64 then oraclejdk10 else openjdk10 // { outputs = [ "out" ]; };
-  jre10 = if stdenv.isAarch32 || stdenv.isAarch64 then oraclejre10 else lib.setName "openjre-${lib.getVersion pkgs.openjdk10.jre}"
+  jdk10 = openjdk10 // { outputs = [ "out" ]; };
+  jre10 = lib.setName "openjre-${lib.getVersion pkgs.openjdk10.jre}"
     (lib.addMetaAttrs { outputsToInstall = [ "jre" ]; }
       (openjdk10.jre // { outputs = [ "jre" ]; }));
   jre10_headless =
-    if stdenv.isAarch32 || stdenv.isAarch64 then
-      oraclejre10
-    else if stdenv.isDarwin then
+    if stdenv.isDarwin then
       jre10
     else
       lib.setName "openjre-${lib.getVersion pkgs.openjdk10.jre}-headless"
@@ -13786,22 +13786,19 @@ with pkgs;
     inherit (darwin.apple_sdk.libs) Xplugin;
   };
 
-  xorg = recurseIntoAttrs (lib.callPackagesWith pkgs ../servers/x11/xorg {
-    inherit clangStdenv fetchurl fetchgit fetchpatch stdenv intltool freetype fontconfig
-      libxslt expat libpng zlib perl mesa_drivers spice-protocol libunwind
-      dbus libuuid openssl gperf m4 libevdev tradcpp libinput mcpp makeWrapper autoreconfHook
-      autoconf automake libtool mtdev pixman libGL libGLU
-      cairo epoxy;
-    inherit (buildPackages) pkgconfig xmlto asciidoc flex bison;
-    inherit (darwin) apple_sdk cf-private libobjc;
+  # Use `lib.callPackageWith __splicedPackages` rather than plain `callPackage`
+  # so as not to have the newly bound xorg items already in scope,  which would
+  # have created a cycle.
+  xorg = recurseIntoAttrs ((lib.callPackageWith __splicedPackages ../servers/x11/xorg {
+  }).overrideScope' (lib.callPackageWith __splicedPackages ../servers/x11/xorg/overrides.nix {
+    inherit (darwin) apple_sdk;
     bootstrap_cmds = if stdenv.isDarwin then darwin.bootstrap_cmds else null;
     python = python2; # Incompatible with Python 3x
     udev = if stdenv.isLinux then udev else null;
     libdrm = if stdenv.isLinux then libdrm else null;
     abiCompat = config.xorg.abiCompat # `config` because we have no `xorg.override`
       or (if stdenv.isDarwin then "1.18" else null); # 1.19 needs fixing on Darwin
-    fglrxCompat = config.xorg.fglrxCompat or false; # `config` because we have no `xorg.override`
-  } // { inherit xlibsWrapper; xf86videospiceqxl = xspice; } );
+  }) // { inherit xlibsWrapper; xf86videospiceqxl = xspice; } );
 
   xspice = callPackage ../servers/x11/xorg/xspice.nix {
     sasl = cyrus_sasl;

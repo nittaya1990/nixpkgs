@@ -154,6 +154,18 @@ in {
         '';
       };
 
+      extraModules = mkOption {
+        type = types.listOf types.package;
+        default = [];
+        example = literalExample "[ pkgs.pulseaudio-modules-bt ]";
+        description = ''
+          Extra pulseaudio modules to use. This is intended for out-of-tree
+          pulseaudio modules like extra bluetooth codecs.
+
+          Extra modules take precedence over built-in pulseaudio modules.
+        '';
+      };
+
       daemon = {
         logLevel = mkOption {
           type = types.str;
@@ -247,6 +259,19 @@ in {
 
       users.groups.pulse.gid = gid;
     })
+
+    (mkIf (cfg.extraModules != []) {
+      hardware.pulseaudio.daemon.config.dl-search-path = let
+        overriddenModules = builtins.map
+          (drv: drv.override { pulseaudio = overriddenPackage; })
+          cfg.extraModules;
+        modulePaths = builtins.map
+          (drv: "${drv}/lib/pulse-${overriddenPackage.version}/modules")
+          # User-provided extra modules take precedence
+          (overriddenModules ++ [ overriddenPackage ]);
+      in lib.concatStringsSep ":" modulePaths;
+    })
+
     (mkIf hasZeroconf {
       services.avahi.enable = true;
     })
