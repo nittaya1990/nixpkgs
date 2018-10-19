@@ -6842,7 +6842,7 @@ with pkgs;
 
   cabal-install = haskell.lib.justStaticExecutables haskellPackages.cabal-install;
 
-  stack = haskell.lib.justStaticExecutables haskellPackages.stack;
+  stack = haskell.lib.justStaticExecutables haskell.packages.ghc861.stack;
   hlint = haskell.lib.justStaticExecutables haskellPackages.hlint;
 
   all-cabal-hashes = callPackage ../data/misc/hackage { };
@@ -18613,6 +18613,8 @@ with pkgs;
 
   rclone = callPackage ../applications/networking/sync/rclone { };
 
+  rclone-browser = libsForQt5.callPackage ../applications/networking/sync/rclone/browser.nix { };
+  
   rcs = callPackage ../applications/version-management/rcs { };
 
   rdesktop = callPackage ../applications/networking/remote/rdesktop { };
