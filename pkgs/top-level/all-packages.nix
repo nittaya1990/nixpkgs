@@ -20367,11 +20367,9 @@ with pkgs;
 
   pong3d = callPackage ../games/pong3d { };
 
-  pokerth = callPackage ../games/pokerth {
-    protobuf = protobuf3_4;
-  };
+  pokerth = libsForQt5.callPackage ../games/pokerth { };
 
-  pokerth-server = pokerth.server;
+  pokerth-server = libsForQt5.callPackage ../games/pokerth { target = "server"; };
 
   prboom = callPackage ../games/prboom { };
 
