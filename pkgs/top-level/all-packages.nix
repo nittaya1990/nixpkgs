@@ -1111,6 +1111,8 @@ with pkgs;
 
   cloud-init = callPackage ../tools/virtualization/cloud-init { };
 
+  cloudflared = callPackage ../applications/networking/cloudflared { };
+
   cloudmonkey = callPackage ../tools/virtualization/cloudmonkey { };
 
   clib = callPackage ../tools/package-management/clib { };
@@ -3433,7 +3435,7 @@ with pkgs;
   jaaa = callPackage ../applications/audio/jaaa { };
 
   jackett = callPackage ../servers/jackett {
-    mono = mono5;
+    mono = mono514;
   };
 
   jade = callPackage ../tools/text/sgml/jade { };
@@ -4530,6 +4532,8 @@ with pkgs;
   update-resolv-conf = callPackage ../tools/networking/openvpn/update-resolv-conf.nix { };
 
   opae = callPackage ../development/libraries/opae { };
+
+  opentracing-cpp = callPackages ../development/libraries/opentracing-cpp { };
 
   openvswitch = callPackage ../os-specific/linux/openvswitch { };
 
@@ -5746,6 +5750,8 @@ with pkgs;
 
   tty-clock = callPackage ../tools/misc/tty-clock { };
 
+  ttyplot = callPackage ../tools/misc/ttyplot { };
+
   ttyrec = callPackage ../tools/misc/ttyrec { };
 
   ttylog = callPackage ../tools/misc/ttylog { };
@@ -5866,6 +5872,9 @@ with pkgs;
   vim-vint = callPackage ../development/tools/vim-vint { };
 
   vimer = callPackage ../tools/misc/vimer { };
+
+  visidata = (newScope python3Packages) ../applications/misc/visidata {
+  };
 
   vit = callPackage ../applications/misc/vit { };
 
@@ -7266,6 +7275,8 @@ with pkgs;
 
   ocamlPackages = recurseIntoAttrs ocaml-ng.ocamlPackages;
 
+  ocamlformat = callPackage ../development/tools/ocaml/ocamlformat { };
+
   orc = callPackage ../development/compilers/orc { };
 
   metaocaml_3_09 = callPackage ../development/compilers/ocaml/metaocaml-3.09.nix { };
@@ -8575,6 +8586,8 @@ with pkgs;
   kube-aws = callPackage ../development/tools/kube-aws { };
 
   kubectx = callPackage ../development/tools/kubectx { };
+
+  kube-prompt = callPackage ../development/tools/kube-prompt { };
 
   kustomize = callPackage ../development/tools/kustomize { };
 
@@ -12181,6 +12194,8 @@ with pkgs;
 
   shibboleth-sp = callPackage ../development/libraries/shibboleth-sp { };
 
+  skaffold = callPackage ../development/tools/skaffold { };
+
   skalibs = skawarePackages.skalibs;
 
   skawarePackages = recurseIntoAttrs {
@@ -12314,6 +12329,29 @@ with pkgs;
   sqlite-interactive = appendToName "interactive" (sqlite.override { interactive = true; }).bin;
 
   sqlite-jdbc = callPackage ../servers/sql/sqlite/jdbc { };
+
+  sqlite-replication = sqlite.overrideAttrs (oldAttrs: rec {
+    name = "sqlite-${version}";
+    version = "3.24.0+replication3";
+    src = pkgs.fetchFromGitHub {
+      owner = "CanonicalLtd";
+      repo = "sqlite";
+      rev = "version-${version}";
+      sha256 = "19557b7aick1pxk0gw013cf5jy42i7539qn1ziza8dzy16a6zs8b";
+    };
+    nativeBuildInputs = [ pkgs.tcl ];
+    configureFlags = oldAttrs.configureFlags ++ [
+      "--enable-replication"
+      "--disable-amalgamation"
+      "--disable-tcl"
+    ];
+    preConfigure = ''
+      echo "D 2018-08-01T13:22:18" > manifest
+      echo -n "c94dbda1a570c1ab180e7694afd3cc7116268c06" > manifest.uuid
+    '';
+  });
+
+  dqlite = callPackage ../development/libraries/dqlite { };
 
   sqlcipher = lowPrio (callPackage ../development/libraries/sqlcipher {
     readline = null;
@@ -12913,6 +12951,8 @@ with pkgs;
   go2nix = callPackage ../development/tools/go2nix { };
 
   leaps = callPackage ../development/tools/leaps { };
+
+  vgo2nix = callPackage ../development/tools/vgo2nix { };
 
   ws = callPackage ../development/tools/ws { };
 
@@ -13657,7 +13697,6 @@ with pkgs;
   });
 
   samba4Full = lowPrio (samba4.override {
-    enableInfiniband = true;
     enableLDAP = true;
     enablePrinting = true;
     enableMDNS = true;
@@ -14227,6 +14266,16 @@ with pkgs;
       ];
   };
 
+  linux_4_19 = callPackage ../os-specific/linux/kernel/linux-4.19.nix {
+    kernelPatches =
+      [ kernelPatches.bridge_stp_helper
+        # See pkgs/os-specific/linux/kernel/cpu-cgroup-v2-patches/README.md
+        # when adding a new linux version
+        # kernelPatches.cpu-cgroup-v2."4.11"
+        kernelPatches.modinst_arg_list_too_long
+      ];
+  };
+
   linux_testing = callPackage ../os-specific/linux/kernel/linux-testing.nix {
     kernelPatches = [
       kernelPatches.bridge_stp_helper
@@ -14419,7 +14468,7 @@ with pkgs;
   linux = linuxPackages.kernel;
 
   # Update this when adding the newest kernel major version!
-  linuxPackages_latest = linuxPackages_4_18;
+  linuxPackages_latest = linuxPackages_4_19;
   linux_latest = linuxPackages_latest.kernel;
 
   # Build the kernel modules for the some of the kernels.
@@ -14430,6 +14479,7 @@ with pkgs;
   linuxPackages_4_9 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_9);
   linuxPackages_4_14 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_14);
   linuxPackages_4_18 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_18);
+  linuxPackages_4_19 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_19);
   # Don't forget to update linuxPackages_latest!
 
   # Intentionally lacks recurseIntoAttrs, as -rc kernels will quite likely break out-of-tree modules and cause failed Hydra builds.
@@ -15831,6 +15881,8 @@ with pkgs;
 
   brackets = callPackage ../applications/editors/brackets { gconf = gnome2.GConf; };
 
+  brave = callPackage ../applications/networking/browsers/brave { };
+
   notmuch-bower = callPackage ../applications/networking/mailreaders/notmuch-bower { };
 
   bristol = callPackage ../applications/audio/bristol { };
@@ -16050,6 +16102,7 @@ with pkgs;
     pythonPackages = datadog-integrations-core {};
   };
   datadog-process-agent = callPackage ../tools/networking/dd-agent/datadog-process-agent.nix { };
+  datadog-trace-agent = callPackage ../tools/networking/dd-agent/datadog-trace-agent.nix { };
   datadog-integrations-core = extras: callPackage ../tools/networking/dd-agent/integrations-core.nix {
     python = python27;
     extraIntegrations = extras;
@@ -17159,9 +17212,11 @@ with pkgs;
 
   wlc = callPackage ../development/libraries/wlc { };
   wlroots = callPackage ../development/libraries/wlroots { };
-  rootston = wlroots.bin;
+
   orbment = callPackage ../applications/window-managers/orbment { };
+
   sway = callPackage ../applications/window-managers/sway { };
+  sway-beta = callPackage ../applications/window-managers/sway/beta.nix { };
 
   velox = callPackage ../applications/window-managers/velox {
     stConf = config.st.conf or null;
@@ -17667,6 +17722,8 @@ with pkgs;
   };
 
   makeself = callPackage ../applications/misc/makeself { };
+
+  mako = callPackage ../applications/misc/mako { };
 
   mapmap = libsForQt5.callPackage ../applications/video/mapmap { };
 
@@ -18616,7 +18673,7 @@ with pkgs;
   rclone = callPackage ../applications/networking/sync/rclone { };
 
   rclone-browser = libsForQt5.callPackage ../applications/networking/sync/rclone/browser.nix { };
-  
+
   rcs = callPackage ../applications/version-management/rcs { };
 
   rdesktop = callPackage ../applications/networking/remote/rdesktop { };
@@ -21095,6 +21152,8 @@ with pkgs;
   liblapackWithAtlas = liblapack;
 
   liblbfgs = callPackage ../development/libraries/science/math/liblbfgs { };
+  
+  lrs = callPackage ../development/libraries/science/math/lrs { };
 
   m4ri = callPackage ../development/libraries/science/math/m4ri { };
 
