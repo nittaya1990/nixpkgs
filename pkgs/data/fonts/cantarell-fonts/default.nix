@@ -11,7 +11,8 @@ in stdenv.mkDerivation rec {
     sha256 = "1286rx1z7mrmi6snx957fprpcmd5p00l6drdfpbgf6mqapl6kb81";
   };
 
-  nativeBuildInputs = [ meson ninja gettext appstream-glib ];
+  nativeBuildInputs = [ meson ninja appstream-glib ];
+  buildInputs = [ gettext ];
 
   outputHashAlgo = "sha256";
   outputHashMode = "recursive";
