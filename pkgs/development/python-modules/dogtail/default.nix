@@ -25,7 +25,7 @@ buildPythonPackage rec {
   # };
   src = fetchurl {
     url = https://gitlab.com/dogtail/dogtail/raw/released/dogtail-0.9.10.tar.gz;
-    sha256 = "14sycidl8ahj3fwlhpwlpnyd43c302yqr7nqg2hj39pyj7kgk15b";
+    sha256 = "0xyb0rmkv0ajbn6nc03wz2p6hdmspmlzdjylcb7zb9bfi9ib2v0h";
   };
 
   patches = [
