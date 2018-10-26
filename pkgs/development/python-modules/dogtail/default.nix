@@ -39,6 +39,7 @@ buildPythonPackage rec {
     runHook preCheck
     export XDG_DATA_DIRS=${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:$XDG_DATA_DIRS
     # export NO_AT_BRIDGE=1
+    export LANG=en_US.utf8
     gsettings set org.gnome.desktop.interface toolkit-accessibility true
     xvfb-run -s '-screen 0 800x600x24' dbus-run-session \
       --config-file=${dbus.daemon}/share/dbus-1/session.conf \
