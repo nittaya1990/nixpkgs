@@ -5,6 +5,7 @@
 , pyatspi
 , pycairo
 , at-spi2-core
+, glibcLocales
 , gobjectIntrospection
 , gtk3
 , gsettings-desktop-schemas
@@ -32,14 +33,16 @@ buildPythonPackage rec {
     ./nix-support.patch
   ];
 
-  nativeBuildInputs = [ gobjectIntrospection dbus xvfb_run ]; # for setup hooks
+  nativeBuildInputs = [ glibcLocales gobjectIntrospection dbus xvfb_run ]; # for setup hooks
   propagatedBuildInputs = [ at-spi2-core gtk3 pygobject3 pyatspi pycairo ];
+
+  # UnicodeDecodeError: 'ascii' codec can't decode byte 0xe2 in position 3506
+  LC_ALL = "en_US.utf8";
 
   checkPhase = ''
     runHook preCheck
     export XDG_DATA_DIRS=${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:$XDG_DATA_DIRS
     # export NO_AT_BRIDGE=1
-    export LANG=en_US.utf8
     gsettings set org.gnome.desktop.interface toolkit-accessibility true
     xvfb-run -s '-screen 0 800x600x24' dbus-run-session \
       --config-file=${dbus.daemon}/share/dbus-1/session.conf \
