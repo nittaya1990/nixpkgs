@@ -4507,8 +4507,6 @@ with pkgs;
 
   openobex = callPackage ../tools/bluetooth/openobex { };
 
-  openopc = callPackage ../tools/misc/openopc { };
-
   openresolv = callPackage ../tools/networking/openresolv { };
 
   opensc = callPackage ../tools/security/opensc {
