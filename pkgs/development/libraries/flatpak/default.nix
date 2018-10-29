@@ -25,7 +25,7 @@ in stdenv.mkDerivation rec {
     })
     (substituteAll {
       src = ./fix-paths.patch;
-      p11 = p11-kit;
+      p11 = p11-kit.dev;
     })
     # patch taken from gtk_doc
     ./respect-xml-catalog-files-var.patch
