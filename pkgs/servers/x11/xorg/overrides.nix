@@ -394,11 +394,7 @@ self: super:
   });
 
   xf86videovmware = super.xf86videovmware.overrideAttrs (attrs: {
-<<<<<<< HEAD
-    buildInputs =  attrs.buildInputs ++ [ libGL_driver.dev ]; # for libxatracker
-=======
-    buildInputs =  attrs.buildInputs ++ [ mesa_noglu llvm_6 ]; # for libxatracker
->>>>>>> upstream/master
+    buildInputs =  attrs.buildInputs ++ [ libGL_driver.dev llbm_6 ]; # for libxatracker
     meta = attrs.meta // {
       platforms = ["i686-linux" "x86_64-linux"];
     };
