@@ -770,6 +770,7 @@ with pkgs;
 
   androidenv = callPackage ../development/mobile/androidenv {
     pkgs_i686 = pkgsi686Linux;
+    licenseAccepted = (config.android_sdk.accept_license or false);
   };
 
   inherit (androidenv) androidndk;
@@ -4153,6 +4154,8 @@ with pkgs;
   mmake = callPackage ../tools/misc/mmake { };
 
   modemmanager = callPackage ../tools/networking/modem-manager {};
+
+  modem-manager-gui = callPackage ../applications/networking/modem-manager-gui {};
 
   modsecurity_standalone = callPackage ../tools/security/modsecurity { };
 
