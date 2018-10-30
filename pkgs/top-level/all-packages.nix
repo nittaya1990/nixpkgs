@@ -8991,10 +8991,6 @@ with pkgs;
 
   qcachegrind = libsForQt5.callPackage ../development/tools/analysis/qcachegrind {};
 
-  verasco = ocaml-ng.ocamlPackages_4_02.verasco.override {
-    coq = coq_8_4;
-  };
-
   visualvm = callPackage ../development/tools/java/visualvm { };
 
   vultr = callPackage ../development/tools/vultr { };
@@ -13602,22 +13598,23 @@ with pkgs;
 
   pgbouncer = callPackage ../servers/sql/pgbouncer { };
 
-  pgpool93 = pgpool.override { postgresql = postgresql93; };
-  pgpool94 = pgpool.override { postgresql = postgresql94; };
+  pgpool93 = pgpool.override { postgresql = postgresql_9_3; };
+  pgpool94 = pgpool.override { postgresql = postgresql_9_4; };
 
   pgpool = callPackage ../servers/sql/pgpool {
     pam = if stdenv.isLinux then pam else null;
     libmemcached = null; # Detection is broken upstream
   };
 
-  postgresql = postgresql96;
+  postgresql = postgresql_9_6;
 
   inherit (callPackages ../servers/sql/postgresql { })
-    postgresql93
-    postgresql94
-    postgresql95
-    postgresql96
-    postgresql100;
+    postgresql_9_3
+    postgresql_9_4
+    postgresql_9_5
+    postgresql_9_6
+    postgresql_10
+    postgresql_11;
 
   postgresql_jdbc = callPackage ../servers/sql/postgresql/jdbc { };
 
@@ -17486,6 +17483,8 @@ with pkgs;
 
   jwm = callPackage ../applications/window-managers/jwm { };
 
+  jwm-settings-manager = callPackage ../applications/window-managers/jwm/jwm-settings-manager.nix { };
+
   k3d = callPackage ../applications/graphics/k3d {
     inherit (pkgs.gnome2) gtkglext;
     stdenv = overrideCC stdenv gcc6;
@@ -19058,6 +19057,8 @@ with pkgs;
   libspotify = callPackage ../development/libraries/libspotify {
     apiKey = config.libspotify.apiKey or null;
   };
+
+  sourcetrail = callPackage ../development/tools/sourcetrail { };
 
   spotifywm = callPackage ../applications/audio/spotifywm { };
 
@@ -21383,7 +21384,7 @@ with pkgs;
                        ocamlPackages_4_05
     ;
   }) mkCoqPackages
-    coq_8_4 coq_8_5 coq_8_6 coq_8_7 coq_8_8
+    coq_8_5 coq_8_6 coq_8_7 coq_8_8
     coqPackages_8_5 coqPackages_8_6 coqPackages_8_7 coqPackages_8_8
     coqPackages coq
   ;
