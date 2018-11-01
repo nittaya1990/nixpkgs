@@ -577,6 +577,8 @@ with pkgs;
 
   avfs = callPackage ../tools/filesystems/avfs { };
 
+  avldrums-lv2 = callPackage ../applications/audio/avldrums-lv2 { };
+
   aws-iam-authenticator = callPackage ../tools/security/aws-iam-authenticator {};
 
   awscli = callPackage ../tools/admin/awscli { };
@@ -2062,8 +2064,12 @@ with pkgs;
     cudatoolkit_7
     cudatoolkit_7_5
     cudatoolkit_8
+    cudatoolkit_9
     cudatoolkit_9_0
-    cudatoolkit_9;
+    cudatoolkit_9_1
+    cudatoolkit_9_2
+    cudatoolkit_10
+    cudatoolkit_10_0;
 
   cudatoolkit = cudatoolkit_9;
 
@@ -2073,7 +2079,11 @@ with pkgs;
     cudnn6_cudatoolkit_8
     cudnn_cudatoolkit_8
     cudnn_cudatoolkit_9
-    cudnn_cudatoolkit_9_0;
+    cudnn_cudatoolkit_9_0
+    cudnn_cudatoolkit_9_1
+    cudnn_cudatoolkit_9_2
+    cudnn_cudatoolkit_10
+    cudnn_cudatoolkit_10_0;
 
   cudnn = cudnn_cudatoolkit_9;
 
@@ -3285,6 +3295,8 @@ with pkgs;
   hubicfuse = callPackage ../tools/filesystems/hubicfuse { };
 
   hwinfo = callPackage ../tools/system/hwinfo { };
+
+  hybridreverb2 = callPackage ../applications/audio/hybridreverb2 { };
 
   hylafaxplus = callPackage ../servers/hylafaxplus { };
 
@@ -6193,6 +6205,8 @@ with pkgs;
 
   wol = callPackage ../tools/networking/wol { };
 
+  wolf-shaper = callPackage ../applications/audio/wolf-shaper { };
+
   wring = nodePackages.wring;
 
   wrk = callPackage ../tools/networking/wrk { };
@@ -6971,11 +6985,11 @@ with pkgs;
         inherit (gnome2) GConf gnome_vfs;
       };
 
-  openjdk10 =
+  openjdk11 =
     if stdenv.isDarwin then
-      callPackage ../development/compilers/openjdk/darwin/10.nix { }
+      callPackage ../development/compilers/openjdk/darwin/11.nix { }
     else
-      callPackage ../development/compilers/openjdk/10.nix {
+      callPackage ../development/compilers/openjdk/11.nix {
         inherit (gnome2) GConf gnome_vfs;
       };
 
@@ -6995,17 +7009,14 @@ with pkgs;
         (lib.addMetaAttrs { outputsToInstall = [ "jre" ]; }
           ((openjdk8.override { minimal = true; }).jre // { outputs = [ "jre" ]; }));
 
-  jdk10 = openjdk10 // { outputs = [ "out" ]; };
-  jre10 = lib.setName "openjre-${lib.getVersion pkgs.openjdk10.jre}"
-    (lib.addMetaAttrs { outputsToInstall = [ "jre" ]; }
-      (openjdk10.jre // { outputs = [ "jre" ]; }));
-  jre10_headless =
+  jdk11 = openjdk11 // { outputs = [ "out" ]; };
+  jdk11_headless =
     if stdenv.isDarwin then
-      jre10
+      jdk11
     else
-      lib.setName "openjre-${lib.getVersion pkgs.openjdk10.jre}-headless"
-        (lib.addMetaAttrs { outputsToInstall = [ "jre" ]; }
-          ((openjdk10.override { minimal = true; }).jre // { outputs = [ "jre" ]; }));
+      lib.setName "openjdk-${lib.getVersion pkgs.openjdk11}-headless"
+        (lib.addMetaAttrs {}
+          ((openjdk11.override { minimal = true; }) // {}));
 
   jdk = jdk8;
   jre = jre8;
@@ -7982,6 +7993,8 @@ with pkgs;
 
   jython = callPackage ../development/interpreters/jython {};
 
+  gImageReader = callPackage ../applications/misc/gImageReader { };
+
   guile-cairo = callPackage ../development/guile-modules/guile-cairo { };
 
   guile-fibers = callPackage ../development/guile-modules/guile-fibers { };
@@ -8128,10 +8141,10 @@ with pkgs;
     inherit (darwin) cctools;
     inherit (darwin.apple_sdk.frameworks) CoreFoundation CoreServices Foundation;
   };
-  bazel_jdk10 = callPackage ../development/tools/build-managers/bazel {
+  bazel_jdk11 = callPackage ../development/tools/build-managers/bazel {
     inherit (darwin) cctools;
     inherit (darwin.apple_sdk.frameworks) CoreFoundation CoreServices Foundation;
-    runJdk = jdk10;
+    runJdk = jdk11;
   };
 
   bazel-buildtools = callPackage ../development/tools/build-managers/bazel/buildtools { };
@@ -9549,6 +9562,8 @@ with pkgs;
   freetts = callPackage ../development/libraries/freetts { };
 
   frog = self.languageMachines.frog;
+
+  fstrcmp = callPackage ../development/libraries/fstrcmp { };
 
   fstrm = callPackage ../development/libraries/fstrm { };
 
@@ -13190,6 +13205,8 @@ with pkgs;
 
   dex-oidc = callPackage ../servers/dex { };
 
+  doh-proxy = callPackage ../servers/dns/doh-proxy { };
+
   dgraph = callPackage ../servers/dgraph { };
 
   dico = callPackage ../servers/dico { };
@@ -14802,8 +14819,6 @@ with pkgs;
 
   pmutils = callPackage ../os-specific/linux/pm-utils { };
 
-  pmtools = callPackage ../os-specific/linux/pmtools { };
-
   policycoreutils = callPackage ../os-specific/linux/policycoreutils { };
 
   semodule-utils = callPackage ../os-specific/linux/semodule-utils { };
@@ -16282,7 +16297,7 @@ with pkgs;
   eaglemode = callPackage ../applications/misc/eaglemode { };
 
   eclipses = recurseIntoAttrs (callPackage ../applications/editors/eclipse {
-    jdk = jdk10;
+    jdk = jdk11;
   });
 
   ecs-agent = callPackage ../applications/virtualization/ecs-agent { };
@@ -17164,6 +17179,8 @@ with pkgs;
   };
 
   gxmessage = callPackage ../applications/misc/gxmessage { };
+
+  gxplugins-lv2 = callPackage ../applications/audio/gxplugins-lv2 { };
 
   hackrf = callPackage ../applications/misc/hackrf { };
 
