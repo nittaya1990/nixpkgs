@@ -266,6 +266,8 @@ in {
 
   brotli = callPackage ../development/python-modules/brotli { };
 
+  broadlink = callPackage ../development/python-modules/broadlink { };
+
   browser-cookie3 = callPackage ../development/python-modules/browser-cookie3 { };
 
   browsermob-proxy = disabledIf isPy3k (callPackage ../development/python-modules/browsermob-proxy {});
@@ -337,6 +339,8 @@ in {
   diff-match-patch = callPackage ../development/python-modules/diff-match-patch { };
 
   eradicate = callPackage ../development/python-modules/eradicate {  };
+
+  fastpbkdf2 = callPackage ../development/python-modules/fastpbkdf2 {  };
 
   fido2 = callPackage ../development/python-modules/fido2 {  };
 
@@ -659,6 +663,8 @@ in {
   slicerator = callPackage ../development/python-modules/slicerator { };
 
   spglib = callPackage ../development/python-modules/spglib { };
+
+  sslib = callPackage ../development/python-modules/sslib { };
 
   statistics = callPackage ../development/python-modules/statistics { };
 
@@ -1644,6 +1650,8 @@ in {
     inherit (pkgs.gitAndTools) git-annex;
   };
 
+  python-gitlab = callPackage ../development/python-modules/python-gitlab { };
+
   google-cloud-sdk = callPackage ../tools/admin/google-cloud-sdk { };
   google-cloud-sdk-gce = callPackage ../tools/admin/google-cloud-sdk { with-gce=true; };
 
@@ -2455,6 +2463,8 @@ in {
   htmllaundry = callPackage ../development/python-modules/htmllaundry { };
 
   html5lib = callPackage ../development/python-modules/html5lib { };
+
+  httmock = callPackage ../development/python-modules/httmock { };
 
   http_signature = callPackage ../development/python-modules/http_signature { };
 
@@ -4456,21 +4466,21 @@ in {
   };
 
   PyICU = buildPythonPackage rec {
-    name = "PyICU-2.0.3";
+    name = "PyICU-2.2";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/P/PyICU/${name}.tar.gz";
-      sha256 = "0pzss3l0b0vcsyr7wlqdd6pkcqldspajfgd9k2iijf6r152d2ln4";
+      sha256 = "0wq9y5fi1ighgf5aws9nr87vi1w44p7q1k83rx2y3qj5d2xyhspa";
     };
 
     patches = [
       (pkgs.fetchpatch {
-        url = https://sources.debian.org/data/main/p/pyicu/2.0.3-1/debian/patches/icu_test.patch;
+        url = https://sources.debian.org/data/main/p/pyicu/2.2-1/debian/patches/icu_test.patch;
         sha256 = "1iavdkyqixm9i753svl17barla93b7jzgkw09dn3hnggamx7zwx9";
       })
     ];
 
-    buildInputs = [ pkgs.icu self.pytest ];
+    buildInputs = [ pkgs.icu60 self.pytest ];
 
     propagatedBuildInputs = [ self.six ];
 
