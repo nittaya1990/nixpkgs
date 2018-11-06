@@ -25,7 +25,7 @@ let
 
   package32 = pkgs.buildEnv {
     name = "opengl-drivers-32bit";
-    paths = [ cfg.package32 ] ++ cfg.extraPackages32 ++ optional cfg.useGLVND pkgs_i686.libglvnd;
+    paths = [ cfg.package32 ] ++ cfg.extraPackages32 ++ optional cfg.useGLVND pkgs.pkgsi686Linux.libglvnd;
   };
 
 in
