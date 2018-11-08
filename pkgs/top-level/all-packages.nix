@@ -14049,6 +14049,8 @@ with pkgs;
 
   cpufrequtils = callPackage ../os-specific/linux/cpufrequtils { };
 
+  cpuset = callPackage ../os-specific/linux/cpuset { };
+
   criu = callPackage ../os-specific/linux/criu { };
 
   cryptsetup = callPackage ../os-specific/linux/cryptsetup { };
