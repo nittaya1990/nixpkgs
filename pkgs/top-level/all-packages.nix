@@ -9077,6 +9077,8 @@ with pkgs;
 
   acl = callPackage ../development/libraries/acl { };
 
+  acsccid = callPackage ../tools/security/acsccid { };
+
   activemq = callPackage ../development/libraries/apache-activemq { };
 
   adns = callPackage ../development/libraries/adns { };
