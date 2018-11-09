@@ -148,6 +148,8 @@ with pkgs;
 
   dieHook = makeSetupHook {} ../build-support/setup-hooks/die.sh;
 
+  archiver = callPackage ../applications/misc/archiver { };
+
   digitalbitbox = libsForQt5.callPackage ../applications/misc/digitalbitbox { };
 
   dockerTools = callPackage ../build-support/docker { };
@@ -3592,6 +3594,8 @@ with pkgs;
 
   kexectools = callPackage ../os-specific/linux/kexectools { };
 
+  kexpand = callPackage ../development/tools/kexpand { };
+
   keybase = callPackage ../tools/security/keybase {
     # Reasoning for the inherited apple_sdk.frameworks:
     # 1. specific compiler errors about: AVFoundation, AudioToolbox, MediaToolbox
@@ -4784,6 +4788,8 @@ with pkgs;
   peco = callPackage ../tools/text/peco { };
 
   pg_top = callPackage ../tools/misc/pg_top { };
+
+  pgmetrics = callPackage ../tools/misc/pgmetrics { };
 
   pdsh = callPackage ../tools/networking/pdsh {
     rsh = true;          # enable internal rsh implementation
@@ -6002,7 +6008,9 @@ with pkgs;
 
   wal_e = callPackage ../tools/backup/wal-e { };
 
-  watchexec = callPackage ../tools/misc/watchexec { };
+  watchexec = callPackage ../tools/misc/watchexec {
+    inherit (darwin.apple_sdk.frameworks) CoreServices CoreFoundation;
+  };
 
   watchman = callPackage ../development/tools/watchman {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
@@ -6498,9 +6506,12 @@ with pkgs;
     then callPackage adoptopenjdk-bin-11-packages-linux.jre-hotspot {}
     else callPackage adoptopenjdk-bin-11-packages-darwin.jre-hotspot {};
 
-  # no OpenJ9 for Darwin
-  adoptopenjdk-openj9-bin-11 = callPackage adoptopenjdk-bin-11-packages-linux.jdk-openj9 {};
-  adoptopenjdk-jre-openj9-bin-11 = callPackage adoptopenjdk-bin-11-packages-linux.jre-openj9 {};
+  adoptopenjdk-openj9-bin-11 = if stdenv.isLinux
+    then callPackage adoptopenjdk-bin-11-packages-linux.jdk-openj9 {}
+    else callPackage adoptopenjdk-bin-11-packages-darwin.jdk-openj9 {};
+  adoptopenjdk-jre-openj9-bin-11 = if stdenv.isLinux
+    then callPackage adoptopenjdk-bin-11-packages-linux.jre-openj9 {}
+    else callPackage adoptopenjdk-bin-11-packages-darwin.jre-openj9 {};
 
   adoptopenjdk-bin = adoptopenjdk-hotspot-bin-11;
   adoptopenjdk-jre-bin = adoptopenjdk-jre-hotspot-bin-11;
@@ -7321,7 +7332,7 @@ with pkgs;
 
   metaocaml_3_09 = callPackage ../development/compilers/ocaml/metaocaml-3.09.nix { };
 
-  ber_metaocaml = callPackage ../development/compilers/ocaml/ber-metaocaml-104.nix { };
+  ber_metaocaml = callPackage ../development/compilers/ocaml/ber-metaocaml.nix { };
 
   ocaml_make = callPackage ../development/ocaml-modules/ocamlmake { };
 
@@ -11187,6 +11198,8 @@ with pkgs;
   giflib_4_1 = callPackage ../development/libraries/giflib/4.1.nix { };
   giflib_5_1 = callPackage ../development/libraries/giflib/5.1.nix { };
 
+  libunarr = callPackage ../development/libraries/libunarr { };
+
   libungif = callPackage ../development/libraries/giflib/libungif.nix { };
 
   libunibreak = callPackage ../development/libraries/libunibreak { };
@@ -11854,7 +11867,7 @@ with pkgs;
 
   re2 = callPackage ../development/libraries/re2 { };
 
-  qbs = callPackage ../development/tools/build-managers/qbs { };
+  qbs = libsForQt5.callPackage ../development/tools/build-managers/qbs { };
 
   qca2 = callPackage ../development/libraries/qca2 { qt = qt4; };
   qca2-qt5 = qca2.override { qt = qt5.qtbase; };
@@ -16249,10 +16262,10 @@ with pkgs;
   };
 
   inherit (callPackage ../applications/virtualization/docker {})
-    docker_18_06;
+    docker_18_09;
 
-  docker = docker_18_06;
-  docker-edge = docker_18_06;
+  docker = docker_18_09;
+  docker-edge = docker_18_09;
 
   docker-proxy = callPackage ../applications/virtualization/docker/proxy.nix { };
 
@@ -19030,6 +19043,8 @@ with pkgs;
   };
 
   lightdm-mini-greeter = callPackage ../applications/display-managers/lightdm-mini-greeter { };
+
+  ly = callPackage ../applications/display-managers/ly { }; 
 
   slic3r = callPackage ../applications/misc/slic3r { };
 
@@ -22116,8 +22131,6 @@ with pkgs;
     lilypond = lilypond-unstable;
   };
 
-  lollypop-portal = callPackage ../misc/lollypop-portal { };
-
   openlilylib-fonts = callPackage ../misc/lilypond/fonts.nix { };
 
   mailcore2 = callPackage ../development/libraries/mailcore2 {
@@ -22731,6 +22744,8 @@ with pkgs;
     openal = null;
   };
 
+  yacreader = libsForQt5.callPackage ../applications/graphics/yacreader { };
+
   yadm = callPackage ../applications/version-management/yadm { };
 
   yamdi = callPackage ../tools/video/yamdi { };
@@ -22849,6 +22864,8 @@ with pkgs;
   ghc-standalone-archive = callPackage ../os-specific/darwin/ghc-standalone-archive { inherit (darwin) cctools; };
 
   chrome-gnome-shell = callPackage  ../desktops/gnome-3/extensions/chrome-gnome-shell {};
+
+  chrome-token-signing = libsForQt5.callPackage ../tools/security/chrome-token-signing {};
 
   NSPlist = callPackage ../development/libraries/NSPlist {};
 

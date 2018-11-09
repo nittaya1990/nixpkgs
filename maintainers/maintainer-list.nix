@@ -3820,6 +3820,11 @@
     github = "scolobb";
     name = "Sergiu Ivanov";
   };
+  screendriver = {
+    email = "nix@echooff.de";
+    github = "screendriver";
+    name = "Christian Rackerseder";
+  };
   Scriptkiddi = {
     email = "nixos@scriptkiddi.de";
     github = "scriptkiddi";
@@ -4002,6 +4007,11 @@
     email = "spacefrogg-nixos@meterriblecrew.net";
     github = "spacefrogg";
     name = "Michael Raitza";
+  };
+  spacekookie = {
+    email = "kookie@spacekookie.de";
+    github = "spacekookie";
+    name = "Katharina Fey";
   };
   spencerjanssen = {
     email = "spencerjanssen@gmail.com";
