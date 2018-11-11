@@ -521,6 +521,7 @@ with pkgs;
 
   alacritty = callPackage ../applications/misc/alacritty {
     inherit (xorg) libXcursor libXxf86vm libXi;
+    inherit (darwin) cf-private;
     inherit (darwin.apple_sdk.frameworks) AppKit CoreFoundation CoreGraphics CoreServices CoreText Foundation OpenGL;
   };
 
@@ -1065,7 +1066,7 @@ with pkgs;
 
   cue2pops = callPackage ../tools/cd-dvd/cue2pops { };
 
-  cabal2nix = haskell.lib.overrideCabal (haskell.lib.addOptparseApplicativeCompletionScripts "cabal2nix" haskellPackages.cabal2nix) (drv: {
+  cabal2nix = haskell.lib.overrideCabal (haskell.lib.generateOptparseApplicativeCompletion "cabal2nix" haskellPackages.cabal2nix) (drv: {
     isLibrary = false;
     enableSharedExecutables = false;
     executableToolDepends = (drv.executableToolDepends or []) ++ [ makeWrapper ];
@@ -1550,6 +1551,7 @@ with pkgs;
   noteshrink = callPackage ../tools/misc/noteshrink { };
 
   noti = callPackage ../tools/misc/noti {
+    inherit (darwin) cf-private;
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
 
@@ -2036,7 +2038,7 @@ with pkgs;
 
   checkbashisms = callPackage ../development/tools/misc/checkbashisms { };
 
-  ckb = libsForQt5.callPackage ../tools/misc/ckb { };
+  ckb-next = libsForQt5.callPackage ../tools/misc/ckb-next { };
 
   clamav = callPackage ../tools/security/clamav { };
 
@@ -3597,6 +3599,7 @@ with pkgs;
   kexpand = callPackage ../development/tools/kexpand { };
 
   keybase = callPackage ../tools/security/keybase {
+    inherit (darwin) cf-private;
     # Reasoning for the inherited apple_sdk.frameworks:
     # 1. specific compiler errors about: AVFoundation, AudioToolbox, MediaToolbox
     # 2. the rest are added from here: https://github.com/keybase/client/blob/68bb8c893c5214040d86ea36f2f86fbb7fac8d39/go/chat/attachments/preview_darwin.go#L7
@@ -3949,8 +3952,6 @@ with pkgs;
 
   libiberty_static = libiberty.override { staticBuild = true; };
 
-  libibverbs = callPackage ../development/libraries/libibverbs { };
-
   libxc = callPackage ../development/libraries/libxc { };
 
   libxcomp = callPackage ../development/libraries/libxcomp { };
@@ -3960,8 +3961,6 @@ with pkgs;
   libx86emu = callPackage ../development/libraries/libx86emu { };
 
   libzmf = callPackage ../development/libraries/libzmf {};
-
-  librdmacm = callPackage ../development/libraries/librdmacm { };
 
   libreswan = callPackage ../tools/networking/libreswan { };
 
@@ -7659,6 +7658,10 @@ with pkgs;
 
   kanif = callPackage ../applications/networking/cluster/kanif { };
 
+  lumo = callPackage ../development/interpreters/clojurescript/lumo {
+    nodejs = nodejs-10_x;
+  };
+
   lxappearance = callPackage ../desktops/lxde/core/lxappearance {
     gtk2 = gtk2-x11;
   };
@@ -9593,7 +9596,10 @@ with pkgs;
 
   flite = callPackage ../development/libraries/flite { };
 
-  fltk13 = callPackage ../development/libraries/fltk { };
+  fltk13 = callPackage ../development/libraries/fltk {
+    inherit (darwin) cf-private;
+    inherit (darwin.apple_sdk.frameworks) Cocoa AGL GLUT;
+  };
   fltk = self.fltk13;
 
   flyway = callPackage ../development/tools/flyway { };
@@ -9747,7 +9753,10 @@ with pkgs;
 
   glfw = glfw3;
   glfw2 = callPackage ../development/libraries/glfw/2.x.nix { };
-  glfw3 = callPackage ../development/libraries/glfw/3.x.nix { };
+  glfw3 = callPackage ../development/libraries/glfw/3.x.nix {
+    inherit (darwin) cf-private;
+    inherit (darwin.apple_sdk.frameworks) Cocoa Kernel;
+  };
 
   glibc = callPackage ../development/libraries/glibc {
     installLocales = config.glibc.locales or false;
@@ -11186,7 +11195,10 @@ with pkgs;
 
   libuecc = callPackage ../development/libraries/libuecc { };
 
-  libui = callPackage ../development/libraries/libui { };
+  libui = callPackage ../development/libraries/libui {
+    inherit (darwin) cf-private;
+    inherit (darwin.apple_sdk.frameworks) Cocoa;
+  };
 
   libunistring = callPackage ../development/libraries/libunistring { };
 
@@ -11636,6 +11648,8 @@ with pkgs;
 
   opencv = callPackage ../development/libraries/opencv {
     ffmpeg = ffmpeg_2;
+    inherit (darwin) cf-private;
+    inherit (darwin.apple_sdk.frameworks) Cocoa QTKit;
   };
 
   opencv3 = callPackage ../development/libraries/opencv/3.x.nix {
@@ -12433,6 +12447,8 @@ with pkgs;
     readline = null;
     ncurses = null;
   });
+
+  standardnotes = callPackage ../applications/editors/standardnotes { };
 
   stfl = callPackage ../development/libraries/stfl { };
 
@@ -13344,6 +13360,8 @@ with pkgs;
   gofish = callPackage ../servers/gopher/gofish { };
 
   grafana = callPackage ../servers/monitoring/grafana { };
+
+  grafana_reporter = callPackage ../servers/monitoring/grafana-reporter { };
 
   h2o = callPackage ../servers/http/h2o { };
 
@@ -14332,11 +14350,6 @@ with pkgs;
       [ kernelPatches.bridge_stp_helper
         kernelPatches.cpu-cgroup-v2."4.9"
         kernelPatches.modinst_arg_list_too_long
-        # https://github.com/NixOS/nixpkgs/issues/42755
-        # Remove these xen-netfront patches once they're included in
-        # upstream! Fixes https://github.com/NixOS/nixpkgs/issues/42755
-        kernelPatches.xen-netfront_fix_mismatched_rtnl_unlock
-        kernelPatches.xen-netfront_update_features_after_registering_netdev
       ];
   };
 
@@ -16399,6 +16412,7 @@ with pkgs;
     imagemagick = null;
     acl = null;
     gpm = null;
+    inherit (darwin) cf-private;
     inherit (darwin.apple_sdk.frameworks) AppKit GSS ImageIO;
   };
 
@@ -16408,8 +16422,8 @@ with pkgs;
     withGTK3 = false;
   }));
 
-  emacsMacport = emacs25Macport;
-  emacs25Macport = callPackage ../applications/editors/emacs/macport.nix {
+  emacsMacport = callPackage ../applications/editors/emacs/macport.nix {
+    inherit (darwin) cf-private;
     inherit (darwin.apple_sdk.frameworks)
       AppKit Carbon Cocoa IOKit OSAKit Quartz QuartzCore WebKit
       ImageCaptureCore GSS ImageIO;
@@ -17265,6 +17279,8 @@ with pkgs;
     gtk = gtk3;
   };
 
+  hovercraft = python3Packages.callPackage ../applications/misc/hovercraft { };
+
   howl = callPackage ../applications/editors/howl { };
 
   ht = callPackage ../applications/editors/ht { };
@@ -17688,6 +17704,7 @@ with pkgs;
   librecad = callPackage ../applications/misc/librecad { };
 
   libreoffice = hiPrio libreoffice-still;
+  libreoffice-unwrapped = libreoffice.libreoffice;
 
   libreoffice-args = {
     inherit (perlPackages) ArchiveZip IOCompress;
@@ -17709,21 +17726,20 @@ with pkgs;
     };
   };
 
-  libreoffice-unwrapped = callPackage ../applications/office/libreoffice
-  (libreoffice-args // {
-  });
-  libreoffice-still-unwrapped = callPackage ../applications/office/libreoffice/still.nix
-  (libreoffice-args // {
-      poppler = poppler_0_61;
-  });
-
   libreoffice-fresh = lowPrio (callPackage ../applications/office/libreoffice/wrapper.nix {
-    libreoffice = libreoffice-unwrapped;
+    libreoffice = callPackage ../applications/office/libreoffice
+      (libreoffice-args // {
+      });
   });
+  libreoffice-fresh-unwrapped = libreoffice-fresh.libreoffice;
 
   libreoffice-still = lowPrio (callPackage ../applications/office/libreoffice/wrapper.nix {
-    libreoffice = libreoffice-still-unwrapped;
+    libreoffice = callPackage ../applications/office/libreoffice/still.nix
+      (libreoffice-args // {
+          poppler = poppler_0_61;
+      });
   });
+  libreoffice-still-unwrapped = libreoffice-still.libreoffice;
 
   libvmi = callPackage ../development/libraries/libvmi { };
 
@@ -19044,7 +19060,7 @@ with pkgs;
 
   lightdm-mini-greeter = callPackage ../applications/display-managers/lightdm-mini-greeter { };
 
-  ly = callPackage ../applications/display-managers/ly { }; 
+  ly = callPackage ../applications/display-managers/ly { };
 
   slic3r = callPackage ../applications/misc/slic3r { };
 

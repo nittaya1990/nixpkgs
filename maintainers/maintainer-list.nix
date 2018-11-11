@@ -1754,6 +1754,11 @@
     email = "t@larkery.com";
     name = "Tom Hinton";
   };
+  hlolli = {
+    email = "hlolli@gmail.com";
+    github = "hlolli";
+    name = "Hlodver Sigurdsson";
+  };
   hodapp = {
     email = "hodapp87@gmail.com";
     github = "Hodapp87";
@@ -2694,6 +2699,11 @@
     email = "mgdelacroix@gmail.com";
     github = "mgdelacroix";
     name = "Miguel de la Cruz";
+  };
+  mgregoire = {
+    email = "gregoire@martinache.net";
+    github = "M-Gregoire";
+    name = "Gregoire Martinache";
   };
   mgttlinger = {
     email = "megoettlinger@gmail.com";
