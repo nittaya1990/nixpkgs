@@ -1,21 +1,21 @@
-{ stdenv, fetchFromGitHub, cmake }:
+{ stdenv, fetchFromGitHub, cmake, python }:
 
 stdenv.mkDerivation rec {
-  name = "catch-${version}";
-  version = "1.12.2";
+  name = "catch2-${version}";
+  version = "2.4.2";
 
   src = fetchFromGitHub {
     owner = "catchorg";
-    repo = "Catch";
+    repo = "Catch2";
     rev = "v${version}";
-    sha256 = "1gdp5wm8khn02g2miz381llw3191k7309qj8s3jd6sasj01rhf23";
+    sha256="1105bxbvh1xxl4yxjjp6l6w6hgsh8xbdiwlnga9di5y2x92b9bjd";
   };
 
   nativeBuildInputs = [ cmake ];
-  cmakeFlags = [ "-DUSE_CPP14=ON" ];
 
-  doCheck = true;
-  checkTarget = "test";
+  cmakeFlags = [
+    "-H.."
+    "-DBUILD_TESTING=OFF"];
 
   meta = with stdenv.lib; {
     description = "A multi-paradigm automated test framework for C++ and Objective-C (and, maybe, C)";
