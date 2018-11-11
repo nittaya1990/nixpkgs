@@ -5892,6 +5892,8 @@ with pkgs;
 
   untrunc = callPackage ../tools/video/untrunc { };
 
+  up = callPackage ../tools/misc/up { };
+
   upx = callPackage ../tools/compression/upx { };
 
   uqmi = callPackage ../tools/networking/uqmi { };
@@ -6252,6 +6254,8 @@ with pkgs;
   wol = callPackage ../tools/networking/wol { };
 
   wolf-shaper = callPackage ../applications/audio/wolf-shaper { };
+
+  wpgtk = callPackage ../tools/X11/wpgtk { };
 
   wring = nodePackages.wring;
 
@@ -12366,6 +12370,8 @@ with pkgs;
   soundtouch = callPackage ../development/libraries/soundtouch {};
 
   spandsp = callPackage ../development/libraries/spandsp {};
+
+  spaceship-prompt = callPackage ../shells/zsh/spaceship-prompt {};
 
   spatialite_tools = callPackage ../development/libraries/spatialite-tools { };
 
@@ -20375,7 +20381,7 @@ with pkgs;
   garden-of-coloured-lights = callPackage ../games/garden-of-coloured-lights { allegro = allegro4; };
 
   gargoyle = callPackage ../games/gargoyle {
-    libtool = darwin.cctools;
+    inherit (darwin) cctools cf-private;
   };
 
   gav = callPackage ../games/gav { };
