@@ -278,6 +278,8 @@ in {
 
   browsermob-proxy = disabledIf isPy3k (callPackage ../development/python-modules/browsermob-proxy {});
 
+  bt_proximity = callPackage ../development/python-modules/bt-proximity { };
+
   bugseverywhere = callPackage ../applications/version-management/bugseverywhere {};
 
   cachecontrol = callPackage ../development/python-modules/cachecontrol { };
@@ -526,6 +528,8 @@ in {
 
   pyfakefs = callPackage ../development/python-modules/pyfakefs {};
 
+  pyfttt = callPackage ../development/python-modules/pyfttt { };
+
   pygame = callPackage ../development/python-modules/pygame { };
 
   pygame-git = callPackage ../development/python-modules/pygame/git.nix { };
@@ -709,6 +713,8 @@ in {
   vidstab = callPackage ../development/python-modules/vidstab { };
 
   pyunbound = callPackage ../tools/networking/unbound/python.nix { };
+
+  WazeRouteCalculator = callPackage ../development/python-modules/WazeRouteCalculator { };
 
   # packages defined here
 
