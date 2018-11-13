@@ -10258,6 +10258,8 @@ with pkgs;
 
   jsonrpc-glib = callPackage ../development/libraries/jsonrpc-glib { };
 
+  jxrlib = callPackage ../development/libraries/jxrlib { };
+
   libjson = callPackage ../development/libraries/libjson { };
 
   libb64 = callPackage ../development/libraries/libb64 { };
