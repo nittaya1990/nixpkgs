@@ -99,7 +99,7 @@ in
   hydra = handleTest ./hydra {};
   i3wm = handleTest ./i3wm.nix {};
   iftop = handleTest ./iftop.nix {};
-  incron = handleTest tests/incron.nix {};
+  incron = handleTest ./incron.nix {};
   influxdb = handleTest ./influxdb.nix {};
   initrd-network-ssh = handleTest ./initrd-network-ssh {};
   initrdNetwork = handleTest ./initrd-network.nix {};
@@ -190,7 +190,6 @@ in
   smokeping = handleTest ./smokeping.nix {};
   snapper = handleTest ./snapper.nix {};
   solr = handleTest ./solr.nix {};
-  #statsd = handleTest ./statsd.nix {}; # statsd is broken: #45946
   strongswan-swanctl = handleTest ./strongswan-swanctl.nix {};
   sudo = handleTest ./sudo.nix {};
   switchTest = handleTest ./switch-test.nix {};
