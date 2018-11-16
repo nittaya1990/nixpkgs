@@ -63,7 +63,7 @@ in {
 
           Note that this should be a last resort; patching the package is preferred (see GPaste).
         '';
-        apply = list: list ++ [ pkgs.gnome3.gnome-shell pkgs.gnome3.gnome-shell-extensions ];
+        type = types.listOf types.package;
       };
 
       extraGSettingsOverrides = mkOption {
@@ -146,7 +146,7 @@ in {
               export GI_TYPELIB_PATH=$GI_TYPELIB_PATH''${GI_TYPELIB_PATH:+:}${p}/lib/girepository-1.0
               export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}${p}/lib
             fi
-          '') cfg.sessionPath}
+            '') (cfg.sessionPath ++ pkgs.gnome3.corePackages) }
       fi
     '';
 
