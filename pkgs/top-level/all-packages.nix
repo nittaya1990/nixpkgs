@@ -14888,6 +14888,8 @@ with pkgs;
   procps = if stdenv.isLinux then callPackage ../os-specific/linux/procps-ng { }
            else unixtools.procps;
 
+  procdump = callPackage ../os-specific/linux/procdump { };
+
   qemu_kvm = lowPrio (qemu.override { hostCpuOnly = true; });
 
   # See `xenPackages` source for explanations.
