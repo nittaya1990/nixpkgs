@@ -2968,6 +2968,8 @@ in {
 
   nose = callPackage ../development/python-modules/nose { };
 
+  nose-cov = callPackage ../development/python-modules/nose-cov { };
+
   nose-exclude = callPackage ../development/python-modules/nose-exclude { };
 
   nose2 = callPackage ../development/python-modules/nose2 { };
