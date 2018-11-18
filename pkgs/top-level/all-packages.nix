@@ -20071,6 +20071,8 @@ with pkgs;
 
   xmacro = callPackage ../tools/X11/xmacro { };
 
+  xmlcopyeditor = callPackage ../applications/editors/xmlcopyeditor { };
+
   xmove = callPackage ../applications/misc/xmove { };
 
   xmp = callPackage ../applications/audio/xmp { };
