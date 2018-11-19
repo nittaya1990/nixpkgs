@@ -19667,6 +19667,8 @@ with pkgs;
 
   vym = qt5.callPackage ../applications/misc/vym { };
 
+  wavepack = callPackage ../development/libraries/WavePack { };
+
   w3m = callPackage ../applications/networking/browsers/w3m {
     graphicsSupport = !stdenv.isDarwin;
   };
