@@ -5812,6 +5812,8 @@ with pkgs;
 
   trash-cli = callPackage ../tools/misc/trash-cli { };
 
+  traverso = libsForQt5.callPackage ../applications/audio/traverso { };
+
   trickle = callPackage ../tools/networking/trickle {};
 
   inherit (nodePackages) triton;
