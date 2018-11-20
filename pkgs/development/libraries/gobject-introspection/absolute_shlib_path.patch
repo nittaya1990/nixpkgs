@@ -66,7 +66,7 @@
  # This is a what we do for non-la files. We assume that we are on an
  # ELF-like system where ldd exists and the soname extracted with ldd is
  # a filename that can be opened with dlopen().
-@@ -110,16 +116,15 @@ def _resolve_non_libtool(options, binary, libraries):
+@@ -110,17 +116,16 @@ def _resolve_non_libtool(options, binary, libraries):
          if isinstance(output, bytes):
              output = output.decode("utf-8", "replace")
  
@@ -83,11 +83,12 @@
 +def resolve_from_ldd_output(libraries, output, basename=False, fallback_libpath=""):
      patterns = {}
      for library in libraries:
--        patterns[library] = _ldd_library_pattern(library)
-+        patterns[library] = (_ldd_library_pattern(library), _ldd_library_nix_pattern(library))
+         if not os.path.isfile(library):
+-            patterns[library] = _ldd_library_pattern(library)
++            patterns[library] = (_ldd_library_pattern(library), _ldd_library_nix_pattern(library))
+     if len(patterns) == 0:
+         return []
  
-     shlibs = []
-     for line in output.splitlines():
 @@ -129,11 +134,14 @@ def resolve_from_ldd_output(libraries, output, basename=False):
          if line.endswith(':'):
              continue
