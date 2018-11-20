@@ -66,14 +66,14 @@ in rec {
 
   vala_0_40 = generic {
     major   = "0.40";
-    minor   = "6";
-    sha256  = "1qjbwhifwwqbdg5zilvnwm4n76g8p7jwqs3fa0biw3rylzqm193d";
+    minor   = "11";
+    sha256  = "0xhm61kjdws167pafcji43s7icfvpq58lkbq3irb1jv3icjr3i8z";
   };
 
   vala_0_42 = generic {
     major   = "0.42";
-    minor   = "2";
-    sha256  = "01szirhpnqf8fhacjy3x92ssk8pf5nm2gy382mayy71b2m1am2cy";
+    minor   = "3";
+    sha256  = "0zaq9009wqk5aah131m426a2ia0scwpjpl4npf8p7p43wv8kvisz";
   };
 
   vala = vala_0_42;

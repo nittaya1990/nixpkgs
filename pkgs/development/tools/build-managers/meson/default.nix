@@ -1,12 +1,12 @@
-{ lib, python3Packages, stdenv, writeTextDir, substituteAll, targetPackages, fetchpatch }:
+{ lib, python3Packages, stdenv, writeTextDir, substituteAll, targetPackages }:
 
 python3Packages.buildPythonApplication rec {
-  version = "0.48.1";
+  version = "0.48.2";
   pname = "meson";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "0ivlascy671bpincd76dhz0lpi78vcz6hpgh87z66d08chnkx2gg";
+    sha256 = "1shfbr0mf8gmwpw5ivrmwp8282qw9mfhxmccd7fsgidp4x3nslby";
   };
 
   postFixup = ''
@@ -43,12 +43,6 @@ python3Packages.buildPythonApplication rec {
     (substituteAll {
       src = ./fix-rpath.patch;
       inherit (builtins) storeDir;
-    })
-
-    # Support Python 3.7. This is part of 0.47 and 0.48.1.
-    (fetchpatch {
-      url = https://github.com/mesonbuild/meson/commit/a87496addd9160300837aa50193f4798c6f1d251.patch;
-      sha256 = "1jfn9dgib5bc8frcd65cxn3fzhp19bpbjadxjkqzbjk1v4hdbl88";
     })
   ];
 

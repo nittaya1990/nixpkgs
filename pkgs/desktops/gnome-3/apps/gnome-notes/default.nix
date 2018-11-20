@@ -5,13 +5,13 @@
 , gnome3, libxml2 }:
 
 let
-  version = "3.30.2";
+  version = "3.30.3";
 in stdenv.mkDerivation rec {
   name = "gnome-notes-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/bijiben/${stdenv.lib.versions.majorMinor version}/bijiben-${version}.tar.xz";
-    sha256 = "0ll82hndxwd12nap19wmmd7v588rw457050h5pjcwig56ycarczs";
+    sha256 = "1mkpi2i9nqpip5l15ihjcscyiri113s0705sjgh6b89164ahyn5k";
   };
 
   doCheck = true;

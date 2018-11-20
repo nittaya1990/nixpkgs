@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub, pkgconfig, go, gobjectIntrospection
-, libgudev, fetchurl, deepin }:
+{ stdenv, fetchFromGitHub, pkgconfig, go, gobjectIntrospection,
+  libgudev, deepin, fetchurl }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
