@@ -41,6 +41,10 @@ stdenv.mkDerivation rec {
 
   patches = [
     (substituteAll {
+      src = ./test_shlibs.patch;
+      inherit nixStoreDir;
+    })
+    (substituteAll {
       src = ./absolute_shlib_path.patch;
       inherit nixStoreDir;
     })
