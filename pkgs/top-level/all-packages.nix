@@ -934,8 +934,6 @@ with pkgs;
 
   bindfs = callPackage ../tools/filesystems/bindfs { };
 
-  bins = callPackage ../tools/graphics/bins { };
-
   bitbucket-cli = python2Packages.bitbucket-cli;
 
   bittornado = callPackage ../tools/networking/p2p/bittornado { };
@@ -1521,6 +1519,8 @@ with pkgs;
   meson = callPackage ../development/tools/build-managers/meson { };
 
   metabase = callPackage ../servers/metabase { };
+
+  miniserve = callPackage ../tools/misc/miniserve { };
 
   mkspiffs = callPackage ../tools/filesystems/mkspiffs { };
 
@@ -2360,6 +2360,8 @@ with pkgs;
     # and enable
     # customConfig = builtins.readFile ./dvtm.config.h;
   };
+
+  dvtm-unstable = callPackage ../tools/misc/dvtm/unstable.nix {};
 
   ecmtools = callPackage ../tools/cd-dvd/ecm-tools { };
 
@@ -4112,10 +4114,6 @@ with pkgs;
 
   mdbtools = callPackage ../tools/misc/mdbtools { };
 
-  mdbtools_git = callPackage ../tools/misc/mdbtools/git.nix {
-    inherit (gnome2) scrollkeeper;
-  };
-
   mdk = callPackage ../development/tools/mdk { };
 
   mdp = callPackage ../applications/misc/mdp { };
@@ -4757,8 +4755,6 @@ with pkgs;
   pdfread = callPackage ../tools/graphics/pdfread {
     inherit (pythonPackages) pillow;
   };
-
-  pdfshuffler = callPackage ../applications/misc/pdfshuffler { };
 
   briss = callPackage ../tools/graphics/briss { };
 
@@ -5410,10 +5406,6 @@ with pkgs;
 
   smarty3 = callPackage ../development/libraries/smarty3 { };
   smarty3-i18n = callPackage ../development/libraries/smarty3-i18n { };
-
-  smbldaptools = callPackage ../tools/networking/smbldaptools {
-    inherit (perlPackages) perlldap CryptSmbHash DigestSHA1;
-  };
 
   smbnetfs = callPackage ../tools/filesystems/smbnetfs {};
 
@@ -6338,7 +6330,9 @@ with pkgs;
 
   xsel = callPackage ../tools/misc/xsel { };
 
-  xsv = callPackage ../tools/text/xsv { };
+  xsv = callPackage ../tools/text/xsv {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   xtreemfs = callPackage ../tools/filesystems/xtreemfs {
     boost = boost165;
@@ -7391,22 +7385,8 @@ with pkgs;
 
   defaultCrateOverrides = callPackage ../build-support/rust/default-crate-overrides.nix { };
 
+  makeRustPlatform = callPackage ../build-support/rust/make-rust-platform.nix {};
   rustPlatform = recurseIntoAttrs (makeRustPlatform rust);
-
-  makeRustPlatform = rust: lib.fix (self:
-    let
-      callPackage = newScope self;
-    in {
-      inherit rust;
-
-      buildRustPackage = callPackage ../build-support/rust {
-        inherit rust;
-      };
-
-      rustcSrc = callPackage ../development/compilers/rust/rust-src.nix {
-        inherit (rust) rustc;
-      };
-    });
 
   cargo-download = callPackage ../tools/package-management/cargo-download { };
   cargo-edit = callPackage ../tools/package-management/cargo-edit { };
@@ -9139,7 +9119,6 @@ with pkgs;
   };
 
   arb = callPackage ../development/libraries/arb {};
-  arb-git = callPackage ../development/libraries/arb/git.nix {};
 
   argp-standalone = callPackage ../development/libraries/argp-standalone {};
 
@@ -9605,6 +9584,10 @@ with pkgs;
   flite = callPackage ../development/libraries/flite { };
 
   fltk13 = callPackage ../development/libraries/fltk {
+    inherit (darwin) cf-private;
+    inherit (darwin.apple_sdk.frameworks) Cocoa AGL GLUT;
+  };
+  fltk14 = callPackage ../development/libraries/fltk/1.4.nix {
     inherit (darwin) cf-private;
     inherit (darwin.apple_sdk.frameworks) Cocoa AGL GLUT;
   };
@@ -11278,7 +11261,6 @@ with pkgs;
   libviper = callPackage ../development/libraries/libviper { };
 
   libvpx = callPackage ../development/libraries/libvpx { };
-  libvpx-git = callPackage ../development/libraries/libvpx/git.nix { };
 
   libvterm = callPackage ../development/libraries/libvterm { };
   libvterm-neovim = callPackage ../development/libraries/libvterm-neovim { };
@@ -11709,20 +11691,11 @@ with pkgs;
 
   inherit (callPackages ../development/libraries/openssl {
       fetchurl = fetchurlBoot;
-      cryptodevHeaders = linuxPackages.cryptodev.override {
-        fetchurl = fetchurlBoot;
-        onlyHeaders = true;
-      };
     })
     openssl_1_0_2
     openssl_1_1;
 
-  openssl-chacha = callPackage ../development/libraries/openssl/chacha.nix {
-    cryptodevHeaders = linuxPackages.cryptodev.override {
-      fetchurl = fetchurlBoot;
-      onlyHeaders = true;
-    };
-  };
+  openssl-chacha = callPackage ../development/libraries/openssl/chacha.nix { };
 
   opensubdiv = callPackage ../development/libraries/opensubdiv {
     cudaSupport = config.cudaSupport or false;
@@ -11809,8 +11782,6 @@ with pkgs;
   poco = callPackage ../development/libraries/poco { };
 
   podofo = callPackage ../development/libraries/podofo { lua5 = lua5_1; };
-
-  poker-eval = callPackage ../development/libraries/poker-eval { };
 
   polkit = callPackage ../development/libraries/polkit { };
 
@@ -14656,6 +14627,8 @@ with pkgs;
 
   buildLinux = attrs: callPackage ../os-specific/linux/kernel/generic.nix attrs;
 
+  cryptodev = linuxPackages_4_9.cryptodev;
+
   dpdk = callPackage ../os-specific/linux/dpdk {
     kernel = null; # dpdk modules are in linuxPackages.dpdk.kmod
   };
@@ -15685,6 +15658,8 @@ with pkgs;
 
   xorg-rgb = callPackage ../data/misc/xorg-rgb {};
 
+  zafiro-icons = callPackage ../data/icons/zafiro-icons { };
+
   zeal = libsForQt5.callPackage ../data/documentation/zeal { };
 
   zilla-slab = callPackage ../data/fonts/zilla-slab { };
@@ -15775,7 +15750,7 @@ with pkgs;
 
   antiword = callPackage ../applications/office/antiword {};
 
-  ao = callPackage ../applications/graphics/ao {};
+  ao = libfive;
 
   apache-directory-studio = callPackage ../applications/networking/apache-directory-studio {};
 
@@ -16553,8 +16528,6 @@ with pkgs;
 
     rectMark = callPackage ../applications/editors/emacs-modes/rect-mark { };
 
-    remember = callPackage ../applications/editors/emacs-modes/remember { };
-
     rudel = callPackage ../applications/editors/emacs-modes/rudel { };
 
     s = callPackage ../applications/editors/emacs-modes/s { };
@@ -17110,6 +17083,8 @@ with pkgs;
   manuskript = callPackage ../applications/editors/manuskript { };
 
   manul = callPackage ../development/tools/manul { };
+
+  mindforger = libsForQt5.callPackage ../applications/editors/mindforger { };
 
   mi2ly = callPackage ../applications/audio/mi2ly {};
 
@@ -18578,6 +18553,8 @@ with pkgs;
 
   pommed_light = callPackage ../os-specific/linux/pommed-light {};
 
+  polymake = callPackage ../applications/science/math/polymake { };
+
   pond = callPackage ../applications/networking/instant-messengers/pond { };
 
   ponymix = callPackage ../applications/audio/ponymix { };
@@ -19424,6 +19401,8 @@ with pkgs;
 
   transgui = callPackage ../applications/networking/p2p/transgui { };
 
+  traverso = libsForQt5.callPackage ../applications/audio/traverso { };
+
   trayer = callPackage ../applications/window-managers/trayer { };
 
   tree = callPackage ../tools/system/tree {};
@@ -20056,6 +20035,10 @@ with pkgs;
     inherit (gnome3) gsettings-desktop-schemas vte;
   };
 
+  termonad-with-packages = callPackage ../applications/misc/termonad {
+    inherit (haskellPackages) ghcWithPackages;
+  };
+
   xtrace = callPackage ../tools/X11/xtrace { };
 
   xmacro = callPackage ../tools/X11/xmacro { };
@@ -20214,8 +20197,6 @@ with pkgs;
   };
 
   blackshades = callPackage ../games/blackshades { };
-
-  blackshadeselite = callPackage ../games/blackshadeselite { };
 
   blobby = callPackage ../games/blobby { };
 
@@ -21045,6 +21026,8 @@ with pkgs;
 
   gnome-themes-extra = gnome3.gnome-themes-extra;
 
+  nordic = callPackage ../misc/themes/nordic { };
+
   numix-gtk-theme = callPackage ../misc/themes/numix { };
 
   numix-solarized-gtk-theme = callPackage ../misc/themes/numix-solarized { };
@@ -21528,9 +21511,7 @@ with pkgs;
     java = if stdenv.isLinux then jre else jdk;
   };
 
-  iprover = callPackage ../applications/science/logic/iprover {
-    inherit (ocaml-ng.ocamlPackages_4_02) ocaml;
-  };
+  iprover = callPackage ../applications/science/logic/iprover { };
 
   jonprl = callPackage ../applications/science/logic/jonprl {
     smlnj = if stdenv.isDarwin
@@ -21776,6 +21757,8 @@ with pkgs;
 
   scotch = callPackage ../applications/science/math/scotch { };
 
+  mininet = callPackage ../tools/virtualization/mininet { };
+
   msieve = callPackage ../applications/science/math/msieve { };
 
   weka = callPackage ../applications/science/math/weka { };
@@ -21812,6 +21795,8 @@ with pkgs;
   golly-beta = callPackage ../applications/science/misc/golly/beta.nix { wxGTK = wxGTK30; };
 
   megam = callPackage ../applications/science/misc/megam { };
+
+  netlogo = callPackage ../applications/science/misc/netlogo { };
 
   ns-3 = callPackage ../development/libraries/science/networking/ns3 { };
 
@@ -22897,6 +22882,8 @@ with pkgs;
   maphosts = callPackage ../tools/networking/maphosts {};
 
   zimg = callPackage ../development/libraries/zimg { };
+
+  wtf = callPackage ../applications/misc/wtf { };
 
   zk-shell = callPackage ../applications/misc/zk-shell { };
 

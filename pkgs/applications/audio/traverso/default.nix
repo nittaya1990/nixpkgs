@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, cmake
+{ stdenv, fetchurl, cmake, pkgconfig
 , alsaLib, fftw, flac, lame, libjack2, libmad, libpulseaudio
 , libsamplerate, libsndfile, libvorbis, portaudio, qtbase, wavpack
 }:
@@ -6,18 +6,20 @@ stdenv.mkDerivation rec {
   name = "traverso-${version}";
   version = "0.49.5";
 
-  src = fetchgit {
-    url = "https://git.savannah.gnu.org/git/traverso.git";
-    rev = "2e215feaa9aebe104658c14d1820abdece7fb287";
-    sha256 = "1bmfaxi3f4ppk9dp8zj5lllrkmzq3s04h066j9cqsm4v27vra6bg";
+  src = fetchurl {
+    url = "http://traverso-daw.org/traverso-0.49.5.tar.gz";
+    sha256 = "169dsqrf807ciavrd82d3iil0xy0r3i1js08xshcrn80ws9hv63m";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake pkgconfig ];
   buildInputs = [ alsaLib fftw flac.dev libjack2 lame
                   libmad libpulseaudio libsamplerate.dev libsndfile.dev libvorbis
                   portaudio qtbase wavpack ];
 
-  cmakeFlags = [ "-DWANT_PORTAUDIO=1" "-DWANT_PULSEAUDIO=0" "-DWANT_MP3_ENCODE=1" ];
+  cmakeFlags = [ "-DWANT_PORTAUDIO=1" "-DWANT_PULSEAUDIO=1" "-DWANT_MP3_ENCODE=1" "-DWANT_LV2=0" ];
+
+  enableParallelBuilding = true;
+  hardeningDisable = [ "format" ];
 
   meta = with stdenv.lib; {
     description = "Cross-platform multitrack audio recording and audio editing suite";

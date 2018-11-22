@@ -422,6 +422,8 @@ in {
 
   monty = callPackage ../development/python-modules/monty { };
 
+  mininet-python = (toPythonModule (pkgs.mininet.override{ inherit python; })).py;
+
   mpi4py = callPackage ../development/python-modules/mpi4py {
     mpi = pkgs.openmpi;
   };
@@ -609,6 +611,8 @@ in {
 
   pystache = callPackage ../development/python-modules/pystache { };
 
+  pytesseract = callPackage ../development/python-modules/pytesseract { };
+
   pytest-tornado = callPackage ../development/python-modules/pytest-tornado { };
 
   python-binance = callPackage ../development/python-modules/python-binance { };
@@ -717,6 +721,8 @@ in {
   unifi = callPackage ../development/python-modules/unifi { };
 
   vidstab = callPackage ../development/python-modules/vidstab { };
+
+  webapp2 = callPackage ../development/python-modules/webapp2 { };
 
   pyunbound = callPackage ../tools/networking/unbound/python.nix { };
 
@@ -1798,9 +1804,14 @@ in {
 
   jupyter = callPackage ../development/python-modules/jupyter { };
 
-  jupyter_console = callPackage ../development/python-modules/jupyter_console { };
+  jupyter_console = if pythonOlder "3.5" then
+       callPackage ../development/python-modules/jupyter_console/5.nix { }
+     else
+       callPackage ../development/python-modules/jupyter_console { };
 
   jupyterlab_launcher = callPackage ../development/python-modules/jupyterlab_launcher { };
+
+  jupyterlab_server = callPackage ../development/python-modules/jupyterlab_server { };
 
   jupyterlab = callPackage ../development/python-modules/jupyterlab {};
 
@@ -2442,14 +2453,77 @@ in {
 
   google_auth = callPackage ../development/python-modules/google_auth { };
 
+  google_cloud_asset = callPackage ../development/python-modules/google_cloud_asset { };
+
+  google_cloud_automl = callPackage ../development/python-modules/google_cloud_automl { };
+
   google_cloud_core = callPackage ../development/python-modules/google_cloud_core { };
+
+  google_cloud_bigquery = callPackage ../development/python-modules/google_cloud_bigquery { };
+
+  google_cloud_bigquery_datatransfer = callPackage ../development/python-modules/google_cloud_bigquery_datatransfer { };
+
+  google_cloud_bigtable = callPackage ../development/python-modules/google_cloud_bigtable { };
+
+  google_cloud_container = callPackage ../development/python-modules/google_cloud_container { };
+
+  google_cloud_dataproc = callPackage ../development/python-modules/google_cloud_dataproc { };
+
+  google_cloud_datastore = callPackage ../development/python-modules/google_cloud_datastore { };
+
+  google_cloud_dlp = callPackage ../development/python-modules/google_cloud_dlp { };
+
+  google_cloud_dns = callPackage ../development/python-modules/google_cloud_dns { };
+
+  google_cloud_error_reporting = callPackage ../development/python-modules/google_cloud_error_reporting { };
+
+  google_cloud_firestore = callPackage ../development/python-modules/google_cloud_firestore { };
+
+  google_cloud_iot = callPackage ../development/python-modules/google_cloud_iot { };
+
+  google_cloud_kms = callPackage ../development/python-modules/google_cloud_kms { };
+
+  google_cloud_language = callPackage ../development/python-modules/google_cloud_language { };
+
+  google_cloud_logging = callPackage ../development/python-modules/google_cloud_logging { };
+
+  google_cloud_monitoring = callPackage ../development/python-modules/google_cloud_monitoring { };
+
+  google_cloud_pubsub = callPackage ../development/python-modules/google_cloud_pubsub { };
+
+  google_cloud_redis = callPackage ../development/python-modules/google_cloud_redis { };
+
+  google_cloud_resource_manager = callPackage ../development/python-modules/google_cloud_resource_manager { };
+
+  google_cloud_runtimeconfig = callPackage ../development/python-modules/google_cloud_runtimeconfig { };
+
+  google_cloud_securitycenter = callPackage ../development/python-modules/google_cloud_securitycenter { };
+
+  google_cloud_spanner = callPackage ../development/python-modules/google_cloud_spanner { };
+
+  google_cloud_storage = callPackage ../development/python-modules/google_cloud_storage { };
 
   google_cloud_speech = callPackage ../development/python-modules/google_cloud_speech { };
 
-  gpgme = toPythonModule (pkgs.gpgme.override {
-    pythonSupport = true;
-    inherit (self) python;
-  });
+  google_cloud_tasks = callPackage ../development/python-modules/google_cloud_tasks { };
+
+  google_cloud_testutils = callPackage ../development/python-modules/google_cloud_testutils { };
+
+  google_cloud_texttospeech = callPackage ../development/python-modules/google_cloud_texttospeech { };
+
+  google_cloud_trace = callPackage ../development/python-modules/google_cloud_trace { };
+
+  google_cloud_translate = callPackage ../development/python-modules/google_cloud_translate { };
+
+  google_cloud_videointelligence = callPackage ../development/python-modules/google_cloud_videointelligence { };
+
+  google_cloud_vision = callPackage ../development/python-modules/google_cloud_vision { };
+
+  google_cloud_websecurityscanner = callPackage ../development/python-modules/google_cloud_websecurityscanner { };
+
+  google_resumable_media = callPackage ../development/python-modules/google_resumable_media { };
+
+  gpgme = toPythonModule (pkgs.gpgme.override { pythonSupport=true; });
 
   gphoto2 = callPackage ../development/python-modules/gphoto2 {
     inherit (pkgs) pkgconfig;
@@ -2468,6 +2542,10 @@ in {
   grpcio = callPackage ../development/python-modules/grpcio { };
 
   grpcio-tools = callPackage ../development/python-modules/grpcio-tools { };
+
+  grpcio-gcp = callPackage ../development/python-modules/grpcio-gcp { };
+
+  grpc_google_iam_v1 = callPackage ../development/python-modules/grpc_google_iam_v1 { };
 
   gspread = callPackage ../development/python-modules/gspread { };
 
@@ -2541,16 +2619,17 @@ in {
 
   ipy = callPackage ../development/python-modules/IPy { };
 
-  ipykernel = callPackage ../development/python-modules/ipykernel { };
+  ipykernel = if pythonOlder "3.4" then
+      callPackage ../development/python-modules/ipykernel/4.nix { }
+    else
+      callPackage ../development/python-modules/ipykernel { };
 
   ipyparallel = callPackage ../development/python-modules/ipyparallel { };
 
-  # Newer versions of IPython no longer support Python 2.7.
-  ipython = if isPy27 then self.ipython_5 else self.ipython_6;
-
-  ipython_5 = callPackage ../development/python-modules/ipython/5.nix { };
-
-  ipython_6 = callPackage ../development/python-modules/ipython { };
+  ipython = if pythonOlder "3.5" then
+      callPackage ../development/python-modules/ipython/5.nix { }
+    else
+      callPackage ../development/python-modules/ipython { };
 
   ipython_genutils = callPackage ../development/python-modules/ipython_genutils { };
 
@@ -3264,11 +3343,9 @@ in {
 
   prettytable = callPackage ../development/python-modules/prettytable { };
 
-  prompt_toolkit = self.prompt_toolkit_1;
-
-  prompt_toolkit_1 = callPackage ../development/python-modules/prompt_toolkit/1.nix { };
-
-  prompt_toolkit_2 = callPackage ../development/python-modules/prompt_toolkit { };
+  prompt_toolkit = let
+    filename = if isPy3k then ../development/python-modules/prompt_toolkit else ../development/python-modules/prompt_toolkit/1.nix;
+  in callPackage filename { };
 
   protobuf = callPackage ../development/python-modules/protobuf {
     disabled = isPyPy;
@@ -3283,7 +3360,7 @@ in {
   psycopg2 = callPackage ../development/python-modules/psycopg2 {};
 
   ptpython = callPackage ../development/python-modules/ptpython {
-    prompt_toolkit = self.prompt_toolkit_2;
+    prompt_toolkit = self.prompt_toolkit;
   };
 
   publicsuffix = callPackage ../development/python-modules/publicsuffix {};
@@ -3918,6 +3995,8 @@ in {
   wordfreq = callPackage ../development/python-modules/wordfreq { };
 
   magic-wormhole = callPackage ../development/python-modules/magic-wormhole { };
+
+  magic-wormhole-mailbox-server = callPackage ../development/python-modules/magic-wormhole-mailbox-server { };
 
   magic-wormhole-transit-relay = callPackage ../development/python-modules/magic-wormhole-transit-relay { };
 
