@@ -772,7 +772,6 @@
   ./services/x11/xbanish.nix
   ./services/x11/xfs.nix
   ./services/x11/xserver.nix
-  ./services/x11/xspice.nix
   ./system/activation/activation-script.nix
   ./system/activation/top-level.nix
   ./system/boot/binfmt.nix
