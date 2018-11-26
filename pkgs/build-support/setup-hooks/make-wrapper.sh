@@ -40,7 +40,7 @@ makeWrapper() {
 
     mkdir -p "$(dirname "$wrapper")"
 
-    echo "#! @shell@ -e" > "$wrapper"
+    echo "#! $SHELL -e" > "$wrapper"
 
     params=("$@")
     for ((n = 2; n < ${#params[*]}; n += 1)); do
