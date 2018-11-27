@@ -8567,6 +8567,7 @@ with pkgs;
   gradle_2_14 = self.gradleGen.gradle_2_14;
   gradle_2_5 = self.gradleGen.gradle_2_5;
   gradle_3_5 = self.gradleGen.gradle_3_5;
+  gradle_4_10 = self.gradleGen.gradle_4_10;
 
   gperf = callPackage ../development/tools/misc/gperf { };
   # 3.1 changed some parameters from int to size_t, leading to mismatches.
@@ -8920,6 +8921,8 @@ with pkgs;
 
   sbt-extras = callPackage ../development/tools/build-managers/sbt-extras { };
 
+  scss-lint = callPackage ../development/tools/scss-lint { };
+
   shallot = callPackage ../tools/misc/shallot { };
 
   shards = callPackage ../development/tools/build-managers/shards { };
@@ -9146,6 +9149,10 @@ with pkgs;
     db = if stdenv.isFreeBSD then db4 else db;
     # XXX: only the db_185 interface was available through
     #      apr with db58 on freebsd (nov 2015), for unknown reasons
+  };
+
+  aravis = callPackage ../development/libraries/aravis {
+    inherit (gst_all_1) gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad;
   };
 
   arb = callPackage ../development/libraries/arb {};
@@ -16370,6 +16377,8 @@ with pkgs;
   dzen2 = callPackage ../applications/window-managers/dzen2 { };
 
   eaglemode = callPackage ../applications/misc/eaglemode { };
+
+  echoip = callPackage ../servers/echoip { };
 
   eclipses = recurseIntoAttrs (callPackage ../applications/editors/eclipse {
     jdk = jdk11;
