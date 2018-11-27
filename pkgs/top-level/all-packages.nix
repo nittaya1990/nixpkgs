@@ -420,6 +420,8 @@ with pkgs;
 
   iconConvTools = callPackage ../build-support/icon-conv-tools {};
 
+  #package writers
+  writers = callPackage ../build-support/writers {};
 
   ### TOOLS
 
@@ -3776,6 +3778,8 @@ with pkgs;
     pythonPackages = python3Packages;
   };
 
+  nbench = callPackage ../tools/misc/nbench { };
+
   netdata = callPackage ../tools/system/netdata {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation IOKit;
   };
@@ -5629,6 +5633,8 @@ with pkgs;
   talkfilters = callPackage ../misc/talkfilters {};
 
   znapzend = callPackage ../tools/backup/znapzend { };
+
+  targetcli = callPackage ../os-specific/linux/targetcli { };
 
   tarsnap = callPackage ../tools/backup/tarsnap { };
 
@@ -18720,6 +18726,8 @@ with pkgs;
   qtractor = callPackage ../applications/audio/qtractor { };
 
   qtscrobbler = callPackage ../applications/audio/qtscrobbler { };
+
+  quantomatic = callPackage ../applications/science/physics/quantomatic { };
 
   quassel = libsForQt5.callPackage ../applications/networking/irc/quassel {
     monolithic = true;
