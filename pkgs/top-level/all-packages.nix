@@ -4717,6 +4717,8 @@ with pkgs;
 
   pitivi = callPackage ../applications/video/pitivi { };
 
+  pulumi-bin = callPackage ../tools/admin/pulumi { };
+
   p0f = callPackage ../tools/security/p0f { };
 
   pngout = callPackage ../tools/graphics/pngout { };
