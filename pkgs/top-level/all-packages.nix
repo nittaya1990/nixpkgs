@@ -8976,6 +8976,8 @@ with pkgs;
 
   spoofer-gui = callPackage ../tools/networking/spoofer { withGUI = true; };
 
+  sqlcheck = callPackage ../development/tools/database/sqlcheck { };
+
   sqlitebrowser = libsForQt5.callPackage ../development/tools/database/sqlitebrowser { };
 
   sqlite-web = callPackage ../development/tools/database/sqlite-web { };
