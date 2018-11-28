@@ -102,10 +102,6 @@ stdenv.mkDerivation rec {
       --replace run_keybase $out/bin/keybase-gui
   '';
 
-  postFixup = ''
-    patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) --set-rpath "${libPath}:\$ORIGIN" "$out/share/keybase/Keybase"
-  '';
-
   meta = with stdenv.lib; {
     homepage = https://www.keybase.io/;
     description = "The Keybase official GUI";
