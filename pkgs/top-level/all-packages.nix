@@ -183,7 +183,7 @@ with pkgs;
   fetchfossil = callPackage ../build-support/fetchfossil { };
 
   fetchgit = callPackage ../build-support/fetchgit {
-    git = gitMinimal;
+    git = buildPackages.gitMinimal;
   };
 
   fetchgitPrivate = callPackage ../build-support/fetchgit/private.nix { };
@@ -594,6 +594,8 @@ with pkgs;
   };
 
   autoflake = callPackage ../development/tools/analysis/autoflake { };
+
+  autospotting = callPackage ../applications/misc/autospotting { };
 
   avfs = callPackage ../tools/filesystems/avfs { };
 
@@ -19338,6 +19340,11 @@ with pkgs;
 
   lxterminal = callPackage ../applications/misc/lxterminal {
     vte = gnome3.vte;
+  };
+
+  aminal = callPackage ../applications/misc/aminal {
+    inherit (darwin.apple_sdk.frameworks) Carbon Cocoa Kernel;
+    inherit (darwin) cf-private;
   };
 
   termite-unwrapped = callPackage ../applications/misc/termite {
