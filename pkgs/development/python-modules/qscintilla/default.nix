@@ -1,72 +1,35 @@
-<<<<<<< HEAD
 { lib
 , buildPythonPackage
 , fetchPypi
 , python
 , qscintillaCpp
 , lndir
-, pyqt4
+, pyqt5
+, qt5
 }:
 
-let base = import ./base.nix { inherit lib qscintillaCpp; };
-in buildPythonPackage (base // rec {
-  buildInputs = [ lndir pyqt4.qt qscintillaCpp ];
-  propagatedBuildInputs = [ pyqt4 ];
+let
+  base = import ./base.nix { inherit lib qscintillaCpp; };
+in buildPythonPackage (base // {
+  buildInputs = [ lndir qt5.qtbase qscintillaCpp ];
+  propagatedBuildInputs = [ pyqt5 ];
 
-  # TODO: with qscintilla 2.10 this will have to use configure.py
+  # a dependency on QT's widget module is missing.
+  patches = [ ./qscintilla-pyqt5-widgets.patch ];
+
   preConfigure = ''
     mkdir -p $out
-    lndir ${pyqt4} $out
+    lndir ${pyqt5} $out
     rm -rf "$out/nix-support"
     cd Python
-    ${python.executable} ./configure-old.py \
-        --destdir $out/lib/${python.libPrefix}/site-packages/PyQt4 \
-        --apidir $out/api/${python.libPrefix} \
-        -n ${qscintillaCpp}/include \
-        -o ${qscintillaCpp}/lib \
-        --sipdir $out/share/sip
+    ${python.executable} ./configure.py \
+        --pyqt=PyQt5 \
+        --destdir=$out/lib/${python.libPrefix}/site-packages/PyQt5 \
+        --stubsdir=$out/lib/${python.libPrefix}/site-packages/PyQt5 \
+        --apidir=$out/api/${python.libPrefix} \
+        --qsci-incdir=${qscintillaCpp}/include \
+        --qsci-libdir=${qscintillaCpp}/lib \
+        --pyqt-sipdir=${pyqt5}/share/sip/PyQt5 \
+        --qsci-sipdir=$out/share/sip/PyQt5
   '';
 })
-=======
-{ stdenv
-, buildPythonPackage
-, disabledIf
-, isPy3k
-, isPyPy
-, pkgs
-, python
-, pyqt4
-}:
-
-disabledIf (isPy3k || isPyPy)
-  (buildPythonPackage rec {
-    # TODO: Qt5 support
-    name = "qscintilla-${version}";
-    version = pkgs.qscintilla.version;
-    format = "other";
-
-    src = pkgs.qscintilla.src;
-
-    buildInputs = [ pkgs.xorg.lndir pyqt4.qt pyqt4 ];
-
-    preConfigure = ''
-      mkdir -p $out
-      lndir ${pyqt4} $out
-      rm -rf "$out/nix-support"
-      cd Python
-      ${python.executable} ./configure-old.py \
-          --destdir $out/lib/${python.libPrefix}/site-packages/PyQt4 \
-          --apidir $out/api/${python.libPrefix} \
-          -n ${pkgs.qscintilla}/include \
-          -o ${pkgs.qscintilla}/lib \
-          --sipdir $out/share/sip
-    '';
-
-    meta = with stdenv.lib; {
-      description = "A Python binding to QScintilla, Qt based text editing control";
-      license = licenses.lgpl21Plus;
-      maintainers = with maintainers; [ danbst ];
-      platforms = platforms.unix;
-    };
-  })
->>>>>>> add-traverso
