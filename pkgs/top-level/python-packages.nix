@@ -641,6 +641,8 @@ in {
 
   python-ldap-test = callPackage ../development/python-modules/python-ldap-test { };
 
+  python-mnist = callPackage ../development/python-modules/python-mnist { };
+
   python-igraph = callPackage ../development/python-modules/python-igraph {
     pkgconfig = pkgs.pkgconfig;
     igraph = pkgs.igraph;
