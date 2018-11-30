@@ -4715,6 +4715,8 @@ with pkgs;
 
   pepper = callPackage ../tools/admin/salt/pepper { };
 
+  perceptualdiff = callPackage ../tools/graphics/perceptualdiff { };
+
   percona-xtrabackup = callPackage ../tools/backup/percona-xtrabackup {
     boost = boost159;
   };
