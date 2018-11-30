@@ -12530,7 +12530,7 @@ with pkgs;
   taglib-sharp = callPackage ../development/libraries/taglib-sharp { };
 
   talloc = callPackage ../development/libraries/talloc {
-    python = python2;
+    python = buildPackages.python2;
   };
 
   tclap = callPackage ../development/libraries/tclap {};
@@ -20103,8 +20103,6 @@ with pkgs;
   xmacro = callPackage ../tools/X11/xmacro { };
 
   xmlcopyeditor = callPackage ../applications/editors/xmlcopyeditor { };
-
-  xmove = callPackage ../applications/misc/xmove { };
 
   xmp = callPackage ../applications/audio/xmp { };
 
