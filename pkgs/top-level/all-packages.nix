@@ -294,8 +294,8 @@ with pkgs;
     ... # For hash agility
   }@args: fetchzip ({
     inherit name;
-    url = "http://git.savannah.gnu.org/cgit/${repo}.git/snapshot/${repo}-${rev}.tar.gz";
-    meta.homepage = "http://git.savannah.gnu.org/cgit/${repo}.git/";
+    url = "https://git.savannah.gnu.org/cgit/${repo}.git/snapshot/${repo}-${rev}.tar.gz";
+    meta.homepage = "https://git.savannah.gnu.org/cgit/${repo}.git/";
   } // removeAttrs args [ "repo" "rev" ]) // { inherit rev; };
 
   # gitlab example
@@ -611,6 +611,8 @@ with pkgs;
 
   aws-env = callPackage ../tools/admin/aws-env { };
 
+  aws-google-auth = pythonPackages.callPackage ../tools/admin/aws-google-auth { };
+
   aws-okta = callPackage ../tools/security/aws-okta { };
 
   aws-rotate-key = callPackage ../tools/admin/aws-rotate-key { };
@@ -919,7 +921,8 @@ with pkgs;
     filebeat6
     heartbeat6
     metricbeat6
-    packetbeat6;
+    packetbeat6
+    journalbeat6;
 
   filebeat = filebeat6;
   heartbeat = heartbeat6;
@@ -2453,7 +2456,7 @@ with pkgs;
 
   # The latest version used by elasticsearch, logstash, kibana and the the beats from elastic.
   elk5Version = "5.6.9";
-  elk6Version = "6.3.2";
+  elk6Version = "6.5.1";
 
   elasticsearch5 = callPackage ../servers/search/elasticsearch/5.x.nix { };
   elasticsearch6 = callPackage ../servers/search/elasticsearch { };
@@ -11690,11 +11693,18 @@ with pkgs;
 
   opencv3 = callPackage ../development/libraries/opencv/3.x.nix {
     enableCuda = config.cudaSupport or false;
+    inherit (darwin) cf-private;
     inherit (darwin.apple_sdk.frameworks) AVFoundation Cocoa QTKit VideoDecodeAcceleration;
   };
 
   opencv3WithoutCuda = opencv3.override {
     enableCuda = false;
+  };
+
+  opencv4 = callPackage ../development/libraries/opencv/4.x.nix {
+    enableCuda = config.cudaSupport or false;
+    inherit (darwin) cf-private;
+    inherit (darwin.apple_sdk.frameworks) AVFoundation Cocoa QTKit VideoDecodeAcceleration;
   };
 
   openexr = callPackage ../development/libraries/openexr { };
@@ -14392,16 +14402,6 @@ with pkgs;
       ];
   };
 
-  linux_4_18 = callPackage ../os-specific/linux/kernel/linux-4.18.nix {
-    kernelPatches =
-      [ kernelPatches.bridge_stp_helper
-        # See pkgs/os-specific/linux/kernel/cpu-cgroup-v2-patches/README.md
-        # when adding a new linux version
-        # kernelPatches.cpu-cgroup-v2."4.11"
-        kernelPatches.modinst_arg_list_too_long
-      ];
-  };
-
   linux_4_19 = callPackage ../os-specific/linux/kernel/linux-4.19.nix {
     kernelPatches =
       [ kernelPatches.bridge_stp_helper
@@ -14597,7 +14597,6 @@ with pkgs;
   linuxPackages_4_4 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_4);
   linuxPackages_4_9 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_9);
   linuxPackages_4_14 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_14);
-  linuxPackages_4_18 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_18);
   linuxPackages_4_19 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_19);
   # Don't forget to update linuxPackages_latest!
 
@@ -19522,7 +19521,9 @@ with pkgs;
 
   vcv-rack = callPackage ../applications/audio/vcv-rack { };
 
-  vdirsyncer = callPackage ../tools/misc/vdirsyncer { };
+  vdirsyncer = callPackage ../tools/misc/vdirsyncer {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   vdpauinfo = callPackage ../tools/X11/vdpauinfo { };
 
@@ -21954,6 +21955,8 @@ with pkgs;
   attract-mode = callPackage ../misc/emulators/attract-mode { };
 
   beep = callPackage ../misc/beep { };
+
+  bees = callPackage ../tools/filesystems/bees { };
 
   biscuit = callPackage ../tools/security/biscuit { };
 

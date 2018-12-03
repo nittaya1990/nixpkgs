@@ -79,6 +79,11 @@ rec {
     , ... } @ attrs:
 
     let
+<<<<<<< HEAD
+=======
+      computedName = if name != "" then name else "${attrs.pname}-${attrs.version}";
+
+>>>>>>> upstream/master
       # TODO(@oxij, @Ericson2314): This is here to keep the old semantics, remove when
       # no package has `doCheck = true`.
       doCheck' = doCheck && stdenv.hostPlatform == stdenv.buildPlatform;
@@ -177,7 +182,11 @@ rec {
         // {
           # A hack to make `nix-env -qa` and `nix search` ignore broken packages.
           # TODO(@oxij): remove this assert when something like NixOS/nix#1771 gets merged into nix.
+<<<<<<< HEAD
           name = assert validity.handled && (separateDebugInfo -> stdenv.hostPlatform.isLinux); name + lib.optionalString
+=======
+          name = assert validity.handled && (separateDebugInfo -> stdenv.hostPlatform.isLinux); computedName + lib.optionalString
+>>>>>>> upstream/master
             # Fixed-output derivations like source tarballs shouldn't get a host
             # suffix. But we have some weird ones with run-time deps that are
             # just used for their side-affects. Those might as well since the
