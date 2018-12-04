@@ -3125,8 +3125,6 @@ in {
 
   emoji = callPackage ../development/python-modules/emoji { };
 
-  ntfy = callPackage ../development/python-modules/ntfy { };
-
   ntplib = callPackage ../development/python-modules/ntplib { };
 
   numba = callPackage ../development/python-modules/numba { };
