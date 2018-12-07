@@ -11125,6 +11125,8 @@ in
 
   libopus = callPackage ../development/libraries/libopus { };
 
+  libopusenc = callPackage ../development/libraries/libopusenc { };
+
   libosinfo = callPackage ../development/libraries/libosinfo {
     inherit (gnome3) libsoup;
   };
