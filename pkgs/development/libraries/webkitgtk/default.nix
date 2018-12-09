@@ -1,5 +1,5 @@
 { stdenv, fetchurl, perl, python2, ruby, bison, gperf, cmake, ninja
-, pkgconfig, gettext, gobjectIntrospection, libnotify, gnutls, libgcrypt
+, pkgconfig, gettext, gobject-introspection, libnotify, gnutls, libgcrypt
 , gtk3, wayland, libwebp, enchant2, xorg, libxkbcommon, epoxy, at-spi2-core
 , libxml2, libsoup, libsecret, libxslt, harfbuzz, libpthreadstubs, pcre, nettle, libtasn1, p11-kit
 , libidn, libedit, readline, libGLU_combined, libintl
@@ -15,7 +15,7 @@ assert stdenv.isDarwin -> !enableGtk2Plugins;
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "webkitgtk-${version}";
-  version = "2.22.2";
+  version = "2.22.4";
 
   meta = {
     description = "Web content rendering engine, GTK+ port";
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://webkitgtk.org/releases/${name}.tar.xz";
-    sha256 = "1flrbr8pzbrlwv09b4pmgh6vklw7jghd2lgrhcb72vl9s7a8fm1l";
+    sha256 = "1f2335hjzsvjxjf6hy5cyypsn65wykpx2pbk1sp548w0hclbxdgs";
   };
 
   patches = optionals stdenv.isDarwin [
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake ninja perl python2 ruby bison gperf
-    pkgconfig gettext gobjectIntrospection
+    pkgconfig gettext gobject-introspection
   ];
 
   buildInputs = [

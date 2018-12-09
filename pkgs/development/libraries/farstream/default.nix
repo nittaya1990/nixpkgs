@@ -1,5 +1,5 @@
 { stdenv, fetchurl, libnice, pkgconfig, pythonPackages, gstreamer, gst-plugins-base
-, gupnp-igd, gobjectIntrospection
+, gst-python, gupnp-igd, gobject-introspection
 , gst-plugins-good, gst-plugins-bad, gst-libav
 }:
 
@@ -17,10 +17,10 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [ libnice python pygobject2 gupnp-igd libnice ];
 
-  nativeBuildInputs = [ pkgconfig gobjectIntrospection ];
+  nativeBuildInputs = [ pkgconfig gobject-introspection ];
 
   propagatedBuildInputs = [
-    gstreamer gst-plugins-base
+    gstreamer gst-plugins-base gst-python
     gst-plugins-good gst-plugins-bad gst-libav
   ];
 

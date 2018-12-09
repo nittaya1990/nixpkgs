@@ -6,7 +6,7 @@
 , pycairo
 , at-spi2-core
 , glibcLocales
-, gobjectIntrospection
+, gobject-introspection
 , gtk3
 , gsettings-desktop-schemas
 , fetchurl
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     ./nix-support.patch
   ];
 
-  nativeBuildInputs = [ glibcLocales gobjectIntrospection dbus xvfb_run ]; # for setup hooks
+  nativeBuildInputs = [ glibcLocales gobject-introspection dbus xvfb_run ]; # for setup hooks
   propagatedBuildInputs = [ at-spi2-core gtk3 pygobject3 pyatspi pycairo ];
 
   # UnicodeDecodeError: 'ascii' codec can't decode byte 0xe2 in position 3506

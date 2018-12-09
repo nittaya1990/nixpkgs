@@ -23,6 +23,7 @@ my %pkgURLs;
 my %pkgHashes;
 my %pkgNames;
 my %pkgRequires;
+my %pkgNativeRequires;
 
 my %pcMap;
 
@@ -107,6 +108,7 @@ while (<>) {
     my $provides = `find $pkgDir -name "*.pc.in"`;
     my @provides2 = split '\n', $provides;
     my @requires = ();
+    my @nativeRequires = ();
 
     foreach my $pcFile (@provides2) {
         my $pc = $pcFile;
@@ -164,7 +166,7 @@ while (<>) {
     }
 
     if ($file =~ /AM_PATH_PYTHON/) {
-        push @requires, "python";
+        push @nativeRequires, "python";
     }
 
     if ($file =~ /AC_PATH_PROG\(FCCACHE/) {
@@ -231,7 +233,9 @@ while (<>) {
     push @requires, "gperf", "m4", "xproto" if $pkg =~ /xcbutil/;
 
     print "REQUIRES $pkg => @requires\n";
+    print "NATIVE_REQUIRES $pkg => @nativeRequires\n";
     $pkgRequires{$pkg} = \@requires;
+    $pkgNativeRequires{$pkg} = \@nativeRequires;
 
     print "done\n";
 }
@@ -256,6 +260,20 @@ EOF
 foreach my $pkg (sort (keys %pkgURLs)) {
     print "$pkg\n";
 
+    my %nativeRequires = ();
+    my @nativeBuildInputs;
+    foreach my $req (sort @{$pkgNativeRequires{$pkg}}) {
+        if (defined $pcMap{$req}) {
+            # Some packages have .pc that depends on itself.
+            next if $pcMap{$req} eq $pkg;
+            if (!defined $nativeRequires{$pcMap{$req}}) {
+                push @nativeBuildInputs, $pcMap{$req};
+                $nativeRequires{$pcMap{$req}} = 1;
+            }
+        } else {
+            print "  NOT FOUND: $req\n";
+        }
+    }
     my %requires = ();
     my @buildInputs;
     foreach my $req (sort @{$pkgRequires{$pkg}}) {
@@ -271,9 +289,11 @@ foreach my $pkg (sort (keys %pkgURLs)) {
         }
     }
 
+    my $nativeBuildInputsStr = join "", map { $_ . " " } @nativeBuildInputs;
     my $buildInputsStr = join "", map { $_ . " " } @buildInputs;
 
     my @arguments = @buildInputs;
+    push @arguments, @nativeBuildInputs;
     unshift @arguments, "stdenv", "pkgconfig", "fetchurl";
     my $argumentsStr = join ", ", @arguments;
 
@@ -291,7 +311,7 @@ foreach my $pkg (sort (keys %pkgURLs)) {
       sha256 = "$pkgHashes{$pkg}";
     };
     hardeningDisable = [ "bindnow" "relro" ];
-    nativeBuildInputs = [ pkgconfig ];
+    nativeBuildInputs = [ pkgconfig $nativeBuildInputsStr];
     buildInputs = [ $buildInputsStr];$extraAttrsStr
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};

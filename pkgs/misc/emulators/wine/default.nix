@@ -43,6 +43,7 @@
   xineramaSupport ? false,
   xmlSupport ? false,
   vulkanSupport ? false,
+  sdlSupport ? false,
 }:
 
 assert gstreamerUnsafeSupport -> gstreamerSupport;
@@ -56,7 +57,7 @@ let wine-build = build: release:
                   netapiSupport cursesSupport vaSupport pcapSupport v4lSupport saneSupport
                   gsmSupport gphoto2Support ldapSupport fontconfigSupport alsaSupport
                   pulseaudioSupport xineramaSupport gtkSupport openclSupport xmlSupport tlsSupport
-                  openglSupport gstreamerSupport gstreamerUnsafeSupport udevSupport vulkanSupport;
+                  openglSupport gstreamerSupport gstreamerUnsafeSupport udevSupport vulkanSupport sdlSupport;
         };
       });
 
