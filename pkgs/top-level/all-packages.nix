@@ -710,6 +710,8 @@ in
 
   dkimpy = with pythonPackages; toPythonApplication dkimpy;
 
+  dpt-rp1-py = callPackage ../tools/misc/dpt-rp1-py { };
+
   ecdsautils = callPackage ../tools/security/ecdsautils { };
 
   sedutil = callPackage ../tools/security/sedutil { };
@@ -15948,6 +15950,8 @@ in
   parity = res.altcoins.parity;
   parity-beta = res.altcoins.parity-beta;
   parity-ui = res.altcoins.parity-ui;
+
+  polkadot = res.altcoins.polkadot;
 
   stellar-core = res.altcoins.stellar-core;
 
