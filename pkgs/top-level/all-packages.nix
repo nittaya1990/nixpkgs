@@ -18897,6 +18897,8 @@ in
     wxGTK = wxGTK30;
   };
 
+  railcar = callPackage ../applications/virtualization/railcar {};
+
   rapcad = libsForQt5.callPackage ../applications/graphics/rapcad { boost = boost159; };
 
   rapid-photo-downloader = libsForQt5.callPackage ../applications/graphics/rapid-photo-downloader { };
