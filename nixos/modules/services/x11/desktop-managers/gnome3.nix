@@ -146,7 +146,7 @@ in {
           export GI_TYPELIB_PATH=$GI_TYPELIB_PATH''${GI_TYPELIB_PATH:+:}${p}/lib/girepository-1.0
           export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}${p}/lib
         fi
-      '') (cfg.sessionPath ++ pkgs.gnime3.corePackages) }
+      '') (cfg.sessionPath ++ pkgs.gnome3.corePackages) }
     '';
 
     environment.variables.GNOME_SESSION_DEBUG = optionalString cfg.debug "1";
