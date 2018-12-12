@@ -450,8 +450,6 @@ in
 
   abduco = callPackage ../tools/misc/abduco { };
 
-  acbuild = callPackage ../applications/misc/acbuild { };
-
   acct = callPackage ../tools/system/acct { };
 
   accuraterip-checksum = callPackage ../tools/audio/accuraterip-checksum { };
@@ -3737,8 +3735,6 @@ in
   logstash = logstash6;
 
   logstash-contrib = callPackage ../tools/misc/logstash/contrib.nix { };
-
-  logstash-forwarder = callPackage ../tools/misc/logstash-forwarder { };
 
   lolcat = callPackage ../tools/misc/lolcat { };
 
@@ -8716,6 +8712,10 @@ in
 
   iconnamingutils = callPackage ../development/tools/misc/icon-naming-utils {
     inherit (perlPackages) XMLSimple;
+  };
+
+  ikos = callPackage ../development/tools/analysis/ikos {
+    inherit (llvmPackages_7) stdenv clang llvm;
   };
 
   include-what-you-use = callPackage ../development/tools/analysis/include-what-you-use {
