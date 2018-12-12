@@ -13401,7 +13401,9 @@ in
 
   dex-oidc = callPackage ../servers/dex { };
 
-  doh-proxy = callPackage ../servers/dns/doh-proxy { };
+  doh-proxy = callPackage ../servers/dns/doh-proxy {
+    python3Packages = python36Packages;
+  };
 
   dgraph = callPackage ../servers/dgraph { };
 
