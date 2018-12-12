@@ -5545,6 +5545,8 @@ in
 
   sstp = callPackage ../tools/networking/sstp {};
 
+  strip-nondeterminism = perlPackages.strip-nondeterminism;
+
   structure-synth = callPackage ../tools/graphics/structure-synth { };
 
   su-exec = callPackage ../tools/security/su-exec {};
@@ -19688,8 +19690,6 @@ in
   neovim = wrapNeovim neovim-unwrapped { };
 
   neovim-qt = libsForQt5.callPackage ../applications/editors/neovim/qt.nix { };
-
-  neovim-pygui = pythonPackages.neovim_gui;
 
   neovim-remote = callPackage ../applications/editors/neovim/neovim-remote.nix { pythonPackages = python3Packages; };
 
