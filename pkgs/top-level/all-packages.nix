@@ -15879,7 +15879,7 @@ in
 
   alock = callPackage ../misc/screensavers/alock { };
 
-  inherit (python2Packages) alot;
+  inherit (python3Packages) alot;
 
   alpine = callPackage ../applications/networking/mailreaders/alpine {
     tcl = tcl-8_5;
@@ -18454,6 +18454,7 @@ in
 
   notmuch = callPackage ../applications/networking/mailreaders/notmuch {
     gmime = gmime3;
+    pythonPackages = python3Packages;
   };
 
   notejot = callPackage ../applications/misc/notejot { };
