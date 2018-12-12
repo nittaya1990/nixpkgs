@@ -7840,18 +7840,28 @@ in
     php = php72;
   });
 
+  php73Packages = recurseIntoAttrs (callPackage ./php-packages.nix {
+    php = php73;
+  });
+
   phpPackages-unit = php72Packages-unit;
 
   php71Packages-unit = recurseIntoAttrs (callPackage ./php-packages.nix {
     php = php71-unit;
   });
-   php72Packages-unit = recurseIntoAttrs (callPackage ./php-packages.nix {
+
+  php72Packages-unit = recurseIntoAttrs (callPackage ./php-packages.nix {
     php = php72-unit;
+  });
+
+   php73Packages-unit = recurseIntoAttrs (callPackage ./php-packages.nix {
+    php = php73-unit;
   });
 
   inherit (callPackages ../development/interpreters/php { })
     php71
-    php72;
+    php72
+    php73;
 
   php-embed = php72-embed;
 
@@ -7865,12 +7875,19 @@ in
     config.php.apxs2 = false;
   };
 
+  php73-embed = php73.override {
+    config.php.embed = true;
+    config.php.apxs2 = false;
+  };
+
   php-unit = php72-unit;
 
   php71-unit = php71.override {
     config.php.embed = true;
     config.php.apxs2 = false;
     config.php.systemd = false;
+    config.php.phpdbg = false;
+    config.php.cgi = false;
     config.php.fpm = false;
   };
 
@@ -7878,6 +7895,17 @@ in
     config.php.embed = true;
     config.php.apxs2 = false;
     config.php.systemd = false;
+    config.php.phpdbg = false;
+    config.php.cgi = false;
+    config.php.fpm = false;
+  };
+
+  php73-unit = php73.override {
+    config.php.embed = true;
+    config.php.apxs2 = false;
+    config.php.systemd = false;
+    config.php.phpdbg = false;
+    config.php.cgi = false;
     config.php.fpm = false;
   };
 
@@ -12373,6 +12401,7 @@ in
     avrgcc = pkgsCross.avr.buildPackages.gcc;
     avrbinutils = pkgsCross.avr.buildPackages.binutils;
     avrlibc = pkgsCross.avr.libcCross;
+    inherit (darwin.apple_sdk.frameworks) GLUT;
   };
 
   simgear = callPackage ../development/libraries/simgear { openscenegraph = openscenegraph_3_4; };
@@ -13557,6 +13586,7 @@ in
   unit = callPackage ../servers/http/unit {
     php71 = php71-unit;
     php72 = php72-unit;
+    php73 = php73-unit;
   };
 
   nginx = nginxStable;
