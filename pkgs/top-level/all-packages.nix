@@ -10772,6 +10772,8 @@ in
   });
   libgap = callPackage ../development/libraries/libgap { };
 
+  libgda = callPackage ../development/libraries/libgda { };
+
   libgdata = gnome3.libgdata;
 
   libgig = callPackage ../development/libraries/libgig { };
