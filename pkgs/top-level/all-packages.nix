@@ -15291,6 +15291,8 @@ in
 
   bgnet = callPackage ../data/documentation/bgnet { };
 
+  bibata-cursors = callPackage ../data/icons/bibata-cursors { };
+
   brise = callPackage ../data/misc/brise { };
 
   inherit (kdeFrameworks) breeze-icons;
