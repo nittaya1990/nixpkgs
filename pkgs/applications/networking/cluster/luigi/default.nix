@@ -14,10 +14,13 @@ python3Packages.buildPythonApplication rec {
     sed -i 's/<2.2.0//' setup.py
   '';
 
-  propagatedBuildInputs = with python3Packages; [ tornado_4 python-daemon ];
+  propagatedBuildInputs = with python3Packages; [ tornado_4 python-daemon boto3 ];
 
   # Requires tox, hadoop, and google cloud
   doCheck = false;
+
+  # This enables accessing modules stored in cwd
+  makeWrapperArgs = ["--prefix PYTHONPATH . :"];
 
   meta = with lib; {
     homepage = https://github.com/spotify/luigi;

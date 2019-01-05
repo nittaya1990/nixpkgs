@@ -11,6 +11,8 @@
   ./config/xdg/icons.nix
   ./config/xdg/menus.nix
   ./config/xdg/mime.nix
+  ./config/appstream.nix
+  ./config/xdg/sounds.nix
   ./config/gtk/gtk-icon-cache.nix
   ./config/gnu.nix
   ./config/i18n.nix
@@ -34,6 +36,7 @@
   ./config/vpnc.nix
   ./config/zram.nix
   ./hardware/all-firmware.nix
+  ./hardware/bladeRF.nix
   ./hardware/brightnessctl.nix
   ./hardware/ckb-next.nix
   ./hardware/cpu/amd-microcode.nix
@@ -151,6 +154,7 @@
   ./security/chromium-suid-sandbox.nix
   ./security/dhparams.nix
   ./security/duosec.nix
+  ./security/google_oslogin.nix
   ./security/hidepid.nix
   ./security/lock-kernel-modules.nix
   ./security/misc.nix
@@ -300,6 +304,7 @@
   ./services/hardware/usbmuxd.nix
   ./services/hardware/thermald.nix
   ./services/hardware/undervolt.nix
+  ./services/hardware/vdr.nix
   ./services/logging/SystemdJournal2Gelf.nix
   ./services/logging/awstats.nix
   ./services/logging/fluentd.nix

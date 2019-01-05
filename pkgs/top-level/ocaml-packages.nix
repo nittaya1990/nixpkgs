@@ -54,6 +54,8 @@ let
 
     atd = callPackage ../development/ocaml-modules/atd { };
 
+    atdgen = callPackage ../development/ocaml-modules/atdgen { };
+
     base64 = callPackage ../development/ocaml-modules/base64 { };
 
     bap = callPackage ../development/ocaml-modules/bap {
@@ -199,6 +201,8 @@ let
       if lib.versionAtLeast ocaml.version "4.2"
       then callPackage ../development/ocaml-modules/csv { }
       else callPackage ../development/ocaml-modules/csv/1.5.nix { };
+
+    csv-lwt = callPackage ../development/ocaml-modules/csv/lwt.nix { };
 
     curses = callPackage ../development/ocaml-modules/curses { };
 
@@ -575,6 +579,8 @@ let
 
     piqi = callPackage ../development/ocaml-modules/piqi { };
     piqi-ocaml = callPackage ../development/ocaml-modules/piqi-ocaml { };
+
+    ppxfind = callPackage ../development/ocaml-modules/ppxfind { };
 
     ppxlib = callPackage ../development/ocaml-modules/ppxlib { };
 

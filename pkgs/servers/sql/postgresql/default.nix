@@ -106,16 +106,12 @@ let
       license     = licenses.postgresql;
       maintainers = with maintainers; [ ocharles thoughtpolice ];
       platforms   = platforms.unix;
+      knownVulnerabilities = optional (!atLeast "9.4")
+        "PostgreSQL versions older than 9.4 are not maintained anymore!";
     };
   });
 
 in {
-
-  postgresql_9_3 = common {
-    version = "9.3.25";
-    psqlSchema = "9.3";
-    sha256 = "1nxn0hjrg4y5v5n2jgzrbicgv4504r2yfjyk6g6rq0sx8603x5g4";
-  };
 
   postgresql_9_4 = common {
     version = "9.4.20";
