@@ -391,6 +391,11 @@
     github = "asppsa";
     name = "Alastair Pharo";
   };
+  astro = {
+    email = "astro@spaceboyz.net";
+    github = "astro";
+    name = "Astro";
+  };
   astsmtl = {
     email = "astsmtl@yandex.ru";
     github = "astsmtl";
@@ -4676,6 +4681,11 @@
     email = "vklquevs@gmail.com";
     github = "vklquevs";
     name = "vklquevs";
+  };
+  vlaci = {
+    email = "laszlo.vasko@outlook.com";
+    github = "vlaci";
+    name = "László Vaskó";
   };
   vlstill = {
     email = "xstill@fi.muni.cz";

@@ -1,27 +1,20 @@
 { lib, fetchurl, fetchpatch, pythonPackages, pkgconfig
-, qmake, lndir, qtbase, qtsvg, qtwebkit, qtwebengine, dbus
-, withWebSockets ? false, qtwebsockets
+, qmake, lndir, qtbase, qtsvg, qtwebengine, dbus
 , withConnectivity ? false, qtconnectivity
+, withWebKit ? false, qtwebkit
+, withWebSockets ? false, qtwebsockets
 }:
 
 let
+
+  inherit (pythonPackages) buildPythonPackage python isPy3k dbus-python enum34;
+
+  sip = pythonPackages.sip.override { sip-module = "PyQt5.sip"; };
+
+in buildPythonPackage rec {
   pname = "PyQt";
   version = "5.11.3";
-
-  inherit (pythonPackages) buildPythonPackage python isPy3k dbus-python sip enum34;
-
-in buildPythonPackage {
-  pname = pname;
-  version = version;
   format = "other";
-
-  meta = with lib; {
-    description = "Python bindings for Qt5";
-    homepage    = http://www.riverbankcomputing.co.uk;
-    license     = licenses.gpl3;
-    platforms   = platforms.mesaPlatforms;
-    maintainers = with maintainers; [ sander ];
-  };
 
   src = fetchurl {
     url = "mirror://sourceforge/pyqt/PyQt5/PyQt-${version}/PyQt5_gpl-${version}.tar.gz";
@@ -32,11 +25,13 @@ in buildPythonPackage {
 
   nativeBuildInputs = [ pkgconfig qmake lndir ];
 
-  buildInputs = [ dbus ];
+  buildInputs = [ dbus sip ];
 
-  propagatedBuildInputs = [
-    sip qtbase qtsvg qtwebkit qtwebengine
-  ] ++ lib.optional (!isPy3k) enum34 ++ lib.optional withWebSockets qtwebsockets ++ lib.optional withConnectivity qtconnectivity;
+  propagatedBuildInputs = [ qtbase qtsvg qtwebengine ]
+    ++ lib.optional (!isPy3k) enum34
+    ++ lib.optional withConnectivity qtconnectivity
+    ++ lib.optional withWebKit qtwebkit
+    ++ lib.optional withWebSockets qtwebsockets;
 
   configurePhase = ''
     runHook preConfigure
@@ -47,11 +42,7 @@ in buildPythonPackage {
 
     export PYTHONPATH=$PYTHONPATH:$out/${python.sitePackages}
 
-    substituteInPlace configure.py \
-      --replace 'install_dir=pydbusmoddir' "install_dir='$out/${python.sitePackages}/dbus/mainloop'" \
-      --replace "ModuleMetadata(qmake_QT=['webkitwidgets'])" "ModuleMetadata(qmake_QT=['webkitwidgets', 'printsupport'])"
-
-    ${python.executable} configure.py -w \
+    ${python.executable} configure.py  -w \
       --confirm-license \
       --dbus=${dbus.dev}/include/dbus-1.0 \
       --no-qml-plugin \
@@ -65,11 +56,19 @@ in buildPythonPackage {
   '';
 
   postInstall = ''
-    ln -s ${sip}/${python.sitePackages}/PyQt5/* $out/${python.sitePackages}/PyQt5
+    ln -s ${sip}/${python.sitePackages}/PyQt5/sip.* $out/${python.sitePackages}/PyQt5/
     for i in $out/bin/*; do
       wrapProgram $i --prefix PYTHONPATH : "$PYTHONPATH"
     done
   '';
 
   enableParallelBuilding = true;
+
+  meta = with lib; {
+    description = "Python bindings for Qt5";
+    homepage    = http://www.riverbankcomputing.co.uk;
+    license     = licenses.gpl3;
+    platforms   = platforms.mesaPlatforms;
+    maintainers = with maintainers; [ sander ];
+  };
 }

@@ -13,13 +13,13 @@ buildEnv {
     for exe in kodi{,-standalone}
     do
       makeWrapper ${kodi}/bin/$exe $out/bin/$exe \
-        --prefix PATH ":" "${makeBinPath allRuntimeDependencies}" \
+        --prefix PYTHONPATH : ${kodi.pythonPackages.makePythonPath plugins} \
         --prefix KODI_HOME : $out/share/kodi;
     done
   '';
 
   meta = kodi.meta // {
     description = kodi.meta.description
-                + " (with plugins: ${concatMapStringsSep ", " (x: x.name) plugins})";
+                + " (with plugins: ${lib.concatMapStringsSep ", " (x: x.name) plugins})";
   };
 }

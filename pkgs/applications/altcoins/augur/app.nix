@@ -16,7 +16,6 @@ let
     fontconfig
     gdk_pixbuf
     glib
-    gnome3.gconf
     gtk3
     pango
     libX11
