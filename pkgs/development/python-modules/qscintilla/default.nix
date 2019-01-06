@@ -3,6 +3,7 @@
 , fetchPypi
 , python
 , qscintillaCpp
+, sip
 , lndir
 , pyqt5
 , qt5
@@ -12,7 +13,7 @@ let
   base = import ./base.nix { inherit lib qscintillaCpp; };
 in buildPythonPackage (base // {
   buildInputs = [ lndir qt5.qtbase qscintillaCpp ];
-  propagatedBuildInputs = [ pyqt5 ];
+  propagatedBuildInputs = [ sip pyqt5.dev ];
 
   # a dependency on QT's widget module is missing.
   patches = [ ./qscintilla-pyqt5-widgets.patch ];
