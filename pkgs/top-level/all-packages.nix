@@ -9188,7 +9188,7 @@ in
 
   vagrant = callPackage ../development/tools/vagrant {};
 
-  vagrant-libvirt = callPackage ../development/tools/vagrant/libvirt.nix { };
+  # vagrant-libvirt = callPackage ../development/tools/vagrant/libvirt.nix { };
 
   bashdb = callPackage ../development/tools/misc/bashdb { };
 
@@ -14185,11 +14185,7 @@ in
     libdrm = if stdenv.isLinux then libdrm else null;
     abiCompat = config.xorg.abiCompat # `config` because we have no `xorg.override`
       or (if stdenv.isDarwin then "1.18" else null); # 1.19 needs fixing on Darwin
-  }) // { inherit xlibsWrapper; xf86videospiceqxl = xspice; } );
-
-  xspice = callPackage ../servers/x11/xorg/xspice.nix {
-    sasl = cyrus_sasl;
-  };
+  }) // { inherit xlibsWrapper; } );
 
   xwayland = callPackage ../servers/x11/xorg/xwayland.nix { };
 
