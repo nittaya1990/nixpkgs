@@ -2,7 +2,7 @@
   stdenv, makeWrapper, lib, fetchurl, fetchpatch, buildPackages,
 
   automake, autoconf, libtool, intltool, mtdev, libevdev, libinput,
-  freetype, tradcpp, fontconfig, meson, ninja
+  freetype, tradcpp, fontconfig, meson, ninja,
   libGL, libGL_driver, spice-protocol, zlib, libGLU, dbus, libunwind, libdrm,
   mesa_noglu, udev, bootstrap_cmds, bison, flex, clangStdenv, autoreconfHook,
   mcpp, epoxy, openssl, pkgconfig, llvm_6,
