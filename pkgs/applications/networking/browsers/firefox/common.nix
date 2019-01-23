@@ -92,8 +92,8 @@ stdenv.mkDerivation rec {
     dbus dbus-glib pango freetype fontconfig xorg.libXi xorg.libXcursor
     xorg.libX11 xorg.libXrender xorg.libXft xorg.libXt file
     libnotify xorg.pixman yasm libGLU_combined
-    xorg.libXScrnSaver xorg.scrnsaverproto
-    xorg.libXext xorg.xextproto sqlite unzip makeWrapper
+    xorg.libXScrnSaver xorg.xorgproto
+    xorg.libXext sqlite unzip makeWrapper
     libevent libstartup_notification libvpx /* cairo */
     icu libpng jemalloc glib
   ]
@@ -263,20 +263,12 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
   doCheck = false; # "--disable-tests" above
 
-  preInstall = ''
-    # The following is needed for startup cache creation on grsecurity kernels.
-    paxmark m dist/bin/xpcshell
-  '';
-
   installPhase = if stdenv.isDarwin then ''
     mkdir -p $out/Applications
     cp -LR dist/Firefox.app $out/Applications
   '' else null;
 
   postInstall = lib.optionalString stdenv.isLinux ''
-    # For grsecurity kernels
-    paxmark m $out/lib/firefox*/{firefox,firefox-bin,plugin-container}
-
     # Remove SDK cruft. FIXME: move to a separate output?
     rm -rf $out/share/idl $out/include $out/lib/firefox-devel-*
 

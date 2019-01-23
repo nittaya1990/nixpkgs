@@ -93,9 +93,6 @@ self: super: {
     hinotify = if pkgs.stdenv.isLinux then self.hinotify else self.fsnotify;
   };
 
-  # https://github.com/bitemyapp/esqueleto/issues/105
-  esqueleto = markBrokenVersion "2.5.3" super.esqueleto;
-
   # Fix test trying to access /home directory
   shell-conduit = overrideCabal super.shell-conduit (drv: {
     postPatch = "sed -i s/home/tmp/ test/Spec.hs";
@@ -520,6 +517,10 @@ self: super: {
   # generic-deriving bound is too tight
   aeson = doJailbreak super.aeson;
 
+  # containers >=0.4 && <0.6 is too tight
+  # https://github.com/RaphaelJ/friday/issues/34
+  friday = doJailbreak super.friday;
+
   # Won't compile with recent versions of QuickCheck.
   inilist = dontCheck super.inilist;
   MissingH = dontCheck super.MissingH;
@@ -913,15 +914,6 @@ self: super: {
   # See https://github.com/haskell/haddock/issues/679
   language-puppet = dontHaddock super.language-puppet;
   filecache = overrideCabal super.filecache (drv: { doCheck = !pkgs.stdenv.isDarwin; });
-
-  # Missing FlexibleContexts in testsuite
-  # https://github.com/EduardSergeev/monad-memo/pull/4
-  monad-memo =
-    let patch = pkgs.fetchpatch
-          { url = https://github.com/EduardSergeev/monad-memo/pull/4.patch;
-            sha256 = "14mf9940arilg6v54w9bc4z567rfbmm7gknsklv965fr7jpinxxj";
-          };
-    in appendPatch super.monad-memo patch;
 
   # https://github.com/alphaHeavy/protobuf/issues/34
   protobuf = dontCheck super.protobuf;
