@@ -18,6 +18,10 @@ stdenv.mkDerivation rec {
     "-DLASZIP_INCLUDE_DIR=${LASzip}/include"
   ];
 
+  NIX_LDFLAGS = [
+    "-lpthread"
+  ];
+
   postFixup = stdenv.lib.optionalString stdenv.isDarwin ''
     install_name_tool -change "@rpath/liblas.3.dylib" "$out/lib/liblas.3.dylib" $out/lib/liblas_c.dylib
   '';
