@@ -380,7 +380,7 @@ let
     '';
 
     meta = with pkgs.stdenv.lib.maintainers; {
-      maintainers = [ aszlig wkennington cdepillabout ];
+      maintainers = [ aszlig cdepillabout ];
     };
   };
 
