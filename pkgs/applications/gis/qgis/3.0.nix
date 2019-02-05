@@ -7,15 +7,15 @@
 with lib;
 let
   pythonBuildInputs = with python3Packages;
-    [ python3Packages.qscintilla gdal jinja2 numpy psycopg2
+    [ python3Packages.qscintilla-qt5 gdal jinja2 numpy psycopg2
       chardet dateutil pyyaml pytz requests urllib3 pygments pyqt5 sip OWSLib six ];
 in stdenv.mkDerivation rec {
-  version = "3.2.0";
+  version = "3.4.4";
   name = "qgis-unwrapped-${version}";
 
   src = fetchurl {
     url = "http://qgis.org/downloads/qgis-${version}.tar.bz2";
-    sha256 = "1zxylby32d3l4rgi3w7kglx5q2qk0pkhq9ah1wgsqny0vrdwriqb";
+    sha256 = "1nmwcxfjbhz0x028mizwrl2w6pxvvisdifmn58kpnfgl2kvjnzgl";
   };
 
   inherit pythonBuildInputs;

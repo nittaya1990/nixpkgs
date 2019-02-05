@@ -1,36 +1,40 @@
-{ lib
+{ stdenv
 , buildPythonPackage
-, fetchPypi
+, disabledIf
+, isPy3k
+, isPyPy
+, pkgs
 , python
-, qscintillaCpp
-, sip
-, lndir
-, pyqt5
-, qt5
+, pyqt4
 }:
 
-let
-  base = import ./base.nix { inherit lib qscintillaCpp; };
-in buildPythonPackage (base // {
-  buildInputs = [ lndir qt5.qtbase qscintillaCpp ];
-  propagatedBuildInputs = [ sip pyqt5.dev ];
+disabledIf (isPy3k || isPyPy)
+  (buildPythonPackage rec {
+    name = "qscintilla-${version}";
+    version = pkgs.qscintilla.version;
+    format = "other";
 
-  # a dependency on QT's widget module is missing.
-  patches = [ ./qscintilla-pyqt5-widgets.patch ];
+    src = pkgs.qscintilla.src;
 
-  preConfigure = ''
-    mkdir -p $out
-    lndir ${pyqt5} $out
-    rm -rf "$out/nix-support"
-    cd Python
-    ${python.executable} ./configure.py \
-        --pyqt=PyQt5 \
-        --destdir=$out/lib/${python.libPrefix}/site-packages/PyQt5 \
-        --stubsdir=$out/lib/${python.libPrefix}/site-packages/PyQt5 \
-        --apidir=$out/api/${python.libPrefix} \
-        --qsci-incdir=${qscintillaCpp}/include \
-        --qsci-libdir=${qscintillaCpp}/lib \
-        --pyqt-sipdir=${pyqt5}/share/sip/PyQt5 \
-        --qsci-sipdir=$out/share/sip/PyQt5
-  '';
-})
+    buildInputs = [ pkgs.xorg.lndir pyqt4.qt pyqt4 ];
+
+    preConfigure = ''
+      mkdir -p $out
+      lndir ${pyqt4} $out
+      rm -rf "$out/nix-support"
+      cd Python
+      ${python.executable} ./configure-old.py \
+          --destdir $out/lib/${python.libPrefix}/site-packages/PyQt4 \
+          --apidir $out/api/${python.libPrefix} \
+          -n ${pkgs.qscintilla}/include \
+          -o ${pkgs.qscintilla}/lib \
+          --sipdir $out/share/sip
+    '';
+
+    meta = with stdenv.lib; {
+      description = "A Python binding to QScintilla, Qt based text editing control";
+      license = licenses.lgpl21Plus;
+      maintainers = with maintainers; [ danbst ];
+      platforms = platforms.unix;
+    };
+  })
