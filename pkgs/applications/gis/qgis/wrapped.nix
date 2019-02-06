@@ -26,18 +26,16 @@ symlinkJoin rec {
       --set PYTHONPATH $program_PYTHONPATH
 
     # desktop link
-    mkdir -p $out/share/applications
+    substitute $out/share/applications/org.qgis.qgis.desktop \
+               $out/share/applications/org.qgis.qgis.desktop.patched \
+               --replace 'Exec=qgis' "Exec=$out/bin/qgis"
 
-    sed "/^Exec=/c\Exec=$out/bin/qgis" \
-      < $sourceRoot/debian/qgis.desktop \
-      > $out/share/applications/qgis.desktop
+    rm $out/share/applications/org.qgis.qgis.desktop
+    mv $out/share/applications/org.qgis.qgis.desktop.patched \
+       $out/share/applications/org.qgis.qgis.desktop
 
     # mime types
     mkdir -p $out/share/mime/packages
-    cp $sourceRoot/debian/qgis.xml $out/share/mime/packages
-
-    # vector icon
-    mkdir -p $out/share/icons/hicolor/scalable/apps
-    cp $sourceRoot/images/icons/qgis_icon.svg $out/share/icons/hicolor/scalable/apps/qgis.svg
+    cp $sourceRoot/debian/qgis.xml $out/share/mime/packages/
   '';
 }
