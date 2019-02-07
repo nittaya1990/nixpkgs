@@ -298,6 +298,8 @@ in {
 
   cdecimal = callPackage ../development/python-modules/cdecimal { };
 
+  cfn-flip = callPackage ../development/python-modules/cfn-flip { };
+ 
   chalice = callPackage ../development/python-modules/chalice { };
 
   cleo = callPackage ../development/python-modules/cleo { };
@@ -405,6 +407,8 @@ in {
   gsd = callPackage ../development/python-modules/gsd { };
 
   gssapi = callPackage ../development/python-modules/gssapi { };
+
+  guestfs = callPackage ../development/python-modules/guestfs { };
 
   h5py = callPackage ../development/python-modules/h5py {
     hdf5 = pkgs.hdf5;
@@ -4033,6 +4037,8 @@ in {
   simanneal = callPackage ../development/python-modules/simanneal { };
 
   simplegeneric = callPackage ../development/python-modules/simplegeneric { };
+
+  shodan = callPackage ../development/python-modules/shodan { };
 
   should-dsl = callPackage ../development/python-modules/should-dsl { };
 
