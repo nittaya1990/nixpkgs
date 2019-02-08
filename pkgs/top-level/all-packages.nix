@@ -4543,6 +4543,8 @@ in
     inherit (gnome3) defaultIconTheme;
   };
 
+  openapi-generator-cli = callPackage ../tools/networking/openapi-generator-cli { };
+
   opencc = callPackage ../tools/text/opencc { };
 
   opencl-info = callPackage ../tools/system/opencl-info { };
@@ -20357,6 +20359,8 @@ in
   xscreensaver = callPackage ../misc/screensavers/xscreensaver {
     inherit (gnome2) libglade;
   };
+
+  xsuspender = callPackage ../applications/misc/xsuspender {  };
 
   xss-lock = callPackage ../misc/screensavers/xss-lock { };
 

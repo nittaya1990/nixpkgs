@@ -780,6 +780,8 @@ in {
 
   slither-analyzer = callPackage ../development/python-modules/slither-analyzer { };
 
+  sly = callPackage ../development/python-modules/sly { };
+
   snapcast = callPackage ../development/python-modules/snapcast { };
 
   spglib = callPackage ../development/python-modules/spglib { };
@@ -4744,7 +4746,7 @@ in {
 
   pygccxml = callPackage ../development/python-modules/pygccxml {};
 
-  pymacaroons-pynacl = callPackage ../development/python-modules/pymacaroons-pynacl { };
+  pymacaroons = callPackage ../development/python-modules/pymacaroons { };
 
   pynacl = callPackage ../development/python-modules/pynacl { };
 
