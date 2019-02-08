@@ -629,6 +629,8 @@ in
 
   bunny = callPackage ../tools/package-management/bunny { };
 
+  chezmoi = callPackage ../tools/misc/chezmoi { };
+
   clair = callPackage ../tools/admin/clair { };
 
   cloud-sql-proxy = callPackage ../tools/misc/cloud-sql-proxy { };
@@ -1616,6 +1618,8 @@ in
   };
 
   roundcube = callPackage ../servers/roundcube { };
+
+  roundcubePlugins = callPackage ../servers/roundcube/plugins { };
 
   rsbep = callPackage ../tools/backup/rsbep { };
 
@@ -22495,6 +22499,8 @@ in
   kontemplate = callPackage ../applications/networking/cluster/kontemplate { };
 
   kops = callPackage ../applications/networking/cluster/kops { };
+
+  lguf-brightness = callPackage ../misc/lguf-brightness { };
 
   lilypond = callPackage ../misc/lilypond { guile = guile_1_8; };
   lilypond-unstable = callPackage ../misc/lilypond/unstable.nix { };
