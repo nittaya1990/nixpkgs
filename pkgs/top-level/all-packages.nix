@@ -690,6 +690,8 @@ in
 
   git-fire = callPackage ../tools/misc/git-fire { };
 
+  git-town = callPackage ../tools/misc/git-town { };
+
   github-changelog-generator = callPackage ../development/tools/github-changelog-generator { };
 
   gitless = callPackage ../applications/version-management/gitless { };
@@ -1089,6 +1091,8 @@ in
   catdocx = callPackage ../tools/text/catdocx { };
 
   catclock = callPackage ../applications/misc/catclock { };
+
+  cardpeek = callPackage ../applications/misc/cardpeek { };
 
   cde = callPackage ../tools/package-management/cde { };
 
@@ -7506,6 +7510,7 @@ in
 
   pyo3-pack = callPackage ../development/tools/rust/pyo3-pack { };
   rainicorn = callPackage ../development/tools/rust/rainicorn { };
+  rls = callPackage ../development/tools/rust/rls { };
   rustfmt = callPackage ../development/tools/rust/rustfmt { };
   rustracer = callPackage ../development/tools/rust/racer { };
   rustracerd = callPackage ../development/tools/rust/racerd { };
@@ -8593,6 +8598,8 @@ in
       gccRaw = gcc.cc;
       binutils = binutils;
     };
+
+  dive = callPackage ../development/tools/dive { };
 
   doclifter = callPackage ../development/tools/misc/doclifter { };
 
@@ -12090,6 +12097,8 @@ in
   qjson = callPackage ../development/libraries/qjson { };
 
   qoauth = callPackage ../development/libraries/qoauth { };
+
+  qolibri = libsForQt5.callPackage ../applications/misc/qolibri { };
 
   qt3 = callPackage ../development/libraries/qt-3 {
     openglSupport = libGLSupported;
@@ -21513,6 +21522,8 @@ in
 
   bftools = callPackage ../applications/science/biology/bftools { };
 
+  cmtk = callPackage ../applications/science/biology/cmtk { }; 
+
   conglomerate = callPackage ../applications/science/biology/conglomerate { };
 
   dcm2niix = callPackage ../applications/science/biology/dcm2niix { };
@@ -22218,6 +22229,8 @@ in
   g4py = callPackage ../development/libraries/physics/geant4/g4py { };
 
   hepmc = callPackage ../development/libraries/physics/hepmc { };
+
+  hepmc3 = callPackage ../development/libraries/physics/hepmc3 { };
 
   herwig = callPackage ../development/libraries/physics/herwig { };
 
