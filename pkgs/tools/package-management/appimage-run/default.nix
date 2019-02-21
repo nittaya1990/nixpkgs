@@ -73,6 +73,11 @@ buildFHSUserEnv {
     xorg.libXt
     xorg.libXmu
     xorg.libxcb
+    xorg.xcbutil
+    xorg.xcbutilwm
+    xorg.xcbutilimage
+    xorg.xcbutilkeysyms
+    xorg.xcbutilrenderutil
     libGLU
     libuuid
     libogg
