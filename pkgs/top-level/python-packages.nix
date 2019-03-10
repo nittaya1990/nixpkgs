@@ -2998,7 +2998,7 @@ in {
 
   fs-s3fs = callPackage ../development/python-modules/fs-s3fs { };
 
-  libarcus = callPackage ../development/python-modules/libarcus { };
+  libarcus = callPackage ../development/python-modules/libarcus { inherit (pkgs) protobuf; };
 
   libcloud = callPackage ../development/python-modules/libcloud { };
 
@@ -3550,6 +3550,7 @@ in {
   periodictable = callPackage ../development/python-modules/periodictable { };
 
   pg8000 = callPackage ../development/python-modules/pg8000 { };
+  pg8000_1_12 = callPackage ../development/python-modules/pg8000/1_12.nix { };
 
   pgsanity = callPackage ../development/python-modules/pgsanity { };
 
