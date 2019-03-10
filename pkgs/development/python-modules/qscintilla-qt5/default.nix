@@ -1,5 +1,6 @@
 { lib
 , buildPythonPackage
+, qmake
 , qscintillaCpp
 , lndir
 , sip
@@ -12,7 +13,7 @@ buildPythonPackage rec {
   src = qscintillaCpp.src;
   format = "other";
 
-  nativeBuildInputs = [ lndir sip ];
+  nativeBuildInputs = [ lndir qmake sip ];
   buildInputs = [ qscintillaCpp ];
   propagatedBuildInputs = [ pyqt5 ];
 

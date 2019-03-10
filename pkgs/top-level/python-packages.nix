@@ -3995,6 +3995,7 @@ in {
   qscintilla-qt5 = callPackage ../development/python-modules/qscintilla-qt5 {
     qscintillaCpp = pkgs.libsForQt5.qscintilla;
     lndir = pkgs.xorg.lndir;
+    qmake = pkgs.qt5.qmake;
   };
 
   qscintilla = if (isPy3k || isPyPy) then self.qscintilla-qt5 else self.qscintilla-qt4;
