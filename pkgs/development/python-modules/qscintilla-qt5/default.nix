@@ -14,7 +14,7 @@ buildPythonPackage rec {
   format = "other";
 
   nativeBuildInputs = [ lndir qmake sip ];
-  buildInputs = [ qscintillaCpp ];
+  buildInputs = [ qscintillaCpp sip ];
   propagatedBuildInputs = [ pyqt5 ];
 
   preConfigure = ''
