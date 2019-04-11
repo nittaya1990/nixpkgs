@@ -1,7 +1,7 @@
 { lib, buildGoPackage, fetchurl, fetchFromGitHub, phantomjs2 }:
 
 buildGoPackage rec {
-  version = "6.0.0";
+  version = "6.1.0";
   name = "grafana-${version}";
   goPackagePath = "github.com/grafana/grafana";
 
@@ -11,12 +11,12 @@ buildGoPackage rec {
     rev = "v${version}";
     owner = "grafana";
     repo = "grafana";
-    sha256 = "1dacji3b8iqfx92cb6psrhvg2hym8xl1lzfn7yvyss4vjj7pmbbc";
+    sha256 = "0h66ndqpbv2l1srn3z4qjg78d69146ryynkvn5ynrbvka4fzg0yp";
   };
 
   srcStatic = fetchurl {
     url = "https://s3-us-west-2.amazonaws.com/grafana-releases/release/grafana-${version}.linux-amd64.tar.gz";
-    sha256 = "02c7klma5zl1mcis7gnbfi56i59ps7i757yyy8v9gnp5ynnb55v4";
+    sha256 = "0180zfm9py0ah74vh384cxbvgnx5mfbkdc8fbiqlmfz0wvlpvz7q";
   };
 
   postPatch = ''
