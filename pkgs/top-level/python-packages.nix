@@ -732,6 +732,8 @@ in {
 
   pyscard = callPackage ../development/python-modules/pyscard { inherit (pkgs.darwin.apple_sdk.frameworks) PCSC; };
 
+  pyschedule = callPackage ../development/python-modules/pyschedule { };
+
   pyside = callPackage ../development/python-modules/pyside { };
 
   pysideShiboken = callPackage ../development/python-modules/pyside/shiboken.nix {
@@ -750,7 +752,11 @@ in {
 
   pytesseract = callPackage ../development/python-modules/pytesseract { };
 
+  pytest-click = callPackage ../development/python-modules/pytest-click { };
+
   pytest-mypy = callPackage ../development/python-modules/pytest-mypy { };
+
+  pytest-pylint = callPackage ../development/python-modules/pytest-pylint { };
 
   pytest-tornado = callPackage ../development/python-modules/pytest-tornado { };
 
@@ -942,6 +948,8 @@ in {
 
   aioprocessing = callPackage ../development/python-modules/aioprocessing { };
 
+  aioresponses = callPackage ../development/python-modules/aioresponses { };
+
   aiorpcx = callPackage ../development/python-modules/aiorpcx { };
 
   aiounifi = callPackage ../development/python-modules/aiounifi { };
@@ -953,6 +961,8 @@ in {
   alembic = callPackage ../development/python-modules/alembic {};
 
   allpairspy = callPackage ../development/python-modules/allpairspy { };
+
+  annexremote = callPackage ../development/python-modules/annexremote { };
 
   ansible = callPackage ../development/python-modules/ansible { };
 
@@ -1074,6 +1084,8 @@ in {
 
   avro3k = callPackage ../development/python-modules/avro3k {};
 
+  aws-lambda-builders = callPackage ../development/python-modules/aws-lambda-builders { };
+
   python-slugify = callPackage ../development/python-modules/python-slugify { };
 
   awesome-slugify = callPackage ../development/python-modules/awesome-slugify {};
@@ -1178,6 +1190,8 @@ in {
   channels = callPackage ../development/python-modules/channels {};
 
   cheroot = callPackage ../development/python-modules/cheroot {};
+
+  chevron = callPackage ../development/python-modules/chevron {};
 
   cli-helpers = callPackage ../development/python-modules/cli-helpers {};
 
@@ -1971,6 +1985,8 @@ in {
 
   humanize = callPackage ../development/python-modules/humanize { };
 
+  humanfriendly = callPackage ../development/python-modules/humanfriendly { };
+
   hupper = callPackage ../development/python-modules/hupper {};
 
   hsaudiotag = callPackage ../development/python-modules/hsaudiotag { };
@@ -2121,6 +2137,8 @@ in {
   paperspace = callPackage ../development/python-modules/paperspace { };
 
   paperwork-backend = callPackage ../applications/office/paperwork/backend.nix { };
+
+  papis = callPackage ../development/python-modules/papis { };
 
   papis-python-rofi = callPackage ../development/python-modules/papis-python-rofi { };
 
@@ -3368,6 +3386,8 @@ in {
 
   nixpkgs = callPackage ../development/python-modules/nixpkgs { };
 
+  nixpkgs-pytools = callPackage ../development/python-modules/nixpkgs-pytools { };
+
   nodeenv = callPackage ../development/python-modules/nodeenv { };
 
   nose = callPackage ../development/python-modules/nose { };
@@ -3741,8 +3761,6 @@ in {
   pybfd = callPackage ../development/python-modules/pybfd { };
 
   pyblock = callPackage ../development/python-modules/pyblock { };
-
-  pybcrypt = callPackage ../development/python-modules/pybcrypt { };
 
   pyblosxom = callPackage ../development/python-modules/pyblosxom { };
 
@@ -4203,6 +4221,8 @@ in {
 
   setuptools_scm = callPackage ../development/python-modules/setuptools_scm { };
 
+  serverlessrepo = callPackage ../development/python-modules/serverlessrepo { };
+
   shippai = callPackage ../development/python-modules/shippai {};
 
   simanneal = callPackage ../development/python-modules/simanneal { };
@@ -4420,6 +4440,8 @@ in {
 
   xlwt = callPackage ../development/python-modules/xlwt { };
 
+  xxhash = callPackage ../development/python-modules/xxhash { };
+
   youtube-dl = callPackage ../tools/misc/youtube-dl {};
 
   youtube-dl-light = callPackage ../tools/misc/youtube-dl {
@@ -4430,6 +4452,8 @@ in {
   zconfig = callPackage ../development/python-modules/zconfig { };
 
   zc_lockfile = callPackage ../development/python-modules/zc_lockfile { };
+
+  zerorpc = callPackage ../development/python-modules/zerorpc { };
 
   zipstream = callPackage ../development/python-modules/zipstream { };
 
@@ -4740,6 +4764,8 @@ in {
 
   zfec = callPackage ../development/python-modules/zfec { };
 
+  zipp = callPackage ../development/python-modules/zipp { };
+
   zope_broken = callPackage ../development/python-modules/zope_broken { };
 
   zope_component = callPackage ../development/python-modules/zope_component { };
@@ -4863,6 +4889,8 @@ in {
 
   graphite_beacon = callPackage ../development/python-modules/graphite_beacon { };
 
+  graph_nets = callPackage ../development/python-modules/graph_nets { };
+
   influxgraph = callPackage ../development/python-modules/influxgraph { };
 
   graphitepager = callPackage ../development/python-modules/graphitepager { };
@@ -4912,6 +4940,8 @@ in {
   toposort = callPackage ../development/python-modules/toposort { };
 
   snapperGUI = callPackage ../development/python-modules/snappergui { };
+
+  dm-sonnet = callPackage ../development/python-modules/dm-sonnet { };
 
   uncertainties = callPackage ../development/python-modules/uncertainties { };
 
@@ -5128,6 +5158,8 @@ in {
   zerobin = callPackage ../development/python-modules/zerobin { };
 
   tensorflow-estimator = callPackage ../development/python-modules/tensorflow-estimator { };
+
+  tensorflow-probability = callPackage ../development/python-modules/tensorflow-probability { };
 
   tensorflow-tensorboard = callPackage ../development/python-modules/tensorflow-tensorboard { };
 

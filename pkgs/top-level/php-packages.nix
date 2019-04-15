@@ -10,8 +10,8 @@ let
   isPhp73 = pkgs.lib.versionAtLeast php.version "7.3";
 
   apcu = buildPecl {
-    name = "apcu-5.1.15";
-    sha256 = "0v91fxh3z3amwicqlmz7lvnh4zfl2d7kj2zc8pvlvj2lms8ql5zc";
+    name = "apcu-5.1.17";
+    sha256 = "14y7alvj5q17q1b544bxidavkn6i40cjbq2nv1m0k70ai5vv84bb";
     buildInputs = [ (if isPhp73 then pkgs.pcre2 else pkgs.pcre) ];
     doCheck = true;
     checkTarget = "test";
@@ -21,8 +21,8 @@ let
   };
 
   apcu_bc = buildPecl {
-    name = "apcu_bc-1.0.4";
-    sha256 = "1raww7alwayg9nk0akly1mdrjypxlwg8safnmaczl773cwpw5cbw";
+    name = "apcu_bc-1.0.5";
+    sha256 = "0ma00syhk2ps9k9p02jz7rii6x3i2p986il23703zz5npd6y9n20";
     buildInputs = [ apcu (if isPhp73 then pkgs.pcre2 else pkgs.pcre) ];
   };
 
@@ -166,14 +166,14 @@ let
   };
 
   sqlsrv = buildPecl rec {
-    name = "sqlsrv-5.6.0";
-    sha256 = "089iy2lz7p3x9c88zaxrg37m74gh3phxqsldr33nj16rpb5d67bc";
+    name = "sqlsrv-5.6.1";
+    sha256 = "0ial621zxn9zvjh7k1h755sm2lc9aafc389yxksqcxcmm7kqmd0a";
     buildInputs = [ pkgs.unixODBC ];
   };
 
   pdo_sqlsrv = buildPecl rec {
-    name = "pdo_sqlsrv-5.6.0";
-    sha256 = "11g07l6mn804hbcmwqwfd6a4yx5bz54bmk5j2dpm8nil1rq9qb7r";
+    name = "pdo_sqlsrv-5.6.1";
+    sha256 = "02ill1iqffa5fha9iz4y91823scml24ikfk8pn90jyycfwv07x6a";
     buildInputs = [ pkgs.unixODBC ];
   };
 
