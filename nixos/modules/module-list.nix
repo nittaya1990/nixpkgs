@@ -270,6 +270,7 @@
   ./services/desktops/gnome3/evince.nix
   ./services/desktops/gnome3/evolution-data-server.nix
   ./services/desktops/gnome3/file-roller.nix
+  ./services/desktops/gnome3/glib-networking.nix
   ./services/desktops/gnome3/gnome-disks.nix
   ./services/desktops/gnome3/gnome-documents.nix
   ./services/desktops/gnome3/gnome-keyring.nix
@@ -490,6 +491,7 @@
   ./services/monitoring/prometheus/default.nix
   ./services/monitoring/prometheus/alertmanager.nix
   ./services/monitoring/prometheus/exporters.nix
+  ./services/monitoring/prometheus/pushgateway.nix
   ./services/monitoring/riemann.nix
   ./services/monitoring/riemann-dash.nix
   ./services/monitoring/riemann-tools.nix
