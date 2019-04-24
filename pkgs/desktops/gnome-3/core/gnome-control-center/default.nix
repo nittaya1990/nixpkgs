@@ -8,8 +8,8 @@
 , fontconfig, sound-theme-freedesktop, grilo, python3
 , gtk3, glib, glib-networking, gsettings-desktop-schemas
 , gnome-desktop, gnome-settings-daemon, gnome-online-accounts
-, vino, gnome-bluetooth, tracker, adwaita-icon-theme, mutter
-, udisks2, gsound, libhandy, cups }:
+, vino, gnome-bluetooth, tracker, adwaita-icon-theme
+, udisks2, gsound, libhandy, cups, mutter }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-control-center";
@@ -40,6 +40,7 @@ stdenv.mkDerivation rec {
     (substituteAll {
       src = ./paths.patch;
       gcm = gnome-color-manager;
+      gnome_desktop = gnome-desktop;
       inherit glibc libgnomekbd tzdata;
       inherit cups networkmanagerapplet;
     })
