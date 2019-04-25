@@ -3838,6 +3838,8 @@ in {
   pylint = if isPy3k then callPackage ../development/python-modules/pylint { }
            else callPackage ../development/python-modules/pylint/1.9.nix { };
 
+  pyomo = callPackage ../development/python-modules/pyomo { };
+
   pyopencl = callPackage ../development/python-modules/pyopencl { };
 
   pyotp = callPackage ../development/python-modules/pyotp { };
@@ -4025,6 +4027,8 @@ in {
   pytzdata = callPackage ../development/python-modules/pytzdata { };
 
   pyutil = callPackage ../development/python-modules/pyutil { };
+
+  pyutilib = callPackage ../development/python-modules/pyutilib { };
 
   pywal = callPackage ../development/python-modules/pywal { };
 
