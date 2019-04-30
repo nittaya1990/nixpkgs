@@ -84,7 +84,7 @@ in
     by Hydra.
   '';
 
-  tests = recurseIntoAttrs (callPackages ../test {});
+  tests = callPackages ../test {};
 
   ### Nixpkgs maintainer tools
 
@@ -1025,9 +1025,14 @@ in
     charles4
   ;
 
-  libqmatrixclient = libsForQt5.callPackage ../development/libraries/libqmatrixclient { };
+  inherit (libsForQt5.callPackage ../development/libraries/libqmatrixclient { })
+    libqmatrixclient_0_4
+    libqmatrixclient_0_5
+    libqmatrixclient;
 
-  quaternion = libsForQt5.callPackage ../applications/networking/instant-messengers/quaternion { };
+  inherit (libsForQt5.callPackage ../applications/networking/instant-messengers/quaternion { })
+    quaternion
+    quaternion-git;
 
   tensor = libsForQt5.callPackage ../applications/networking/instant-messengers/tensor { };
 
@@ -1330,6 +1335,10 @@ in
   ddar = callPackage ../tools/backup/ddar { };
 
   ddate = callPackage ../tools/misc/ddate { };
+
+  dedup = callPackage ../tools/backup/dedup {
+    inherit (llvmPackages) openmp;
+  };
 
   dehydrated = callPackage ../tools/admin/dehydrated { };
 
@@ -1659,6 +1668,10 @@ in
   mkspiffs-presets = recurseIntoAttrs (callPackages ../tools/filesystems/mkspiffs/presets.nix { });
 
   monetdb = callPackage ../servers/sql/monetdb { };
+
+  mousetweaks = callPackage ../applications/accessibility/mousetweaks {
+    inherit (pkgs.xorg) libX11 libXtst libXfixes;
+  };
 
   mp3blaster = callPackage ../applications/audio/mp3blaster { };
 
@@ -2560,6 +2573,8 @@ in
 
   eid-mw = callPackage ../tools/security/eid-mw { };
 
+  epubcheck = callPackage ../tools/text/epubcheck { };
+
   mcrcon = callPackage ../tools/networking/mcrcon {};
 
   s-tar = callPackage ../tools/archivers/s-tar {};
@@ -2579,6 +2594,8 @@ in
   wallutils = callPackage ../tools/graphics/wallutils { };
 
   wl-clipboard = callPackage ../tools/misc/wl-clipboard { };
+
+  z-lua = callPackage ../tools/misc/z-lua { };
 
   zabbix-cli = callPackage ../tools/misc/zabbix-cli { };
 
@@ -3520,6 +3537,8 @@ in
 
   httping = callPackage ../tools/networking/httping {};
 
+  httplz = callPackage ../tools/networking/httplz { };
+
   httpfs2 = callPackage ../tools/filesystems/httpfs { };
 
   httpstat = callPackage ../tools/networking/httpstat { };
@@ -4120,6 +4139,8 @@ in
 
   leatherman = callPackage ../development/libraries/leatherman { };
 
+  ledmon = callPackage ../tools/system/ledmon { };
+
   leela = callPackage ../tools/graphics/leela { };
 
   lftp = callPackage ../tools/networking/lftp { };
@@ -4401,6 +4422,8 @@ in
 
   mimetic = callPackage ../development/libraries/mimetic { };
 
+  minetime = callPackage ../applications/office/minetime { };
+
   minio-client = callPackage ../tools/networking/minio-client {
     buildGoPackage = buildGo110Package;
   };
@@ -4528,6 +4551,8 @@ in
 
   nabi = callPackage ../tools/inputmethods/nabi { };
 
+  nahid-fonts = callPackage ../data/fonts/nahid-fonts { };
+
   namazu = callPackage ../tools/text/namazu { };
 
   nano-wallet = libsForQt5.callPackage ../applications/altcoins/nano-wallet { };
@@ -4649,6 +4674,8 @@ in
     buildGoPackage = buildGo110Package;
   };
 
+  notable = callPackage ../applications/misc/notable { };
+
   miller = callPackage ../tools/text/miller { };
 
   milu = callPackage ../applications/misc/milu { };
@@ -4656,6 +4683,8 @@ in
   mpack = callPackage ../tools/networking/mpack { };
 
   pa_applet = callPackage ../tools/audio/pa-applet { };
+
+  pandoc-imagine = python3Packages.callPackage ../tools/misc/pandoc-imagine { };
 
   pasystray = callPackage ../tools/audio/pasystray { };
 
@@ -4945,6 +4974,8 @@ in
   parted = callPackage ../tools/misc/parted { };
 
   paulstretch = callPackage ../applications/audio/paulstretch { };
+
+  pazi = callPackage ../tools/misc/pazi { };
 
   pell = callPackage ../applications/misc/pell { };
 
@@ -5239,6 +5270,8 @@ in
 
   pydb = callPackage ../development/tools/pydb { };
 
+  pydf = callPackage ../applications/misc/pydf { };
+
   pygmentex = callPackage ../tools/typesetting/pygmentex { };
 
   pythonIRClib = pythonPackages.pythonIRClib;
@@ -5279,6 +5312,7 @@ in
   qdigidoc = libsForQt5.callPackage ../tools/security/qdigidoc { } ;
   esteidfirefoxplugin = callPackage ../applications/networking/browsers/mozilla-plugins/esteidfirefoxplugin { };
 
+  qgrep = callPackage ../tools/text/qgrep {};
 
   qhull = callPackage ../development/libraries/qhull { };
 
@@ -5578,6 +5612,8 @@ in
 
   scrypt = callPackage ../tools/security/scrypt { };
 
+  sd = callPackage ../tools/text/sd { };
+
   sdate = callPackage ../tools/misc/sdate { };
 
   sdcv = callPackage ../applications/misc/sdcv { };
@@ -5744,6 +5780,8 @@ in
   sonarr = callPackage ../servers/sonarr { };
 
   sonata = callPackage ../applications/audio/sonata { };
+
+  soundkonverter = kdeApplications.callPackage ../applications/audio/soundkonverter {};
 
   souper = callPackage ../development/compilers/souper { };
 
@@ -7723,6 +7761,8 @@ in
     inherit (ocaml-ng.ocamlPackages_4_05) ocaml;
   };
 
+  pforth = callPackage ../development/compilers/pforth {};
+
   picat = callPackage ../development/compilers/picat {
     stdenv = overrideCC stdenv gcc49;
   };
@@ -7775,6 +7815,7 @@ in
   cargo-bloat = callPackage ../development/tools/rust/cargo-bloat { };
   cargo-expand = callPackage ../development/tools/rust/cargo-expand { };
   cargo-fuzz = callPackage ../development/tools/rust/cargo-fuzz { };
+  cargo-sweep = callPackage ../development/tools/rust/cargo-sweep { };
   cargo-xbuild = callPackage ../development/tools/rust/cargo-xbuild { };
 
   pyo3-pack = callPackage ../development/tools/rust/pyo3-pack { };
@@ -8061,24 +8102,10 @@ in
 
   wabt = callPackage ../development/tools/wabt { };
 
-  ### LUA MODULES
-  lua5_1 = callPackage ../development/interpreters/lua-5/5.1.nix {
-    self = lua5_1;
-  };
-  lua5_2 = callPackage ../development/interpreters/lua-5/5.2.nix {
-    self = lua5_2;
-  };
-  lua5_2_compat = callPackage ../development/interpreters/lua-5/5.2.nix {
-    compat = true;
-    self = lua5_2_compat;
-  };
-  lua5_3 = callPackage ../development/interpreters/lua-5/5.3.nix {
-    self = lua5_3;
-  };
-  lua5_3_compat = callPackage ../development/interpreters/lua-5/5.3.nix {
-    compat = true;
-    self = lua5_3_compat;
-  };
+  ### LUA interpreters
+  luaInterpreters = callPackage ./../development/interpreters/lua-5 {};
+  inherit (luaInterpreters) lua5_1 lua5_2 lua5_2_compat lua5_3 lua5_3_compat luajit_2_1 luajit_2_0;
+
   lua5 = lua5_2_compat;
   lua = lua5;
 
@@ -8088,17 +8115,6 @@ in
   luajitPackages = recurseIntoAttrs luajit.pkgs;
 
   luaPackages = lua52Packages;
-
-  # override instead ?
-  luajit_2_0 = import ../development/interpreters/luajit/2.0.nix {
-    self = luajit_2_0;
-    inherit (super) callPackage lib;
-  };
-
-  luajit_2_1 = import ../development/interpreters/luajit/2.1.nix {
-    self = luajit_2_1;
-    inherit (super) callPackage lib;
-  };
 
   luajit = luajit_2_1;
 
@@ -8580,9 +8596,12 @@ in
 
   awf = callPackage ../development/tools/misc/awf { };
 
-  electron = callPackage ../development/tools/electron { };
+  electron_5 = callPackage ../development/tools/electron/5.x.nix { };
+
+  electron_4 = callPackage ../development/tools/electron { };
 
   electron_3 = callPackage ../development/tools/electron/3.x.nix { };
+  electron = electron_4;
 
   autobuild = callPackage ../development/tools/misc/autobuild { };
 
@@ -13909,8 +13928,7 @@ in
   elasticmq = callPackage ../servers/elasticmq { };
 
   eventstore = callPackage ../servers/nosql/eventstore {
-    mono = mono4;
-    v8 = v8_6_x;
+    Nuget = dotnetPackages.Nuget;
   };
 
   exim = callPackage ../servers/mail/exim { };
@@ -16405,6 +16423,8 @@ in
 
   xits-math = callPackage ../data/fonts/xits-math { };
 
+  xkcd-font = callPackage ../data/fonts/xkcd-font { };
+
   xkeyboard_config = xorg.xkeyboardconfig;
 
   xlsx2csv = with python3Packages; toPythonApplication xlsx2csv;
@@ -16908,6 +16928,8 @@ in
 
   ctop = callPackage ../tools/system/ctop { };
 
+  cubicsdr = callPackage ../applications/radio/cubicsdr { wxGTK = wxGTK31; };
+
   cuneiform = callPackage ../tools/graphics/cuneiform {};
 
   curseradio = callPackage ../applications/audio/curseradio { };
@@ -16947,7 +16969,7 @@ in
   dbvisualizer = callPackage ../applications/misc/dbvisualizer {};
 
   dd-agent = callPackage ../tools/networking/dd-agent/5.nix { };
-  datadog-agent = callPackage ../tools/networking/dd-agent/6.nix {
+  datadog-agent = callPackage ../tools/networking/dd-agent/datadog-agent.nix {
     pythonPackages = datadog-integrations-core {};
   };
   datadog-process-agent = callPackage ../tools/networking/dd-agent/datadog-process-agent.nix { };
@@ -17379,8 +17401,6 @@ in
   etherape = callPackage ../applications/networking/sniffers/etherape { };
 
   evilvte = callPackage ../applications/misc/evilvte (config.evilvte or {});
-
-  evopedia = callPackage ../applications/misc/evopedia { };
 
   exercism = callPackage ../applications/misc/exercism { };
 
@@ -18303,7 +18323,7 @@ in
   inherit (kdeApplications)
     akonadi akregator ark dolphin dragon ffmpegthumbs filelight gwenview k3b
     kaddressbook kate kcachegrind kcalc kcharselect kcolorchooser kcontacts kdenlive kdf kdialog
-    keditbookmarks kget kgpg khelpcenter kig kleopatra kmail kmix kmplot kolourpaint kompare konsole
+    keditbookmarks kfind kget kgpg khelpcenter kig kleopatra kmail kmix kmplot kolourpaint kompare konsole
     kpkpass kitinerary kontact korganizer krdc krfb ksystemlog ktouch kwalletmanager marble minuet okular spectacle;
 
   okteta = libsForQt5.callPackage ../applications/editors/okteta { };
@@ -18792,7 +18812,8 @@ in
 
   mm-common = callPackage ../development/libraries/mm-common { };
 
-  matrique = libsForQt5.callPackage ../applications/networking/instant-messengers/matrique { };
+  # Renamed
+  matrique = spectral;
 
   mpc-qt = libsForQt5.callPackage ../applications/video/mpc-qt { };
 
@@ -19999,6 +20020,8 @@ in
   tasksh = callPackage ../applications/misc/tasksh { };
 
   taskserver = callPackage ../servers/misc/taskserver { };
+
+  taskopen = callPackage ../applications/misc/taskopen { };
 
   tdesktopPackages = dontRecurseIntoAttrs (callPackage ../applications/networking/instant-messengers/telegram/tdesktop { });
   tdesktop = tdesktopPackages.stable;
@@ -21850,7 +21873,7 @@ in
   inherit (kdeFrameworks) kded kinit frameworkintegration;
 
   inherit (plasma5)
-    bluedevil breeze-gtk breeze-qt5 breeze-grub breeze-plymouth
+    bluedevil breeze-gtk breeze-qt5 breeze-grub breeze-plymouth discover
     kactivitymanagerd kde-cli-tools kde-gtk-config kdeplasma-addons kgamma5
     kinfocenter kmenuedit kscreen kscreenlocker ksshaskpass ksysguard
     kwallet-pam kwayland-integration kwin kwrited milou oxygen plasma-browser-integration
@@ -21911,6 +21934,8 @@ in
   alliance = callPackage ../applications/science/electronics/alliance { };
 
   ants = callPackage ../applications/science/biology/ants { };
+
+  aragorn = callPackage ../applications/science/biology/aragorn { };
 
   archimedes = callPackage ../applications/science/electronics/archimedes {
     stdenv = overrideCC stdenv gcc49;
@@ -23824,6 +23849,8 @@ in
   newlib = callPackage ../development/misc/newlib { };
   newlibCross = callPackage ../development/misc/newlib {
     stdenv = crossLibcStdenv;
-  };
+    };
+
+	omnisharp-roslyn = callPackage ../development/tools/omnisharp-roslyn { };
 
 }

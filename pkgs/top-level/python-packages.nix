@@ -1316,7 +1316,7 @@ in {
 
   bottle = callPackage ../development/python-modules/bottle { };
 
-  box2d = callPackage ../development/python-modules/box2d { pkgs-box2d = pkgs.box2d; };
+  box2d = callPackage ../development/python-modules/box2d { };
 
   branca = callPackage ../development/python-modules/branca { };
 
@@ -4435,6 +4435,8 @@ in {
   widgetsnbextension = callPackage ../development/python-modules/widgetsnbextension { };
 
   wordfreq = callPackage ../development/python-modules/wordfreq { };
+
+  wikipedia = callPackage ../development/python-modules/wikipedia { };
 
   magic-wormhole = callPackage ../development/python-modules/magic-wormhole { };
 
