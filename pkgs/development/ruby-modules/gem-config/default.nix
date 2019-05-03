@@ -23,7 +23,7 @@
 , cmake, libssh2, openssl, mysql, darwin, git, perl, pcre, gecode_3, curl
 , msgpack, qt59, libsodium, snappy, libossp_uuid, lxc, libpcap, xorg, gtk2, buildRubyGem
 , cairo, re2, rake, gobject-introspection, gdk_pixbuf, zeromq, czmq, graphicsmagick, libcxx
-, file, libvirt, glib, vips, taglib, libopus
+, file, libvirt, glib, vips, taglib, libopus, linux-pam, libidn, protobuf
 , libselinux ? null, libsepol ? null
 }@args:
 
@@ -77,6 +77,11 @@ in
 
   charlock_holmes = attrs: {
     buildInputs = [ which icu zlib ];
+  };
+
+  cld3 = attrs: {
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ protobuf ];
   };
 
   curb = attrs: {
@@ -199,6 +204,10 @@ in
 
   iconv = attrs: {
     buildFlags = lib.optional stdenv.isDarwin "--with-iconv-dir=${libiconv}";
+  };
+
+  idn-ruby = attrs: {
+    buildInputs = [ libidn ];
   };
 
   # disable bundle install as it can't install anything in addition to what is
@@ -340,6 +349,10 @@ in
     buildInputs = [ imagemagick which ];
   };
 
+  rpam2 = attrs: {
+    buildInputs = [ linux-pam ];
+  };
+
   ruby-libvirt = attrs: {
     buildInputs = [ libvirt pkgconfig ];
     buildFlags = [
@@ -415,6 +428,7 @@ in
   sup = attrs: {
     dontBuild = false;
     # prevent sup from trying to dynamically install `xapian-ruby`.
+    nativeBuildInputs = [ rake ];
     postPatch = ''
       cp ${./mkrf_conf_xapian.rb} ext/mkrf_conf_xapian.rb
 
@@ -484,7 +498,7 @@ in
   xapian-ruby = attrs: {
     # use the system xapian
     dontBuild = false;
-    nativeBuildInputs = [ pkgconfig ];
+    nativeBuildInputs = [ rake pkgconfig ];
     buildInputs = [ xapian_1_2_22 zlib ];
     postPatch = ''
       cp ${./xapian-Rakefile} Rakefile

@@ -177,6 +177,8 @@ in
 
   docker-sync = callPackage ../tools/misc/docker-sync { };
 
+  docui = callPackage ../tools/misc/docui { };
+
   dotfiles = callPackage ../applications/misc/dotfiles { };
 
   dotnetenv = callPackage ../build-support/dotnetenv {
@@ -2101,9 +2103,13 @@ in
 
   colormake = callPackage ../development/tools/build-managers/colormake { };
 
+  ethash = callPackage ../development/libraries/ethash { };
+
   cpuminer = callPackage ../tools/misc/cpuminer { };
 
   cpuminer-multi = callPackage ../tools/misc/cpuminer-multi { };
+
+  ethminer = callPackage ../tools/misc/ethminer { };
 
   cuetools = callPackage ../tools/cd-dvd/cuetools { };
 
@@ -3428,6 +3434,8 @@ in
   halibut = callPackage ../tools/typesetting/halibut { };
 
   halide = callPackage ../development/compilers/halide { };
+
+  ham = pkgs.perlPackages.ham;
 
   hardinfo = callPackage ../tools/system/hardinfo { };
 
@@ -5356,6 +5364,8 @@ in
 
   rambox = callPackage ../applications/networking/instant-messengers/rambox { };
 
+  rambox-pro = callPackage ../applications/networking/instant-messengers/rambox/pro.nix { };
+
   ranger = callPackage ../applications/misc/ranger { };
 
   rarcrack = callPackage ../tools/security/rarcrack { };
@@ -5427,9 +5437,7 @@ in
 
   remind = callPackage ../tools/misc/remind { };
 
-  remmina = callPackage ../applications/networking/remote/remmina {
-    gsettings-desktop-schemas = gnome3.gsettings-desktop-schemas;
-  };
+  remmina = callPackage ../applications/networking/remote/remmina { };
 
   rename = callPackage ../tools/misc/rename { };
 
@@ -5749,6 +5757,8 @@ in
   smbnetfs = callPackage ../tools/filesystems/smbnetfs {};
 
   smenu = callPackage ../tools/misc/smenu { };
+
+  smesh = callPackage ../development/libraries/smesh {};
 
   smugline = python3Packages.smugline;
 
@@ -6346,6 +6356,8 @@ in
   };
 
   vtun = callPackage ../tools/networking/vtun { };
+
+  waifu2x-converter-cpp = callPackage ../tools/graphics/waifu2x-converter-cpp { };
 
   wakatime = pythonPackages.callPackage ../tools/misc/wakatime { };
 
@@ -7324,7 +7336,7 @@ in
 
   haskell = callPackage ./haskell-packages.nix { };
 
-  haskellPackages = dontRecurseIntoAttrs (haskell.packages.ghc864.override {
+  haskellPackages = dontRecurseIntoAttrs (haskell.packages.ghc865.override {
     overrides = haskell.packageOverrides;
   });
 
@@ -7662,6 +7674,8 @@ in
   });
 
   llvmPackages_latest = llvmPackages_8;
+
+  lorri = throw "lorri is not stable yet. Please go to https://github.com/target/lorri and follow the installation instructions there, for the time being.";
 
   manticore = callPackage ../development/compilers/manticore { };
 
@@ -8865,6 +8879,8 @@ in
   libsigrok4dsl = callPackage ../applications/science/electronics/dsview/libsigrok4dsl.nix { };
   libsigrokdecode4dsl = callPackage ../applications/science/electronics/dsview/libsigrokdecode4dsl.nix { };
 
+  cli11 = callPackage ../development/tools/misc/cli11 { };
+
   dcadec = callPackage ../development/tools/dcadec { };
 
   dejagnu = callPackage ../development/tools/misc/dejagnu { };
@@ -9053,6 +9069,8 @@ in
   gtk-doc = callPackage ../development/tools/documentation/gtk-doc { };
 
   gtkdialog = callPackage ../development/tools/misc/gtkdialog { };
+
+  gtranslator = callPackage ../tools/text/gtranslator { };
 
   guff = callPackage ../tools/graphics/guff { };
 
@@ -10328,9 +10346,14 @@ in
     else if stdenv.targetPlatform.useiOSPrebuilt then targetPackages.darwin.iosSdkPkgs.libraries or darwin.iosSdkPkgs.libraries
     else if name == "libSystem" then targetPackages.darwin.xcode
     else if name == "nblibc" then targetPackages.netbsdCross.libc
-    else throw "Unknown libc";
+    else if name == "wasilibc" then targetPackages.wasilibc or wasilibc
+    else throw "Unknown libc ${name}";
 
   libcCross = assert stdenv.targetPlatform != stdenv.buildPlatform; libcCrossChooser stdenv.targetPlatform.libc;
+
+  wasilibc = callPackages ../development/libraries/wasilibc {
+    stdenv = crossLibcStdenv;
+  };
 
   # Only supported on Linux, using glibc
   glibcLocales = if stdenv.hostPlatform.libc == "glibc" then callPackage ../development/libraries/glibc/locales.nix { } else null;
@@ -11414,7 +11437,7 @@ in
   # We also provide `libiconvReal`, which will always be a standalone libiconv,
   # just in case you want it regardless of platform.
   libiconv =
-    if (stdenv.hostPlatform.libc == "glibc" || stdenv.hostPlatform.libc == "musl")
+    if lib.elem stdenv.hostPlatform.libc ["glibc" "musl" "wasilibc"]
       then glibcIconv (if stdenv.hostPlatform != stdenv.buildPlatform
                        then libcCross
                        else stdenv.cc.libc)
@@ -15715,35 +15738,9 @@ in
   # Non-upstream U-Boots:
   ubootNanonote = callPackage ../misc/uboot/nanonote.nix { };
 
-  inherit (let
-    dtc = buildPackages.dtc.overrideAttrs (old: rec {
-      version = "1.4.5";
-      src = fetchgit {
-        url = "https://git.kernel.org/pub/scm/utils/dtc/dtc.git";
-        rev = "refs/tags/v${version}";
-        sha256 = "10y5pbkcj5gkijcgnlvrh6q2prpnvsgihb9asz3zfp66mcjwzsy3";
-      };
-    });
-    # Newer dtc versions are incompatible with U-Boot 2017.09
-    inherit (callPackage ../misc/uboot {
-      inherit dtc;
-      buildPackages = buildPackages // {
-        python2 = buildPackages.python2.override (old: {
-          packageOverrides = pySelf: pySuper: {
-            libfdt = pySelf.toPythonModule dtc;
-          };
-        });
-      };
-    }) buildUBoot;
-  in {
-    ubootRock64 = callPackage ../misc/uboot/rock64.nix {
-      inherit buildUBoot;
-    };
+  ubootRock64 = callPackage ../misc/uboot/rock64.nix { };
 
-    ubootRockPro64 = callPackage ../misc/uboot/rockpro64.nix {
-      inherit buildUBoot;
-    };
-  }) ubootRock64 ubootRockPro64;
+  ubootRockPro64 = callPackage ../misc/uboot/rockpro64.nix { };
 
   uclibc = callPackage ../os-specific/linux/uclibc { };
 
@@ -15944,6 +15941,8 @@ in
 
   cooper-hewitt = callPackage ../data/fonts/cooper-hewitt { };
 
+  d2coding = callPackage ../data/fonts/d2coding { };
+
   dosis = callPackage ../data/fonts/dosis { };
 
   dosemu_fonts = callPackage ../data/fonts/dosemu-fonts { };
@@ -16004,7 +16003,7 @@ in
 
   gnome_user_docs = callPackage ../data/documentation/gnome-user-docs { };
 
-  inherit (gnome3) gsettings-desktop-schemas;
+  gsettings-desktop-schemas = callPackage ../development/libraries/gsettings-desktop-schemas { };
 
   go-font = callPackage ../data/fonts/go-font { };
 
@@ -16163,6 +16162,8 @@ in
   myrica = callPackage ../data/fonts/myrica { };
 
   nafees = callPackage ../data/fonts/nafees { };
+
+  nanum-gothic-coding = callPackage ../data/fonts/nanum-gothic-coding {  };
 
   nordic = callPackage ../data/themes/nordic { };
 
@@ -16368,6 +16369,8 @@ in
   terminus_font_ttf = callPackage ../data/fonts/terminus-font-ttf { };
 
   termtekst = callPackage ../misc/emulators/termtekst { };
+
+  tetra-gtk-theme = callPackage ../data/themes/tetra { };
 
   tex-gyre = callPackages ../data/fonts/tex-gyre { };
 
@@ -16842,7 +16845,6 @@ in
   cinelerra = callPackage ../applications/video/cinelerra { };
 
   claws-mail = callPackage ../applications/networking/mailreaders/claws-mail {
-    inherit (gnome3) gsettings-desktop-schemas;
     inherit (xorg) libSM;
   };
 
@@ -18498,7 +18500,7 @@ in
   libvmi = callPackage ../development/libraries/libvmi { };
 
   liferea = callPackage ../applications/networking/newsreaders/liferea {
-    inherit (gnome3) gsettings-desktop-schemas dconf;
+    inherit (gnome3) dconf;
   };
 
   lightworks = callPackage ../applications/video/lightworks {
@@ -18963,7 +18965,9 @@ in
   speedread = callPackage ../applications/misc/speedread { };
 
   sup = callPackage ../applications/networking/mailreaders/sup {
-    ruby = ruby_2_3.override { cursesSupport = true; };
+    bundlerApp = bundlerApp.override{
+      ruby = ruby.override { cursesSupport = true; };
+    };
   };
 
   synapse = callPackage ../applications/misc/synapse { };
@@ -20816,9 +20820,7 @@ in
     openssl = null;
   };
 
-  roxterm = callPackage ../applications/misc/roxterm {
-    inherit (gnome3) gsettings-desktop-schemas;
-  };
+  roxterm = callPackage ../applications/misc/roxterm { };
 
   termonad-with-packages = callPackage ../applications/misc/termonad {
     inherit (haskellPackages) ghcWithPackages;
@@ -21274,12 +21276,11 @@ in
 
   minecraft = callPackage ../games/minecraft { };
 
-  minecraft-server = minecraft-server_1_13_2;
+  minecraft-server = minecraft-server_1_14;
 
   inherit (callPackages ../games/minecraft-server { })
+    minecraft-server_1_14
     minecraft-server_1_13_2
-    minecraft-server_1_13_1
-    minecraft-server_1_13_0
     minecraft-server_1_12_2;
 
   moon-buggy = callPackage ../games/moon-buggy {};
@@ -21864,8 +21865,8 @@ in
       mkPlasma5 = import ../desktops/plasma-5;
       attrs = {
         inherit libsForQt5 lib fetchurl;
-        inherit (gnome3) gsettings-desktop-schemas;
         gconf = gnome2.GConf;
+        inherit gsettings-desktop-schemas;
       };
     in
       recurseIntoAttrs (makeOverridable mkPlasma5 attrs);
@@ -22473,6 +22474,7 @@ in
     wxGTK = wxGTK30;
     boost = boost160;
   };
+  kicad-with-packages3d = kicad.overrideAttrs (old: { modules = old.modules ++ [ old.passthru.packages3d ]; });
 
   kicad-unstable = python.pkgs.callPackage ../applications/science/electronics/kicad/unstable.nix {
     wxGTK = wxGTK30;
@@ -23439,8 +23441,6 @@ in
 
   tetex = callPackage ../tools/typesetting/tex/tetex { libpng = libpng12; };
 
-  tetra-gtk-theme = callPackage ../misc/themes/tetra { };
-
   tewi-font = callPackage ../data/fonts/tewi  {};
 
   texFunctions = callPackage ../tools/typesetting/tex/nix pkgs;
@@ -23452,6 +23452,8 @@ in
   ib-tws = callPackage ../applications/office/ib/tws { jdk=oraclejdk8; };
 
   ib-controller = callPackage ../applications/office/ib/controller { jdk=oraclejdk8; };
+
+  ssh-audit = callPackage ../tools/security/ssh-audit { };
 
   thermald = callPackage ../tools/system/thermald { };
 
@@ -23852,5 +23854,7 @@ in
     };
 
 	omnisharp-roslyn = callPackage ../development/tools/omnisharp-roslyn { };
+
+  wasmtime = callPackage ../development/interpreters/wasmtime {};
 
 }
