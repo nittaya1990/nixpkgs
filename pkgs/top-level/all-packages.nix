@@ -1439,8 +1439,6 @@ in
 
   elm-github-install = callPackage ../tools/package-management/elm-github-install { };
 
-  emby = callPackage ../servers/emby { };
-
   enca = callPackage ../tools/text/enca { };
 
   ent = callPackage ../tools/misc/ent { };
@@ -4547,6 +4545,8 @@ in
 
   munge = callPackage ../tools/security/munge { };
 
+  munt = libsForQt5.callPackage ../applications/audio/munt { };
+
   mycli = callPackage ../tools/admin/mycli { };
 
   mydumper = callPackage ../tools/backup/mydumper { };
@@ -4788,6 +4788,8 @@ in
   obex_data_server = callPackage ../tools/bluetooth/obex-data-server { };
 
   obexd = callPackage ../tools/bluetooth/obexd { };
+
+  obfs4 = callPackage ../tools/networking/obfs4 { };
 
   oci-image-tool = callPackage ../tools/misc/oci-image-tool { };
 
@@ -6104,7 +6106,6 @@ in
   tor-browser-bundle = callPackage ../applications/networking/browsers/tor-browser-bundle {
     stdenv = stdenvNoCC;
     tor-browser-unwrapped = firefoxPackages.tor-browser;
-    inherit (python27Packages) obfsproxy;
   };
 
   touchegg = callPackage ../tools/inputmethods/touchegg { };
@@ -6845,6 +6846,8 @@ in
   fish-foreign-env = callPackage ../shells/fish/fish-foreign-env { };
 
   ion = callPackage ../shells/ion { };
+
+  jush = callPackage ../shells/jush { };
 
   ksh = callPackage ../shells/ksh { };
 
@@ -7843,7 +7846,7 @@ in
     inherit (darwin.apple_sdk.frameworks) Security;
   };
   rustup = callPackage ../development/tools/rust/rustup {
-    inherit (darwin.apple_sdk.frameworks) Security;
+    inherit (darwin.apple_sdk.frameworks) CoreServices Security;
   };
 
   sbclBootstrap = callPackage ../development/compilers/sbcl/bootstrap.nix {};
@@ -12741,9 +12744,8 @@ in
 
   lambda-mod-zsh-theme = callPackage ../shells/zsh/lambda-mod-zsh-theme { };
 
-  leksah = callPackage ../development/tools/haskell/leksah {
-    inherit (haskellPackages) ghcWithPackages;
-  };
+  leksah = throw ("To use leksah, refer to the instructions in " +
+    "https://github.com/leksah/leksah.");
 
   libgme = callPackage ../development/libraries/audio/libgme { };
 
@@ -14298,10 +14300,9 @@ in
 
   oracleXE = callPackage ../servers/sql/oracle-xe { };
 
-  softether_4_18 = callPackage ../servers/softether/4.18.nix { };
-  softether_4_20 = callPackage ../servers/softether/4.20.nix { };
   softether_4_25 = callPackage ../servers/softether/4.25.nix { };
-  softether = softether_4_25;
+  softether_4_29 = callPackage ../servers/softether/4.29.nix { };
+  softether = softether_4_29;
 
   qboot = pkgsi686Linux.callPackage ../applications/virtualization/qboot { };
 
@@ -14818,6 +14819,8 @@ in
   lightum = callPackage ../os-specific/linux/lightum { };
 
   ebtables = callPackage ../os-specific/linux/ebtables { };
+
+  extrace = callPackage ../os-specific/linux/extrace { };
 
   facetimehd-firmware = callPackage ../os-specific/linux/firmware/facetimehd-firmware { };
 
@@ -18077,6 +18080,7 @@ in
   orbment = callPackage ../applications/window-managers/orbment { };
 
   sway = callPackage ../applications/window-managers/sway { };
+  swaybg = callPackage ../applications/window-managers/sway/bg.nix { };
   swayidle = callPackage ../applications/window-managers/sway/idle.nix { };
   swaylock = callPackage ../applications/window-managers/sway/lock.nix { };
 
@@ -19338,8 +19342,6 @@ in
   potrace = callPackage ../applications/graphics/potrace {};
 
   posterazor = callPackage ../applications/misc/posterazor { };
-
-  ppl-address-book = callPackage ../applications/office/ppl-address-book { };
 
   pqiv = callPackage ../applications/graphics/pqiv { };
 
@@ -23525,6 +23527,8 @@ in
   vokoscreen = libsForQt5.callPackage ../applications/video/vokoscreen { };
 
   vttest = callPackage ../tools/misc/vttest { };
+
+  wasm-pack = callPackage ../development/tools/wasm-pack { };
 
   wavegain = callPackage ../applications/audio/wavegain { };
 
