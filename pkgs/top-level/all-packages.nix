@@ -8366,7 +8366,7 @@ in
   svg2tikz = python27Packages.svg2tikz;
 
   pew = callPackage ../development/tools/pew {};
-  pipenv = callPackage ../development/tools/pipenv {};
+  pipenv = python3Packages.callPackage ../development/tools/pipenv {};
 
   pipewire = callPackage ../development/libraries/pipewire {};
 
