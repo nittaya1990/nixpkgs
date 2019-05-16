@@ -667,6 +667,8 @@ in {
 
   py-lru-cache = callPackage ../development/python-modules/py-lru-cache { };
 
+  py-radix = callPackage ../development/python-modules/py-radix { };
+
   pydbus = callPackage ../development/python-modules/pydbus { };
 
   pydocstyle = callPackage ../development/python-modules/pydocstyle { };
@@ -678,6 +680,8 @@ in {
   pyfakefs = callPackage ../development/python-modules/pyfakefs {};
 
   pyfttt = callPackage ../development/python-modules/pyfttt { };
+
+  pyftdi = callPackage ../development/python-modules/pyftdi { };
 
   pygame = callPackage ../development/python-modules/pygame { };
 
@@ -3098,6 +3102,8 @@ in {
   le = callPackage ../development/python-modules/le { };
 
   lektor = callPackage ../development/python-modules/lektor { };
+
+  leveldb = callPackage ../development/python-modules/leveldb { };
 
   python-oauth2 = callPackage ../development/python-modules/python-oauth2 { };
 
@@ -5524,6 +5530,7 @@ in {
   foundationdb51 = callPackage ../servers/foundationdb/python.nix { foundationdb = pkgs.foundationdb51; };
   foundationdb52 = callPackage ../servers/foundationdb/python.nix { foundationdb = pkgs.foundationdb52; };
   foundationdb60 = callPackage ../servers/foundationdb/python.nix { foundationdb = pkgs.foundationdb60; };
+  foundationdb61 = callPackage ../servers/foundationdb/python.nix { foundationdb = pkgs.foundationdb61; };
 
   libtorrentRasterbar = (toPythonModule (pkgs.libtorrentRasterbar.override {
     inherit python;
