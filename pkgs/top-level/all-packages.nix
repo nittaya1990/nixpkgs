@@ -649,6 +649,8 @@ in
 
   altermime = callPackage ../tools/networking/altermime {};
 
+  alttab = callPackage ../tools/X11/alttab { };
+
   amule = callPackage ../tools/networking/p2p/amule { };
 
   amuleDaemon = appendToName "daemon" (amule.override {
@@ -1932,11 +1934,7 @@ in
 
   bepasty = callPackage ../tools/misc/bepasty { };
 
-  bettercap = callPackage ../tools/security/bettercap {
-    # XXX: this is failing with Go 1.12. Error is related to cgo, an
-    # update to this package might fix it.
-    buildGoPackage = buildGo111Package;
-  };
+  bettercap = callPackage ../tools/security/bettercap { };
 
   bfg-repo-cleaner = gitAndTools.bfg-repo-cleaner;
 
@@ -4440,8 +4438,6 @@ in
 
   memtier-benchmark = callPackage ../tools/networking/memtier-benchmark { };
 
-  memtest86 = callPackage ../tools/misc/memtest86 { };
-
   memtest86-efi = callPackage ../tools/misc/memtest86-efi { };
 
   memtest86plus = callPackage ../tools/misc/memtest86+ { };
@@ -6593,6 +6589,8 @@ in
   xarchiver = callPackage ../tools/archivers/xarchiver { };
 
   xbanish = callPackage ../tools/X11/xbanish { };
+
+  xbill = callPackage ../games/xbill { };
 
   xbrightness = callPackage ../tools/X11/xbrightness { };
 
@@ -14729,7 +14727,7 @@ in
 
   webhook = callPackage ../servers/http/webhook { };
 
-  winstone = callPackage ../servers/http/winstone { };
+  winstone = throw "Winstone is not supported anymore. Alternatives are Jetty or Tomcat.";
 
   xinetd = callPackage ../servers/xinetd { };
 
