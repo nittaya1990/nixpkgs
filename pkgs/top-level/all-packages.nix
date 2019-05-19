@@ -2278,6 +2278,8 @@ in
 
   convoy = callPackage ../tools/filesystems/convoy { };
 
+  cpcfs = callPackage ../tools/filesystems/cpcfs { };
+
   cool-retro-term = libsForQt5.callPackage ../applications/misc/cool-retro-term { };
 
   coreutils = callPackage ../tools/misc/coreutils { };
@@ -8610,9 +8612,7 @@ in
     inherit (gnome2) gnome_vfs libglade libgnome libgnomecanvas libgnomeui;
   };
 
-  guile-lib = callPackage ../development/guile-modules/guile-lib {
-    guile = guile_2_0;
-  };
+  guile-lib = callPackage ../development/guile-modules/guile-lib { };
 
   guile-ncurses = callPackage ../development/guile-modules/guile-ncurses { };
 
@@ -9682,6 +9682,10 @@ in
   };
 
   vtable-dumper = callPackage ../development/tools/misc/vtable-dumper { };
+
+  whatstyle = callPackage ../development/tools/misc/whatstyle {
+    inherit (llvmPackages) clang-unwrapped;
+  };
 
   watson-ruby = callPackage ../development/tools/misc/watson-ruby {};
 
@@ -17533,6 +17537,8 @@ in
   epeg = callPackage ../applications/graphics/epeg { };
 
   inherit (gnome3) epiphany;
+
+  ephemeral = callPackage ../applications/networking/browsers/ephemeral { };
 
   epic5 = callPackage ../applications/networking/irc/epic5 { };
 
