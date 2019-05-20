@@ -2867,6 +2867,8 @@ in
 
   flannel = callPackage ../tools/networking/flannel { };
 
+  flare = callPackage ../games/flare { };
+
   flashbench = callPackage ../os-specific/linux/flashbench { };
 
   flatpak = callPackage ../development/libraries/flatpak { };
@@ -3446,6 +3448,8 @@ in
   partimage = callPackage ../tools/backup/partimage { };
 
   pgf_graphics = callPackage ../tools/graphics/pgf { };
+
+  pgloader = callPackage ../development/tools/pgloader { };
 
   pigz = callPackage ../tools/compression/pigz { };
 
