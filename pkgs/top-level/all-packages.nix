@@ -699,6 +699,8 @@ in
 
   bunny = callPackage ../tools/package-management/bunny { };
 
+  certigo = callPackage ../tools/admin/certigo { };
+
   chezmoi = callPackage ../tools/misc/chezmoi { };
 
   chipsec = callPackage ../tools/security/chipsec {
@@ -2437,9 +2439,13 @@ in
 
   dnscrypt-wrapper = callPackage ../tools/networking/dnscrypt-wrapper { };
 
+  dnsenum = callPackage ../tools/security/dnsenum { };
+
   dnsmasq = callPackage ../tools/networking/dnsmasq { };
 
   dnsperf = callPackage ../tools/networking/dnsperf { };
+
+  dnsrecon = callPackage ../tools/security/dnsrecon { };
 
   dnstop = callPackage ../tools/networking/dnstop { };
 
@@ -2723,6 +2729,8 @@ in
 
   enblend-enfuse = callPackage ../tools/graphics/enblend-enfuse { };
 
+  endlessh = callPackage ../servers/endlessh { };
+
   cryfs = callPackage ../tools/filesystems/cryfs {
     spdlog = spdlog_0;
   };
@@ -2877,6 +2885,12 @@ in
 
   fltrdr = callPackage ../tools/misc/fltrdr { stdenv = gcc8Stdenv; };
 
+  fluent-bit = callPackage ../tools/misc/fluent-bit {
+    stdenv = gccStdenv;
+  };
+
+  fierce = callPackage ../tools/security/fierce { };
+
   figlet = callPackage ../tools/misc/figlet { };
 
   file = callPackage ../tools/misc/file {
@@ -2987,6 +3001,9 @@ in
   fprot = callPackage ../tools/security/fprot { };
 
   fprintd = callPackage ../tools/security/fprintd { };
+  fprintd-thinkpad = fprintd.override {
+    thinkpad = true;
+  };
 
   franz = callPackage ../applications/networking/instant-messengers/franz { };
 
@@ -6020,6 +6037,8 @@ in
 
   svtplay-dl = callPackage ../tools/misc/svtplay-dl { };
 
+  symengine = callPackage ../development/libraries/symengine { };
+
   sysbench = callPackage ../development/tools/misc/sysbench {};
 
   system-config-printer = callPackage ../tools/misc/system-config-printer {
@@ -6032,6 +6051,8 @@ in
   staruml = callPackage ../tools/misc/staruml { inherit (gnome2) GConf; libgcrypt = libgcrypt_1_5; };
 
   systrayhelper = callPackage ../tools/misc/systrayhelper {};
+
+  Sylk = callPackage ../applications/networking/Sylk {};
 
   otter-browser = qt5.callPackage ../applications/networking/browsers/otter {};
 
@@ -8528,8 +8549,8 @@ in
 
   self = pkgsi686Linux.callPackage ../development/interpreters/self { };
 
-  spark = spark_22;
-  spark_22 = callPackage ../applications/networking/cluster/spark { version = "2.2.1"; };
+  spark = spark_24;
+  spark_24 = callPackage ../applications/networking/cluster/spark { version = "2.4.3"; };
 
   spidermonkey_1_8_5 = callPackage ../development/interpreters/spidermonkey/1.8.5.nix { };
   spidermonkey_38 = callPackage ../development/interpreters/spidermonkey/38.nix ({
@@ -9389,6 +9410,8 @@ in
 
   noweb = callPackage ../development/tools/literate-programming/noweb { };
   nuweb = callPackage ../development/tools/literate-programming/nuweb { tex = texlive.combined.scheme-small; };
+
+  nrfutil = callPackage ../development/tools/misc/nrfutil { };
 
   obelisk = callPackage ../development/tools/ocaml/obelisk { };
 
@@ -11123,6 +11146,8 @@ in
     then pkgs.libcanberra
     else pkgs.libcanberra-gtk2;
 
+  libcbor = callPackage ../development/libraries/libcbor { };
+
   libcec = callPackage ../development/libraries/libcec { };
   libcec_platform = callPackage ../development/libraries/libcec/platform.nix { };
 
@@ -11287,6 +11312,8 @@ in
 
   libfakekey = callPackage ../development/libraries/libfakekey { };
 
+  libfido2 = callPackage ../development/libraries/libfido2 { };
+
   libfilezilla = callPackage ../development/libraries/libfilezilla { };
 
   libfm = callPackage ../development/libraries/libfm { };
@@ -11295,6 +11322,9 @@ in
   };
 
   libfprint = callPackage ../development/libraries/libfprint { };
+  libfprint-thinkpad = libfprint.override {
+    thinkpad = true;
+  };
 
   libfpx = callPackage ../development/libraries/libfpx { };
 
@@ -13139,10 +13169,7 @@ in
 
   sphinxsearch = callPackage ../servers/search/sphinxsearch { };
 
-  spice = callPackage ../development/libraries/spice {
-    celt = celt_0_5_1;
-    inherit (pythonPackages) pyparsing;
-  };
+  spice = callPackage ../development/libraries/spice { };
 
   spice-gtk = callPackage ../development/libraries/spice-gtk { };
 
@@ -16412,6 +16439,8 @@ in
 
   qogir-theme = callPackage ../data/themes/qogir { };
 
+  redhat-official-fonts = callPackage ../data/fonts/redhat-official { };
+
   route159 = callPackage ../data/fonts/route159 { };
 
   sampradaya = callPackage ../data/fonts/sampradaya { };
@@ -16510,6 +16539,8 @@ in
   source-han-serif-traditional-chinese = sourceHanSerifPackages.traditional-chinese;
 
   spleen = callPackage ../data/fonts/spleen { };
+
+  stilo-themes = callPackage ../data/themes/stilo { };
 
   sudo-font = callPackage ../data/fonts/sudo { };
 
@@ -19102,7 +19133,9 @@ in
 
   pig = callPackage ../applications/networking/cluster/pig { };
 
-  pijul = callPackage ../applications/version-management/pijul {};
+  pijul = callPackage ../applications/version-management/pijul {
+    inherit (llvmPackages) clang libclang;
+  };
 
   ping = callPackage ../applications/networking/ping { };
 
@@ -19551,6 +19584,8 @@ in
   psi-plus = callPackage ../applications/networking/instant-messengers/psi-plus { };
 
   psol = callPackage ../development/libraries/psol { };
+
+  pstree = callPackage ../applications/misc/pstree { };
 
   ptask = callPackage ../applications/misc/ptask { };
 
@@ -20569,13 +20604,15 @@ in
 
   vorbis-tools = callPackage ../applications/audio/vorbis-tools { };
 
-  vscode = callPackage ../applications/editors/vscode { };
+  vscode = callPackage ../applications/editors/vscode/vscode.nix { };
 
   vscode-with-extensions = callPackage ../applications/editors/vscode/with-extensions.nix {};
 
   vscode-utils = callPackage ../misc/vscode-extensions/vscode-utils.nix {};
 
   vscode-extensions = recurseIntoAttrs (callPackage ../misc/vscode-extensions {});
+
+  vscodium = callPackage ../applications/editors/vscode/vscodium.nix { };
 
   vue = callPackage ../applications/misc/vue { };
 
@@ -22831,7 +22868,7 @@ in
 
   simgrid = callPackage ../applications/science/misc/simgrid { };
 
-  spyder = callPackage ../applications/science/spyder { };
+  spyder = with python3.pkgs; toPythonApplication spyder;
 
   openspace = callPackage ../applications/science/astronomy/openspace { };
 

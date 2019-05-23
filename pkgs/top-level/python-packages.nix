@@ -511,6 +511,8 @@ in {
 
   logzero = callPackage ../development/python-modules/logzero { };
 
+  macropy = callPackage ../development/python-modules/macropy { };
+
   mail-parser = callPackage ../development/python-modules/mail-parser { };
 
   manhole = callPackage ../development/python-modules/manhole { };
@@ -595,6 +597,8 @@ in {
 
   pathlib = callPackage ../development/python-modules/pathlib { };
 
+  pc-ble-driver-py = toPythonModule (callPackage ../development/python-modules/pc-ble-driver-py { });
+
   pdf2image = callPackage ../development/python-modules/pdf2image { };
 
   pdfminer = callPackage ../development/python-modules/pdfminer_six { };
@@ -606,6 +610,8 @@ in {
   perf = callPackage ../development/python-modules/perf { };
 
   phonopy = callPackage ../development/python-modules/phonopy { };
+
+  piccata = callPackage ../development/python-modules/piccata {};
 
   pims = callPackage ../development/python-modules/pims { };
 
@@ -782,6 +788,8 @@ in {
     slurm = pkgs.slurm;
   };
 
+  pyspinel = callPackage ../development/python-modules/pyspinel {};
+
   pyssim = callPackage ../development/python-modules/pyssim { };
 
   pystache = callPackage ../development/python-modules/pystache { };
@@ -931,6 +939,9 @@ in {
   trio = callPackage ../development/python-modules/trio {};
 
   sniffio = callPackage ../development/python-modules/sniffio { };
+
+  spyder-kernels = callPackage ../development/python-modules/spyder-kernels {};
+  spyder = callPackage ../development/python-modules/spyder {};
 
   tenacity = callPackage ../development/python-modules/tenacity { };
 
@@ -1232,6 +1243,8 @@ in {
   capstone = callPackage ../development/python-modules/capstone { };
 
   cement = callPackage ../development/python-modules/cement {};
+
+  cgen = callPackage ../development/python-modules/cgen { };
 
   cgroup-utils = callPackage ../development/python-modules/cgroup-utils {};
 
@@ -1781,6 +1794,8 @@ in {
 
   locket = callPackage ../development/python-modules/locket { };
 
+  loo-py = callPackage ../development/python-modules/loo-py { };
+
   tblib = callPackage ../development/python-modules/tblib { };
 
   s3fs = callPackage ../development/python-modules/s3fs { };
@@ -2081,6 +2096,8 @@ in {
 
   isbnlib = callPackage ../development/python-modules/isbnlib { };
 
+  islpy = callPackage ../development/python-modules/islpy { };
+
   itsdangerous = callPackage ../development/python-modules/itsdangerous { };
 
   iniparse = callPackage ../development/python-modules/iniparse { };
@@ -2282,6 +2299,8 @@ in {
   pyhomematic = callPackage ../development/python-modules/pyhomematic { };
 
   pylama = callPackage ../development/python-modules/pylama { };
+
+  pymbolic = callPackage ../development/python-modules/pymbolic { };
 
   pymediainfo = callPackage ../development/python-modules/pymediainfo { };
 
@@ -2609,6 +2628,8 @@ in {
   filelock = callPackage ../development/python-modules/filelock {};
 
   fiona = callPackage ../development/python-modules/fiona { gdal = pkgs.gdal; };
+
+  fitbit = callPackage ../development/python-modules/fitbit { };
 
   flake8 = callPackage ../development/python-modules/flake8 { };
 
@@ -3804,6 +3825,8 @@ in {
 
   pyasn1-modules = callPackage ../development/python-modules/pyasn1-modules { };
 
+  pyatmo = callPackage ../development/python-modules/pyatmo { };
+
   pyaudio = callPackage ../development/python-modules/pyaudio { };
 
   pysam = callPackage ../development/python-modules/pysam { };
@@ -4056,6 +4079,8 @@ in {
   pyscss = callPackage ../development/python-modules/pyscss { };
 
   pyserial = callPackage ../development/python-modules/pyserial {};
+
+  pysonos = callPackage ../development/python-modules/pysonos {};
 
   pymongo = callPackage ../development/python-modules/pymongo {};
 
@@ -4374,6 +4399,8 @@ in {
 
   statsmodels = callPackage ../development/python-modules/statsmodels { };
 
+  stravalib = callPackage ../development/python-modules/stravalib { };
+
   streamz = callPackage ../development/python-modules/streamz { };
 
   structlog = callPackage ../development/python-modules/structlog { };
@@ -4567,6 +4594,8 @@ in {
 
   pysendfile = callPackage ../development/python-modules/pysendfile { };
 
+  pyxl3 = callPackage ../development/python-modules/pyxl3 { };
+
   qpid-python = callPackage ../development/python-modules/qpid-python { };
 
   xattr = callPackage ../development/python-modules/xattr { };
@@ -4655,6 +4684,10 @@ in {
   python-daemon = callPackage ../development/python-modules/python-daemon { };
 
   python-vagrant = callPackage ../development/python-modules/python-vagrant { };
+
+  symengine = callPackage ../development/python-modules/symengine {
+    symengine = pkgs.symengine;
+  };
 
   sympy = callPackage ../development/python-modules/sympy { };
 
@@ -4795,6 +4828,8 @@ in {
   unicodecsv = callPackage ../development/python-modules/unicodecsv { };
 
   unidiff = callPackage ../development/python-modules/unidiff { };
+
+  units = callPackage ../development/python-modules/units { };
 
   unittest2 = callPackage ../development/python-modules/unittest2 { };
 
@@ -5430,6 +5465,8 @@ in {
   smart_open =  callPackage ../development/python-modules/smart_open { };
 
   gensim = callPackage  ../development/python-modules/gensim { };
+
+  genpy = callPackage ../development/python-modules/genpy { };
 
   cymem = callPackage ../development/python-modules/cymem { };
 
