@@ -20830,7 +20830,7 @@ in
         advanced-emulator-launcher
       ++ optionals (config.kodi.enableControllers or false)
         (with controllers;
-          [ default dreamcast gba genesis mouse n64 nes ps snes ])
+          [ dreamcast gba genesis mouse n64 nes ps ])
       ++ optional (config.kodi.enableExodus or false) exodus
       ++ optionals (config.kodi.enableHyperLauncher or false)
            (with hyper-launcher; [ plugin service pdfreader ])
