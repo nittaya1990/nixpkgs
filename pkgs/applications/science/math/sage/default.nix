@@ -7,7 +7,7 @@
 # is always preferred, see `sage-src.nix` for that.
 
 let
-  inherit (pkgs) fetchurl symlinkJoin callPackage nodePackages;
+  inherit (pkgs) symlinkJoin callPackage nodePackages;
 
   # https://trac.sagemath.org/ticket/15980 for tracking of python3 support
   python = pkgs.python2.override {
@@ -33,7 +33,7 @@ let
       # `sagelib`, i.e. all of sage except some wrappers and runtime dependencies
       sagelib = self.callPackage ./sagelib.nix {
         inherit flint ecl arb;
-        inherit sage-src pynac singular;
+        inherit sage-src env-locations pynac singular;
         linbox = pkgs.linbox.override { withSage = true; };
         pkg-config = pkgs.pkgconfig; # not to confuse with pythonPackages.pkgconfig
       };

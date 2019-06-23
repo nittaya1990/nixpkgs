@@ -2,7 +2,7 @@
   harfbuzz, fontconfig, pkgconfig, ncurses, imagemagick, xsel,
   libstartup_notification, libX11, libXrandr, libXinerama, libXcursor,
   libxkbcommon, libXi, libXext, wayland-protocols, wayland,
-  which, dbus, fetchpatch,
+  which, dbus,
   Cocoa,
   CoreGraphics,
   Foundation,
@@ -21,14 +21,14 @@
 with python3Packages;
 buildPythonApplication rec {
   pname = "kitty";
-  version = "0.14.0";
+  version = "0.14.2";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "kovidgoyal";
     repo = "kitty";
     rev = "v${version}";
-    sha256 = "122573l7xirs9dsi5p8gra47qpgxb3vahqp2r0c043pgz4i22v5z";
+    sha256 = "15iv3k7iryf10n8n67d37x24pzcarq97a3dr42lbld00k1lx19az";
   };
 
   buildInputs = [

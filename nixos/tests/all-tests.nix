@@ -36,6 +36,7 @@ in
   borgbackup = handleTest ./borgbackup.nix {};
   buildbot = handleTest ./buildbot.nix {};
   cadvisor = handleTestOn ["x86_64-linux"] ./cadvisor.nix {};
+  cassandra = handleTest ./cassandra.nix {};
   ceph = handleTestOn ["x86_64-linux"] ./ceph.nix {};
   certmgr = handleTest ./certmgr.nix {};
   cfssl = handleTestOn ["x86_64-linux"] ./cfssl.nix {};
@@ -82,6 +83,7 @@ in
   fish = handleTest ./fish.nix {};
   flannel = handleTestOn ["x86_64-linux"] ./flannel.nix {};
   flatpak = handleTest ./flatpak.nix {};
+  flatpak-builder = handleTest ./flatpak-builder.nix {};
   fsck = handleTest ./fsck.nix {};
   fwupd = handleTestOn ["x86_64-linux"] ./fwupd.nix {}; # libsmbios is unsupported on aarch64
   gdk-pixbuf = handleTest ./gdk-pixbuf.nix {};
@@ -135,6 +137,7 @@ in
   leaps = handleTest ./leaps.nix {};
   lidarr = handleTest ./lidarr.nix {};
   #lightdm = handleTest ./lightdm.nix {};
+  limesurvey = handleTest ./limesurvey.nix {};
   login = handleTest ./login.nix {};
   #logstash = handleTest ./logstash.nix {};
   mailcatcher = handleTest ./mailcatcher.nix {};
@@ -238,6 +241,7 @@ in
   syncthing-relay = handleTest ./syncthing-relay.nix {};
   systemd = handleTest ./systemd.nix {};
   systemd-confinement = handleTest ./systemd-confinement.nix {};
+  systemd-timesyncd = handleTest ./systemd-timesyncd.nix {};
   pdns-recursor = handleTest ./pdns-recursor.nix {};
   taskserver = handleTest ./taskserver.nix {};
   telegraf = handleTest ./telegraf.nix {};
@@ -247,6 +251,7 @@ in
   transmission = handleTest ./transmission.nix {};
   udisks2 = handleTest ./udisks2.nix {};
   upnp = handleTest ./upnp.nix {};
+  uwsgi = handleTest ./uwsgi.nix {};
   vault = handleTest ./vault.nix {};
   virtualbox = handleTestOn ["x86_64-linux"] ./virtualbox.nix {};
   wireguard = handleTest ./wireguard {};

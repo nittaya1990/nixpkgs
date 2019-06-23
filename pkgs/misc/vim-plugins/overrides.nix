@@ -1,6 +1,6 @@
 { lib, stdenv
 , python, cmake, meson, vim, ruby
-, which, fetchgit, fetchurl, fetchzip
+, which, fetchFromGitHub, fetchgit, fetchurl, fetchzip
 , llvmPackages, rustPlatform
 , xkb-switch, fzf, skim, stylish-haskell
 , python3, boost, icu, ncurses
@@ -111,10 +111,10 @@ self: super: {
 
 
   coc-nvim = let
-    version = "0.0.67";
+    version = "0.0.69";
     index_js = fetchzip {
         url = "https://github.com/neoclide/coc.nvim/releases/download/v${version}/coc.tar.gz";
-        sha256 = "0cqgrfyaq9nck1y6mb63gmwgdrxqzgdgns5gjshpp1xzfq6asrqj";
+        sha256 = "1qnznpb39bbhimzbhsvpsdkg87dv3yxzs1vr3kaikl3kpakik9p8";
       };
   in super.coc-nvim.overrideAttrs(old: {
     # you still need to enable the node js provider in your nvim config
@@ -183,6 +183,18 @@ self: super: {
   gist-vim = super.gist-vim.overrideAttrs(old: {
     dependencies = with super; [ webapi-vim ];
   });
+
+  gruvbox-community = buildVimPluginFrom2Nix {
+    pname = "gruvbox-community";
+    version = "2019-05-31";
+    src = fetchFromGitHub {
+      owner = "gruvbox-community";
+      repo = "gruvbox";
+      rev = "e122091dad968a5524f3e8136615a479c7b6f247";
+      sha256 = "1hncjyfi1gbw62b2pngy5qxyzibrhbyzgfmm9a58sdh1272l8ls8";
+    };
+    meta.maintainers = with stdenv.lib.maintainers; [ minijackson ];
+  };
 
   meson = buildVimPluginFrom2Nix {
     inherit (meson) pname version src;

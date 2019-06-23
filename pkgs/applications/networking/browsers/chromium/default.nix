@@ -1,5 +1,5 @@
-{ newScope, config, stdenv, llvmPackages, gcc8Stdenv, llvmPackages_7
-, makeWrapper, makeDesktopItem, ed
+{ newScope, config, stdenv, llvmPackages, gcc8Stdenv, llvmPackages_8
+, makeWrapper, ed
 , glib, gtk3, gnome3, gsettings-desktop-schemas
 , libva ? null
 
@@ -18,8 +18,8 @@
 }:
 
 let
-  stdenv_ = if stdenv.isAarch64 then gcc8Stdenv else llvmPackages_7.stdenv;
-  llvmPackages_ = if stdenv.isAarch64 then llvmPackages else llvmPackages_7;
+  stdenv_ = if stdenv.isAarch64 then gcc8Stdenv else llvmPackages_8.stdenv;
+  llvmPackages_ = if stdenv.isAarch64 then llvmPackages else llvmPackages_8;
 in let
   stdenv = stdenv_;
   llvmPackages = llvmPackages_;

@@ -1,4 +1,4 @@
-{ pkgs,  ... }@args:
+{ pkgs,  ... }:
 self: super:
 with super;
 {
@@ -32,6 +32,10 @@ with super;
   lrexlib-gnu = super.lrexlib-gnu.override({
     buildInputs = [ pkgs.gnulib ];
   });
+  lua-zlib = super.lua-zlib.override({
+    buildInputs = [ pkgs.zlib.dev ];
+    disabled=luaOlder "5.1" || luaAtLeast "5.4";
+  });
   luaevent = super.luaevent.override({
     buildInputs = with pkgs; [ libevent.dev libevent ];
     propagatedBuildInputs = [ luasocket ];
@@ -46,7 +50,19 @@ with super;
   lua-iconv = super.lua-iconv.override({
     buildInputs = [ pkgs.libiconv ];
   });
+  luazip = super.luazip.override({
+    buildInputs = [ pkgs.zziplib ];
+  });
   luv = super.luv.overrideAttrs(oa: {
+    # Use system libuv instead of building local and statically linking
+    # This is a hacky way to specify -DWITH_SHARED_LIBUV=ON which
+    # should be possible but I'm unable to make work.
+    # While at it, remove bundled libuv source entirely to be sure.
+    # We may wish to drop bundled lua submodules too...
+    preBuild = ''
+     sed -i 's,\(option(WITH_SHARED_LIBUV.*\)OFF,\1ON,' CMakeLists.txt
+     rm -rf deps/libuv
+    '';
     propagatedBuildInputs = oa.propagatedBuildInputs ++ [ pkgs.libuv ];
   });
 

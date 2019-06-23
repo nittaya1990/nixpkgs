@@ -1,6 +1,6 @@
 { abiCompat ? null,
-  stdenv, makeWrapper, lib, fetchurl, fetchpatch, buildPackages,
-  automake, autoconf, gettext, libiconv, libtool, intltool, mtdev, libevdev, libinput,
+  stdenv, makeWrapper, fetchurl, fetchpatch, buildPackages,
+  automake, autoconf, gettext, libiconv, libtool, intltool,
   freetype, tradcpp, fontconfig, meson, ninja,
   libGL, libGL_driver, spice-protocol, zlib, libGLU, dbus, libunwind, libdrm,
   mesa_noglu, udev, bootstrap_cmds, bison, flex, clangStdenv, autoreconfHook,
@@ -697,6 +697,17 @@ self: super:
   xrandr = super.xrandr.overrideAttrs (attrs: {
     postInstall = ''
       rm $out/bin/xkeystone
+    '';
+  });
+
+  xcalc = super.xcalc.overrideAttrs (attrs: {
+    configureFlags = attrs.configureFlags or [] ++ [
+      "--with-appdefaultdir=${placeholder "out"}/share/X11/app-defaults"
+    ];
+    nativeBuildInputs = attrs.nativeBuildInputs or [] ++ [ makeWrapper ];
+    postInstall = ''
+      wrapProgram $out/bin/xcalc \
+        --set XAPPLRESDIR ${placeholder "out"}/share/X11/app-defaults
     '';
   });
 }

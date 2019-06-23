@@ -1405,11 +1405,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   xcalc = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXaw, xorgproto, libXt }: stdenv.mkDerivation {
-    name = "xcalc-1.0.7";
+    name = "xcalc-1.1.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xcalc-1.0.7.tar.bz2;
-      sha256 = "08bzaldi76vrj7350d7b04pq7qa1qhi81x8i806yv42zcp8p3lkh";
+      url = mirror://xorg/individual/app/xcalc-1.1.0.tar.bz2;
+      sha256 = "1sxmlcb0sb3h4z05kl5l0kxnhrc0h8c74p9m3zdc7bv58jaldmym";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
@@ -2679,11 +2679,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   xorgserver = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, openssl, libX11, libXau, libXaw, libxcb, xcbutil, xcbutilwm, xcbutilimage, xcbutilkeysyms, xcbutilrenderutil, libXdmcp, libXfixes, libxkbfile, libXmu, libXpm, libXrender, libXres, libXt }: stdenv.mkDerivation {
-    name = "xorg-server-1.20.4";
+    name = "xorg-server-1.20.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/xserver/xorg-server-1.20.4.tar.bz2;
-      sha256 = "1vk6j7hmigfill9x8m7a6vvgb3s50ji2yf6yprbgqfz9xf9x83zy";
+      url = mirror://xorg/individual/xserver/xorg-server-1.20.5.tar.bz2;
+      sha256 = "17dc3g8cc55nbkx3np64dsz04n621dnzjmcc9wys0xbyyd1q47d8";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];

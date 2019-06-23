@@ -10,7 +10,6 @@
 , sqlite
 , tcl ? null, tk ? null, tix ? null, xlibsWrapper ? null, libX11 ? null, x11Support ? false
 , zlib
-, callPackage
 , self
 , CF, configd, coreutils
 , python-setup-hook
@@ -22,6 +21,7 @@
 , sourceVersion
 , sha256
 , passthruFun
+, static ? false
 }:
 
 assert x11Support -> tcl != null
@@ -164,7 +164,8 @@ let
   ]
     # Never even try to use lchmod on linux,
     # don't rely on detecting glibc-isms.
-  ++ optional stdenv.hostPlatform.isLinux "ac_cv_func_lchmod=no";
+  ++ optional stdenv.hostPlatform.isLinux "ac_cv_func_lchmod=no"
+  ++ optional static "LDFLAGS=-static";
 
   buildInputs =
     optional (stdenv ? cc && stdenv.cc.libc != null) stdenv.cc.libc ++

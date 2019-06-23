@@ -2,16 +2,8 @@
 
 let
   description = "A note-taking application that knows programmers and Markdown better";
-  desktopItem = makeDesktopItem {
-    name = "VNote";
-    exec = "vnote";
-    icon = "vnote";
-    comment = description;
-    desktopName = "VNote";
-    categories = "Office";
-  };
 in stdenv.mkDerivation rec {
-  version = "2.5";
+  version = "2.6";
   pname = "vnote";
 
   src = fetchFromGitHub {
@@ -19,7 +11,7 @@ in stdenv.mkDerivation rec {
     repo = "vnote";
     fetchSubmodules = true;
     rev = "v${version}";
-    sha256 = "17nl4z1k24wfl18f6fxs2chsmxc2526ckn5pddi2ckirbiwqwm60";
+    sha256 = "10lnzzwz7fjj55kbn3j6gdl9yi6a85mdjis586p3zcc4830mlv91";
   };
 
   nativeBuildInputs = [ qmake ];

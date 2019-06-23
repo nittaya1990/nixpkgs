@@ -1,8 +1,12 @@
-{ stdenv, callPackage, lib, fetchurl, fetchpatch, runCommand, makeWrapper
-, zip, unzip, bash, writeCBin, coreutils
-, which, python, perl, gawk, gnused, gnutar, gnugrep, gzip, findutils
+{ stdenv, callPackage, lib, fetchurl, runCommand, runCommandCC, makeWrapper
+# this package (through the fixpoint glass)
+, bazel
+, lr, xe, zip, unzip, bash, writeCBin, coreutils
+, which, python, gawk, gnused, gnutar, gnugrep, gzip, findutils
+# updater
+, python3, writeScript
 # Apple dependencies
-, cctools, clang, libcxx, CoreFoundation, CoreServices, Foundation
+, cctools, libcxx, CoreFoundation, CoreServices, Foundation
 # Allow to independently override the jdks used to build and run respectively
 , buildJdk, runJdk
 , buildJdkName
@@ -13,17 +17,35 @@
 }:
 
 let
-  srcDeps = [
-    (fetchurl {
-      url = "https://github.com/google/desugar_jdk_libs/archive/915f566d1dc23bc5a8975320cd2ff71be108eb9c.zip";
-      sha256 = "0b926df7yxyyyiwm9cmdijy6kplf0sghm23sf163zh8wrk87wfi7";
-    })
+  version = "0.26.1";
 
-    (fetchurl {
-        url = "https://mirror.bazel.build/bazel_java_tools/java_tools_pkg-0.5.1.tar.gz";
-        sha256 = "1ld8m5cj9j0r474f56pixcfi0xvx3w7pzwahxngs8f6ns0yimz5w";
-    })
-  ];
+  src = fetchurl {
+    url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-dist.zip";
+    sha256 = "000ny51hwnjyizm1md4w8q7m832jhf3c767pgbvg6nc7h67lzsf0";
+  };
+
+  # Update with `eval $(nix-build -A bazel.updater)`,
+  # then add new dependencies from the dict in ./src-deps.json as required.
+  srcDeps =
+    let
+      srcs = (builtins.fromJSON (builtins.readFile ./src-deps.json));
+      toFetchurl = d: fetchurl {
+        name = d.name;
+        urls = d.urls;
+        sha256 = d.sha256;
+      };
+    in map toFetchurl [
+      srcs.desugar_jdk_libs
+      srcs.io_bazel_skydoc
+      srcs.bazel_skylib
+      srcs.io_bazel_rules_sass
+      (if stdenv.hostPlatform.isDarwin
+       then srcs.${"java_tools_javac10_darwin-v3.2.zip"}
+       else srcs.${"java_tools_javac10_linux-v3.2.zip"})
+      srcs.${"coverage_output_generator-v1.0.zip"}
+      srcs.build_bazel_rules_nodejs
+      srcs.${"android_tools_pkg-0.2.tar.gz"}
+    ];
 
   distDir = runCommand "bazel-deps" {} ''
     mkdir -p $out
@@ -63,45 +85,108 @@ let
   # Java toolchain used for the build and tests
   javaToolchain = "@bazel_tools//tools/jdk:toolchain_host${buildJdkName}";
 
+  platforms = lib.platforms.linux ++ lib.platforms.darwin;
+
 in
 stdenv.mkDerivation rec {
-
-  version = "0.24.0";
+  name = "bazel-${version}";
 
   meta = with lib; {
     homepage = "https://github.com/bazelbuild/bazel/";
     description = "Build tool that builds code quickly and reliably";
     license = licenses.asl20;
     maintainers = [ maintainers.mboes ];
-    platforms = platforms.linux ++ platforms.darwin;
+    inherit platforms;
   };
+
+  inherit src;
+  sourceRoot = ".";
+
+  patches = [
+    ./python-stub-path-fix.patch
+  ] ++ lib.optional enableNixHacks ./nix-hacks.patch;
+
 
   # Additional tests that check bazel’s functionality. Execute
   #
   #     nix-build . -A bazel.tests
   #
   # in the nixpkgs checkout root to exercise them locally.
-  passthru.tests = {
-    pythonBinPath = callPackage ./python-bin-path-test.nix {};
-    bashTools = callPackage ./bash-tools-test.nix {};
-  };
+  passthru.tests =
+    let
+      runLocal = name: attrs: script: runCommandCC name ({
+        preferLocalBuild = true;
+        meta.platforms = platforms;
+      } // attrs) script;
 
-  name = "bazel-${version}";
+      # bazel wants to extract itself into $install_dir/install every time it runs,
+      # so let’s do that only once.
+      extracted = bazelPkg:
+        let install_dir =
+          # `install_base` field printed by `bazel info`, minus the hash.
+          # yes, this path is kinda magic. Sorry.
+          "$HOME/.cache/bazel/_bazel_nixbld";
+        in runLocal "bazel-extracted-homedir" { passthru.install_dir = install_dir; } ''
+            export HOME=$(mktemp -d)
+            touch WORKSPACE # yeah, everything sucks
+            install_base="$(${bazelPkg}/bin/bazel info | grep install_base)"
+            # assert it’s actually below install_dir
+            [[ "$install_base" =~ ${install_dir} ]] \
+              || (echo "oh no! $install_base but we are \
+            trying to copy ${install_dir} to $out instead!"; exit 1)
+            cp -R ${install_dir} $out
+          '';
 
-  src = fetchurl {
-    url = "https://github.com/bazelbuild/bazel/releases/download/${version}/${name}-dist.zip";
-    sha256 = "11gsc00ghxqkbci8nrflkwq1lcvqawlgkaryj458b24si6bjl7b2";
-  };
+      bazelTest = { name, bazelScript, workspaceDir, bazelPkg }:
+        let
+          be = extracted bazelPkg;
+        in runLocal name {} (
+          # skip extraction caching on Darwin, because nobody knows how Darwin works
+          (lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
+            # set up home with pre-unpacked bazel
+            export HOME=$(mktemp -d)
+            mkdir -p ${be.install_dir}
+            cp -R ${be}/install ${be.install_dir}
+
+            # https://stackoverflow.com/questions/47775668/bazel-how-to-skip-corrupt-installation-on-centos6
+            # Bazel checks whether the mtime of the install dir files
+            # is >9 years in the future, otherwise it extracts itself again.
+            # see PosixFileMTime::IsUntampered in src/main/cpp/util
+            # What the hell bazel.
+            ${lr}/bin/lr -0 -U ${be.install_dir} | ${xe}/bin/xe -N0 -0 touch --date="9 years 6 months" {}
+          '')
+          +
+          ''
+            # Note https://github.com/bazelbuild/bazel/issues/5763#issuecomment-456374609
+            # about why to create a subdir for the workspace.
+            cp -r ${workspaceDir} wd && chmod u+w wd && cd wd
+
+            ${bazelScript}
+
+            touch $out
+          '');
+
+      bazelWithNixHacks = bazel.override { enableNixHacks = true; };
+    in {
+      pythonBinPathWithoutNixHacks = callPackage ./python-bin-path-test.nix{ inherit runLocal bazelTest; };
+      bashToolsWithoutNixHacks = callPackage ./bash-tools-test.nix { inherit runLocal bazelTest; };
+
+      pythonBinPathWithNixHacks = callPackage ./python-bin-path-test.nix{ inherit runLocal bazelTest; bazel = bazelWithNixHacks; };
+      bashToolsWithNixHacks = callPackage ./bash-tools-test.nix { inherit runLocal bazelTest; bazel = bazelWithNixHacks; };
+    };
+
+  # update the list of workspace dependencies
+  passthru.updater = writeScript "update-bazel-deps.sh" ''
+    #!${runtimeShell}
+    cat ${runCommand "bazel-deps.json" {} ''
+        ${unzip}/bin/unzip ${src} WORKSPACE
+        ${python3}/bin/python3 ${./update-srcDeps.py} ./WORKSPACE > $out
+    ''} > ${builtins.toString ./src-deps.json}
+  '';
 
   # Necessary for the tests to pass on Darwin with sandbox enabled.
   # Bazel starts a local server and needs to bind a local address.
   __darwinAllowLocalNetworking = true;
-
-  sourceRoot = ".";
-
-  patches = [
-    ./python-stub-path-fix.patch
-  ] ++ lib.optional enableNixHacks ./nix-hacks.patch;
 
   # Bazel expects several utils to be available in Bash even without PATH. Hence this hack.
 
@@ -148,16 +233,15 @@ stdenv.mkDerivation rec {
       # https://github.com/NixOS/nixpkgs/pull/41589
       export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -isystem ${libcxx}/include/c++/v1"
 
-      # 10.10 apple_sdk Foundation doesn't have type arguments on classes
-      # Remove this when we update apple_sdk
-      sed -i -e 's/<.*\*>//g' tools/osx/xcode_locator.m
-
       # don't use system installed Xcode to run clang, use Nix clang instead
       sed -i -e "s;/usr/bin/xcrun clang;${stdenv.cc}/bin/clang $NIX_CFLAGS_COMPILE $NIX_LDFLAGS -framework CoreFoundation;g" \
         scripts/bootstrap/compile.sh \
         src/tools/xcode/realpath/BUILD \
         src/tools/xcode/stdredirect/BUILD \
         tools/osx/BUILD
+
+      # nixpkgs's libSystem cannot use pthread headers directly, must import GCD headers instead
+      sed -i -e "/#include <pthread\/spawn.h>/i #include <dispatch/dispatch.h>" src/main/cpp/blaze_util_darwin.cc
 
       # clang installed from Xcode has a compatibility wrapper that forwards
       # invocations of gcc to clang, but vanilla clang doesn't
@@ -193,7 +277,7 @@ stdenv.mkDerivation rec {
 
       # Fixup scripts that generate scripts. Not fixed up by patchShebangs below.
       substituteInPlace scripts/bootstrap/compile.sh \
-          --replace /bin/sh ${customBash}/bin/bash
+          --replace /bin/bash ${customBash}/bin/bash
 
       # add nix environment vars to .bazelrc
       cat >> .bazelrc <<EOF
@@ -297,7 +381,9 @@ stdenv.mkDerivation rec {
     cp ./bazel_src/scripts/zsh_completion/_bazel $out/share/zsh/site-functions/
   '';
 
-  doInstallCheck = true;
+  # Temporarily disabling for now. A new approach is needed for this derivation as Bazel
+  # accesses the internet during the tests which fails in a sandbox.
+  doInstallCheck = false;
   installCheckPhase = ''
     export TEST_TMPDIR=$(pwd)
 

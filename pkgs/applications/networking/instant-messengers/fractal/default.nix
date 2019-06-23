@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchFromGitLab, meson, ninja, gettext, cargo, rustc, python3, rustPlatform, pkgconfig, gtksourceview
+{ stdenv, fetchFromGitLab, meson, ninja, gettext, cargo, rustc, python3, rustPlatform, pkgconfig, gtksourceview
 , hicolor-icon-theme, glib, libhandy, gtk3, libsecret, dbus, openssl, sqlite, gst_all_1, wrapGAppsHook }:
 
 rustPlatform.buildRustPackage rec {
@@ -31,7 +31,7 @@ rustPlatform.buildRustPackage rec {
   checkPhase = null;
   installPhase = null;
 
-  cargoSha256 = "0hlvdcdzkggc2adggmlxz0yxigwp3320wfav77gddlvfip1f90sw";
+  cargoSha256 = "1ax5dv200v8mfx0418bx8sbwpbp6zj469xg75hp78kqfiv83pn1g";
 
   meta = with stdenv.lib; {
     description = "Matrix group messaging app";

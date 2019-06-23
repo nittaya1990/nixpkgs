@@ -1,4 +1,4 @@
-{ stdenv, lib, callPackage, fetchurl, fetchpatch, isInsiders ? false }:
+{ stdenv, lib, callPackage, fetchurl, isInsiders ? false }:
 
 let
   inherit (stdenv.hostPlatform) system;
@@ -12,14 +12,14 @@ let
   archive_fmt = if system == "x86_64-darwin" then "zip" else "tar.gz";
 
   sha256 = {
-    "i686-linux" = "1xl8bk1m7d930dp7nw4770vk14cppci0ag079y8d39xqnvs24mr0";
-    "x86_64-linux" = "0mq6gzz7338h4ragiar55xxby0x7whcd9nvnfk46bri162bacjbg";
-    "x86_64-darwin" = "0pgj515k2bkpz953shmnalfw6yz8sg07jsxqk1rni9s3khrrd25h";
+    "i686-linux" = "0345pxad3fkcmn5z2r55fnvx8ybvfpwydxv2h21rd99grhwh8dk4";
+    "x86_64-linux" = "1g6cib1c9mikg8cv940xk5g8dh0q5v6vlrgj78rr161hz1lrrv09";
+    "x86_64-darwin" = "0krihhr57hnsc9qc1l2ncg70vz7nmrvlqrjbgdnihlrpf71d09hp";
   }.${system};
 in
   callPackage ./generic.nix rec {
 
-    version = "1.34.0";
+    version = "1.35.1";
     pname = "vscode";
 
     executableName = "code" + lib.optionalString isInsiders "-insiders";
