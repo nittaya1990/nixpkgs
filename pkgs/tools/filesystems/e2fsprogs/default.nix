@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     ];
 
   checkInputs = [ buildPackages.perl ];
-  doCheck = true;
+  doCheck = false;
 
   postInstall = ''
     # avoid cycle between outputs
