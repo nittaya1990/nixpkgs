@@ -2479,7 +2479,9 @@ in
 
   dnstop = callPackage ../tools/networking/dnstop { };
 
-  dhcp = callPackage ../tools/networking/dhcp { };
+
+  dhcp = let pkg = callPackage ../tools/networking/dhcp { }; in
+         if stdenv.isi686 then pkg.overrideAttrs (oldAttrs: { NIX_CFLAGS_COMPILE = []; }) else pkg;
 
   dhcpdump = callPackage ../tools/networking/dhcpdump { };
 
