@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "15dk4k251y72kywnffy6iii0sgdpmqxv6b27whdyijp82716swb2";
   };
 
-  nativeBuildInputs = [ cmake python3 bison jq ];
+  nativeBuildInputs = [ cmake python bison jq ];
   enableParallelBuilding = true;
 
   postPatch = ''
