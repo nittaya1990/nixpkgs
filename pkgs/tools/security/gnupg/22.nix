@@ -1,5 +1,5 @@
-{ fetchurl, stdenv, pkgconfig, libgcrypt, libassuan, libksba, libgpgerror
-, libiconv, npth, gettext, texinfo, pcsclite, sqlite
+{ fetchurl, fetchpatch, stdenv, pkgconfig, libgcrypt, libassuan, libksba
+, libgpgerror, libiconv, npth, gettext, texinfo, pcsclite, sqlite
 , buildPackages
 
 # Each of the dependencies below are optional.
@@ -32,8 +32,12 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./fix-libusb-include-path.patch
+    ./0001-dirmngr-Only-use-SKS-pool-CA-for-SKS-pool.patch
   ];
-  postPatch = stdenv.lib.optionalString stdenv.isLinux ''
+  postPatch = ''
+    sed -i 's,hkps://hkps.pool.sks-keyservers.net,hkps://keys.openpgp.org,g' \
+        configure doc/dirmngr.texi doc/gnupg.info-1
+  '' + stdenv.lib.optionalString stdenv.isLinux ''
     sed -i 's,"libpcsclite\.so[^"]*","${stdenv.lib.getLib pcsclite}/lib/libpcsclite.so",g' scd/scdaemon.c
   ''; #" fix Emacs syntax highlighting :-(
 
