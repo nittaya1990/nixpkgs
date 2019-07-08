@@ -179,6 +179,8 @@ in
 
   dockerTools = callPackage ../build-support/docker { };
 
+  snapTools = callPackage ../build-support/snap { };
+
   nix-prefetch-docker = callPackage ../build-support/docker/nix-prefetch-docker.nix { };
 
   docker-compose = python3Packages.callPackage ../applications/virtualization/docker-compose {};
@@ -3994,7 +3996,7 @@ in
     inherit (darwin.apple_sdk.frameworks) AVFoundation AudioToolbox ImageIO CoreMedia Foundation CoreGraphics MediaToolbox;
   };
 
-  kbfs = callPackage ../tools/security/kbfs { };
+  kbfs = callPackage ../tools/security/keybase/kbfs.nix { };
 
   keybase-gui = callPackage ../tools/security/keybase/gui.nix { };
 
@@ -8056,6 +8058,7 @@ in
   cargo-bloat = callPackage ../development/tools/rust/cargo-bloat { };
   cargo-expand = callPackage ../development/tools/rust/cargo-expand { };
   cargo-fuzz = callPackage ../development/tools/rust/cargo-fuzz { };
+  cargo-inspect = callPackage ../development/tools/rust/cargo-inspect { };
   cargo-make = callPackage ../development/tools/rust/cargo-make {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -19303,6 +19306,17 @@ in
   };
 
   polybar = callPackage ../applications/misc/polybar { };
+
+  polybarFull = callPackage ../applications/misc/polybar {
+    alsaSupport = true;
+    githubSupport = true;
+    mpdSupport = true;
+    pulseSupport  = true;
+    iwSupport = true;
+    nlSupport = true;
+    i3Support = true;
+    i3GapsSupport = true;
+  };
 
   ptex = callPackage ../development/libraries/ptex {};
 
