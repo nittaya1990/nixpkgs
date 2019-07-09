@@ -1,0 +1,12 @@
+diff -ru QScintilla_gpl-2.11.1/Python/configure.py QScintilla_gpl-2.11.1-new/Python/configure.py
+--- QScintilla_gpl-2.11.1/Python/configure.py	2019-02-13 09:57:18.000000000 -0800
++++ QScintilla_gpl-2.11.1-new/Python/configure.py	2019-07-08 21:40:24.463402735 -0700
+@@ -317,6 +317,8 @@
+         if target_configuration.qsci_features_dir is not None:
+             os.environ['QMAKEFEATURES'] = target_configuration.qsci_features_dir
+
++        qmake['QT'] = "widgets printsupport"
++
+         return qmake
+
+     @staticmethod

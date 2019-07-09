@@ -15,6 +15,8 @@ buildPythonPackage rec {
   buildInputs = [ qscintilla ];
   propagatedBuildInputs = [ pyqt5 ];
 
+  patches = [ ./add-QT-modules.patch ];
+
   preConfigure = ''
     mkdir -p $out
     lndir ${pyqt5} $out
@@ -29,7 +31,8 @@ buildPythonPackage rec {
       --qsci-libdir=${qscintilla}/lib \
       --pyqt-sipdir=${pyqt5}/share/sip/PyQt5 \
       --qsci-sipdir=$out/share/sip/PyQt5 \
-      --sip-incdir=${sip}/include
+      --sip-incdir=${sip}/include \
+      --no-dist-info
   '';
 
   meta = with lib; {

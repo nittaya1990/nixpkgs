@@ -11,13 +11,13 @@ let xcodePatch =
 in
 stdenv.mkDerivation rec {
   pname = "qscintilla";
-  version = "2.9.4";
+  version = "2.11.1";
 
   name = "${pname}-${if withQt5 then "qt5" else "qt4"}-${version}";
 
   src = fetchurl {
-    url = "mirror://sourceforge/pyqt/QScintilla2/QScintilla-${version}/QScintilla_gpl-${version}.zip";
-    sha256 = "04678skipydx68zf52vznsfmll2v9aahr66g50lcqbr6xsmgr1yi";
+    url = "https://www.riverbankcomputing.com/static/Downloads/QScintilla/2.11.1/QScintilla_gpl-2.11.1.tar.gz";
+    sha256 = "1x92sxzkj10ll21if7w5z89vfvzspk04y25ck0zmmfixwhclvrfs";
   };
 
   buildInputs = [ (if withQt5 then qtbase else qt4) ];
