@@ -134,7 +134,6 @@ in
     services.xserver.drivers = singleton {
       name = "nvidia";
       modules = [ nvidia_x11.bin ];
-      libPath = [ nvidia_x11 ];
       deviceSection = optionalString optimusCfg.enable
         ''
           BusID "${optimusCfg.nvidiaBusId}"
