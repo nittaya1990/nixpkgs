@@ -58,6 +58,7 @@ in {
           Note that this should be a last resort; patching the package is preferred (see GPaste).
         '';
         type = types.listOf types.package;
+        apply = list: list ++ [ pkgs.gnome3.gnome-shell pkgs.gnome3.gnome-shell-extensions ];
       };
 
       extraGSettingsOverrides = mkOption {
@@ -154,7 +155,7 @@ in {
     services.hardware.bolt.enable = mkDefault true;
     services.xserver.libinput.enable = mkDefault true; # for controlling touchpad settings via gnome control center
     systemd.packages = [ pkgs.gnome3.vino ];
-    services.flatpak.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+    xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
 
     # If gnome3 is installed, build vim for gtk3 too.
     nixpkgs.config.vim.gui = "gtk3";
