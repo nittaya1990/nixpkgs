@@ -20,18 +20,19 @@ let
 
   package = pkgs.buildEnv {
     name = "opengl-drivers";
-    paths = [ cfg.package ] ++ cfg.extraPackages ++ optional cfg.useGLVND pkgs.libglvnd;
+    paths = [ cfg.package ] ++ cfg.extraPackages;
   };
 
   package32 = pkgs.buildEnv {
     name = "opengl-drivers-32bit";
-    paths = [ cfg.package32 ] ++ cfg.extraPackages32 ++ optional cfg.useGLVND pkgs.pkgsi686Linux.libglvnd;
+    paths = [ cfg.package32 ] ++ cfg.extraPackages32;
   };
 
 in
 
 {
   options = {
+
     hardware.opengl = {
       enable = mkOption {
         description = ''
@@ -130,17 +131,6 @@ in
           instead of overriding libraries should not set this.
         '';
       };
-    };
-
-    hardware.opengl.useGLVND = mkOption {
-      type = types.bool;
-      default = false;
-      description = ''
-        Whether to use libglvnd for vendor-neutral dispatching. Useful in case you need to use
-        both Mesa and proprietary drivers without going into conflict, the last can be added via
-        <option>hardware.opengl.extraPackages</option> and
-        <option>hardware.opengl.extraPackages32</option>.
-      '';
     };
 
   };

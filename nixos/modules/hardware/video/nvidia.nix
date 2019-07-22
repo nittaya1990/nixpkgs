@@ -5,9 +5,12 @@
 with lib;
 
 let
-  cfg = config.hardware.nvidia;
+
   drivers = config.services.xserver.videoDrivers;
 
+  # FIXME: should introduce an option like
+  # ‘hardware.video.nvidia.package’ for overriding the default NVIDIA
+  # driver.
   nvidiaForKernel = kernelPackages:
     if elem "nvidia" drivers then
         kernelPackages.nvidia_x11
@@ -30,6 +33,7 @@ let
 
   enabled = nvidia_x11 != null;
 
+  cfg = config.hardware.nvidia;
   optimusCfg = cfg.optimus_prime;
 in
 
