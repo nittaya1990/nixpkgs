@@ -1,9 +1,6 @@
 { config, lib, ... }:
 
-let
-  kernel = config.boot.kernelPackages;
-  cfg = config.hardware.nvidiaOptimus;
-in
+let kernel = config.boot.kernelPackages; in
 
 {
 
@@ -20,12 +17,6 @@ in
       '';
     };
 
-    hardware.nvidiaOptimus.enable = lib.mkOption {
-      default = false;
-      type = lib.types.bool;
-      internal = true;
-    };
-
   };
 
 
@@ -35,8 +26,6 @@ in
     boot.blacklistedKernelModules = ["nouveau" "nvidia" "nvidiafb" "nvidia-drm"];
     boot.kernelModules = [ "bbswitch" ];
     boot.extraModulePackages = [ kernel.bbswitch ];
-
-    hardware.opengl.useGLVND = true;
 
     systemd.services.bbswitch = {
       description = "Disable NVIDIA Card";
