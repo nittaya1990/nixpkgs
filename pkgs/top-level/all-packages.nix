@@ -663,6 +663,8 @@ in
 
   brakeman = callPackage ../development/tools/analysis/brakeman { };
 
+  brewtarget = libsForQt5.callPackage ../applications/misc/brewtarget { } ;
+
   ec2_api_tools = callPackage ../tools/virtualization/ec2-api-tools { };
 
   ec2_ami_tools = callPackage ../tools/virtualization/ec2-ami-tools { };
@@ -8115,7 +8117,9 @@ in
 
   pyo3-pack = callPackage ../development/tools/rust/pyo3-pack { };
   rainicorn = callPackage ../development/tools/rust/rainicorn { };
-  rls = callPackage ../development/tools/rust/rls { };
+  rls = callPackage ../development/tools/rust/rls {
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
+  };
   rustfmt = callPackage ../development/tools/rust/rustfmt { };
   rustracer = callPackage ../development/tools/rust/racer { };
   rustracerd = callPackage ../development/tools/rust/racerd { };
@@ -9795,6 +9799,8 @@ in
   teensyduino = arduino-core.override { withGui = true; withTeensyduino = true; };
 
   teensy-loader-cli = callPackage ../development/tools/misc/teensy-loader-cli { };
+
+  terraform-lsp = callPackage ../development/tools/misc/terraform-lsp { };
 
   texinfo413 = callPackage ../development/tools/misc/texinfo/4.13a.nix { };
   texinfo4 = texinfo413;
@@ -17015,6 +17021,7 @@ in
 
   bitcoin = altcoins.bitcoin;
   clightning = altcoins.clightning;
+  lnd = altcoins.lnd;
 
   bitcoin-xt = altcoins.bitcoin-xt;
   cryptop = altcoins.cryptop;
@@ -22493,6 +22500,8 @@ in
   eggnog-mapper = callPackage ../applications/science/biology/eggnog-mapper { };
 
   emboss = callPackage ../applications/science/biology/emboss { };
+
+  est-sfs = callPackage ../applications/science/biology/est-sfs { };
 
   ezminc = callPackage ../applications/science/biology/EZminc { };
 
