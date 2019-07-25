@@ -333,6 +333,11 @@
     github = "andersk";
     name = "Anders Kaseorg";
   };
+  anderslundstedt = {
+    email = "git@anderslundstedt.se";
+    github = "anderslundstedt";
+    name = "Anders Lundstedt";
+  };
   AndersonTorres = {
     email = "torres.anderson.85@protonmail.com";
     github = "AndersonTorres";
@@ -2132,6 +2137,11 @@
     github = "henrytill";
     name = "Henry Till";
   };
+  herberteuler = {
+    email = "herberteuler@gmail.com";
+    github = "herberteuler";
+    name = "Guanpeng Xu";
+  };
   hhm = {
     email = "heehooman+nixpkgs@gmail.com";
     github = "hhm0";
@@ -2297,6 +2307,11 @@
     email = "jhyphenkeck@gmail.com";
     github = "j-keck";
     name = "Jürgen Keck";
+  };
+  j03 = {
+    email = "github@johannesloetzsch.de";
+    github = "johannesloetzsch";
+    name = "Johannes Lötzsch";
   };
   jagajaga = {
     email = "ars.seroka@gmail.com";
@@ -2585,6 +2600,11 @@
     email = "jraygauthier@gmail.com";
     github = "jraygauthier";
     name = "Raymond Gauthier";
+  };
+  jtobin = {
+    email = "jared@jtobin.io";
+    github = "jtobin";
+    name = "Jared Tobin";
   };
   jtojnar = {
     email = "jtojnar@gmail.com";
