@@ -1,5 +1,5 @@
 { fetchgit, stdenv, pkgconfig, libtool, autoconf, automake
-, curl, ncurses, ocl-icd, opencl-headers, xorg, jansson, libusb1 }:
+, curl, ncurses, ocl-icd, opencl-headers, xorg, jansson }:
 
 stdenv.mkDerivation rec {
   version = "3.7.2";
@@ -21,10 +21,11 @@ stdenv.mkDerivation rec {
   NIX_LDFLAGS = "-lgcc_s -lX11 -lXext -lXinerama";
 
   postBuild = ''
-    gcc -I ${libusb1}/include/libusb-1.0 api-example.c -o cgminer-api
+    gcc api-example.c -o cgminer-api
   '';
 
   postInstall = ''
+    cp cgminer-api $out/bin/
     chmod 444 $out/bin/*.cl
   '';
 
