@@ -64,22 +64,26 @@ in stdenv.mkDerivation rec {
     sha256 = "0f7pip4d97xixwf667xpi50r0r65givvmry862zhp2cq24bs0693";
   };
 
-  phases = [ "unpackPhase" "installPhase" "fixupPhase" ];
+  phases = [ "unpackPhase" "installPhase" ];
 
   nativeBuildInputs = [ dpkg wrapGAppsHook ];
 
   unpackPhase = "dpkg-deb -x $src .";
+
   installPhase = ''
     mkdir -p $out
-    mkdir -p $out/libexec
+    cp -R opt $out
 
-    mv opt/Signal $out/libexec/Signal
+    mv ./usr/share $out/share
+    mv $out/opt/Signal $out/libexec
+    rmdir $out/opt
+
+    chmod -R g-w $out
 
     # Patch signal
     patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-             --set-rpath ${rpath}:$out/libexec/Signal $out/libexec/Signal/signal-desktop
-
-    wrapProgram $out/libexec/Signal/signal-desktop \
+             --set-rpath ${rpath}:$out/libexec $out/libexec/signal-desktop
+    wrapProgram $out/libexec/signal-desktop \
       --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}/" \
       --prefix LD_LIBRARY_PATH : "${stdenv.cc.cc.lib}/lib" \
       ${customLanguageWrapperArgs} \
@@ -87,10 +91,9 @@ in stdenv.mkDerivation rec {
 
     # Symlink to bin
     mkdir -p $out/bin
-    ln -s $out/libexec/Signal/signal-desktop $out/bin/signal-desktop
+    ln -s $out/libexec/signal-desktop $out/bin/signal-desktop
 
     # Fix the desktop link
-    mv ./usr/share $out/share
     substituteInPlace $out/share/applications/signal-desktop.desktop \
       --replace /opt/Signal/signal-desktop $out/bin/signal-desktop
   '';
