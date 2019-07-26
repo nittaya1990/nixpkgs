@@ -1,14 +1,13 @@
 { stdenv, fetchFromGitHub, cmake, bison, jq, python, spirv-tools, spirv-headers }:
 stdenv.mkDerivation rec {
   name = "glslang-${version}";
-  version = "7.11.3204";
+  version = "7.11.3113";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "glslang";
-    # rev = "${version}";
-    rev = "86c72c9486a97da534f97e56b8f7ae06cd1b580b";
-    sha256 = "15dk4k251y72kywnffy6iii0sgdpmqxv6b27whdyijp82716swb2";
+    rev = "${version}";
+    sha256 = "1kzv2b4q1fddxd7c0hc754nd6rw6y9vijb9fsi13xzzq9dficgb6";
   };
 
   nativeBuildInputs = [ cmake python bison jq ];
@@ -24,7 +23,7 @@ stdenv.mkDerivation rec {
     TOOLS_COMMIT=$(jq -r < known_good.json '.commits|map(select(.name=="spirv-tools"))[0].commit')
     if [ "$HEADERS_COMMIT" != "${spirv-headers.src.rev}" ] || [ "$TOOLS_COMMIT" != "${spirv-tools.src.rev}" ]; then
       echo "ERROR: spirv-tools commits do not match expected versions: expected tools at $TOOLS_COMMIT, headers at $HEADERS_COMMIT";
-      # exit 1;
+      exit 1;
     fi
   '';
 
