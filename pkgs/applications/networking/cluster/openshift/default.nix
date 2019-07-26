@@ -35,7 +35,7 @@ in buildGoPackage rec {
 
   buildInputs = [ which rsync go-bindata kerberos clang ];
 
-  postPatch = ''
+  patchPhase = ''
     patchShebangs ./hack
 
     substituteInPlace pkg/oc/clusterup/docker/host/host.go  \
