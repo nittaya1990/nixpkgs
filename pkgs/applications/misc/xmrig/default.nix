@@ -1,20 +1,23 @@
 { stdenv, lib, fetchFromGitHub, cmake, libuv, libmicrohttpd, openssl, hwloc
+, jansson
 , donateLevel ? 0
 }:
 
 stdenv.mkDerivation rec {
   pname = "xmrig";
-  version = "6.6.1";
+  version = "6.8.0";
 
   src = fetchFromGitHub {
     owner = "xmrig";
     repo = "xmrig";
     rev = "v${version}";
-    sha256 = "03phq1c6fylvkg5x7l0bskspr9jdfx61jy67yx2lxhymqgpbf64z";
+    sha256 = "1pkq54vg3jv25zwyd5kw9lqkc6zgfal307rq8n50nvfrcpfkkb81";
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ libuv libmicrohttpd openssl hwloc ];
+  buildInputs = [ libuv libmicrohttpd openssl hwloc jansson ];
+
+  patches = [ ./msr.patch ];
 
   postPatch = ''
     substituteInPlace src/donate.h \

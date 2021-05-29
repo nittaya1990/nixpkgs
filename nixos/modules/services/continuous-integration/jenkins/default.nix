@@ -141,6 +141,17 @@ in {
           Additional command line arguments to pass to the Java run time (as opposed to Jenkins).
         '';
       };
+
+      scriptPrefix = mkOption {
+        type = types.lines;
+        default = "";
+        example = ''
+          export PATH=/run/wrappers/bin:$PATH
+        '';
+        description = ''
+          Code added as a prefix to the script used to launch jenkins.
+        '';
+      };
     };
   };
 
@@ -207,6 +218,8 @@ in {
 
       # For reference: https://wiki.jenkins.io/display/JENKINS/JenkinsLinuxStartupScript
       script = ''
+        ${cfg.scriptPrefix}
+
         ${pkgs.jdk11}/bin/java ${concatStringsSep " " cfg.extraJavaOptions} -jar ${cfg.package}/webapps/jenkins.war --httpListenAddress=${cfg.listenAddress} \
                                                   --httpPort=${toString cfg.port} \
                                                   --prefix=${cfg.prefix} \

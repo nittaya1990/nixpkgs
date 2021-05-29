@@ -4212,6 +4212,10 @@ in
 
   epubcheck = callPackage ../tools/text/epubcheck { };
 
+  lipx = callPackage ../tools/misc/lipx {
+    python = python3;
+  };
+
   luckybackup = libsForQt5.callPackage ../tools/backup/luckybackup {
     ssh = openssh;
   };
@@ -19865,7 +19869,11 @@ in
     libdrm = if stdenv.isLinux then libdrm else null;
     abiCompat = config.xorg.abiCompat # `config` because we have no `xorg.override`
       or (if stdenv.isDarwin then "1.18" else null); # 1.19 needs fixing on Darwin
-  }) // { inherit xlibsWrapper; } );
+  }) // { inherit xlibsWrapper; xf86videospiceqxl = xspice; } );
+
+  xspice = callPackage ../servers/x11/xorg/xspice.nix {
+    sasl = cyrus_sasl;
+  };
 
   xwayland = callPackage ../servers/x11/xorg/xwayland.nix { };
 
@@ -27343,6 +27351,7 @@ in
       ++ optional (cfg.enableO2EM or false) o2em
       ++ optional (cfg.enableOpera or false) opera
       ++ optional (cfg.enableParallelN64 or false) parallel-n64
+      ++ optional (cfg.enablePCSX2 or false) pcsx2
       ++ optional (cfg.enablePCSXRearmed or false) pcsx_rearmed
       ++ optional (cfg.enablePicodrive or false) picodrive
       ++ optional (cfg.enablePlay or false) play

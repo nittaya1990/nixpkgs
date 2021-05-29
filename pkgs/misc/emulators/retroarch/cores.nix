@@ -2,6 +2,7 @@
 , alsaLib, fluidsynth, curl, hidapi, libGLU, gettext, glib, gtk2, portaudio, SDL, SDL_net, SDL2, SDL2_image, libGL
 , ffmpeg, pcre, libevdev, libpng, libjpeg, libzip, udev, libvorbis, snappy, which, hexdump
 , miniupnpc, sfml, xorg, zlib, nasm, libpcap, boost, icu, openssl
+, perl, libxml2, wxGTK30-gtk3, libaio, glew
 , buildPackages }:
 
 let
@@ -784,6 +785,27 @@ in with lib.licenses;
     '';
   };
 
+  pcsx2 = mkLibRetroCore rec {
+    core = "pcsx2";
+    src = fetchgit {
+      url = "https://github.com/aliaspider/pcsx2.git";
+      rev = "6828ca9933e822e0492f1ffd0efe4c282573e4ee";
+      sha256 = "0m198iqv1zl31a8vl1wa7pxxbp2ir2rbqh15rrvhfwjnxzxlcwr4";
+      fetchSubmodules = true;
+    };
+    description = "PCSX2";
+    license = gpl2;
+    extraNativeBuildInputs = [ cmake pkg-config perl libaio udev ];
+    extraBuildInputs = [
+      libGLU libGL boost glib libpng gtk2 libxml2 wxGTK30-gtk3 pcre
+    ] ++ (with xorg; [ libxcb xcbutil libXdmcp libpthreadstubs ]);
+    cmakeFlags = [
+      "-DLIBRETRO=ON"
+    ];
+    makefile = "Makefile";
+    postBuild = "mv pcsx2/pcsx2_libretro.so pcsx2_libretro.so";
+  };
+
   pcsx_rearmed = mkLibRetroCore rec {
     core = "pcsx_rearmed";
     src = fetchRetro {
@@ -847,8 +869,8 @@ in with lib.licenses;
     ];
     description = "ppsspp libretro port";
     license = gpl2;
-    extraNativeBuildInputs = [ cmake pkg-config python3 ];
-    extraBuildInputs = [ libGLU libGL libzip ffmpeg snappy xorg.libX11 ];
+    extraNativeBuildInputs = [ cmake pkgconfig python3 ];
+    extraBuildInputs = [ libGLU libGL libzip ffmpeg snappy xorg.libX11 libpng glew ];
     makefile = "Makefile";
     cmakeFlags = [ "-DLIBRETRO=ON -DUSE_SYSTEM_FFMPEG=ON -DUSE_SYSTEM_SNAPPY=ON -DUSE_SYSTEM_LIBZIP=ON -DOpenGL_GL_PREFERENCE=GLVND" ];
     postBuild = "mv lib/ppsspp_libretro${stdenv.hostPlatform.extensions.sharedLibrary} ppsspp_libretro${stdenv.hostPlatform.extensions.sharedLibrary}";
