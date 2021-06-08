@@ -869,7 +869,7 @@ in with lib.licenses;
     ];
     description = "ppsspp libretro port";
     license = gpl2;
-    extraNativeBuildInputs = [ cmake pkgconfig python3 ];
+    extraNativeBuildInputs = [ cmake pkg-config python3 ];
     extraBuildInputs = [ libGLU libGL libzip ffmpeg snappy xorg.libX11 libpng glew ];
     makefile = "Makefile";
     cmakeFlags = [ "-DLIBRETRO=ON -DUSE_SYSTEM_FFMPEG=ON -DUSE_SYSTEM_SNAPPY=ON -DUSE_SYSTEM_LIBZIP=ON -DOpenGL_GL_PREFERENCE=GLVND" ];
