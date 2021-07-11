@@ -2,7 +2,7 @@
 , alsaLib, fluidsynth, curl, hidapi, libGLU, gettext, glib, gtk2, portaudio, SDL, SDL_net, SDL2, SDL2_image, libGL
 , ffmpeg, pcre, libevdev, libpng, libjpeg, libzip, udev, libvorbis, snappy, which, hexdump
 , miniupnpc, sfml, xorg, zlib, nasm, libpcap, boost, icu, openssl
-, perl, libxml2, wxGTK30-gtk3, libaio, glew
+, perl, libxml2, wxGTK30-gtk2, libaio, glew, xxd, fmt, gcc-unwrapped
 , buildPackages }:
 
 let
@@ -788,22 +788,30 @@ in with lib.licenses;
   pcsx2 = mkLibRetroCore rec {
     core = "pcsx2";
     src = fetchgit {
-      url = "https://github.com/aliaspider/pcsx2.git";
-      rev = "6828ca9933e822e0492f1ffd0efe4c282573e4ee";
-      sha256 = "0m198iqv1zl31a8vl1wa7pxxbp2ir2rbqh15rrvhfwjnxzxlcwr4";
+      url = "https://github.com/libretro/pcsx2.git";
+      rev = "1c0004153a8de958fc4a87313de1021a61579896";
+      sha256 = "0kjw5mb9rbk6gw51l543wsd6ii406i9qmfkl6bpx810jy2krz9j0";
       fetchSubmodules = true;
     };
     description = "PCSX2";
     license = gpl2;
     extraNativeBuildInputs = [ cmake pkg-config perl libaio udev ];
     extraBuildInputs = [
-      libGLU libGL boost glib libpng gtk2 libxml2 wxGTK30-gtk3 pcre
+      fmt gettext libGLU libGL boost glib libpng gtk2 libxml2 wxGTK30-gtk2 pcre xxd zlib
     ] ++ (with xorg; [ libxcb xcbutil libXdmcp libpthreadstubs ]);
     cmakeFlags = [
       "-DLIBRETRO=ON"
+      "-DUSE_LTO=TRUE"
     ];
     makefile = "Makefile";
+    patches = [ ./pcsx2-p0.diff ];
     postBuild = "mv pcsx2/pcsx2_libretro.so pcsx2_libretro.so";
+    postPatch = ''
+      substituteInPlace cmake/BuildParameters.cmake \
+        --replace /usr/bin/gcc-ar ${gcc-unwrapped}/bin/gcc-ar \
+        --replace /usr/bin/gcc-nm ${gcc-unwrapped}/bin/gcc-nm \
+        --replace /usr/bin/gcc-ranlib ${gcc-unwrapped}/bin/gcc-ranlib
+    '';
   };
 
   pcsx_rearmed = mkLibRetroCore rec {

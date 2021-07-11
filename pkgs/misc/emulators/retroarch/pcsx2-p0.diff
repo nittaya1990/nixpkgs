@@ -1,0 +1,15 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index f93ea2b2f..7750fc0f1 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -23,10 +23,6 @@ include(Pcsx2Utils)
+ check_no_parenthesis_in_path()
+ detectOperatingSystem()
+ check_compiler_version("7.0" "7.0")
+-if(NOT MSVC)
+-   set(CMAKE_C_COMPILER_LAUNCHER ccache)
+-   set(CMAKE_CXX_COMPILER_LAUNCHER ccache)
+-endif()
+ 
+ #-------------------------------------------------------------------------------
+ # Include specific module
