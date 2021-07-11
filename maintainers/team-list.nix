@@ -74,7 +74,7 @@ with lib.maintainers; {
   };
 
   freedesktop = {
-    members = [ jtojnar ];
+    members = [ ];
     scope = "Maintain Freedesktop.org packages for graphical desktop.";
   };
 
@@ -96,7 +96,6 @@ with lib.maintainers; {
   gnome = {
     members = [
       hedning
-      jtojnar
       dasj19
       maxeaubrey
     ];
@@ -146,7 +145,6 @@ with lib.maintainers; {
   matrix = {
     members = [
       ma27
-      pacien
       fadenb
       mguentner
       ekleog

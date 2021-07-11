@@ -16,6 +16,10 @@
 
 ### optionals
 
+## backported libraries
+
+, rust-cbindgen_latest
+
 ## optional libraries
 
 , alsaSupport ? stdenv.isLinux, alsaLib
@@ -90,6 +94,8 @@ let
             then "/Applications/${binaryNameCapitalized}.app/Contents/MacOS"
             else "/bin";
 
+  rust-cbindgen_pkg = if lib.versionAtLeast ffversion "89" then rust-cbindgen_latest else rust-cbindgen;
+
   # 78 ESR won't build with rustc 1.47
   inherit (if lib.versionAtLeast ffversion "82" then rustPackages else rustPackages_1_45)
     rustc cargo;
@@ -116,7 +122,9 @@ let
                 then overrideCC stdenv llvmPackages.clangUseLLVM
                 else stdenv;
 
-  nss_pkg = if lib.versionOlder ffversion "83" then nss_3_53 else nss;
+  # Disable p11-kit support in nss until our cacert packages has caught up exposing CKA_NSS_MOZILLA_CA_POLICY
+  # https://github.com/NixOS/nixpkgs/issues/126065
+  nss_pkg = if lib.versionOlder ffversion "83" then nss_3_53 else nss.override { useP11kit = false; };
 
   # --enable-release adds -ffunction-sections & LTO that require a big amount of
   # RAM and the 32-bit memory space cannot handle that linking
@@ -226,7 +234,7 @@ buildStdenv.mkDerivation ({
       perl
       pkg-config
       python3
-      rust-cbindgen
+      rust-cbindgen_pkg
       rustc
       which
       unzip
