@@ -802,6 +802,17 @@ in with lib.licenses;
     cmakeFlags = [
       "-DLIBRETRO=ON"
       "-DUSE_LTO=TRUE"
+      "-DENABLE_QT=OFF"
+      "-DCMAKE_INSTALL_PREFIX=${placeholder "out"}"
+      "-DDISABLE_ADVANCE_SIMD=TRUE"
+      "-DDISABLE_PCSX2_WRAPPER=TRUE"
+      "-DDOC_DIR=${placeholder "out"}/share/doc/pcsx2"
+      "-DGAMEINDEX_DIR=${placeholder "out"}/share/pcsx2"
+      "-DGLSL_SHADER_DIR=${placeholder "out"}/share/pcsx2"
+      "-DPACKAGE_MODE=TRUE"
+      "-DPLUGIN_DIR=${placeholder "out"}/lib/pcsx2"
+      "-DREBUILD_SHADER=TRUE"
+      "-DXDG_STD=TRUE"
     ];
     makefile = "Makefile";
     patches = [ ./pcsx2-p0.diff ];
