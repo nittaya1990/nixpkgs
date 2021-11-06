@@ -1,7 +1,7 @@
 { stdenv, lib, makeDesktopItem
 , unzip, libsecret, libXScrnSaver, libxshmfence, wrapGAppsHook
 , gtk2, atomEnv, at-spi2-atk, autoPatchelfHook
-, systemd, fontconfig, libdbusmenu, buildFHSUserEnvBubblewrap
+, systemd, fontconfig, libdbusmenu, glib, buildFHSUserEnvBubblewrap
 , writeShellScriptBin
 
 # Populate passthru.tests
@@ -74,7 +74,7 @@ let
 
     installPhase = ''
       runHook preInstall
-    '' + (if system == "x86_64-darwin" then ''
+    '' + (if stdenv.isDarwin then ''
       mkdir -p "$out/Applications/${longName}.app" $out/bin
       cp -r ./* "$out/Applications/${longName}.app"
       ln -s "$out/Applications/${longName}.app/Contents/Resources/app/bin/code" $out/bin/${executableName}
@@ -96,6 +96,13 @@ let
       grep -q "VSCODE_PATH='$out/lib/vscode'" $out/bin/${executableName} # check if sed succeeded
     '') + ''
       runHook postInstall
+    '';
+
+    preFixup = ''
+      gappsWrapperArgs+=(
+        # Add gio to PATH so that moving files to the trash works when not using a desktop environment
+        --prefix PATH : ${glib.bin}/bin
+      )
     '';
 
     inherit meta;

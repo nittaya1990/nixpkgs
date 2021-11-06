@@ -106,6 +106,7 @@ in stdenv.mkDerivation {
   '';
 
   passthru.tests = {
+    apparmor = nixosTests.transmission; # starts the service with apparmor enabled
     smoke-test = nixosTests.bittorrent;
   };
 

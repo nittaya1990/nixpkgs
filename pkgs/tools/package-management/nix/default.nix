@@ -14,7 +14,7 @@ common =
   , pkg-config, boehmgc, libsodium, brotli, boost, editline, nlohmann_json
   , autoreconfHook, autoconf-archive, bison, flex
   , jq, libarchive, libcpuid
-  , lowdown, mdbook
+  , lowdown-0-9, mdbook
   # Used by tests
   , gtest
   , busybox-sandbox-shell
@@ -45,7 +45,7 @@ common =
           [ autoreconfHook
             autoconf-archive
             bison flex
-            (lib.getBin lowdown) mdbook
+            (lib.getBin lowdown-0-9) mdbook
             jq
            ];
 
@@ -55,7 +55,7 @@ common =
         ]
         ++ lib.optionals stdenv.isDarwin [ Security ]
         ++ lib.optional (stdenv.isLinux || stdenv.isDarwin) libsodium
-        ++ lib.optionals is24 [ libarchive gtest lowdown ]
+        ++ lib.optionals is24 [ libarchive gtest lowdown-0-9 ]
         ++ lib.optional (is24 && stdenv.isx86_64) libcpuid
         ++ lib.optional withLibseccomp libseccomp
         ++ lib.optional withAWS
@@ -189,9 +189,24 @@ common =
 
           preBuild = "unset NIX_INDENT_MAKE";
         });
+        inherit boehmgc;
       };
     };
   in nix;
+
+  boehmgc_nix = boehmgc.override {
+    enableLargeConfig = true;
+  };
+
+  boehmgc_nixUnstable = boehmgc_nix.overrideAttrs (drv: {
+    patches = (drv.patches or []) ++ [
+      # Part of the GC solution in https://github.com/NixOS/nix/pull/4944
+      (fetchpatch {
+        url = https://github.com/hercules-ci/nix/raw/5c58d84a76d96f269e3ff1e72c9c9ba5f68576af/boehmgc-coroutine-sp-fallback.diff;
+        sha256 = "sha256-JvnWVTlkltmQUs/0qApv/LPZ690UX1/2hEP+LYRwKbI=";
+      })
+    ];
+  });
 
 in rec {
 
@@ -199,28 +214,32 @@ in rec {
 
   nixStable = callPackage common (rec {
     pname = "nix";
-    version = "2.3.12";
+    version = "2.3.16";
     src = fetchurl {
       url = "https://nixos.org/releases/nix/${pname}-${version}/${pname}-${version}.tar.xz";
-      sha256 = "sha256-ITp9ScRhB5syNh5NAI0kjX9o400syTR/Oo/5Ap+a+10=";
+      sha256 = "sha256-fuaBtp8FtSVJLSAsO+3Nne4ZYLuBj2JpD2xEk7fCqrw=";
     };
 
-    inherit storeDir stateDir confDir boehmgc;
+    boehmgc = boehmgc_nix;
+
+    inherit storeDir stateDir confDir;
   });
 
   nixUnstable = lib.lowPrio (callPackage common rec {
     pname = "nix";
     version = "2.4${suffix}";
-    suffix = "pre20210601_5985b8b";
+    suffix = "pre20211006_${lib.substring 0 7 src.rev}";
 
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = "5985b8b5275605ddd5e92e2f0a7a9f494ac6e35d";
-      sha256 = "sha256-2So7ZsD8QJlOXCYqdoj8naNgBw6O4Vw1MM2ORsaqlXc=";
+      rev = "53e479428958b39a126ce15de85d7397fdcfe2e1";
+      sha256 = "18mm3f0n964msj5bha6wpnwckg5lwjwdm6r7frrwdj75v10jiyb7";
     };
 
-    inherit storeDir stateDir confDir boehmgc;
+    boehmgc = boehmgc_nixUnstable;
+
+    inherit storeDir stateDir confDir;
 
   });
 
