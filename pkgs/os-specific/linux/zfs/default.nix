@@ -179,6 +179,7 @@ let
           snapshotting, cloning, block devices, deduplication, and more.
         '';
         homepage = "https://github.com/openzfs/zfs";
+        changelog = "https://github.com/openzfs/zfs/releases/tag/zfs-${version}";
         license = licenses.cddl;
         platforms = platforms.linux;
         maintainers = with maintainers; [ hmenke jcumming jonringer wizeman fpletz globin mic92 ];
@@ -193,22 +194,22 @@ in {
   # to be adapted
   zfsStable = common {
     # check the release notes for compatible kernels
-    kernelCompatible = kernel.kernelAtLeast "3.10" && kernel.kernelOlder "5.13";
+    kernelCompatible = kernel.kernelAtLeast "3.10" && kernel.kernelOlder "5.15";
 
     # this package should point to the latest release.
-    version = "2.0.5";
+    version = "2.0.6";
 
-    sha256 = "0n0d8ab7ibxxa8znfsprh7jxwgighx5g291v7hi8272vfjrmk1mj";
+    sha256 = "sha256-A9NX3S57aFScU/apBJBRx4OieK8JlhBveXy+9JjWD/c=";
   };
 
   zfsUnstable = common {
     # check the release notes for compatible kernels
-    kernelCompatible = kernel.kernelAtLeast "3.10" && kernel.kernelOlder "5.13";
+    kernelCompatible = kernel.kernelAtLeast "3.10" && kernel.kernelOlder "5.15";
 
     # this package should point to a version / git revision compatible with the latest kernel release
-    version = "2.1.0-rc5";
+    version = "2.1.1";
 
-    sha256 = "sha256-cj0P2bw6sTO+Y74pYn/WEpBuVGMMYCreJQjUdC3DMTE=";
+    sha256 = "sha256-UUuJa5w/GsEvsgH/BnXFsP/dsOt9wwmPqKzDxLPrhiY=";
 
     isUnstable = true;
   };

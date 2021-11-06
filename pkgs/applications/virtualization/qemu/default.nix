@@ -86,6 +86,61 @@ stdenv.mkDerivation rec {
   patches = [
     ./fix-qemu-ga.patch
     ./9p-ignore-noatime.patch
+    (fetchpatch {
+      name = "CVE-2021-3545.patch";
+      url = "https://gitlab.com/qemu-project/qemu/-/commit/121841b25d72d13f8cad554363138c360f1250ea.patch";
+      sha256 = "13dgfd8dmxcalh2nvb68iv0kyv4xxrvpdqdxf1h3bjr4451glag1";
+    })
+    (fetchpatch {
+      name = "CVE-2021-3546.patch";
+      url = "https://gitlab.com/qemu-project/qemu/-/commit/9f22893adcb02580aee5968f32baa2cd109b3ec2.patch";
+      sha256 = "1vkhm9vl671y4cra60b6704339qk1h5dyyb3dfvmvpsvfyh2pm7n";
+    })
+    (fetchpatch {
+      name = "CVE-2021-3527-patch1.patch";
+      url = "https://gitlab.com/qemu-project/qemu/-/commit/05a40b172e4d691371534828078be47e7fff524c.patch";
+      sha256 = "19hwwyb3vh7pli921dx74i4bgpnlc7s43jma5mqzfp6wc158g5zl";
+    })
+    (fetchpatch {
+      name = "CVE-2021-3527-patch2.patch";
+      url = "https://gitlab.com/qemu-project/qemu/-/commit/7ec54f9eb62b5d177e30eb8b1cad795a5f8d8986.patch";
+      sha256 = "1qakkb7i4gx3x4rrp7500yxqrcnvc2h6a8g916csynscbprlvl97";
+    })
+    (fetchpatch {
+      name = "CVE-2021-3544-patch1.patch";
+      url = "https://gitlab.com/qemu-project/qemu/-/commit/86dd8fac2acc366930a5dc08d3fb1b1e816f4e1e.patch";
+      sha256 = "0kl0jfs7681fymz2b46a8anyzbmp9lv6k43bkscq7nsh8972b7s1";
+    })
+    (fetchpatch {
+      name = "CVE-2021-3544-patch2.patch";
+      url = "https://gitlab.com/qemu-project/qemu/-/commit/b9f79858a614d95f5de875d0ca31096eaab72c3b.patch";
+      sha256 = "1wxd4q5q24lr8yhjxjayxli6kpkq4cd3q953kk4sw793wywivsb3";
+    })
+    (fetchpatch {
+      name = "CVE-2021-3544-patch3.patch";
+      url = "https://gitlab.com/qemu-project/qemu/-/commit/b7afebcf9e6ecf3cf9b5a9b9b731ed04bca6aa3e.patch";
+      sha256 = "05yg9a4khan7hmxv2ssv4l6rvvw4vxf9l225g0kc7a947giwmqjy";
+    })
+    (fetchpatch {
+      name = "CVE-2021-3544-patch4.patch";
+      url = "https://gitlab.com/qemu-project/qemu/-/commit/f6091d86ba9ea05f4e111b9b42ee0005c37a6779.patch";
+      sha256 = "1xxjd1fz21p88x0fp1bk4pd15w873cxm13av45i2xv7j9v510vsj";
+    })
+    (fetchpatch {
+      name = "CVE-2021-3544-patch5.patch";
+      url = "https://gitlab.com/qemu-project/qemu/-/commit/63736af5a6571d9def93769431e0d7e38c6677bf.patch";
+      sha256 = "1h4hij602fsplgmppvgv51rghhkchq14akd8x7jb3w4hv241rsz1";
+    })
+    (fetchpatch {
+      name = "CVE-2021-3682.patch";
+      url = "https://gitlab.com/qemu-project/qemu/-/commit/5e796671e6b8d5de4b0b423dce1b3eba144a92c9.patch";
+      sha256 = "0g87arqvjff1vzgzb87h67ws51y033slhzlqx1yy4fw9dzkszj9k";
+    })
+    (fetchpatch {
+      name = "CVE-2021-3713.patch";
+      url = "https://gitlab.com/qemu-project/qemu/-/commit/13b250b12ad3c59114a6a17d59caf073ce45b33a.patch";
+      sha256 = "0lkzfc7gdlvj4rz9wk07fskidaqysmx8911g914ds1jnczgk71mf";
+    })
   ] ++ optional nixosTestRunner ./force-uid0-on-9p.patch
     ++ optionals stdenv.hostPlatform.isMusl [
     (fetchpatch {

@@ -1,8 +1,8 @@
-{ lib, stdenv, fetchurl, cups }:
+{ lib, stdenv, fetchurl, cups, busybox }:
 
 stdenv.mkDerivation rec {
   pname = "epson-inkjet-printer-escpr2";
-  version = "1.1.34";
+  version = "1.1.42";
 
   src = fetchurl {
     # To find new versions, visit
@@ -11,15 +11,26 @@ stdenv.mkDerivation rec {
     # version.
     # NOTE: Don't forget to update the webarchive link too!
     urls = [
-      "https://download3.ebz.epson.net/dsc/f/03/00/12/85/48/fd5de1ecd7270b0398399355e265c99dfd1dbafb/epson-inkjet-printer-escpr2-1.1.34.tar.gz"
-      "https://web.archive.org/web/20210627160654/https://download3.ebz.epson.net/dsc/f/03/00/12/85/48/fd5de1ecd7270b0398399355e265c99dfd1dbafb/epson-inkjet-printer-escpr2-1.1.34.tar.gz"
+      "https://download3.ebz.epson.net/dsc/f/03/00/13/07/72/df79cc238a167b9526f70cc123459c6bbe1edbad/epson-inkjet-printer-escpr2-1.1.42-1lsb3.2.src.rpm"
+      "https://web.archive.org/web/20211029093638/https://download3.ebz.epson.net/dsc/f/03/00/13/07/72/df79cc238a167b9526f70cc123459c6bbe1edbad/epson-inkjet-printer-escpr2-1.1.42-1lsb3.2.src.rpm"
     ];
-    sha256 = "sha256-sHBGWbkZ+zolHehyXQR8U2AyKSrgDSPmrkrcfcx/bAs=";
+    sha256 = "sha256-CsZUurwwoXNWONZKAIkRd0ztmAr5wLWZhirCzJWWqMA=";
   };
+
+  unpackPhase = ''
+    runHook preUnpack
+
+    rpm2cpio $src | cpio -idmv
+    tar xvf ${pname}-${version}-1lsb3.2.tar.gz
+    cd ${pname}-${version}
+
+    runHook postUnpack
+  '';
 
   patches = [ ./cups-filter-ppd-dirs.patch ];
 
   buildInputs = [ cups ];
+  nativeBuildInputs = [ busybox ];
 
   meta = with lib; {
     homepage = "http://download.ebz.epson.net/dsc/search/01/search/";

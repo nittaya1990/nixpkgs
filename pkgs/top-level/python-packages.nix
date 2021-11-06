@@ -415,7 +415,7 @@ in {
 
   ansible-base = callPackage ../development/python-modules/ansible/base.nix { };
 
-  ansible-collections = callPackage ../development/python-modules/ansible/collections.nix { };
+  ansible-core = callPackage ../development/python-modules/ansible/core.nix { };
 
   ansible-kernel = callPackage ../development/python-modules/ansible-kernel { };
 
@@ -1522,6 +1522,8 @@ in {
   colour = callPackage ../development/python-modules/colour { };
 
   commandparse = callPackage ../development/python-modules/commandparse { };
+
+  commentjson = callPackage ../development/python-modules/commentjson { };
 
   commoncode = callPackage ../development/python-modules/commoncode { };
 
@@ -4728,6 +4730,8 @@ in {
 
   onkyo-eiscp = callPackage ../development/python-modules/onkyo-eiscp { };
 
+  onlykey-solo-python = callPackage ../development/python-modules/onlykey-solo-python { };
+
   onnx = callPackage ../development/python-modules/onnx { };
 
   openant = callPackage ../development/python-modules/openant { };
@@ -6060,6 +6064,8 @@ in {
 
   pypdf2 = callPackage ../development/python-modules/pypdf2 { };
 
+  pypdf3 = callPackage ../development/python-modules/pypdf3 { };
+
   pypeg2 = callPackage ../development/python-modules/pypeg2 { };
 
   pyperclip = callPackage ../development/python-modules/pyperclip { };
@@ -7203,6 +7209,8 @@ in {
   requirements-parser = callPackage ../development/python-modules/requirements-parser { };
 
   resampy = callPackage ../development/python-modules/resampy { };
+
+  resolvelib = callPackage ../development/python-modules/resolvelib { };
 
   responses = callPackage ../development/python-modules/responses { };
 
@@ -9019,6 +9027,13 @@ in {
   youtube-dl = callPackage ../tools/misc/youtube-dl { };
 
   youtube-dl-light = callPackage ../tools/misc/youtube-dl {
+    ffmpegSupport = false;
+    phantomjsSupport = false;
+  };
+
+  yt-dlp = callPackage ../tools/misc/yt-dlp { };
+
+  yt-dlp-light = callPackage ../tools/misc/yt-dlp {
     ffmpegSupport = false;
     phantomjsSupport = false;
   };

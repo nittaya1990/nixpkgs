@@ -7,12 +7,12 @@
 stdenv.mkDerivation rec {
 
   pname = "steam-runtime";
-  # from https://repo.steampowered.com/steamrt-images-scout/snapshots/
-  version = "0.20210527.0";
+  # from https://repo.steampowered.com/steamrt-images-scout/snapshots/latest-steam-client-general-availability/VERSION.txt
+  version = "0.20210906.1";
 
   src = fetchurl {
     url = "https://repo.steampowered.com/steamrt-images-scout/snapshots/${version}/steam-runtime.tar.xz";
-    sha256 = "1880d1byn265w0vy5p98d8w8virnbywj707ydybj7rixhid2gzdc";
+    sha256 = "1dkynar5y4q0pi32ihdhl7r81v9jxsb7lhc91mqhy43f6462qz1h";
     name = "scout-runtime-${version}.tar.gz";
   };
 

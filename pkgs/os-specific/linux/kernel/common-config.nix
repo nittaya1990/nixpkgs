@@ -758,7 +758,7 @@ let
       POSIX_MQUEUE        = yes;
       FRONTSWAP           = yes;
       FUSION              = yes; # Fusion MPT device support
-      IDE                 = no; # deprecated IDE support
+      IDE                 = whenOlder "5.14" no; # deprecated IDE support, removed in 5.14
       IDLE_PAGE_TRACKING  = yes;
       IRDA_ULTRA          = whenOlder "4.17" yes; # Ultra (connectionless) protocol
 
@@ -790,6 +790,7 @@ let
       MODVERSIONS        = whenOlder "4.9" yes;
       MOUSE_ELAN_I2C_SMBUS = yes;
       MOUSE_PS2_ELANTECH = yes; # Elantech PS/2 protocol extension
+      MOUSE_PS2_VMMOUSE  = yes;
       MTRR_SANITIZER     = yes;
       NET_FC             = yes; # Fibre Channel driver support
       # GPIO on Intel Bay Trail, for some Chromebook internal eMMC disks
@@ -878,8 +879,6 @@ let
       # Keeping it a built-in ensures it will be used if possible.
       FB_SIMPLE = yes;
 
-    } // optionalAttrs (stdenv.hostPlatform.system == "armv7l-linux") {
-      ARM_LPAE = yes;
     };
   };
 in
